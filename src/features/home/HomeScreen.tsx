@@ -1,6 +1,10 @@
 import { useGameStore } from "../../store/gameStore";
 import { getFactionClassName } from "../../lib/ui";
 
+function formatFaction(faction: string): string {
+  return faction.charAt(0).toUpperCase() + faction.slice(1);
+}
+
 export default function HomeScreen() {
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
@@ -48,16 +52,28 @@ export default function HomeScreen() {
                   </div>
 
                   <div className="investigator-card-body">
-                    <span className="investigator-name">{investigator.name}</span>
-                    <span className="faction-badge">
-                      {investigator.faction}
-                    </span>
-                    <span className="investigator-stats">
-                      WIL {investigator.willpower} · INT {investigator.intellect} · COM {investigator.combat} · AGI {investigator.agility}
-                    </span>
-                    <span className="investigator-health">
-                      Health {investigator.health} · Sanity {investigator.sanity}
-                    </span>
+                    {/* Faction + Name */}
+                    <div className="investigator-title-row">
+                      <span className="investigator-name">
+                        {investigator.name}:
+                      </span>
+                      <span className="faction-label">
+                        {formatFaction(investigator.faction)}
+                      </span>
+                    </div>
+
+                    {/* Stats (separate line) */}
+                    <div className="investigator-stats">
+                      WIL {investigator.willpower} · INT{" "}
+                      {investigator.intellect} · COM {investigator.combat} · AGI{" "}
+                      {investigator.agility}
+                    </div>
+
+                    {/* Health/Sanity */}
+                    <div className="investigator-health">
+                      Health {investigator.health} · Sanity{" "}
+                      {investigator.sanity}
+                    </div>
                   </div>
                 </div>
               </button>
@@ -74,4 +90,3 @@ export default function HomeScreen() {
     </main>
   );
 }
-
