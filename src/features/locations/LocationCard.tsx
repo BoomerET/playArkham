@@ -9,6 +9,13 @@ function useInvestigatorNameLookup() {
   };
 }
 
+function formatLocationId(id: string): string {
+  return id
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 interface Props {
   location: Location;
 }
@@ -38,7 +45,7 @@ export default function LocationCard({ location }: Props) {
         <div>
           <strong>Connections:</strong>{" "}
           {location.connections.length > 0
-            ? location.connections.join(", ")
+            ? location.connections.map(formatLocationId).join(", ")
             : "None"}
         </div>
 
