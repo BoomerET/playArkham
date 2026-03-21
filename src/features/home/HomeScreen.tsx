@@ -1,25 +1,9 @@
-import { useGameStore } from "../../store/gameStore";
+import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
+import { useGameStore } from "../../store/gameStore";
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
-}
-
-function getFactionIcon(faction: string): string {
-  switch (faction) {
-    case "guardian":
-      return "🛡️";
-    case "seeker":
-      return "📚";
-    case "mystic":
-      return "🔮";
-    case "rogue":
-      return "🗡️";
-    case "survivor":
-      return "🔥";
-    default:
-      return "•";
-  }
 }
 
 export default function HomeScreen() {
@@ -50,17 +34,18 @@ export default function HomeScreen() {
         <div className="investigator-grid">
           {availableInvestigators.map((investigator) => {
             const selected = investigator.id === selectedInvestigatorId;
+            const factionClass = getFactionClassName(investigator.faction);
 
             return (
               <button
                 key={investigator.id}
-                className={`investigator-card ${getFactionClassName(
-                  investigator.faction,
-                )} ${selected ? "selected" : ""}`}
+                className={`investigator-card ${factionClass} ${
+                  selected ? "selected" : ""
+                }`}
                 onClick={() => setSelectedInvestigator(investigator.id)}
               >
                 <div className="investigator-card-top">
-                  <div className="portrait-frame large">
+                  <div className={`portrait-frame large ${factionClass}`}>
                     <img
                       src={investigator.portrait}
                       alt={investigator.name}
@@ -69,35 +54,27 @@ export default function HomeScreen() {
                   </div>
 
                   <div className="investigator-card-body">
-                    {/* Faction + Name */}
                     <div className="investigator-title-row">
                       <span className="investigator-name">
                         {investigator.name}:
                       </span>
 
-                      <span
-                        className={`faction-label ${getFactionClassName(
-                          investigator.faction,
-                        )}`}
-                      >
-                        <span className="faction-icon">
-                          {getFactionIcon(investigator.faction)}
-                        </span>
+                      <span className={`faction-label ${factionClass}`}>
+                        <FactionIcon
+                          faction={investigator.faction}
+                          className="faction-icon"
+                        />
                         {formatFaction(investigator.faction)}
                       </span>
                     </div>
 
-                    {/* Stats (separate line) */}
                     <div className="investigator-stats">
-                      WIL {investigator.willpower} · INT{" "}
-                      {investigator.intellect} · COM {investigator.combat} · AGI{" "}
-                      {investigator.agility}
+                      WIL {investigator.willpower} · INT {investigator.intellect} · COM{" "}
+                      {investigator.combat} · AGI {investigator.agility}
                     </div>
 
-                    {/* Health/Sanity */}
                     <div className="investigator-health">
-                      Health {investigator.health} · Sanity{" "}
-                      {investigator.sanity}
+                      Health {investigator.health} · Sanity {investigator.sanity}
                     </div>
                   </div>
                 </div>

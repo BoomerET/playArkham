@@ -515,3 +515,139 @@ button:hover {
   border-color: rgba(217, 122, 82, 0.4);
   background: rgba(217, 122, 82, 0.12);
 }
+
+/* ---------- Faction Icon + Label Styling ---------- */
+
+.faction-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.faction-icon-svg,
+.faction-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+
+.faction-label.faction-guardian {
+  color: #4aa3ff;
+  border-color: rgba(74, 163, 255, 0.4);
+  background: rgba(74, 163, 255, 0.12);
+  box-shadow: 0 0 12px rgba(74, 163, 255, 0.1);
+}
+
+.faction-label.faction-seeker {
+  color: #d7b46a;
+  border-color: rgba(215, 180, 106, 0.4);
+  background: rgba(215, 180, 106, 0.12);
+  box-shadow: 0 0 12px rgba(215, 180, 106, 0.1);
+}
+
+.faction-label.faction-mystic {
+  color: #9a6bff;
+  border-color: rgba(154, 107, 255, 0.4);
+  background: rgba(154, 107, 255, 0.12);
+  box-shadow: 0 0 12px rgba(154, 107, 255, 0.1);
+}
+
+.faction-label.faction-rogue {
+  color: #4fd18b;
+  border-color: rgba(79, 209, 139, 0.4);
+  background: rgba(79, 209, 139, 0.12);
+  box-shadow: 0 0 12px rgba(79, 209, 139, 0.1);
+}
+
+.faction-label.faction-survivor {
+  color: #d97a52;
+  border-color: rgba(217, 122, 82, 0.4);
+  background: rgba(217, 122, 82, 0.12);
+  box-shadow: 0 0 12px rgba(217, 122, 82, 0.1);
+}
+
+.faction-label.faction-neutral {
+  color: #b8c3cc;
+  border-color: rgba(184, 195, 204, 0.35);
+  background: rgba(184, 195, 204, 0.1);
+}
+
+/* ---------- Portrait Faction Accent ---------- */
+
+.portrait-frame.faction-guardian {
+  border-color: rgba(74, 163, 255, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(74, 163, 255, 0.12),
+    0 0 18px rgba(74, 163, 255, 0.12);
+}
+
+.portrait-frame.faction-seeker {
+  border-color: rgba(215, 180, 106, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(215, 180, 106, 0.12),
+    0 0 18px rgba(215, 180, 106, 0.12);
+}
+
+.portrait-frame.faction-mystic {
+  border-color: rgba(154, 107, 255, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(154, 107, 255, 0.12),
+    0 0 18px rgba(154, 107, 255, 0.12);
+}
+
+.portrait-frame.faction-rogue {
+  border-color: rgba(79, 209, 139, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(79, 209, 139, 0.12),
+    0 0 18px rgba(79, 209, 139, 0.12);
+}
+
+.portrait-frame.faction-survivor {
+  border-color: rgba(217, 122, 82, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(217, 122, 82, 0.12),
+    0 0 18px rgba(217, 122, 82, 0.12);
+}
+
+/* ---------- Home Screen Title Polish ---------- */
+
+.investigator-title-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.investigator-stats {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.investigator-health {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Hover polish ---------- */
+
+.investigator-card:hover .portrait-frame {
+  transform: translateY(-1px);
+}
+
+.portrait-frame {
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
