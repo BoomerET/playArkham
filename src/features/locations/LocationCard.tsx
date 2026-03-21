@@ -26,42 +26,66 @@ export default function LocationCard({ location }: Props) {
     current.investigatorsHere.includes(investigator.id),
   );
 
-  const isConnected =
+  const isLegalMove =
     !!currentLocation &&
-    (currentLocation.id === location.id ||
-      currentLocation.connections.includes(location.id));
+    currentLocation.id !== location.id &&
+    currentLocation.connections.includes(location.id);
+
+  const isIllegalMove =
+    !!currentLocation &&
+    currentLocation.id !== location.id &&
+    !currentLocation.connections.includes(location.id);
 
   function getInvestigatorDisplayName(id: string): string {
-    return availableInvestigators.find((item) => item.id === id)?.name ?? formatName(id);
+    return (
+      availableInvestigators.find((item) => item.id === id)?.name ??
+      formatName(id)
+    );
   }
 
   function handleClick() {
-    if (!isCurrentLocation) {
+    if (isLegalMove) {
       moveInvestigator(location.id);
     }
   }
 
+  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if ((event.key === "Enter" || event.key === " ") && isLegalMove) {
+      event.preventDefault();
+      moveInvestigator(location.id);
+    }
+  }
+
+  const locationStateClass = isCurrentLocation
+    ? "current-location"
+    : isLegalMove
+      ? "legal-location"
+      : isIllegalMove
+        ? "illegal-location"
+        : "";
+
+  const isInteractive = isLegalMove;
+
   return (
     <div
-      className={`entity-card location-card ${
-        isCurrentLocation ? "current-location highlight" : ""
-      } ${isConnected ? "clickable-location" : "unclickable-location"}`}
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          handleClick();
-        }
-      }}
+      className={`entity-card location-card ${locationStateClass} ${
+        isInteractive ? "clickable-location" : "static-location"
+      }`}
+      onClick={isInteractive ? handleClick : undefined}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : -1}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      aria-label={isInteractive ? `Move to ${location.name}` : undefined}
     >
       <p className="entity-title">{location.name}</p>
 
       <div className="token-row">
         <span className="token-chip gold">Shroud {location.shroud}</span>
         <span className="token-chip gold">Clues {location.clues}</span>
+
         {isCurrentLocation && <span className="token-chip success">Current</span>}
+        {isLegalMove && <span className="token-chip">Move Available</span>}
+        {isIllegalMove && <span className="token-chip danger">Not Connected</span>}
       </div>
 
       <div className="entity-meta" style={{ marginTop: 10 }}>

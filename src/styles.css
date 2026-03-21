@@ -380,4 +380,61 @@ button:hover {
   color: var(--muted);
   background: rgba(110, 208, 214, 0.04);
 }
+.location-card {
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease,
+    opacity 140ms ease;
+}
 
+.location-card.current-location {
+  border-color: rgba(215, 180, 106, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(215, 180, 106, 0.18),
+    0 0 26px rgba(110, 208, 214, 0.14),
+    0 0 18px rgba(215, 180, 106, 0.12);
+  background:
+    linear-gradient(180deg, rgba(28, 42, 56, 0.98), rgba(13, 21, 31, 0.98));
+}
+
+.location-card.legal-location {
+  border-color: rgba(141, 243, 255, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.08),
+    0 0 18px rgba(110, 208, 214, 0.1);
+}
+
+.location-card.legal-location:hover {
+  transform: translateY(-2px);
+  border-color: var(--teal-strong);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.22),
+    0 0 28px rgba(141, 243, 255, 0.18);
+}
+
+.location-card.illegal-location {
+  opacity: 0.72;
+  border-color: rgba(168, 188, 199, 0.16);
+  box-shadow: none;
+}
+
+.location-card.illegal-location:hover {
+  transform: none;
+  border-color: rgba(255, 123, 123, 0.22);
+  box-shadow: 0 0 12px rgba(255, 123, 123, 0.08);
+}
+
+.clickable-location {
+  cursor: pointer;
+}
+
+.location-card:focus-visible {
+  outline: 2px solid var(--teal-strong);
+  outline-offset: 2px;
+}
+
+.static-location {
+  cursor: default;
+}
