@@ -5,6 +5,8 @@ export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
   const discardCard = useGameStore((state) => state.discardCard);
   const playCard = useGameStore((state) => state.playCard);
+  const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
+  const draggedCardId = useGameStore((state) => state.draggedCardId);
 
   return (
     <section className="game-panel">
@@ -14,33 +16,47 @@ export default function HandPanel() {
         <p className="panel-subtitle">No cards in hand.</p>
       ) : (
         <div className="horizontal-card-grid">
-          {hand.map((card) => (
-            <div
-              key={card.id}
-              className={`entity-card player-card ${getCardTypeClassName(card)}`}
-            >
-              <div className="card-topline">
-                <p className="entity-title">{card.name}</p>
-                <span className={`card-type-badge ${getCardTypeClassName(card)}`}>
-                  {card.type}
-                </span>
-              </div>
+          {hand.map((card) => {
+            const isDragging = draggedCardId === card.id;
 
-              <div className="entity-meta">
-                {card.cost !== undefined && <span>Cost: {card.cost}</span>}
-              </div>
+            return (
+              <div
+                key={card.id}
+                className={`entity-card player-card ${getCardTypeClassName(card)} ${
+                  isDragging ? "dragging-card" : ""
+                }`}
+                draggable
+                onDragStart={(event) => {
+                  event.dataTransfer.setData("text/plain", card.id);
+                  event.dataTransfer.effectAllowed = "move";
+                  setDraggedCardId(card.id);
+                }}
+                onDragEnd={() => {
+                  setDraggedCardId(null);
+                }}
+              >
+                <div className="card-topline">
+                  <p className="entity-title">{card.name}</p>
+                  <span className={`card-type-badge ${getCardTypeClassName(card)}`}>
+                    {card.type}
+                  </span>
+                </div>
 
-              {card.text && <p className="entity-text">{card.text}</p>}
+                <div className="entity-meta">
+                  {card.cost !== undefined && <span>Cost: {card.cost}</span>}
+                </div>
 
-              <div className="card-actions">
-                <button onClick={() => playCard(card.id)}>Play</button>
-                <button onClick={() => discardCard(card.id)}>Discard</button>
+                {card.text && <p className="entity-text">{card.text}</p>}
+
+                <div className="card-actions">
+                  <button onClick={() => playCard(card.id)}>Play</button>
+                  <button onClick={() => discardCard(card.id)}>Discard</button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </section>
   );
 }
-

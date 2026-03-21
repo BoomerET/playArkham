@@ -106,5 +106,6 @@ export interface GameState {
   log: string[];
   turn: TurnState;
   lastSkillTest: SkillTestResult | null;
+  draggedCardId: string | null;
 }
 

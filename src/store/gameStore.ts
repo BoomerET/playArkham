@@ -24,7 +24,9 @@ type GameStore = GameState & {
   screen: Screen;
   availableInvestigators: Investigator[];
   selectedInvestigatorId: string;
+  draggedCardId: string | null;
   setSelectedInvestigator: (investigatorId: string) => void;
+  setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
   setupGame: () => void;
@@ -117,6 +119,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
   selectedInvestigatorId: investigators[0].id,
+  draggedCardId: null,
 
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
@@ -138,14 +141,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ selectedInvestigatorId: investigatorId });
   },
 
+  setDraggedCardId: (cardId) => {
+    set({ draggedCardId: cardId });
+  },
+
   startGame: () => {
-    get().setupGame();
+    get().setupGame(
+      draggedCardId: null,
+    );
     set({ screen: "game" });
   },
 
   returnToHome: () => {
     set({
       screen: "home",
+      draggedCardId: null,
       log: [],
       hand: [],
       discard: [],
@@ -161,47 +171,47 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setupGame: () => {
-  const selected = get().availableInvestigators.find(
-    (investigator) => investigator.id === get().selectedInvestigatorId,
-  );
+    const selected = get().availableInvestigators.find(
+      (investigator) => investigator.id === get().selectedInvestigatorId,
+    );
 
-  const chosenInvestigator = selected
-    ? createGameInvestigator(selected)
-    : createGameInvestigator(get().availableInvestigators[0]);
+    const chosenInvestigator = selected
+      ? createGameInvestigator(selected)
+      : createGameInvestigator(get().availableInvestigators[0]);
 
-  const shuffledDeck = shuffle(sampleDeck);
+    const shuffledDeck = shuffle(sampleDeck);
 
-  set({
-    investigator: chosenInvestigator,
-    deck: shuffledDeck,
-    hand: [],
-    discard: [],
-    playArea: [],
-    chaosBag: [...startingChaosBag],
-    locations: sampleLocations.map((location) => ({
-      ...location,
-      investigatorsHere:
-        location.id === "study" ? [chosenInvestigator.id] : [],
-    })),
-    enemies: sampleEnemies.map((enemy) => ({ ...enemy })),
-    log: [
-      `Selected investigator: ${chosenInvestigator.name}`,
-      "Game setup complete.",
-      "Round 1 begins.",
-      "First round: Mythos phase is skipped.",
-      "Phase: Investigation",
-    ],
-    lastSkillTest: null,
-    turn: {
-      round: 1,
-      phase: "investigation",
-      actionsRemaining: 3,
-    },
-  });
+    set({
+      investigator: chosenInvestigator,
+      deck: shuffledDeck,
+      hand: [],
+      discard: [],
+      playArea: [],
+      chaosBag: [...startingChaosBag],
+      locations: sampleLocations.map((location) => ({
+        ...location,
+        investigatorsHere:
+          location.id === "study" ? [chosenInvestigator.id] : [],
+      })),
+      enemies: sampleEnemies.map((enemy) => ({ ...enemy })),
+      log: [
+        `Selected investigator: ${chosenInvestigator.name}`,
+        "Game setup complete.",
+        "Round 1 begins.",
+        "First round: Mythos phase is skipped.",
+        "Phase: Investigation",
+      ],
+      lastSkillTest: null,
+      turn: {
+        round: 1,
+        phase: "investigation",
+        actionsRemaining: 3,
+      },
+    });
 
-  get().drawStartingHand(5);
-  get().engageEnemiesAtLocation();
-},
+    get().drawStartingHand(5);
+    get().engageEnemiesAtLocation();
+  },
   drawCard: () => {
     const { deck, hand, log } = get();
 
@@ -287,7 +297,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         hand: updatedHand,
         playArea: [...playArea, card],
         turn: updatedTurn,
-        log: [...log, `Played asset ${card.name} for ${cost} resource(s). 1 action spent.`],
+        log: [
+          ...log,
+          `Played asset ${card.name} for ${cost} resource(s). 1 action spent.`,
+        ],
       });
       return;
     }
@@ -319,13 +332,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (card.type === "skill") {
       set({
-        log: [...log, `Cannot play ${card.name} as a normal action yet. Skill commits are not implemented.`],
+        log: [
+          ...log,
+          `Cannot play ${card.name} as a normal action yet. Skill commits are not implemented.`,
+        ],
       });
       return;
     }
 
     set({
-      log: [...log, `Playing ${card.name} is not implemented for card type ${card.type}.`],
+      log: [
+        ...log,
+        `Playing ${card.name} is not implemented for card type ${card.type}.`,
+      ],
     });
   },
 
@@ -333,7 +352,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { chaosBag, log } = get();
 
     if (chaosBag.length === 0) {
-      set({ log: [...log, "Tried to draw a chaos token, but the bag is empty."] });
+      set({
+        log: [...log, "Tried to draw a chaos token, but the bag is empty."],
+      });
       return null;
     }
 
@@ -350,7 +371,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { investigator, log } = get();
 
     set({
-      investigator: { ...investigator, resources: investigator.resources + amount },
+      investigator: {
+        ...investigator,
+        resources: investigator.resources + amount,
+      },
       log: [...log, `Gained ${amount} resource(s).`],
     });
   },
@@ -397,7 +421,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   moveInvestigator: (locationId: string) => {
     const { investigator, locations, log, turn } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find((location) => location.id === locationId);
+    const destination = locations.find(
+      (location) => location.id === locationId,
+    );
 
     if (!destination) return;
 
@@ -419,7 +445,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentLocation.id !== locationId
     ) {
       set({
-        log: [...log, `Cannot move from ${currentLocation.name} to ${destination.name}. Not connected.`],
+        log: [
+          ...log,
+          `Cannot move from ${currentLocation.name} to ${destination.name}. Not connected.`,
+        ],
       });
       return;
     }
@@ -488,7 +517,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       enemies: updatedEnemies,
-      log: [...log, `Enemies at ${currentLocation.name} engaged ${investigator.name}.`],
+      log: [
+        ...log,
+        `Enemies at ${currentLocation.name} engaged ${investigator.name}.`,
+      ],
     });
   },
 
@@ -518,8 +550,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const totalDamage = engagedEnemies.reduce((sum, enemy) => sum + enemy.damage, 0);
-    const totalHorror = engagedEnemies.reduce((sum, enemy) => sum + enemy.horror, 0);
+    const totalDamage = engagedEnemies.reduce(
+      (sum, enemy) => sum + enemy.damage,
+      0,
+    );
+    const totalHorror = engagedEnemies.reduce(
+      (sum, enemy) => sum + enemy.horror,
+      0,
+    );
 
     set({
       investigator: {
@@ -527,7 +565,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         damage: investigator.damage + totalDamage,
         horror: investigator.horror + totalHorror,
       },
-      log: [...log, `Enemy phase: engaged enemies attacked for ${totalDamage} damage and ${totalHorror} horror.`],
+      log: [
+        ...log,
+        `Enemy phase: engaged enemies attacked for ${totalDamage} damage and ${totalHorror} horror.`,
+      ],
     });
   },
 
@@ -545,7 +586,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (turn.phase === "mythos") {
       set({
         turn: { ...turn, phase: "investigation", actionsRemaining: 3 },
-        log: [...log, "Phase: Investigation", `${investigator.name} has 3 actions this turn.`],
+        log: [
+          ...log,
+          "Phase: Investigation",
+          `${investigator.name} has 3 actions this turn.`,
+        ],
       });
       return;
     }
@@ -574,19 +619,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
       const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
 
-      const upkeepLog = [...get().log, `${investigator.name} gains 1 resource during upkeep.`];
+      const upkeepLog = [
+        ...get().log,
+        `${investigator.name} gains 1 resource during upkeep.`,
+      ];
 
       if (drawnCardName) {
         upkeepLog.push(`Drew card during upkeep: ${drawnCardName}`);
       } else {
-        upkeepLog.push("Tried to draw a card during upkeep, but the deck is empty.");
+        upkeepLog.push(
+          "Tried to draw a card during upkeep, but the deck is empty.",
+        );
       }
 
       upkeepLog.push(`Round ${nextRound} begins.`);
       upkeepLog.push("Phase: Mythos");
 
       set({
-        investigator: { ...investigator, resources: investigator.resources + 1 },
+        investigator: {
+          ...investigator,
+          resources: investigator.resources + 1,
+        },
         deck: updatedDeck,
         hand: updatedHand,
         turn: { round: nextRound, phase: "mythos", actionsRemaining: 3 },
@@ -616,7 +669,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       investigator: { ...investigator, resources: investigator.resources + 1 },
       turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-      log: [...log, "Took a resource action. Gained 1 resource and spent 1 action."],
+      log: [
+        ...log,
+        "Took a resource action. Gained 1 resource and spent 1 action.",
+      ],
     });
   },
 
@@ -638,7 +694,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (deck.length === 0) {
       set({
         turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-        log: [...log, "Took a draw action, but the deck was empty. 1 action spent."],
+        log: [
+          ...log,
+          "Took a draw action, but the deck was empty. 1 action spent.",
+        ],
       });
       return;
     }
@@ -649,7 +708,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deck: remainingDeck,
       hand: [...hand, topCard],
       turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-      log: [...log, `Took a draw action. Drew ${topCard.name} and spent 1 action.`],
+      log: [
+        ...log,
+        `Took a draw action. Drew ${topCard.name} and spent 1 action.`,
+      ],
     });
   },
 
@@ -660,7 +722,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const baseValue = getInvestigatorSkillValue(investigator, skill);
     const modifierDetails = getSkillModifiersFromPlayArea(playArea, skill);
-    const assetModifier = modifierDetails.reduce((sum, modifier) => sum + modifier.amount, 0);
+    const assetModifier = modifierDetails.reduce(
+      (sum, modifier) => sum + modifier.amount,
+      0,
+    );
     const tokenModifier = getChaosTokenModifier(token);
     const finalValue =
       token === "autoFail" ? -999 : baseValue + assetModifier + tokenModifier;
@@ -719,7 +784,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const currentLocation = findCurrentLocation(locations, investigator.id);
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot investigate because the investigator is not at a location."],
+        log: [
+          ...log,
+          "Cannot investigate because the investigator is not at a location.",
+        ],
       });
       return;
     }
@@ -735,7 +803,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!testResult.success) {
       set({
         turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-        log: [...get().log, `Investigation failed at ${currentLocation.name}. 1 action spent.`],
+        log: [
+          ...get().log,
+          `Investigation failed at ${currentLocation.name}. 1 action spent.`,
+        ],
       });
       return;
     }
@@ -743,7 +814,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (currentLocation.clues <= 0) {
       set({
         turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-        log: [...get().log, `Investigation succeeded at ${currentLocation.name}, but there were no clues to discover. 1 action spent.`],
+        log: [
+          ...get().log,
+          `Investigation succeeded at ${currentLocation.name}, but there were no clues to discover. 1 action spent.`,
+        ],
       });
       return;
     }
@@ -755,10 +829,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
 
     set({
-      investigator: { ...get().investigator, clues: get().investigator.clues + 1 },
+      investigator: {
+        ...get().investigator,
+        clues: get().investigator.clues + 1,
+      },
       locations: updatedLocations,
-      turn: { ...get().turn, actionsRemaining: get().turn.actionsRemaining - 1 },
-      log: [...get().log, `Investigation succeeded at ${currentLocation.name}. Discovered 1 clue and spent 1 action.`],
+      turn: {
+        ...get().turn,
+        actionsRemaining: get().turn.actionsRemaining - 1,
+      },
+      log: [
+        ...get().log,
+        `Investigation succeeded at ${currentLocation.name}. Discovered 1 clue and spent 1 action.`,
+      ],
     });
   },
 
@@ -780,34 +863,54 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const currentLocation = findCurrentLocation(locations, investigator.id);
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot fight because the investigator is not at a location."],
+        log: [
+          ...log,
+          "Cannot fight because the investigator is not at a location.",
+        ],
       });
       return;
     }
 
-    const enemy = getEnemyAtInvestigator(enemies, currentLocation.id, investigator.id);
+    const enemy = getEnemyAtInvestigator(
+      enemies,
+      currentLocation.id,
+      investigator.id,
+    );
 
     if (!enemy) {
       set({
         turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-        log: [...log, "Took a fight action, but there was no enemy at your location. 1 action spent."],
+        log: [
+          ...log,
+          "Took a fight action, but there was no enemy at your location. 1 action spent.",
+        ],
       });
       return;
     }
 
-    const testResult = get().runSkillTest("combat", enemy.fight, `Fight ${enemy.name}`);
+    const testResult = get().runSkillTest(
+      "combat",
+      enemy.fight,
+      `Fight ${enemy.name}`,
+    );
     if (!testResult) return;
 
     if (!testResult.success) {
       set({
-        turn: { ...get().turn, actionsRemaining: get().turn.actionsRemaining - 1 },
-        log: [...get().log, `Fight against ${enemy.name} failed. 1 action spent.`],
+        turn: {
+          ...get().turn,
+          actionsRemaining: get().turn.actionsRemaining - 1,
+        },
+        log: [
+          ...get().log,
+          `Fight against ${enemy.name} failed. 1 action spent.`,
+        ],
       });
       return;
     }
 
-    const updatedEnemies = get().enemies
-      .map((currentEnemy) => {
+    const updatedEnemies = get()
+      .enemies.map((currentEnemy) => {
         if (currentEnemy.id !== enemy.id) return currentEnemy;
         return {
           ...currentEnemy,
@@ -823,7 +926,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       enemies: updatedEnemies,
-      turn: { ...get().turn, actionsRemaining: get().turn.actionsRemaining - 1 },
+      turn: {
+        ...get().turn,
+        actionsRemaining: get().turn.actionsRemaining - 1,
+      },
       log: [
         ...get().log,
         defeated
@@ -851,28 +957,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const currentLocation = findCurrentLocation(locations, investigator.id);
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot evade because the investigator is not at a location."],
+        log: [
+          ...log,
+          "Cannot evade because the investigator is not at a location.",
+        ],
       });
       return;
     }
 
-    const enemy = getEnemyAtInvestigator(enemies, currentLocation.id, investigator.id);
+    const enemy = getEnemyAtInvestigator(
+      enemies,
+      currentLocation.id,
+      investigator.id,
+    );
 
     if (!enemy) {
       set({
         turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
-        log: [...log, "Took an evade action, but there was no enemy at your location. 1 action spent."],
+        log: [
+          ...log,
+          "Took an evade action, but there was no enemy at your location. 1 action spent.",
+        ],
       });
       return;
     }
 
-    const testResult = get().runSkillTest("agility", enemy.evade, `Evade ${enemy.name}`);
+    const testResult = get().runSkillTest(
+      "agility",
+      enemy.evade,
+      `Evade ${enemy.name}`,
+    );
     if (!testResult) return;
 
     if (!testResult.success) {
       set({
-        turn: { ...get().turn, actionsRemaining: get().turn.actionsRemaining - 1 },
-        log: [...get().log, `Evade against ${enemy.name} failed. 1 action spent.`],
+        turn: {
+          ...get().turn,
+          actionsRemaining: get().turn.actionsRemaining - 1,
+        },
+        log: [
+          ...get().log,
+          `Evade against ${enemy.name} failed. 1 action spent.`,
+        ],
       });
       return;
     }
@@ -888,9 +1014,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       enemies: updatedEnemies,
-      turn: { ...get().turn, actionsRemaining: get().turn.actionsRemaining - 1 },
-      log: [...get().log, `Evade succeeded. ${enemy.name} is exhausted and disengaged. 1 action spent.`],
+      turn: {
+        ...get().turn,
+        actionsRemaining: get().turn.actionsRemaining - 1,
+      },
+      log: [
+        ...get().log,
+        `Evade succeeded. ${enemy.name} is exhausted and disengaged. 1 action spent.`,
+      ],
     });
   },
 }));
-

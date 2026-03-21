@@ -1,16 +1,46 @@
+import { useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
 
 export default function PlayAreaPanel() {
   const playArea = useGameStore((state) => state.playArea);
+  const playCard = useGameStore((state) => state.playCard);
+  const draggedCardId = useGameStore((state) => state.draggedCardId);
+  const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   return (
-    <section className="game-panel">
+    <section
+      className={`game-panel drop-zone ${isDragOver ? "drop-zone-active" : ""}`}
+      onDragOver={(event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        setIsDragOver(true);
+      }}
+      onDragLeave={() => {
+        setIsDragOver(false);
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+
+        const cardId = event.dataTransfer.getData("text/plain") || draggedCardId;
+        setIsDragOver(false);
+        setDraggedCardId(null);
+
+        if (cardId) {
+          playCard(cardId);
+        }
+      }}
+    >
       <h2>Play Area ({playArea.length})</h2>
-      <p className="panel-subtitle">Assets in play and affecting your board.</p>
+      <p className="panel-subtitle">
+        Drag cards here from your hand to play them.
+      </p>
 
       {playArea.length === 0 ? (
-        <p>No assets in play.</p>
+        <div className="empty-drop-message">
+          Drop an asset or event here
+        </div>
       ) : (
         <div className="horizontal-card-grid">
           {playArea.map((card) => (
@@ -37,4 +67,3 @@ export default function PlayAreaPanel() {
     </section>
   );
 }
-
