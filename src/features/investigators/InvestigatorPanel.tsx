@@ -44,27 +44,27 @@ export default function InvestigatorPanel() {
 
       <div className="stat-grid">
         <div className="stat-box">
-          <span className="stat-label">Health</span>
+          <span className="stat-label">Health: </span>
           <span className="stat-value">{investigator.health}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Sanity</span>
+          <span className="stat-label">Sanity: </span>
           <span className="stat-value">{investigator.sanity}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Damage</span>
+          <span className="stat-label">Damage: </span>
           <span className="stat-value">{investigator.damage}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Horror</span>
+          <span className="stat-label">Horror: </span>
           <span className="stat-value">{investigator.horror}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Resources</span>
+          <span className="stat-label">Resources: </span>
           <span className="stat-value">{investigator.resources}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Clues</span>
+          <span className="stat-label">Clues: </span>
           <span className="stat-value">{investigator.clues}</span>
         </div>
       </div>
