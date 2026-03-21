@@ -466,3 +466,52 @@ button:hover {
 .static-location {
   cursor: default;
 }
+
+.faction-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Icons */
+.faction-icon {
+  font-size: 0.9rem;
+}
+
+/* Faction colors */
+
+.faction-label.faction-guardian {
+  color: #4aa3ff;
+  border-color: rgba(74, 163, 255, 0.4);
+  background: rgba(74, 163, 255, 0.12);
+}
+
+.faction-label.faction-seeker {
+  color: #d7b46a;
+  border-color: rgba(215, 180, 106, 0.4);
+  background: rgba(215, 180, 106, 0.12);
+}
+
+.faction-label.faction-mystic {
+  color: #9a6bff;
+  border-color: rgba(154, 107, 255, 0.4);
+  background: rgba(154, 107, 255, 0.12);
+}
+
+.faction-label.faction-rogue {
+  color: #4fd18b;
+  border-color: rgba(79, 209, 139, 0.4);
+  background: rgba(79, 209, 139, 0.12);
+}
+
+.faction-label.faction-survivor {
+  color: #d97a52;
+  border-color: rgba(217, 122, 82, 0.4);
+  background: rgba(217, 122, 82, 0.12);
+}

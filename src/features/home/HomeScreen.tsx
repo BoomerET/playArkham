@@ -5,6 +5,23 @@ function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
 }
 
+function getFactionIcon(faction: string): string {
+  switch (faction) {
+    case "guardian":
+      return "🛡️";
+    case "seeker":
+      return "📚";
+    case "mystic":
+      return "🔮";
+    case "rogue":
+      return "🗡️";
+    case "survivor":
+      return "🔥";
+    default:
+      return "•";
+  }
+}
+
 export default function HomeScreen() {
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
@@ -57,7 +74,15 @@ export default function HomeScreen() {
                       <span className="investigator-name">
                         {investigator.name}:
                       </span>
-                      <span className="faction-label">
+
+                      <span
+                        className={`faction-label ${getFactionClassName(
+                          investigator.faction,
+                        )}`}
+                      >
+                        <span className="faction-icon">
+                          {getFactionIcon(investigator.faction)}
+                        </span>
                         {formatFaction(investigator.faction)}
                       </span>
                     </div>
