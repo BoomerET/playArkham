@@ -1,6 +1,14 @@
 import type { Location } from "../../types/game";
 import { useGameStore } from "../../store/gameStore";
 
+function useInvestigatorNameLookup() {
+  const investigators = useGameStore((state) => state.availableInvestigators);
+
+  return (id: string) => {
+    return investigators.find((i) => i.id === id)?.name ?? id;
+  };
+}
+
 interface Props {
   location: Location;
 }
@@ -10,6 +18,8 @@ export default function LocationCard({ location }: Props) {
   const investigatorId = useGameStore((state) => state.investigator.id);
 
   const isCurrentLocation = location.investigatorsHere.includes(investigatorId);
+
+  const getName = useInvestigatorNameLookup();
 
   return (
     <div
@@ -25,15 +35,19 @@ export default function LocationCard({ location }: Props) {
       </div>
 
       <div className="entity-meta" style={{ marginTop: 10 }}>
-        <span>
-          Connections: {location.connections.length > 0 ? location.connections.join(", ") : "None"}
-        </span>
-        <span>
-          Investigators Here:{" "}
-          {location.investigatorsHere.length > 0
-            ? location.investigatorsHere.join(", ")
+        <div>
+          <strong>Connections:</strong>{" "}
+          {location.connections.length > 0
+            ? location.connections.join(", ")
             : "None"}
-        </span>
+        </div>
+
+        <div>
+          <strong>Investigators Here:</strong>{" "}
+          {location.investigatorsHere.length > 0
+            ? location.investigatorsHere.map(getName).join(", ")
+            : "None"}
+        </div>
       </div>
 
       <div className="location-actions">
@@ -42,4 +56,3 @@ export default function LocationCard({ location }: Props) {
     </div>
   );
 }
-
