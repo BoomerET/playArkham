@@ -1,32 +1,383 @@
-body {
-  margin: 0;
-  background: #081018;
-  color: white;
-  font-family: Inter, system-ui, Arial, sans-serif;
+:root {
+  --bg-1: #081018;
+  --bg-2: #0d1824;
+  --panel: rgba(14, 24, 36, 0.88);
+  --border: rgba(112, 192, 201, 0.25);
+  --border-strong: rgba(141, 243, 255, 0.45);
+
+  --gold: #d7b46a;
+  --teal: #6ed0d6;
+  --teal-strong: #8df3ff;
+
+  --text: #ecf3f7;
+  --muted: #a8bcc7;
+
+  --danger: #ff7b7b;
+  --success: #90e7a1;
+
+  --shadow: 0 0 0 1px rgba(110, 208, 214, 0.12),
+    0 10px 30px rgba(0, 0, 0, 0.4);
+  --glow: 0 0 18px rgba(110, 208, 214, 0.15);
 }
+
+/* ---------- Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(110, 208, 214, 0.12), transparent 30%),
+    radial-gradient(circle at 20% 20%, rgba(215, 180, 106, 0.08), transparent 25%),
+    linear-gradient(180deg, var(--bg-2), var(--bg-1));
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------- Layout ---------- */
 
 .app-shell {
   width: min(1400px, calc(100% - 32px));
   margin: 0 auto;
   padding: 24px 0 40px;
+  display: grid;
+  gap: 18px;
 }
 
-.game-panel,
-.panel,
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ---------- Panels ---------- */
+
 .hero-panel,
+.panel,
+.game-panel,
 section {
-  background: #142130;
-  border: 1px solid #35556b;
+  background: linear-gradient(180deg, rgba(20, 33, 48, 0.95), rgba(9, 17, 27, 0.95));
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px;
-  margin-bottom: 16px;
+  box-shadow: var(--shadow), var(--glow);
 }
 
-button {
-  background: #1f3b4a;
-  color: white;
-  border: 1px solid #4d8796;
+/* ---------- Typography ---------- */
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.hero-title.small {
+  font-size: 1.6rem;
+}
+
+.hero-subtitle {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.section-title {
+  margin-top: 0;
+}
+
+/* ---------- Buttons ---------- */
+
+.primary-button,
+.secondary-button {
+  padding: 10px 16px;
   border-radius: 10px;
-  padding: 8px 12px;
+  border: 1px solid var(--border);
+}
+
+.primary-button {
+  background: rgba(110, 208, 214, 0.18);
+}
+
+.secondary-button {
+  background: rgba(215, 180, 106, 0.12);
+}
+
+button:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 0 14px rgba(110, 208, 214, 0.2);
+}
+
+/* ---------- Investigator Grid ---------- */
+
+.investigator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.investigator-card {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(17, 29, 43, 0.95);
+}
+
+/* Selected state (VERY visible) */
+.investigator-card.selected {
+  border: 2px solid var(--teal-strong);
+  transform: scale(1.02);
+  box-shadow:
+    0 0 0 2px rgba(141, 243, 255, 0.35),
+    0 0 28px rgba(141, 243, 255, 0.22);
+}
+
+.investigator-card.selected::after {
+  content: "✓ Selected";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--teal-strong);
+  color: #081018;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+/* ---------- Portrait ---------- */
+
+.portrait-frame {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.portrait-frame.large {
+  width: 88px;
+  height: 88px;
+}
+
+.portrait-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Investigator Header ---------- */
+
+.investigator-header {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+}
+
+.investigator-header-text {
+  display: grid;
+  gap: 6px;
+}
+
+/* ---------- Stats ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.stat-box {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(18, 28, 40, 0.85);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-weight: bold;
+}
+
+/* ---------- Tokens ---------- */
+
+.token-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.token-chip {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(110, 208, 214, 0.12);
+  border: 1px solid var(--border);
+}
+
+.token-chip.gold {
+  background: rgba(215, 180, 106, 0.15);
+}
+
+/* ---------- Cards ---------- */
+
+.entity-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(19, 30, 44, 0.95);
+}
+
+.entity-card.highlight {
+  border-color: var(--gold);
+}
+
+.entity-card.dim {
+  opacity: 0.7;
+}
+
+.entity-title {
+  font-weight: bold;
+}
+
+.entity-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Card Types ---------- */
+
+.card-type-badge {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.card-type-asset {
+  background: rgba(74, 163, 255, 0.15);
+}
+
+.card-type-event {
+  background: rgba(79, 209, 139, 0.15);
+}
+
+.card-type-skill {
+  background: rgba(154, 107, 255, 0.15);
+}
+
+/* ---------- Layout helpers ---------- */
+
+.horizontal-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ---------- Log ---------- */
+
+.log-list {
+  padding-left: 20px;
+}
+
+.log-entry {
+  margin-bottom: 6px;
+}
+
+/* ---------- Factions ---------- */
+
+.faction-guardian {
+  border-color: rgba(74, 163, 255, 0.4);
+}
+
+.faction-seeker {
+  border-color: rgba(215, 180, 106, 0.4);
+}
+
+.faction-mystic {
+  border-color: rgba(154, 107, 255, 0.4);
+}
+
+.faction-rogue {
+  border-color: rgba(79, 209, 139, 0.4);
+}
+
+.faction-survivor {
+  border-color: rgba(217, 122, 82, 0.4);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .investigator-header {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait-frame {
+    width: 120px;
+    height: 120px;
+  }
+}
+.dragging-card {
+  opacity: 0.45;
+  transform: rotate(1deg) scale(0.98);
+  box-shadow: 0 0 24px rgba(141, 243, 255, 0.18);
+}
+
+.drop-zone {
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.drop-zone-active {
+  border-color: var(--teal-strong);
+  box-shadow:
+    0 0 0 2px rgba(141, 243, 255, 0.25),
+    0 0 28px rgba(141, 243, 255, 0.18);
+  background:
+    linear-gradient(180deg, rgba(24, 44, 60, 0.98), rgba(9, 17, 27, 0.98));
+}
+
+.empty-drop-message {
+  min-height: 96px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed rgba(141, 243, 255, 0.22);
+  border-radius: 14px;
+  color: var(--muted);
+  background: rgba(110, 208, 214, 0.04);
 }
 
