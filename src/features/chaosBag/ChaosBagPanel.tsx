@@ -19,11 +19,11 @@ export default function ChaosBagPanel() {
 
       <div className="stat-grid">
         <div className="stat-box">
-          <span className="stat-label">Tokens</span>
+          <span className="stat-label">Tokens: </span>
           <span className="stat-value">{chaosBag.length}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Last Draw</span>
+          <span className="stat-label">Last Draw: </span>
           <span className="stat-value">
             {lastDraw === null ? "None" : String(lastDraw)}
           </span>
