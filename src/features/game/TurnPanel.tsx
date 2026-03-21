@@ -14,17 +14,17 @@ export default function TurnPanel() {
 
       <div className="stat-grid">
         <div className="stat-box">
-          <span className="stat-label">Round</span>
+          <span className="stat-label">Round: </span>
           <span className="stat-value">{turn.round}</span>
         </div>
 
         <div className="stat-box">
-          <span className="stat-label">Phase</span>
+          <span className="stat-label">Phase: </span>
           <span className="stat-value">{prettyPhase(turn.phase)}</span>
         </div>
 
         <div className="stat-box">
-          <span className="stat-label">Actions Remaining</span>
+          <span className="stat-label">Actions Remaining: </span>
           <span className="stat-value">
             {turn.phase === "investigation" ? turn.actionsRemaining : "N/A"}
           </span>
