@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  background: #081018;
+  color: white;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+.app-shell {
+  width: min(1400px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.game-panel,
+.panel,
+.hero-panel,
+section {
+  background: #142130;
+  border: 1px solid #35556b;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+button {
+  background: #1f3b4a;
+  color: white;
+  border: 1px solid #4d8796;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+

@@ -1,0 +1,228 @@
+.faction-guardian {
+  --faction-color: #4aa3ff;
+  --faction-glow: rgba(74, 163, 255, 0.18);
+}
+
+.faction-seeker {
+  --faction-color: #d7b46a;
+  --faction-glow: rgba(215, 180, 106, 0.18);
+}
+
+.faction-mystic {
+  --faction-color: #9a6bff;
+  --faction-glow: rgba(154, 107, 255, 0.18);
+}
+
+.faction-rogue {
+  --faction-color: #4fd18b;
+  --faction-glow: rgba(79, 209, 139, 0.18);
+}
+
+.faction-survivor {
+  --faction-color: #d97a52;
+  --faction-glow: rgba(217, 122, 82, 0.18);
+}
+
+.faction-neutral {
+  --faction-color: #b8c3cc;
+  --faction-glow: rgba(184, 195, 204, 0.18);
+}
+
+.investigator-card.faction-guardian,
+.investigator-panel.faction-guardian {
+  border-color: rgba(74, 163, 255, 0.4);
+  box-shadow: 0 0 24px rgba(74, 163, 255, 0.12);
+}
+
+.investigator-card.faction-seeker,
+.investigator-panel.faction-seeker {
+  border-color: rgba(215, 180, 106, 0.4);
+  box-shadow: 0 0 24px rgba(215, 180, 106, 0.12);
+}
+
+.investigator-card.faction-mystic,
+.investigator-panel.faction-mystic {
+  border-color: rgba(154, 107, 255, 0.4);
+  box-shadow: 0 0 24px rgba(154, 107, 255, 0.12);
+}
+
+.investigator-card.faction-rogue,
+.investigator-panel.faction-rogue {
+  border-color: rgba(79, 209, 139, 0.4);
+  box-shadow: 0 0 24px rgba(79, 209, 139, 0.12);
+}
+
+.investigator-card.faction-survivor,
+.investigator-panel.faction-survivor {
+  border-color: rgba(217, 122, 82, 0.4);
+  box-shadow: 0 0 24px rgba(217, 122, 82, 0.12);
+}
+
+.investigator-card-top {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.investigator-card-body {
+  display: grid;
+  gap: 8px;
+}
+
+.investigator-header {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.investigator-header-text {
+  display: grid;
+  gap: 8px;
+}
+
+.portrait-frame {
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(31, 44, 60, 0.9), rgba(12, 18, 27, 0.95));
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.06);
+}
+
+.portrait-frame.large {
+  width: 88px;
+  height: 88px;
+}
+
+.portrait-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.05) contrast(1.04);
+}
+
+.faction-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  text-transform: capitalize;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+}
+
+.card-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.card-type-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.player-card.card-type-asset,
+.card-type-badge.card-type-asset {
+  border-color: rgba(74, 163, 255, 0.35);
+  background: rgba(74, 163, 255, 0.1);
+}
+
+.player-card.card-type-event,
+.card-type-badge.card-type-event {
+  border-color: rgba(79, 209, 139, 0.35);
+  background: rgba(79, 209, 139, 0.1);
+}
+
+.player-card.card-type-skill,
+.card-type-badge.card-type-skill {
+  border-color: rgba(154, 107, 255, 0.35);
+  background: rgba(154, 107, 255, 0.1);
+}
+
+.player-card.card-type-treachery,
+.card-type-badge.card-type-treachery {
+  border-color: rgba(255, 123, 123, 0.35);
+  background: rgba(255, 123, 123, 0.1);
+}
+
+.player-card.card-type-enemy,
+.card-type-badge.card-type-enemy {
+  border-color: rgba(255, 123, 123, 0.35);
+  background: rgba(255, 123, 123, 0.1);
+}
+
+.player-card.card-type-location,
+.card-type-badge.card-type-location {
+  border-color: rgba(215, 180, 106, 0.35);
+  background: rgba(215, 180, 106, 0.1);
+}
+
+@media (max-width: 720px) {
+  .investigator-card-top,
+  .investigator-header {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait-frame,
+  .portrait-frame.large {
+    width: 100%;
+    max-width: 120px;
+    height: 120px;
+  }
+}
+.investigator-card.selected {
+  transform: translateY(-2px) scale(1.01);
+  border-width: 2px;
+  border-color: var(--teal-strong);
+  box-shadow:
+    0 0 0 2px rgba(141, 243, 255, 0.35),
+    0 0 28px rgba(141, 243, 255, 0.22),
+    0 0 48px rgba(141, 243, 255, 0.12);
+}
+
+.investigator-card.selected .portrait-frame {
+  border-color: rgba(141, 243, 255, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.25),
+    0 0 22px rgba(141, 243, 255, 0.2);
+}
+
+.investigator-card.selected .investigator-name {
+  color: var(--teal-strong);
+  text-shadow: 0 0 12px rgba(141, 243, 255, 0.18);
+}
+
+.investigator-card.selected::after {
+  content: "✓ Selected";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #081018;
+  background: var(--teal-strong);
+  box-shadow: 0 0 16px rgba(141, 243, 255, 0.25);
+}
+
+.investigator-card {
+  position: relative;
+}
+
