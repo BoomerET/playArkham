@@ -196,6 +196,28 @@ button:hover {
   gap: 6px;
 }
 
+.investigator-title-row {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.faction-label {
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.investigator-stats {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.investigator-health {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
 /* ---------- Stats ---------- */
 
 .stat-grid {
