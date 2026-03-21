@@ -1,13 +1,20 @@
-import { useGameStore } from "../../store/gameStore";
+import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
+import { useGameStore } from "../../store/gameStore";
+
+function formatFaction(faction: string): string {
+  return faction.charAt(0).toUpperCase() + faction.slice(1);
+}
 
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
   const turn = useGameStore((state) => state.turn);
+
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
   const takeDamage = useGameStore((state) => state.takeDamage);
   const takeHorror = useGameStore((state) => state.takeHorror);
+
   const takeResourceAction = useGameStore((state) => state.takeResourceAction);
   const takeDrawAction = useGameStore((state) => state.takeDrawAction);
   const investigateAction = useGameStore((state) => state.investigateAction);
@@ -17,10 +24,13 @@ export default function InvestigatorPanel() {
   const canTakeAction =
     turn.phase === "investigation" && turn.actionsRemaining > 0;
 
+  const factionClass = getFactionClassName(investigator.faction);
+
   return (
-    <section className={`game-panel investigator-panel ${getFactionClassName(investigator.faction)}`}>
+    <section className={`game-panel investigator-panel ${factionClass}`}>
+      {/* Header */}
       <div className="investigator-header">
-        <div className="portrait-frame">
+        <div className={`portrait-frame ${factionClass}`}>
           <img
             src={investigator.portrait}
             alt={investigator.name}
@@ -30,47 +40,66 @@ export default function InvestigatorPanel() {
 
         <div className="investigator-header-text">
           <h2>{investigator.name}</h2>
+
+          {/* ✅ Updated faction display */}
           <div className="token-row">
-            <span className="faction-badge">{investigator.faction}</span>
-            <span className="token-chip gold">WIL {investigator.willpower}</span>
-            <span className="token-chip gold">INT {investigator.intellect}</span>
-            <span className="token-chip gold">COM {investigator.combat}</span>
-            <span className="token-chip gold">AGI {investigator.agility}</span>
+            <span className={`faction-label ${factionClass}`}>
+              <FactionIcon
+                faction={investigator.faction}
+                className="faction-icon"
+              />
+              {formatFaction(investigator.faction)}
+            </span>
+
+            <span className="token-chip gold">
+              WIL {investigator.willpower}
+            </span>
+            <span className="token-chip gold">
+              INT {investigator.intellect}
+            </span>
+            <span className="token-chip gold">
+              COM {investigator.combat}
+            </span>
+            <span className="token-chip gold">
+              AGI {investigator.agility}
+            </span>
           </div>
         </div>
       </div>
 
       <hr />
 
+      {/* Stats */}
       <div className="stat-grid">
         <div className="stat-box">
-          <span className="stat-label">Health: </span>
+          <span className="stat-label">Health</span>
           <span className="stat-value">{investigator.health}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Sanity: </span>
+          <span className="stat-label">Sanity</span>
           <span className="stat-value">{investigator.sanity}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Damage: </span>
+          <span className="stat-label">Damage</span>
           <span className="stat-value">{investigator.damage}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Horror: </span>
+          <span className="stat-label">Horror</span>
           <span className="stat-value">{investigator.horror}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Resources: </span>
+          <span className="stat-label">Resources</span>
           <span className="stat-value">{investigator.resources}</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Clues: </span>
+          <span className="stat-label">Clues</span>
           <span className="stat-value">{investigator.clues}</span>
         </div>
       </div>
 
       <hr />
 
+      {/* Actions */}
       <div className="button-row">
         <button onClick={takeResourceAction} disabled={!canTakeAction}>
           Resource
@@ -91,6 +120,7 @@ export default function InvestigatorPanel() {
 
       <hr />
 
+      {/* Debug / manual controls */}
       <div className="button-row">
         <button onClick={() => spendResource(1)}>-1 Resource</button>
         <button onClick={() => gainClue(1)}>+1 Clue</button>
@@ -100,4 +130,3 @@ export default function InvestigatorPanel() {
     </section>
   );
 }
-
