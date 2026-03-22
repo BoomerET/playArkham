@@ -136,6 +136,13 @@ function countMatchingIcons(card: PlayerCard, skill: SkillType): number {
   return (card.icons ?? []).filter((icon) => icon === skill).length;
 }
 
+function hasCommittedCardByName(
+  committedCards: CommittedSkillCard[],
+  cardName: string,
+): boolean {
+  return committedCards.some((entry) => entry.card.name === cardName);
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
@@ -1083,6 +1090,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const resolutionLog: string[] = [];
     let updatedInvestigator = investigator;
 
+    let cardsToDrawOnSuccess = 0;
+    let bonusCluesOnSuccess = 0;
+    let bonusDamageOnSuccess = 0;
+
+    if (success) {
+      if (
+        hasCommittedCardByName(activeSkillTest.committedCards, "Perception")
+      ) {
+        cardsToDrawOnSuccess += 1;
+      }
+
+      if (hasCommittedCardByName(activeSkillTest.committedCards, "Guts")) {
+        cardsToDrawOnSuccess += 1;
+      }
+
+      if (
+        hasCommittedCardByName(
+          activeSkillTest.committedCards,
+          "Manual Dexterity",
+        )
+      ) {
+        cardsToDrawOnSuccess += 1;
+      }
+
+      if (
+        pendingTestResolution?.kind === "investigate" &&
+        hasCommittedCardByName(activeSkillTest.committedCards, "Deduction")
+      ) {
+        bonusCluesOnSuccess += 1;
+      }
+
+      if (
+        pendingTestResolution?.kind === "fight" &&
+        hasCommittedCardByName(activeSkillTest.committedCards, "Vicious Blow")
+      ) {
+        bonusDamageOnSuccess += 1;
+      }
+    }
+
     if (pendingTestResolution?.kind === "investigate") {
       const location = locations.find(
         (entry) => entry.id === pendingTestResolution.locationId,
@@ -1097,18 +1143,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
           `Investigation succeeded at ${location?.name ?? "that location"}, but there were no clues to discover. 1 action spent.`,
         );
       } else {
+        const cluesAvailable = location.clues;
+        const totalCluesDiscovered = Math.min(
+          1 + bonusCluesOnSuccess,
+          cluesAvailable,
+        );
+
         updatedLocations = locations.map((entry) =>
           entry.id === pendingTestResolution.locationId
-            ? { ...entry, clues: entry.clues - 1 }
+            ? { ...entry, clues: entry.clues - totalCluesDiscovered }
             : entry,
         );
+
         updatedInvestigator = {
           ...investigator,
-          clues: investigator.clues + 1,
+          clues: investigator.clues + totalCluesDiscovered,
         };
+
         resolutionLog.push(
-          `Investigation succeeded at ${location.name}. Discovered 1 clue and spent 1 action.`,
+          `Investigation succeeded at ${location.name}. Discovered ${totalCluesDiscovered} clue${totalCluesDiscovered === 1 ? "" : "s"} and spent 1 action.`,
         );
+
+        if (bonusCluesOnSuccess > 0) {
+          resolutionLog.push(
+            `Deduction added +${bonusCluesOnSuccess} clue on success.`,
+          );
+        }
       }
     }
 
@@ -1126,23 +1186,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
           "Fight succeeded, but the enemy was no longer present. 1 action spent.",
         );
       } else {
+        const totalDamage = 1 + bonusDamageOnSuccess;
+
         updatedEnemies = enemies
           .map((entry) =>
             entry.id === enemy.id
-              ? { ...entry, damageOnEnemy: entry.damageOnEnemy + 1 }
+              ? { ...entry, damageOnEnemy: entry.damageOnEnemy + totalDamage }
               : entry,
           )
           .filter((entry) =>
             entry.id === enemy.id ? entry.damageOnEnemy < entry.health : true,
           );
 
-        const defeated = enemy.damageOnEnemy + 1 >= enemy.health;
+        const defeated = enemy.damageOnEnemy + totalDamage >= enemy.health;
 
         resolutionLog.push(
           defeated
             ? `Fight succeeded. ${enemy.name} was defeated. 1 action spent.`
-            : `Fight succeeded. Dealt 1 damage to ${enemy.name}. 1 action spent.`,
+            : `Fight succeeded. Dealt ${totalDamage} damage to ${enemy.name}. 1 action spent.`,
         );
+
+        if (bonusDamageOnSuccess > 0) {
+          resolutionLog.push(
+            `Vicious Blow added +${bonusDamageOnSuccess} damage on success.`,
+          );
+        }
       }
     }
 
@@ -1172,10 +1240,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    let updatedDeck = get().deck;
+    let updatedHand = get().hand;
+
+    for (let i = 0; i < cardsToDrawOnSuccess; i += 1) {
+      if (updatedDeck.length === 0) {
+        resolutionLog.push(
+          "Tried to draw a card from a successful skill effect, but the deck was empty.",
+        );
+        break;
+      }
+
+      const [drawnCard, ...remainingDeck] = updatedDeck;
+      updatedDeck = remainingDeck;
+      updatedHand = [...updatedHand, drawnCard];
+      resolutionLog.push(
+        `Drew card from successful skill effect: ${drawnCard.name}`,
+      );
+    }
+
     set({
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
+      deck: updatedDeck,
+      hand: updatedHand,
       discard: [...discard, ...committedCards],
       lastSkillTest: result,
       activeSkillTest: null,
