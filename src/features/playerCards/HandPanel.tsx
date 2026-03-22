@@ -1,6 +1,63 @@
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
 
+type SkillType = "willpower" | "intellect" | "combat" | "agility";
+
+const skillMeta: Record<
+  SkillType,
+  {
+    label: string;
+    short: string;
+    className: string;
+  }
+> = {
+  willpower: {
+    label: "Willpower",
+    short: "W",
+    className: "skill-pill-willpower",
+  },
+  intellect: {
+    label: "Intellect",
+    short: "I",
+    className: "skill-pill-intellect",
+  },
+  combat: {
+    label: "Combat",
+    short: "C",
+    className: "skill-pill-combat",
+  },
+  agility: {
+    label: "Agility",
+    short: "A",
+    className: "skill-pill-agility",
+  },
+};
+
+function normalizeSkillName(value: string): SkillType | null {
+  const normalized = value.trim().toLowerCase();
+
+  if (
+    normalized === "willpower" ||
+    normalized === "intellect" ||
+    normalized === "combat" ||
+    normalized === "agility"
+  ) {
+    return normalized;
+  }
+
+  return null;
+}
+
+function formatSkillList(icons: string[] | undefined) {
+  if (!icons || icons.length === 0) {
+    return [];
+  }
+
+  return icons
+    .map((icon) => normalizeSkillName(icon))
+    .filter((icon): icon is SkillType => icon !== null);
+}
+
 export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
   const discardCard = useGameStore((state) => state.discardCard);
@@ -38,6 +95,7 @@ export default function HandPanel() {
             const draggable = activeSkillTest
               ? card.type === "skill"
               : card.type !== "skill";
+            const cardIcons = formatSkillList(card.icons);
 
             return (
               <div
@@ -70,10 +128,20 @@ export default function HandPanel() {
                     <span className="token-chip">Cost {card.cost}</span>
                   )}
 
-                  {card.icons && card.icons.length > 0 && (
-                    <span className="token-chip gold">
-                      Icons {card.icons.join(", ")}
-                    </span>
+                  {cardIcons.length > 0 && (
+                    <div className="hand-card-icon-row" aria-label="Card icons">
+                      {cardIcons.map((icon, index) => (
+                        <span
+                          key={`${card.id}-${icon}-${index}`}
+                          className={`skill-pill skill-pill-small ${skillMeta[icon].className}`}
+                          title={skillMeta[icon].label}
+                        >
+                          <span className="skill-pill-icon">
+                            {skillMeta[icon].short}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
                   )}
 
                   {activeSkillTest && card.type !== "skill" && (

@@ -1035,3 +1035,10 @@ button:hover {
 .hand-card-actions {
   margin-top: auto;
 }
+
+.hand-card-icon-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
