@@ -725,3 +725,78 @@ button:hover {
     0 0 28px rgba(217, 122, 82, 0.22);
 }
 
+/* ---------- Selected Investigator Pulse ---------- */
+
+.investigator-card.selected {
+  animation: selected-investigator-pulse 2.2s ease-in-out infinite;
+}
+
+.investigator-card.selected .faction-label {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 16px currentColor;
+}
+
+.investigator-card.selected .faction-icon-svg {
+  filter: drop-shadow(0 0 7px currentColor);
+}
+
+.investigator-card.selected .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.22),
+    0 0 22px rgba(141, 243, 255, 0.18);
+}
+
+.investigator-card.selected.faction-guardian .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(74, 163, 255, 0.22),
+    0 0 26px rgba(74, 163, 255, 0.24);
+}
+
+.investigator-card.selected.faction-seeker .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(215, 180, 106, 0.22),
+    0 0 26px rgba(215, 180, 106, 0.24);
+}
+
+.investigator-card.selected.faction-mystic .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(154, 107, 255, 0.22),
+    0 0 26px rgba(154, 107, 255, 0.24);
+}
+
+.investigator-card.selected.faction-rogue .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(79, 209, 139, 0.22),
+    0 0 26px rgba(79, 209, 139, 0.24);
+}
+
+.investigator-card.selected.faction-survivor .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(217, 122, 82, 0.22),
+    0 0 26px rgba(217, 122, 82, 0.24);
+}
+
+@keyframes selected-investigator-pulse {
+  0% {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 0 0 2px rgba(141, 243, 255, 0.28),
+      0 0 22px rgba(141, 243, 255, 0.16);
+  }
+
+  50% {
+    transform: translateY(-3px) scale(1.025);
+    box-shadow:
+      0 0 0 2px rgba(141, 243, 255, 0.4),
+      0 0 34px rgba(141, 243, 255, 0.24);
+  }
+
+  100% {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 0 0 2px rgba(141, 243, 255, 0.28),
+      0 0 22px rgba(141, 243, 255, 0.16);
+  }
+}
+
