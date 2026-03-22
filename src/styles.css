@@ -773,3 +773,91 @@ button:hover {
     font-size: 0.78rem;
   }
 }
+
+/* ---------- Location Row / Scenario Map ---------- */
+
+.location-row-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.location-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.location-row-kicker {
+  margin: 0 0 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.location-row-title {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.location-row-subtitle {
+  margin-top: 6px;
+}
+
+.location-row-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.location-board-surface {
+  position: relative;
+  border-radius: 18px;
+  padding: 18px;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.04), transparent 42%),
+    linear-gradient(180deg, rgba(24, 38, 32, 0.58), rgba(12, 20, 17, 0.68));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.location-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* Make location cards feel a bit more like table cards inside the map */
+.location-board-grid .location-card,
+.location-board-grid .entity-card {
+  height: 100%;
+}
+
+/* Optional: slightly tighten location headings when used in the board */
+.location-board-grid h3,
+.location-board-grid h4 {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .location-row-header {
+    flex-direction: column;
+  }
+
+  .location-board-surface {
+    padding: 14px;
+  }
+
+  .location-board-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
