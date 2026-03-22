@@ -1080,7 +1080,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     let updatedLocations = locations;
     let updatedEnemies = enemies;
-    let resolutionLog: string[] = [];
+    const resolutionLog: string[] = [];
     let updatedInvestigator = investigator;
 
     if (pendingTestResolution?.kind === "investigate") {

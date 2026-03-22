@@ -19,8 +19,9 @@ export default function HandPanel() {
         <div className="horizontal-card-grid">
           {hand.map((card) => {
             const isDragging = draggedCardId === card.id;
-            const draggable =
-              !!activeSkillTest ? card.type === "skill" : card.type !== "skill";
+            const draggable = activeSkillTest
+              ? card.type === "skill"
+              : card.type !== "skill";
 
             return (
               <div
@@ -41,7 +42,9 @@ export default function HandPanel() {
               >
                 <div className="card-topline">
                   <p className="entity-title">{card.name}</p>
-                  <span className={`card-type-badge ${getCardTypeClassName(card)}`}>
+                  <span
+                    className={`card-type-badge ${getCardTypeClassName(card)}`}
+                  >
                     {card.type}
                   </span>
                 </div>
@@ -56,8 +59,14 @@ export default function HandPanel() {
                 {card.text && <p className="entity-text">{card.text}</p>}
 
                 <div className="card-actions">
-                  {!activeSkillTest && <button onClick={() => playCard(card.id)}>Play</button>}
-                  {!activeSkillTest && <button onClick={() => discardCard(card.id)}>Discard</button>}
+                  {!activeSkillTest && (
+                    <button onClick={() => playCard(card.id)}>Play</button>
+                  )}
+                  {!activeSkillTest && (
+                    <button onClick={() => discardCard(card.id)}>
+                      Discard
+                    </button>
+                  )}
                 </div>
               </div>
             );
