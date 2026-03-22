@@ -197,11 +197,6 @@ button:hover {
   gap: 16px;
 }
 
-.investigator-header-text {
-  display: grid;
-  gap: 6px;
-}
-
 .investigator-title-row {
   display: flex;
   gap: 6px;
@@ -223,13 +218,6 @@ button:hover {
 .investigator-health {
   color: var(--muted);
   font-size: 0.9rem;
-}
-
-.investigator-name {
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: #e6edf3; /* lighter, more readable */
-  letter-spacing: 0.02em;
 }
 
 /* ---------- Stats ---------- */
