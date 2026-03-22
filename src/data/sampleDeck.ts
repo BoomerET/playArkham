@@ -68,7 +68,7 @@ export const sampleDeck: PlayerCard[] = [
     id: "perception-1",
     name: "Perception",
     type: "skill",
-    icons: ["intellect"],
+    icons: ["intellect", "intellect"],
     text: "If this test is successful, draw 1 card.",
   },
 ];
