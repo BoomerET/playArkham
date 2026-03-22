@@ -861,3 +861,78 @@ button:hover {
     gap: 12px;
   }
 }
+
+/* ---------- Location Card ---------- */
+
+.location-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+  padding: 14px;
+}
+
+.location-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.location-card-title {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.location-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.location-card-status-row {
+  min-height: 32px;
+  align-items: flex-start;
+}
+
+.location-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.location-card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.location-card-section-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.location-card-section-value {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.token-chip.success {
+  background: rgba(144, 231, 161, 0.14);
+  border-color: rgba(144, 231, 161, 0.38);
+  color: #b8f3c4;
+}
+
+.token-chip.danger {
+  background: rgba(255, 123, 123, 0.14);
+  border-color: rgba(255, 123, 123, 0.38);
+  color: #ffb3b3;
+}
