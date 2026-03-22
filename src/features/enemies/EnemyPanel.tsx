@@ -1,7 +1,26 @@
 import { useGameStore } from "../../store/gameStore";
 
+function formatName(value: string): string {
+  return value
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 export default function EnemyPanel() {
   const enemies = useGameStore((state) => state.enemies);
+  const availableInvestigators = useGameStore(
+    (state) => state.availableInvestigators,
+  );
+
+  function getInvestigatorDisplayName(id: string | null): string {
+    if (!id) return "No";
+
+    return (
+      availableInvestigators.find((investigator) => investigator.id === id)?.name ??
+      formatName(id)
+    );
+  }
 
   return (
     <section className="game-panel">
@@ -30,13 +49,26 @@ export default function EnemyPanel() {
                 </div>
 
                 <div className="entity-meta" style={{ marginTop: 10 }}>
-                  <span>Damage/Horror: {enemy.damage}/{enemy.horror}</span>
-                  <span>Location: {enemy.locationId}</span>
-                  <span>Engaged: {enemy.engagedInvestigatorId ?? "No"}</span>
-                  <span>Exhausted: {enemy.exhausted ? "Yes" : "No"}</span>
-                  <span>
-                    Damage on Enemy: {enemy.damageOnEnemy}/{enemy.health}
-                  </span>
+                  <div>
+                    <strong>Damage/Horror:</strong> {enemy.damage}/{enemy.horror}
+                  </div>
+
+                  <div>
+                    <strong>Location:</strong> {formatName(enemy.locationId)}
+                  </div>
+
+                  <div>
+                    <strong>Engaged:</strong>{" "}
+                    {getInvestigatorDisplayName(enemy.engagedInvestigatorId)}
+                  </div>
+
+                  <div>
+                    <strong>Exhausted:</strong> {enemy.exhausted ? "Yes" : "No"}
+                  </div>
+
+                  <div>
+                    <strong>Damage on Enemy:</strong> {enemy.damageOnEnemy}/{enemy.health}
+                  </div>
                 </div>
               </div>
             );
@@ -46,4 +78,3 @@ export default function EnemyPanel() {
     </section>
   );
 }
-
