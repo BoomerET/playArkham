@@ -180,13 +180,9 @@ export default function ChaosBagPanel() {
         <div
           className={`chaos-token-display ${tokenClassName} ${
             revealState === "drawing" ? "chaos-token-drawing" : ""
-          } ${
-            revealState === "revealed" ? "chaos-token-revealed" : ""
-          } ${
+          } ${revealState === "revealed" ? "chaos-token-revealed" : ""} ${
             resultPulse === "success" ? "chaos-token-success-pulse" : ""
-          } ${
-            resultPulse === "failure" ? "chaos-token-failure-pulse" : ""
-          }`}
+          } ${resultPulse === "failure" ? "chaos-token-failure-pulse" : ""}`}
           aria-live="polite"
         >
           <div className="chaos-token-face">
@@ -217,8 +213,16 @@ export default function ChaosBagPanel() {
         >
           <strong>{lastSkillTest.success ? "Success" : "Failure"}</strong>
           <span>
-            Final {lastSkillTest.finalValue} vs Difficulty{" "}
-            {lastSkillTest.difficulty}
+            {lastSkillTest.baseValue}
+            {lastSkillTest.assetModifier !== 0 &&
+              ` + ${lastSkillTest.assetModifier}`}
+            {lastSkillTest.committedModifier !== 0 &&
+              ` + ${lastSkillTest.committedModifier}`}{" "}
+            {lastSkillTest.tokenModifier >= 0
+              ? `+ ${lastSkillTest.tokenModifier}`
+              : `- ${Math.abs(lastSkillTest.tokenModifier)}`}
+            {" = "}
+            {lastSkillTest.finalValue} vs Difficulty {lastSkillTest.difficulty}
           </span>
         </div>
       )}
