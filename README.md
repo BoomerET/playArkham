@@ -1,6 +1,6 @@
 To run from docker:
 docker build -t playarkham .
-docker run -p 8090:80 playarkham
+docker run -d -p 8090:80 playarkham
 (NOTE: Change 8090 to the port you want to use, which you may need to open)
 (NOTE2: If you use UFW, it's sudo ufw allow 8090)
 
