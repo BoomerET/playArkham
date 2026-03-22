@@ -6,6 +6,25 @@ function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
 }
 
+function splitInvestigatorName(name: string): { firstLine: string; secondLine: string | null } {
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length <= 1) {
+    return { firstLine: name, secondLine: null };
+  }
+
+  if (parts.length === 2) {
+    return { firstLine: parts[0], secondLine: parts[1] };
+  }
+
+  const midpoint = Math.ceil(parts.length / 2);
+
+  return {
+    firstLine: parts.slice(0, midpoint).join(" "),
+    secondLine: parts.slice(midpoint).join(" "),
+  };
+}
+
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
   const turn = useGameStore((state) => state.turn);
@@ -25,20 +44,28 @@ export default function InvestigatorPanel() {
     turn.phase === "investigation" && turn.actionsRemaining > 0;
 
   const factionClass = getFactionClassName(investigator.faction);
+  const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
-        <div className={`portrait-frame ${factionClass}`}>
-          <img
-            src={investigator.portrait}
-            alt={investigator.name}
-            className="portrait-image"
-          />
+        <div className="investigator-portrait-column">
+          <div className={`portrait-frame investigator-portrait-frame ${factionClass}`}>
+            <img
+              src={investigator.portrait}
+              alt={investigator.name}
+              className="portrait-image"
+            />
+          </div>
         </div>
 
         <div className="investigator-header-text">
-          <h2 className="investigator-name">{investigator.name}</h2>
+          <h2 className="investigator-name">
+            <span className="investigator-name-line">{firstLine}</span>
+            {secondLine && (
+              <span className="investigator-name-line">{secondLine}</span>
+            )}
+          </h2>
 
           <div className="investigator-faction-row">
             <span className={`faction-label ${factionClass}`}>
