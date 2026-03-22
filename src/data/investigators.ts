@@ -65,5 +65,21 @@ export const investigators: Investigator[] = [
     combat: 3,
     agility: 4,
   },
+  {
+    id: "joe-diamond",
+    name: '"joe-diamond',
+    faction: "seeker",
+    portrait: "/portraits/joe-diamond.webp",
+    health: 7,
+    sanity: 7,
+    resources: 5,
+    clues: 0,
+    damage: 0,
+    horror: 0,
+    willpower: 2,
+    intellect: 4,
+    combat: 4,
+    agility: 2,
+  },
 ];
 
