@@ -1,8 +1,9 @@
-import SkillIcon, { normalizeSkillIcon } from "../../components/SkillIcon";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
+import { useGameStore } from "../../store/gameStore";
+import { getCardTypeClassName } from "../../lib/ui";
 
 export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
