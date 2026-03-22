@@ -162,6 +162,12 @@ button:hover {
   border-radius: 999px;
 }
 
+.investigator-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 /* ---------- Portrait ---------- */
 
 .portrait-frame {
@@ -222,6 +228,8 @@ button:hover {
 .investigator-name {
   font-weight: 700;
   font-size: 1.05rem;
+  color: #e6edf3; /* lighter, more readable */
+  letter-spacing: 0.02em;
 }
 
 /* ---------- Stats ---------- */

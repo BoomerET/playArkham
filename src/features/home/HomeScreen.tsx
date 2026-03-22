@@ -54,9 +54,9 @@ export default function HomeScreen() {
                   </div>
 
                   <div className="investigator-card-body">
-                    <div className="investigator-title-row">
+                    <div className="investigator-title-block">
                       <span className="investigator-name">
-                        {investigator.name}:
+                        {investigator.name}
                       </span>
 
                       <span className={`faction-label ${factionClass}`}>
@@ -69,12 +69,14 @@ export default function HomeScreen() {
                     </div>
 
                     <div className="investigator-stats">
-                      WIL {investigator.willpower} · INT {investigator.intellect} · COM{" "}
-                      {investigator.combat} · AGI {investigator.agility}
+                      WIL {investigator.willpower} · INT{" "}
+                      {investigator.intellect} · COM {investigator.combat} · AGI{" "}
+                      {investigator.agility}
                     </div>
 
                     <div className="investigator-health">
-                      Health {investigator.health} · Sanity {investigator.sanity}
+                      Health {investigator.health} · Sanity{" "}
+                      {investigator.sanity}
                     </div>
                   </div>
                 </div>
