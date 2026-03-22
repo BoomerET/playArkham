@@ -1120,3 +1120,35 @@ button:hover {
   gap: 6px;
   align-items: center;
 }
+
+/* ---------- Skill Icon Interaction Polish ---------- */
+
+.skill-icon-badge {
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+  cursor: default;
+}
+
+.skill-icon-badge:hover {
+  transform: translateY(-2px) scale(1.08);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.35),
+    0 0 12px currentColor;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.skill-icon-badge:active {
+  transform: translateY(0) scale(0.96);
+  box-shadow: 0 0 6px currentColor;
+}
+
+.skill-icon-svg {
+  transition: transform 120ms ease;
+}
+
+.skill-icon-badge:hover .skill-icon-svg {
+  transform: scale(1.1);
+}
