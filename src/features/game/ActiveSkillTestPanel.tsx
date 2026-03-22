@@ -1,12 +1,8 @@
 import { useMemo, useState } from "react";
-import SkillIcon, {
-  normalizeSkillIcon,
-  type SkillIconType,
-} from "../../components/SkillIcon";
+import SkillIcon from "../../components/SkillIcon";
+import { normalizeSkillIcon, type SkillIconType } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
-import SkillIcon from "../../components/SkillIcon";
-import { normalizeSkillIcon } from "../../components/skillIconUtils";
 
 const skillMeta: Record<
   SkillIconType,
