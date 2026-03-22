@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChaosToken } from "../../types/game";
 import { useGameStore } from "../../store/gameStore";
 
@@ -23,7 +23,6 @@ function formatToken(token: ChaosToken | null): string {
 function getTokenModifier(token: ChaosToken | null): string {
   if (token === null) {
     return "";
-
   }
 
   if (token === "autoFail") {
@@ -77,18 +76,41 @@ export default function ChaosBagPanel() {
   const [lastDraw, setLastDraw] = useState<ChaosToken | null>(null);
   const [displayToken, setDisplayToken] = useState<ChaosToken | null>(null);
   const [revealState, setRevealState] = useState<RevealState>("idle");
-  const [resultPulse, setResultPulse] = useState<"success" | "failure" | null>(null);
+  const [resultPulse, setResultPulse] = useState<"success" | "failure" | null>(
+    null,
+  );
+
+  const lastAnimatedSkillTestRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!lastSkillTest) {
       return;
     }
 
-    setRevealState("drawing");
-    setResultPulse(null);
+    const skillTestKey = [
+      lastSkillTest.source,
+      lastSkillTest.skill,
+      lastSkillTest.difficulty,
+      lastSkillTest.finalValue,
+      lastSkillTest.success,
+      lastSkillTest.token,
+    ].join("|");
+
+    if (lastAnimatedSkillTestRef.current === skillTestKey) {
+      return;
+    }
+
+    lastAnimatedSkillTestRef.current = skillTestKey;
+
+    const startTimeout = window.setTimeout(() => {
+      setDisplayToken(null);
+      setRevealState("drawing");
+      setResultPulse(null);
+    }, 0);
 
     const revealTimeout = window.setTimeout(() => {
       setDisplayToken(lastSkillTest.token);
+      setLastDraw(lastSkillTest.token);
       setRevealState("revealed");
       setResultPulse(lastSkillTest.success ? "success" : "failure");
     }, 320);
@@ -98,12 +120,14 @@ export default function ChaosBagPanel() {
     }, 1200);
 
     return () => {
+      window.clearTimeout(startTimeout);
       window.clearTimeout(revealTimeout);
       window.clearTimeout(pulseTimeout);
     };
   }, [lastSkillTest]);
 
   function handleDraw() {
+    setDisplayToken(null);
     setRevealState("drawing");
     setResultPulse(null);
 
@@ -116,14 +140,16 @@ export default function ChaosBagPanel() {
     }, 320);
   }
 
-  const tokenLabel = useMemo(() => formatToken(displayToken ?? lastDraw), [displayToken, lastDraw]);
+  const shownToken = displayToken ?? lastDraw;
+
+  const tokenLabel = useMemo(() => formatToken(shownToken), [shownToken]);
   const tokenModifierLabel = useMemo(
-    () => getTokenModifier(displayToken ?? lastDraw),
-    [displayToken, lastDraw],
+    () => getTokenModifier(shownToken),
+    [shownToken],
   );
   const tokenClassName = useMemo(
-    () => getTokenClassName(displayToken ?? lastDraw),
-    [displayToken, lastDraw],
+    () => getTokenClassName(shownToken),
+    [shownToken],
   );
 
   return (
@@ -171,7 +197,9 @@ export default function ChaosBagPanel() {
               </>
             ) : (
               <>
-                <span className="chaos-token-symbol">{tokenModifierLabel || "—"}</span>
+                <span className="chaos-token-symbol">
+                  {tokenModifierLabel || "—"}
+                </span>
                 <span className="chaos-token-caption">{tokenLabel}</span>
               </>
             )}
@@ -182,12 +210,15 @@ export default function ChaosBagPanel() {
       {lastSkillTest && revealState === "revealed" && (
         <div
           className={`chaos-test-result ${
-            lastSkillTest.success ? "chaos-test-result-success" : "chaos-test-result-failure"
+            lastSkillTest.success
+              ? "chaos-test-result-success"
+              : "chaos-test-result-failure"
           }`}
         >
           <strong>{lastSkillTest.success ? "Success" : "Failure"}</strong>
           <span>
-            Final {lastSkillTest.finalValue} vs Difficulty {lastSkillTest.difficulty}
+            Final {lastSkillTest.finalValue} vs Difficulty{" "}
+            {lastSkillTest.difficulty}
           </span>
         </div>
       )}
