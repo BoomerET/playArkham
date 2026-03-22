@@ -97,5 +97,21 @@ export const investigators: Investigator[] = [
     combat: 5,
     agility: 2,
   },
+  {
+    id: "trish-scarborough",
+    name: "Trish Scarborough",
+    faction: "guardian",
+    portrait: "/portraits/trish-scarborough.webp",
+    health: 8,
+    sanity: 6,
+    resources: 5,
+    clues: 0,
+    damage: 0,
+    horror: 0,
+    willpower: 2,
+    intellect: 4,
+    combat: 2,
+    agility: 4,
+  },
 ];
 
