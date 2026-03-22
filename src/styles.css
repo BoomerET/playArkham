@@ -1203,3 +1203,118 @@ button:hover {
   gap: 6px;
 }
 
+/* ---------- Enemy Panel ---------- */
+
+.enemy-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.enemy-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.enemy-panel-kicker {
+  margin: 0 0 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.enemy-panel-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.enemy-panel-count {
+  color: var(--muted);
+}
+
+.enemy-panel-empty {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+}
+
+/* ---------- Enemy Cards ---------- */
+
+.enemy-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.enemy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-color: rgba(255, 123, 123, 0.25);
+}
+
+.enemy-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enemy-card-title {
+  margin: 0;
+}
+
+.enemy-health-chip {
+  font-weight: 700;
+  color: #ffb3b3;
+}
+
+.enemy-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.enemy-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.enemy-card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.enemy-section-label {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.enemy-card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ---------- State ---------- */
+
+.enemy-engaged {
+  box-shadow:
+    0 0 0 1px rgba(255, 123, 123, 0.2),
+    0 0 18px rgba(255, 123, 123, 0.18);
+}
+
+.enemy-exhausted {
+  opacity: 0.75;
+  border-style: dashed;
+}
+

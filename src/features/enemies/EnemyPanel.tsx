@@ -14,7 +14,7 @@ export default function EnemyPanel() {
   );
 
   function getInvestigatorDisplayName(id: string | null): string {
-    if (!id) return "No";
+    if (!id) return "None";
 
     return (
       availableInvestigators.find((investigator) => investigator.id === id)?.name ??
@@ -23,52 +23,77 @@ export default function EnemyPanel() {
   }
 
   return (
-    <section className="game-panel">
-      <h2>Enemies</h2>
+    <section className="game-panel enemy-panel">
+      <div className="enemy-panel-header">
+        <div>
+          <p className="enemy-panel-kicker">Threat Area</p>
+          <h2 className="enemy-panel-title">
+            Enemies <span className="enemy-panel-count">({enemies.length})</span>
+          </h2>
+          <p className="panel-subtitle">
+            Enemies in play across all locations.
+          </p>
+        </div>
+      </div>
 
       {enemies.length === 0 ? (
-        <p className="panel-subtitle">No enemies in play.</p>
+        <div className="enemy-panel-empty">
+          <p className="panel-subtitle">No enemies in play.</p>
+        </div>
       ) : (
-        <div className="horizontal-card-grid">
+        <div className="enemy-card-grid">
           {enemies.map((enemy) => {
             const engaged = enemy.engagedInvestigatorId !== null;
 
             return (
               <div
                 key={enemy.id}
-                className={`entity-card enemy-card ${engaged ? "engaged" : ""} ${
-                  enemy.exhausted ? "exhausted" : ""
-                }`}
+                className={`entity-card enemy-card ${
+                  engaged ? "enemy-engaged" : ""
+                } ${enemy.exhausted ? "enemy-exhausted" : ""}`}
               >
-                <p className="entity-title">{enemy.name}</p>
+                <div className="enemy-card-header">
+                  <p className="entity-title enemy-card-title">
+                    {enemy.name}
+                  </p>
 
-                <div className="token-row">
-                  <span className="token-chip gold">Fight {enemy.fight}</span>
-                  <span className="token-chip gold">Evade {enemy.evade}</span>
-                  <span className="token-chip gold">Health {enemy.health}</span>
+                  <span className="enemy-health-chip">
+                    {enemy.damageOnEnemy}/{enemy.health}
+                  </span>
                 </div>
 
-                <div className="entity-meta" style={{ marginTop: 10 }}>
-                  <div>
-                    <strong>Damage/Horror:</strong> {enemy.damage}/{enemy.horror}
+                <div className="enemy-stats-row">
+                  <span className="token-chip gold">Fight {enemy.fight}</span>
+                  <span className="token-chip gold">Evade {enemy.evade}</span>
+                  <span className="token-chip gold">Damage {enemy.damage}</span>
+                  <span className="token-chip gold">Horror {enemy.horror}</span>
+                </div>
+
+                <div className="enemy-card-body">
+                  <div className="enemy-card-section">
+                    <p className="enemy-section-label">Location</p>
+                    <p className="entity-meta">
+                      {formatName(enemy.locationId)}
+                    </p>
                   </div>
 
-                  <div>
-                    <strong>Location:</strong> {formatName(enemy.locationId)}
+                  <div className="enemy-card-section">
+                    <p className="enemy-section-label">Engagement</p>
+                    <p className="entity-meta">
+                      {getInvestigatorDisplayName(
+                        enemy.engagedInvestigatorId,
+                      )}
+                    </p>
                   </div>
+                </div>
 
-                  <div>
-                    <strong>Engaged:</strong>{" "}
-                    {getInvestigatorDisplayName(enemy.engagedInvestigatorId)}
-                  </div>
-
-                  <div>
-                    <strong>Exhausted:</strong> {enemy.exhausted ? "Yes" : "No"}
-                  </div>
-
-                  <div>
-                    <strong>Damage on Enemy:</strong> {enemy.damageOnEnemy}/{enemy.health}
-                  </div>
+                <div className="enemy-card-tags">
+                  {engaged && (
+                    <span className="token-chip danger">Engaged</span>
+                  )}
+                  {enemy.exhausted && (
+                    <span className="token-chip">Exhausted</span>
+                  )}
                 </div>
               </div>
             );
@@ -78,3 +103,4 @@ export default function EnemyPanel() {
     </section>
   );
 }
+
