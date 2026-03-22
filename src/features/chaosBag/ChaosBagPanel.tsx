@@ -167,12 +167,12 @@ export default function ChaosBagPanel() {
       <div className="chaos-bag-layout">
         <div className="chaos-bag-stats">
           <div className="stat-box">
-            <span className="stat-label">Tokens</span>
+            <span className="stat-label">Tokens: </span>
             <span className="stat-value">{chaosBag.length}</span>
           </div>
 
           <div className="stat-box">
-            <span className="stat-label">Last Draw</span>
+            <span className="stat-label">Last Draw: </span>
             <span className="stat-value">{formatToken(lastDraw)}</span>
           </div>
         </div>
