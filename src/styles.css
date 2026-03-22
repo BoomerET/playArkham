@@ -659,3 +659,69 @@ button:hover {
     border-color 140ms ease,
     box-shadow 140ms ease;
 }
+
+/* ---------- Investigator Hover Effects ---------- */
+
+.investigator-card {
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+
+.investigator-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(110, 208, 214, 0.08);
+}
+
+/* Faction badge glow on hover */
+.investigator-card:hover .faction-label {
+  filter: brightness(1.15);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 18px currentColor;
+}
+
+/* Icon glow */
+.investigator-card:hover .faction-icon-svg {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Portrait intensifies */
+.investigator-card:hover .portrait-frame {
+  transform: translateY(-2px);
+}
+
+/* Faction-specific glow boosts */
+.investigator-card:hover .portrait-frame.faction-guardian {
+  box-shadow:
+    0 0 0 1px rgba(74, 163, 255, 0.2),
+    0 0 28px rgba(74, 163, 255, 0.22);
+}
+
+.investigator-card:hover .portrait-frame.faction-seeker {
+  box-shadow:
+    0 0 0 1px rgba(215, 180, 106, 0.2),
+    0 0 28px rgba(215, 180, 106, 0.22);
+}
+
+.investigator-card:hover .portrait-frame.faction-mystic {
+  box-shadow:
+    0 0 0 1px rgba(154, 107, 255, 0.2),
+    0 0 28px rgba(154, 107, 255, 0.22);
+}
+
+.investigator-card:hover .portrait-frame.faction-rogue {
+  box-shadow:
+    0 0 0 1px rgba(79, 209, 139, 0.2),
+    0 0 28px rgba(79, 209, 139, 0.22);
+}
+
+.investigator-card:hover .portrait-frame.faction-survivor {
+  box-shadow:
+    0 0 0 1px rgba(217, 122, 82, 0.2),
+    0 0 28px rgba(217, 122, 82, 0.22);
+}
+
