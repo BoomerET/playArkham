@@ -4,7 +4,7 @@ import { useGameStore } from "../../store/gameStore";
 
 type RevealState = "idle" | "drawing" | "revealed";
 
-function formatToken(token: ChaosToken | null): string {
+function formatTokenLabel(token: ChaosToken | null): string {
   if (token === null) {
     return "None";
   }
@@ -17,29 +17,9 @@ function formatToken(token: ChaosToken | null): string {
     return "Elder Sign";
   }
 
-  return String(token);
-}
-
-function getTokenModifier(token: ChaosToken | null): string {
-  if (token === null) {
-    return "";
-  }
-
-  if (token === "autoFail") {
-    return "FAIL";
-  }
-
-  if (token === "elderSign") {
-    return "★";
-  }
-
-  const numericValue = Number(token);
-
-  if (Number.isNaN(numericValue)) {
-    return String(token);
-  }
-
-  return numericValue >= 0 ? `+${numericValue}` : String(numericValue);
+  return String(token)
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (match) => match.toUpperCase());
 }
 
 function getTokenClassName(token: ChaosToken | null): string {
@@ -58,14 +38,48 @@ function getTokenClassName(token: ChaosToken | null): string {
   const numericValue = Number(token);
 
   if (!Number.isNaN(numericValue)) {
-    if (numericValue >= 0) {
-      return "chaos-token-positive";
-    }
-
-    return "chaos-token-negative";
+    return numericValue >= 0
+      ? "chaos-token-positive"
+      : "chaos-token-negative";
   }
 
-  return "chaos-token-neutral";
+  return "chaos-token-special";
+}
+
+function isNumericToken(token: ChaosToken | null): boolean {
+  if (token === null) {
+    return false;
+  }
+
+  return !Number.isNaN(Number(token));
+}
+
+function getNumericTokenText(token: ChaosToken | null): string {
+  if (token === null || !isNumericToken(token)) {
+    return "—";
+  }
+
+  const numericValue = Number(token);
+  return numericValue >= 0 ? `+${numericValue}` : String(numericValue);
+}
+
+function getSpecialTokenSymbol(token: ChaosToken | null): string {
+  switch (token) {
+    case "elderSign":
+      return "✦";
+    case "autoFail":
+      return "🕯";
+    case "skull":
+      return "☠";
+    case "cultist":
+      return "✠";
+    case "tablet":
+      return "▣";
+    case "elderThing":
+      return "◈";
+    default:
+      return "•";
+  }
 }
 
 export default function ChaosBagPanel() {
@@ -142,13 +156,18 @@ export default function ChaosBagPanel() {
 
   const shownToken = displayToken ?? lastDraw;
 
-  const tokenLabel = useMemo(() => formatToken(shownToken), [shownToken]);
-  const tokenModifierLabel = useMemo(
-    () => getTokenModifier(shownToken),
-    [shownToken],
-  );
+  const tokenLabel = useMemo(() => formatTokenLabel(shownToken), [shownToken]);
   const tokenClassName = useMemo(
     () => getTokenClassName(shownToken),
+    [shownToken],
+  );
+  const numericTokenText = useMemo(
+    () => getNumericTokenText(shownToken),
+    [shownToken],
+  );
+  const isNumeric = useMemo(() => isNumericToken(shownToken), [shownToken]);
+  const specialTokenSymbol = useMemo(
+    () => getSpecialTokenSymbol(shownToken),
     [shownToken],
   );
 
@@ -167,22 +186,26 @@ export default function ChaosBagPanel() {
       <div className="chaos-bag-layout">
         <div className="chaos-bag-stats">
           <div className="stat-box">
-            <span className="stat-label">Tokens: </span>
+            <span className="stat-label">Tokens</span>
             <span className="stat-value">{chaosBag.length}</span>
           </div>
 
           <div className="stat-box">
-            <span className="stat-label">Last Draw: </span>
-            <span className="stat-value">{formatToken(lastDraw)}</span>
+            <span className="stat-label">Last Draw</span>
+            <span className="stat-value">{formatTokenLabel(lastDraw)}</span>
           </div>
         </div>
 
         <div
           className={`chaos-token-display ${tokenClassName} ${
             revealState === "drawing" ? "chaos-token-drawing" : ""
-          } ${revealState === "revealed" ? "chaos-token-revealed" : ""} ${
+          } ${
+            revealState === "revealed" ? "chaos-token-revealed" : ""
+          } ${
             resultPulse === "success" ? "chaos-token-success-pulse" : ""
-          } ${resultPulse === "failure" ? "chaos-token-failure-pulse" : ""}`}
+          } ${
+            resultPulse === "failure" ? "chaos-token-failure-pulse" : ""
+          }`}
           aria-live="polite"
         >
           <div className="chaos-token-face">
@@ -191,10 +214,15 @@ export default function ChaosBagPanel() {
                 <span className="chaos-token-question">?</span>
                 <span className="chaos-token-caption">Drawing…</span>
               </>
+            ) : isNumeric ? (
+              <>
+                <span className="chaos-token-symbol">{numericTokenText}</span>
+                <span className="chaos-token-caption">Modifier</span>
+              </>
             ) : (
               <>
-                <span className="chaos-token-symbol">
-                  {tokenModifierLabel || "—"}
+                <span className="chaos-token-special-symbol">
+                  {specialTokenSymbol}
                 </span>
                 <span className="chaos-token-caption">{tokenLabel}</span>
               </>
@@ -220,9 +248,9 @@ export default function ChaosBagPanel() {
               ` + ${lastSkillTest.committedModifier}`}{" "}
             {lastSkillTest.tokenModifier >= 0
               ? `+ ${lastSkillTest.tokenModifier}`
-              : `- ${Math.abs(lastSkillTest.tokenModifier)}`}
-            {" = "}
-            {lastSkillTest.finalValue} vs Difficulty {lastSkillTest.difficulty}
+              : `- ${Math.abs(lastSkillTest.tokenModifier)}`}{" "}
+            = {lastSkillTest.finalValue} vs Difficulty{" "}
+            {lastSkillTest.difficulty}
           </span>
         </div>
       )}
@@ -233,3 +261,4 @@ export default function ChaosBagPanel() {
     </section>
   );
 }
+

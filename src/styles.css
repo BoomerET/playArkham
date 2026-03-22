@@ -1553,3 +1553,17 @@ button:hover {
     justify-self: center;
   }
 }
+
+.chaos-token-special-symbol {
+  font-size: 2.3rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chaos-token-special {
+  color: #f2ecdf;
+  border-color: rgba(215, 180, 106, 0.28);
+}
+
