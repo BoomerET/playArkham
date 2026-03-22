@@ -9,14 +9,30 @@ export default function HandPanel() {
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
 
+  const title = activeSkillTest ? "Hand — Commit Skill Cards" : "Hand";
+
   return (
-    <section className="game-panel">
-      <h2>Hand ({hand.length})</h2>
+    <section className="game-panel hand-panel">
+      <div className="hand-panel-header">
+        <div>
+          <p className="hand-panel-kicker">Player Cards</p>
+          <h2 className="hand-panel-title">
+            {title} <span className="hand-panel-count">({hand.length})</span>
+          </h2>
+          <p className="panel-subtitle hand-panel-subtitle">
+            {activeSkillTest
+              ? "Only skill cards can be dragged and committed during an active skill test."
+              : "Play or discard cards from your hand."}
+          </p>
+        </div>
+      </div>
 
       {hand.length === 0 ? (
-        <p className="panel-subtitle">No cards in hand.</p>
+        <div className="hand-panel-empty">
+          <p className="panel-subtitle">No cards in hand.</p>
+        </div>
       ) : (
-        <div className="horizontal-card-grid">
+        <div className="hand-card-grid">
           {hand.map((card) => {
             const isDragging = draggedCardId === card.id;
             const draggable = activeSkillTest
@@ -26,9 +42,9 @@ export default function HandPanel() {
             return (
               <div
                 key={card.id}
-                className={`entity-card player-card ${getCardTypeClassName(card)} ${
+                className={`entity-card player-card hand-card ${getCardTypeClassName(card)} ${
                   isDragging ? "dragging-card" : ""
-                }`}
+                } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
                 draggable={draggable}
                 onDragStart={(event) => {
                   if (!draggable) return;
@@ -41,7 +57,7 @@ export default function HandPanel() {
                 }}
               >
                 <div className="card-topline">
-                  <p className="entity-title">{card.name}</p>
+                  <p className="entity-title hand-card-title">{card.name}</p>
                   <span
                     className={`card-type-badge ${getCardTypeClassName(card)}`}
                   >
@@ -49,25 +65,30 @@ export default function HandPanel() {
                   </span>
                 </div>
 
-                <div className="entity-meta">
-                  {card.cost !== undefined && <span>Cost: {card.cost}</span>}
+                <div className="hand-card-meta">
+                  {card.cost !== undefined && (
+                    <span className="token-chip">Cost {card.cost}</span>
+                  )}
+
                   {card.icons && card.icons.length > 0 && (
-                    <span>Icons: {card.icons.join(", ")}</span>
+                    <span className="token-chip gold">
+                      Icons {card.icons.join(", ")}
+                    </span>
+                  )}
+
+                  {activeSkillTest && card.type !== "skill" && (
+                    <span className="token-chip danger">Not commitable</span>
                   )}
                 </div>
 
-                {card.text && <p className="entity-text">{card.text}</p>}
+                {card.text && <p className="entity-text hand-card-text">{card.text}</p>}
 
-                <div className="card-actions">
-                  {!activeSkillTest && (
+                {!activeSkillTest && (
+                  <div className="card-actions hand-card-actions">
                     <button onClick={() => playCard(card.id)}>Play</button>
-                  )}
-                  {!activeSkillTest && (
-                    <button onClick={() => discardCard(card.id)}>
-                      Discard
-                    </button>
-                  )}
-                </div>
+                    <button onClick={() => discardCard(card.id)}>Discard</button>
+                  </div>
+                )}
               </div>
             );
           })}

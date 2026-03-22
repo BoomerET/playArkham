@@ -936,3 +936,102 @@ button:hover {
   border-color: rgba(255, 123, 123, 0.38);
   color: #ffb3b3;
 }
+
+/* ---------- Hand Panel ---------- */
+
+.hand-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hand-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.hand-panel-kicker {
+  margin: 0 0 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hand-panel-title {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.hand-panel-count {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hand-panel-subtitle {
+  margin-top: 6px;
+}
+
+.hand-panel-empty {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hand-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.hand-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.hand-card-draggable:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(110, 208, 214, 0.08);
+}
+
+.hand-card-static {
+  opacity: 0.82;
+}
+
+.hand-card-title {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.hand-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.hand-card-text {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.hand-card-actions {
+  margin-top: auto;
+}
