@@ -1318,3 +1318,40 @@ button:hover {
   border-style: dashed;
 }
 
+.home-actions {
+  margin-top: 20px;
+  padding-top: 6px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.primary-button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(141, 243, 255, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(110, 208, 214, 0.38),
+    rgba(70, 160, 170, 0.38)
+  );
+  color: #f2fcff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+
+.primary-button:hover {
+  border-color: rgba(141, 243, 255, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(141, 243, 255, 0.5),
+    rgba(90, 200, 210, 0.5)
+  );
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.3),
+    0 0 18px rgba(141, 243, 255, 0.2);
+}
+
+.primary-button:active {
+  transform: translateY(1px) scale(0.98);
+}
