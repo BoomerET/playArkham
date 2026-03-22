@@ -28,7 +28,6 @@ export default function InvestigatorPanel() {
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
-      {/* Header */}
       <div className="investigator-header">
         <div className={`portrait-frame ${factionClass}`}>
           <img
@@ -39,10 +38,9 @@ export default function InvestigatorPanel() {
         </div>
 
         <div className="investigator-header-text">
-          <h2>{investigator.name}</h2>
+          <h2 className="investigator-name">{investigator.name}</h2>
 
-          {/* ✅ Updated faction display */}
-          <div className="token-row">
+          <div className="investigator-faction-row">
             <span className={`faction-label ${factionClass}`}>
               <FactionIcon
                 faction={investigator.faction}
@@ -50,26 +48,19 @@ export default function InvestigatorPanel() {
               />
               {formatFaction(investigator.faction)}
             </span>
+          </div>
 
-            <span className="token-chip gold">
-              WIL {investigator.willpower}
-            </span>
-            <span className="token-chip gold">
-              INT {investigator.intellect}
-            </span>
-            <span className="token-chip gold">
-              COM {investigator.combat}
-            </span>
-            <span className="token-chip gold">
-              AGI {investigator.agility}
-            </span>
+          <div className="investigator-skill-row">
+            <span className="token-chip gold">WIL {investigator.willpower}</span>
+            <span className="token-chip gold">INT {investigator.intellect}</span>
+            <span className="token-chip gold">COM {investigator.combat}</span>
+            <span className="token-chip gold">AGI {investigator.agility}</span>
           </div>
         </div>
       </div>
 
       <hr />
 
-      {/* Stats */}
       <div className="stat-grid">
         <div className="stat-box">
           <span className="stat-label">Health: </span>
@@ -99,7 +90,6 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      {/* Actions */}
       <div className="button-row">
         <button onClick={takeResourceAction} disabled={!canTakeAction}>
           Resource
@@ -120,7 +110,6 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      {/* Debug / manual controls */}
       <div className="button-row">
         <button onClick={() => spendResource(1)}>-1 Resource</button>
         <button onClick={() => gainClue(1)}>+1 Clue</button>
