@@ -15,7 +15,8 @@
   --danger: #ff7b7b;
   --success: #90e7a1;
 
-  --shadow: 0 0 0 1px rgba(110, 208, 214, 0.12),
+  --shadow:
+    0 0 0 1px rgba(110, 208, 214, 0.12),
     0 10px 30px rgba(0, 0, 0, 0.4);
   --glow: 0 0 18px rgba(110, 208, 214, 0.15);
 }
@@ -123,7 +124,7 @@ button:hover {
   box-shadow: 0 0 14px rgba(110, 208, 214, 0.2);
 }
 
-/* ---------- Investigator Grid ---------- */
+/* ---------- Investigator Selection Grid ---------- */
 
 .investigator-grid {
   display: grid;
@@ -139,15 +140,26 @@ button:hover {
   border-radius: 14px;
   border: 1px solid var(--border);
   background: rgba(17, 29, 43, 0.95);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
 }
 
-/* Selected state (VERY visible) */
+.investigator-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(110, 208, 214, 0.08);
+}
+
 .investigator-card.selected {
   border: 2px solid var(--teal-strong);
   transform: scale(1.02);
   box-shadow:
     0 0 0 2px rgba(141, 243, 255, 0.35),
     0 0 28px rgba(141, 243, 255, 0.22);
+  animation: selected-investigator-pulse 2.2s ease-in-out infinite;
 }
 
 .investigator-card.selected::after {
@@ -162,10 +174,60 @@ button:hover {
   border-radius: 999px;
 }
 
+.investigator-card:hover .faction-label {
+  filter: brightness(1.15);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 18px currentColor;
+}
+
+.investigator-card:hover .faction-icon-svg {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.investigator-card:hover .portrait-frame {
+  transform: translateY(-2px);
+}
+
+.investigator-card.selected .faction-label {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 16px currentColor;
+}
+
+.investigator-card.selected .faction-icon-svg {
+  filter: drop-shadow(0 0 7px currentColor);
+}
+
+.investigator-card.selected .portrait-frame {
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.22),
+    0 0 22px rgba(141, 243, 255, 0.18);
+}
+
 .investigator-title-block {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.investigator-title-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.investigator-stats {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.investigator-health {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 /* ---------- Portrait ---------- */
@@ -176,6 +238,10 @@ button:hover {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.15);
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
 }
 
 .portrait-frame.large {
@@ -189,42 +255,67 @@ button:hover {
   object-fit: cover;
 }
 
-/* ---------- Investigator Header ---------- */
+/* ---------- Investigator Game Panel Header ---------- */
 
 .investigator-header {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.investigator-portrait-column {
+  flex: 0 0 auto;
+  width: 96px;
+}
+
+.investigator-portrait-frame {
+  width: 96px;
+  height: 96px;
+}
+
+.investigator-header-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: left;
+}
+
+.investigator-name {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  color: #e6edf3;
+  letter-spacing: 0.01em;
+  text-align: left;
 }
 
 .investigator-name-line {
   display: block;
 }
 
-.investigator-title-row {
+.investigator-faction-row,
+.investigator-skill-row {
+  width: 100%;
   display: flex;
-  gap: 6px;
-  align-items: baseline;
-}
-
-.faction-label {
-  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   align-items: center;
-  gap: 6px;
-  color: var(--gold);
-  font-size: 0.82rem;
-  letter-spacing: 0.05em;
+  gap: 8px;
+  text-align: left;
 }
 
-.investigator-stats {
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-top: 4px;
-}
-
-.investigator-health {
-  color: var(--muted);
-  font-size: 0.9rem;
+.investigator-skill-row .token-chip {
+  flex: 0 0 auto;
 }
 
 /* ---------- Stats ---------- */
@@ -316,7 +407,7 @@ button:hover {
   background: rgba(154, 107, 255, 0.15);
 }
 
-/* ---------- Layout helpers ---------- */
+/* ---------- Layout Helpers ---------- */
 
 .horizontal-card-grid {
   display: grid;
@@ -346,141 +437,7 @@ button:hover {
   margin-bottom: 6px;
 }
 
-/* ---------- Factions ---------- */
-
-.faction-guardian {
-  border-color: rgba(74, 163, 255, 0.4);
-}
-
-.faction-seeker {
-  border-color: rgba(215, 180, 106, 0.4);
-}
-
-.faction-mystic {
-  border-color: rgba(154, 107, 255, 0.4);
-}
-
-.faction-rogue {
-  border-color: rgba(79, 209, 139, 0.4);
-}
-
-.faction-survivor {
-  border-color: rgba(217, 122, 82, 0.4);
-}
-
-/* ---------- Responsive ---------- */
-
-/* ---------- Investigator Header ---------- */
-
-.investigator-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-
-.investigator-portrait-column {
-  flex: 0 0 auto;
-  width: 96px;
-}
-
-.investigator-portrait-frame {
-  width: 96px;
-  height: 96px;
-}
-
-.investigator-header-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
-  text-align: left;
-}
-
-.investigator-name {
-  margin: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1.1;
-  color: #e6edf3;
-  letter-spacing: 0.01em;
-  text-align: left;
-}
-
-.investigator-name-line {
-  display: block;
-}
-
-.investigator-title-row {
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-}
-
-.faction-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--gold);
-  font-size: 0.82rem;
-  letter-spacing: 0.05em;
-}
-
-.investigator-faction-row,
-.investigator-skill-row {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-}
-
-.investigator-skill-row .token-chip {
-  flex: 0 0 auto;
-}
-
-.investigator-stats {
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-top: 4px;
-}
-
-.investigator-health {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-@media (max-width: 640px) {
-  .investigator-header {
-    gap: 12px;
-  }
-
-  .investigator-portrait-column,
-  .investigator-portrait-frame {
-    width: 80px;
-  }
-
-  .investigator-portrait-frame {
-    height: 80px;
-  }
-
-  .investigator-name {
-    font-size: 0.88rem;
-  }
-
-  .faction-label {
-    font-size: 0.78rem;
-  }
-}
+/* ---------- Drag / Drop ---------- */
 
 .dragging-card {
   opacity: 0.45;
@@ -500,8 +457,7 @@ button:hover {
   box-shadow:
     0 0 0 2px rgba(141, 243, 255, 0.25),
     0 0 28px rgba(141, 243, 255, 0.18);
-  background:
-    linear-gradient(180deg, rgba(24, 44, 60, 0.98), rgba(9, 17, 27, 0.98));
+  background: linear-gradient(180deg, rgba(24, 44, 60, 0.98), rgba(9, 17, 27, 0.98));
 }
 
 .empty-drop-message {
@@ -513,6 +469,9 @@ button:hover {
   color: var(--muted);
   background: rgba(110, 208, 214, 0.04);
 }
+
+/* ---------- Locations ---------- */
+
 .location-card {
   transition:
     transform 140ms ease,
@@ -528,8 +487,7 @@ button:hover {
     0 0 0 1px rgba(215, 180, 106, 0.18),
     0 0 26px rgba(110, 208, 214, 0.14),
     0 0 18px rgba(215, 180, 106, 0.12);
-  background:
-    linear-gradient(180deg, rgba(28, 42, 56, 0.98), rgba(13, 21, 31, 0.98));
+  background: linear-gradient(180deg, rgba(28, 42, 56, 0.98), rgba(13, 21, 31, 0.98));
 }
 
 .location-card.legal-location {
@@ -572,56 +530,7 @@ button:hover {
   cursor: default;
 }
 
-.faction-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  padding: 4px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-/* Icons */
-.faction-icon {
-  font-size: 0.9rem;
-}
-
-/* Faction colors */
-
-.faction-label.faction-guardian {
-  color: #4aa3ff;
-  border-color: rgba(74, 163, 255, 0.4);
-  background: rgba(74, 163, 255, 0.12);
-}
-
-.faction-label.faction-seeker {
-  color: #d7b46a;
-  border-color: rgba(215, 180, 106, 0.4);
-  background: rgba(215, 180, 106, 0.12);
-}
-
-.faction-label.faction-mystic {
-  color: #9a6bff;
-  border-color: rgba(154, 107, 255, 0.4);
-  background: rgba(154, 107, 255, 0.12);
-}
-
-.faction-label.faction-rogue {
-  color: #4fd18b;
-  border-color: rgba(79, 209, 139, 0.4);
-  background: rgba(79, 209, 139, 0.12);
-}
-
-.faction-label.faction-survivor {
-  color: #d97a52;
-  border-color: rgba(217, 122, 82, 0.4);
-  background: rgba(217, 122, 82, 0.12);
-}
-
-/* ---------- Faction Icon + Label Styling ---------- */
+/* ---------- Faction Labels / Icons ---------- */
 
 .faction-label {
   display: inline-flex;
@@ -637,6 +546,10 @@ button:hover {
   line-height: 1;
 }
 
+.faction-icon {
+  font-size: 0.9rem;
+}
+
 .faction-icon-svg,
 .faction-icon {
   width: 0.95rem;
@@ -644,6 +557,30 @@ button:hover {
   flex: 0 0 auto;
   display: inline-block;
 }
+
+/* ---------- Faction Accent Borders ---------- */
+
+.faction-guardian {
+  border-color: rgba(74, 163, 255, 0.4);
+}
+
+.faction-seeker {
+  border-color: rgba(215, 180, 106, 0.4);
+}
+
+.faction-mystic {
+  border-color: rgba(154, 107, 255, 0.4);
+}
+
+.faction-rogue {
+  border-color: rgba(79, 209, 139, 0.4);
+}
+
+.faction-survivor {
+  border-color: rgba(217, 122, 82, 0.4);
+}
+
+/* ---------- Faction Label Colors ---------- */
 
 .faction-label.faction-guardian {
   color: #4aa3ff;
@@ -723,75 +660,8 @@ button:hover {
     0 0 18px rgba(217, 122, 82, 0.12);
 }
 
-/* ---------- Home Screen Title Polish ---------- */
+/* ---------- Hover Faction Boosts ---------- */
 
-.investigator-title-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.investigator-stats {
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-top: 4px;
-  line-height: 1.35;
-}
-
-.investigator-health {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Hover polish ---------- */
-
-.investigator-card:hover .portrait-frame {
-  transform: translateY(-1px);
-}
-
-.portrait-frame {
-  transition:
-    transform 140ms ease,
-    border-color 140ms ease,
-    box-shadow 140ms ease;
-}
-
-/* ---------- Investigator Hover Effects ---------- */
-
-.investigator-card {
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    border-color 160ms ease;
-}
-
-.investigator-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.35),
-    0 0 24px rgba(110, 208, 214, 0.08);
-}
-
-/* Faction badge glow on hover */
-.investigator-card:hover .faction-label {
-  filter: brightness(1.15);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    0 0 18px currentColor;
-}
-
-/* Icon glow */
-.investigator-card:hover .faction-icon-svg {
-  filter: drop-shadow(0 0 6px currentColor);
-}
-
-/* Portrait intensifies */
-.investigator-card:hover .portrait-frame {
-  transform: translateY(-2px);
-}
-
-/* Faction-specific glow boosts */
 .investigator-card:hover .portrait-frame.faction-guardian {
   box-shadow:
     0 0 0 1px rgba(74, 163, 255, 0.2),
@@ -822,27 +692,7 @@ button:hover {
     0 0 28px rgba(217, 122, 82, 0.22);
 }
 
-/* ---------- Selected Investigator Pulse ---------- */
-
-.investigator-card.selected {
-  animation: selected-investigator-pulse 2.2s ease-in-out infinite;
-}
-
-.investigator-card.selected .faction-label {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.14),
-    0 0 16px currentColor;
-}
-
-.investigator-card.selected .faction-icon-svg {
-  filter: drop-shadow(0 0 7px currentColor);
-}
-
-.investigator-card.selected .portrait-frame {
-  box-shadow:
-    0 0 0 1px rgba(141, 243, 255, 0.22),
-    0 0 22px rgba(141, 243, 255, 0.18);
-}
+/* ---------- Selected Faction Boosts ---------- */
 
 .investigator-card.selected.faction-guardian .portrait-frame {
   box-shadow:
@@ -874,6 +724,8 @@ button:hover {
     0 0 26px rgba(217, 122, 82, 0.24);
 }
 
+/* ---------- Animations ---------- */
+
 @keyframes selected-investigator-pulse {
   0% {
     transform: translateY(-2px) scale(1.02);
@@ -897,60 +749,27 @@ button:hover {
   }
 }
 
-.investigator-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
+/* ---------- Responsive ---------- */
 
-.investigator-header-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 8px;
-  text-align: left;
-}
+@media (max-width: 640px) {
+  .investigator-header {
+    gap: 12px;
+  }
 
-.investigator-name {
-  margin: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1.1;
-  color: #e6edf3;
-  letter-spacing: 0.01em;
-  text-align: left;
-}
+  .investigator-portrait-column,
+  .investigator-portrait-frame {
+    width: 80px;
+  }
 
-.investigator-faction-row,
-.investigator-skill-row {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-}
+  .investigator-portrait-frame {
+    height: 80px;
+  }
 
-.investigator-skill-row .token-chip {
-  flex: 0 0 auto;
-}
+  .investigator-name {
+    font-size: 0.88rem;
+  }
 
-.investigator-portrait-column {
-  flex: 0 0 auto;
-  width: 96px;
+  .faction-label {
+    font-size: 0.78rem;
+  }
 }
-
-.investigator-portrait-frame {
-  width: 96px;
-  height: 96px;
-}
-
