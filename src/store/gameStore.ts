@@ -7,7 +7,9 @@ import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { shuffle } from "../lib/shuffle";
 import type {
+  ActiveSkillTest,
   ChaosToken,
+  CommittedSkillCard,
   Enemy,
   GameState,
   Investigator,
@@ -20,10 +22,17 @@ import type {
 
 type Screen = "home" | "game";
 
+type PendingTestResolution =
+  | { kind: "investigate"; locationId: string }
+  | { kind: "fight"; enemyId: string }
+  | { kind: "evade"; enemyId: string }
+  | null;
+
 type GameStore = GameState & {
   screen: Screen;
   availableInvestigators: Investigator[];
   selectedInvestigatorId: string;
+  pendingTestResolution: PendingTestResolution;
   setSelectedInvestigator: (investigatorId: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
@@ -50,11 +59,14 @@ type GameStore = GameState & {
   engageEnemiesAtLocation: () => void;
   readyAllEnemies: () => void;
   enemyPhaseAttack: () => void;
-  runSkillTest: (
+  beginSkillTest: (
     skill: SkillType,
     difficulty: number,
     source: string,
-  ) => SkillTestResult | null;
+  ) => void;
+  commitSkillCard: (cardId: string) => void;
+  cancelActiveSkillTest: () => void;
+  resolveActiveSkillTest: () => SkillTestResult | null;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -120,11 +132,16 @@ function createGameInvestigator(investigator: Investigator): Investigator {
   };
 }
 
+function countMatchingIcons(card: PlayerCard, skill: SkillType): number {
+  return (card.icons ?? []).filter((icon) => icon === skill).length;
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
   selectedInvestigatorId: investigators[0].id,
   draggedCardId: null,
+  pendingTestResolution: null,
 
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
@@ -136,6 +153,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   enemies: sampleEnemies,
   log: [],
   lastSkillTest: null,
+  activeSkillTest: null,
   turn: {
     round: 1,
     phase: "setup",
@@ -164,6 +182,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea: [],
       log: [],
       lastSkillTest: null,
+      activeSkillTest: null,
+      pendingTestResolution: null,
       draggedCardId: null,
       turn: {
         round: 1,
@@ -193,7 +213,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: [...startingChaosBag],
       locations: sampleLocations.map((location) => ({
         ...location,
-        investigatorsHere: location.id === "study" ? [chosenInvestigator.id] : [],
+        investigatorsHere:
+          location.id === "study" ? [chosenInvestigator.id] : [],
       })),
       enemies: sampleEnemies.map((enemy) => ({ ...enemy })),
       log: [
@@ -204,6 +225,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         "Phase: Investigation",
       ],
       lastSkillTest: null,
+      activeSkillTest: null,
+      pendingTestResolution: null,
       draggedCardId: null,
       turn: {
         round: 1,
@@ -242,7 +265,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   discardCard: (cardId: string) => {
-    const { hand, discard, log } = get();
+    const { hand, discard, log, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Cannot manually discard from hand while a skill test is active.",
+        ],
+      });
+      return;
+    }
+
     const card = hand.find((c) => c.id === cardId);
 
     if (!card) {
@@ -257,7 +291,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   playCard: (cardId: string) => {
-    const { hand, discard, playArea, investigator, turn, log } = get();
+    const {
+      hand,
+      discard,
+      playArea,
+      investigator,
+      turn,
+      log,
+      activeSkillTest,
+    } = get();
+
+    if (activeSkillTest) {
+      set({
+        draggedCardId: null,
+        log: [
+          ...log,
+          "Cannot play cards normally while a skill test is active.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -266,6 +319,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           : "Cannot play a card. No actions remaining.";
 
       set({
+        draggedCardId: null,
         log: [...log, message],
       });
       return;
@@ -275,6 +329,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!card) {
       set({
+        draggedCardId: null,
         log: [...log, "Could not play that card because it was not in hand."],
       });
       return;
@@ -284,6 +339,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (investigator.resources < cost) {
       set({
+        draggedCardId: null,
         log: [...log, `Cannot play ${card.name}. Not enough resources.`],
       });
       return;
@@ -345,7 +401,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         draggedCardId: null,
         log: [
           ...log,
-          `Cannot play ${card.name} as a normal action yet. Skill commits are not implemented.`,
+          `Cannot play ${card.name} as a normal action. Commit it during a skill test instead.`,
         ],
       });
       return;
@@ -440,9 +496,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   moveInvestigator: (locationId: string) => {
-    const { investigator, locations, log, turn } = get();
+    const { investigator, locations, log, turn, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [...log, "Cannot move while a skill test is active."],
+      });
+      return;
+    }
+
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find((location) => location.id === locationId);
+    const destination = locations.find(
+      (location) => location.id === locationId,
+    );
 
     if (!destination) {
       return;
@@ -549,7 +615,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       enemies: updatedEnemies,
-      log: [...log, `Enemies at ${currentLocation.name} engaged ${investigator.name}.`],
+      log: [
+        ...log,
+        `Enemies at ${currentLocation.name} engaged ${investigator.name}.`,
+      ],
     });
   },
 
@@ -579,8 +648,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const totalDamage = engagedEnemies.reduce((sum, enemy) => sum + enemy.damage, 0);
-    const totalHorror = engagedEnemies.reduce((sum, enemy) => sum + enemy.horror, 0);
+    const totalDamage = engagedEnemies.reduce(
+      (sum, enemy) => sum + enemy.damage,
+      0,
+    );
+    const totalHorror = engagedEnemies.reduce(
+      (sum, enemy) => sum + enemy.horror,
+      0,
+    );
 
     set({
       investigator: {
@@ -596,7 +671,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advancePhase: () => {
-    const { turn, log, investigator, deck, hand } = get();
+    const { turn, log, investigator, deck, hand, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before advancing the phase.",
+        ],
+      });
+      return;
+    }
 
     if (turn.phase === "setup") {
       set({
@@ -647,7 +732,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (drawnCardName) {
         upkeepLog.push(`Drew card during upkeep: ${drawnCardName}`);
       } else {
-        upkeepLog.push("Tried to draw a card during upkeep, but the deck is empty.");
+        upkeepLog.push(
+          "Tried to draw a card during upkeep, but the deck is empty.",
+        );
       }
 
       upkeepLog.push(`Round ${nextRound} begins.`);
@@ -690,7 +777,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeResourceAction: () => {
-    const { investigator, turn, log } = get();
+    const { investigator, turn, log, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before taking another action.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -713,12 +810,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
-      log: [...log, "Took a resource action. Gained 1 resource and spent 1 action."],
+      log: [
+        ...log,
+        "Took a resource action. Gained 1 resource and spent 1 action.",
+      ],
     });
   },
 
   takeDrawAction: () => {
-    const { deck, hand, turn, log } = get();
+    const { deck, hand, turn, log, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before taking another action.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -738,7 +848,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...turn,
           actionsRemaining: turn.actionsRemaining - 1,
         },
-        log: [...log, "Took a draw action, but the deck was empty. 1 action spent."],
+        log: [
+          ...log,
+          "Took a draw action, but the deck was empty. 1 action spent.",
+        ],
       });
       return;
     }
@@ -752,41 +865,204 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
-      log: [...log, `Took a draw action. Drew ${topCard.name} and spent 1 action.`],
+      log: [
+        ...log,
+        `Took a draw action. Drew ${topCard.name} and spent 1 action.`,
+      ],
     });
   },
 
-  runSkillTest: (skill, difficulty, source) => {
-    const { investigator, playArea, log } = get();
+  beginSkillTest: (skill, difficulty, source) => {
+    const { log, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [...log, "A skill test is already active."],
+      });
+      return;
+    }
+
+    const nextTest: ActiveSkillTest = {
+      skill,
+      difficulty,
+      source,
+      committedCards: [],
+    };
+
+    set({
+      activeSkillTest: nextTest,
+      draggedCardId: null,
+      log: [
+        ...log,
+        `Started skill test: ${source}. Commit skill cards, then resolve.`,
+      ],
+    });
+  },
+
+  commitSkillCard: (cardId) => {
+    const { activeSkillTest, hand, log } = get();
+
+    if (!activeSkillTest) {
+      set({
+        draggedCardId: null,
+        log: [...log, "No active skill test to commit cards to."],
+      });
+      return;
+    }
+
+    const card = hand.find((currentCard) => currentCard.id === cardId);
+
+    if (!card) {
+      set({
+        draggedCardId: null,
+        log: [...log, "Could not commit that card because it was not in hand."],
+      });
+      return;
+    }
+
+    if (card.type !== "skill") {
+      set({
+        draggedCardId: null,
+        log: [
+          ...log,
+          `${card.name} is not a skill card and cannot be committed.`,
+        ],
+      });
+      return;
+    }
+
+    const matchingIcons = countMatchingIcons(card, activeSkillTest.skill);
+
+    const alreadyCommitted = activeSkillTest.committedCards.some(
+      (entry) => entry.card.id === card.id,
+    );
+
+    if (alreadyCommitted) {
+      set({
+        draggedCardId: null,
+        log: [...log, `${card.name} is already committed to this test.`],
+      });
+      return;
+    }
+
+    const updatedHand = hand.filter((currentCard) => currentCard.id !== cardId);
+    const committedCard: CommittedSkillCard = {
+      card,
+      matchingIcons,
+    };
+
+    set({
+      hand: updatedHand,
+      draggedCardId: null,
+      activeSkillTest: {
+        ...activeSkillTest,
+        committedCards: [...activeSkillTest.committedCards, committedCard],
+      },
+      log: [
+        ...log,
+        `Committed ${card.name} to ${activeSkillTest.source} for +${matchingIcons}.`,
+      ],
+    });
+  },
+
+  cancelActiveSkillTest: () => {
+    const { activeSkillTest, hand, log } = get();
+
+    if (!activeSkillTest) {
+      return;
+    }
+
+    const returnedCards = activeSkillTest.committedCards.map(
+      (entry) => entry.card,
+    );
+
+    set({
+      hand: [...hand, ...returnedCards],
+      activeSkillTest: null,
+      pendingTestResolution: null,
+      draggedCardId: null,
+      log: [
+        ...log,
+        `Cancelled skill test: ${activeSkillTest.source}. Committed cards returned to hand.`,
+      ],
+    });
+  },
+
+  resolveActiveSkillTest: () => {
+    const {
+      activeSkillTest,
+      investigator,
+      playArea,
+      discard,
+      log,
+      pendingTestResolution,
+      locations,
+      enemies,
+      turn,
+    } = get();
+
+    if (!activeSkillTest) {
+      set({
+        log: [...log, "No active skill test to resolve."],
+      });
+      return null;
+    }
+
     const token = get().drawChaosToken();
 
     if (token === null) {
       return null;
     }
 
-    const baseValue = getInvestigatorSkillValue(investigator, skill);
-    const modifierDetails = getSkillModifiersFromPlayArea(playArea, skill);
+    const baseValue = getInvestigatorSkillValue(
+      investigator,
+      activeSkillTest.skill,
+    );
+    const modifierDetails = getSkillModifiersFromPlayArea(
+      playArea,
+      activeSkillTest.skill,
+    );
     const assetModifier = modifierDetails.reduce(
       (sum, modifier) => sum + modifier.amount,
       0,
     );
+    const committedModifier = activeSkillTest.committedCards.reduce(
+      (sum, entry) => sum + entry.matchingIcons,
+      0,
+    );
     const tokenModifier = getChaosTokenModifier(token);
+
     const finalValue =
-      token === "autoFail" ? -999 : baseValue + assetModifier + tokenModifier;
-    const success = token !== "autoFail" && finalValue >= difficulty;
+      token === "autoFail"
+        ? -999
+        : baseValue + assetModifier + committedModifier + tokenModifier;
+
+    const success =
+      token !== "autoFail" && finalValue >= activeSkillTest.difficulty;
 
     const result: SkillTestResult = {
-      skill,
+      skill: activeSkillTest.skill,
       baseValue,
       assetModifier,
+      committedModifier,
       modifierDetails,
-      difficulty,
+      difficulty: activeSkillTest.difficulty,
       token,
       tokenModifier,
       finalValue,
       success,
-      source,
+      source: activeSkillTest.source,
     };
+
+    const committedCards = activeSkillTest.committedCards.map(
+      (entry) => entry.card,
+    );
+    const committedText =
+      activeSkillTest.committedCards.length > 0
+        ? ` Committed cards: ${activeSkillTest.committedCards
+            .map((entry) => `${entry.card.name} (+${entry.matchingIcons})`)
+            .join(", ")}.`
+        : "";
 
     const modifierText =
       modifierDetails.length > 0
@@ -797,21 +1073,136 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const comparisonText =
       token === "autoFail"
-        ? `${source}: AUTO-FAIL token drawn. Base ${baseValue}, asset bonus ${assetModifier}.${modifierText} Test failed.`
-        : `${source}: ${skill} ${baseValue} + asset bonus ${assetModifier} + token ${tokenModifier} vs ${difficulty}, final ${finalValue} => ${
+        ? `${activeSkillTest.source}: AUTO-FAIL token drawn. Base ${baseValue}, asset bonus ${assetModifier}, committed bonus ${committedModifier}.${modifierText}${committedText} Test failed.`
+        : `${activeSkillTest.source}: ${activeSkillTest.skill} ${baseValue} + asset bonus ${assetModifier} + committed bonus ${committedModifier} + token ${tokenModifier} vs ${activeSkillTest.difficulty}, final ${finalValue} => ${
             success ? "success" : "failure"
-          }.${modifierText}`;
+          }.${modifierText}${committedText}`;
+
+    let updatedLocations = locations;
+    let updatedEnemies = enemies;
+    let resolutionLog: string[] = [];
+    let updatedInvestigator = investigator;
+
+    if (pendingTestResolution?.kind === "investigate") {
+      const location = locations.find(
+        (entry) => entry.id === pendingTestResolution.locationId,
+      );
+
+      if (!success) {
+        resolutionLog.push(
+          `Investigation failed at ${location?.name ?? "that location"}. 1 action spent.`,
+        );
+      } else if (!location || location.clues <= 0) {
+        resolutionLog.push(
+          `Investigation succeeded at ${location?.name ?? "that location"}, but there were no clues to discover. 1 action spent.`,
+        );
+      } else {
+        updatedLocations = locations.map((entry) =>
+          entry.id === pendingTestResolution.locationId
+            ? { ...entry, clues: entry.clues - 1 }
+            : entry,
+        );
+        updatedInvestigator = {
+          ...investigator,
+          clues: investigator.clues + 1,
+        };
+        resolutionLog.push(
+          `Investigation succeeded at ${location.name}. Discovered 1 clue and spent 1 action.`,
+        );
+      }
+    }
+
+    if (pendingTestResolution?.kind === "fight") {
+      const enemy = enemies.find(
+        (entry) => entry.id === pendingTestResolution.enemyId,
+      );
+
+      if (!success) {
+        resolutionLog.push(
+          `Fight against ${enemy?.name ?? "that enemy"} failed. 1 action spent.`,
+        );
+      } else if (!enemy) {
+        resolutionLog.push(
+          "Fight succeeded, but the enemy was no longer present. 1 action spent.",
+        );
+      } else {
+        updatedEnemies = enemies
+          .map((entry) =>
+            entry.id === enemy.id
+              ? { ...entry, damageOnEnemy: entry.damageOnEnemy + 1 }
+              : entry,
+          )
+          .filter((entry) =>
+            entry.id === enemy.id ? entry.damageOnEnemy < entry.health : true,
+          );
+
+        const defeated = enemy.damageOnEnemy + 1 >= enemy.health;
+
+        resolutionLog.push(
+          defeated
+            ? `Fight succeeded. ${enemy.name} was defeated. 1 action spent.`
+            : `Fight succeeded. Dealt 1 damage to ${enemy.name}. 1 action spent.`,
+        );
+      }
+    }
+
+    if (pendingTestResolution?.kind === "evade") {
+      const enemy = enemies.find(
+        (entry) => entry.id === pendingTestResolution.enemyId,
+      );
+
+      if (!success) {
+        resolutionLog.push(
+          `Evade against ${enemy?.name ?? "that enemy"} failed. 1 action spent.`,
+        );
+      } else if (!enemy) {
+        resolutionLog.push(
+          "Evade succeeded, but the enemy was no longer present. 1 action spent.",
+        );
+      } else {
+        updatedEnemies = enemies.map((entry) =>
+          entry.id === enemy.id
+            ? { ...entry, exhausted: true, engagedInvestigatorId: null }
+            : entry,
+        );
+
+        resolutionLog.push(
+          `Evade succeeded. ${enemy.name} is exhausted and disengaged. 1 action spent.`,
+        );
+      }
+    }
 
     set({
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      discard: [...discard, ...committedCards],
       lastSkillTest: result,
-      log: [...log, comparisonText],
+      activeSkillTest: null,
+      pendingTestResolution: null,
+      draggedCardId: null,
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      log: [...get().log, comparisonText, ...resolutionLog],
     });
 
     return result;
   },
 
   investigateAction: () => {
-    const { investigator, locations, turn, log } = get();
+    const { investigator, locations, turn, log, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before starting another one.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -829,71 +1220,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot investigate because the investigator is not at a location."],
-      });
-      return;
-    }
-
-    const testResult = get().runSkillTest(
-      "intellect",
-      currentLocation.shroud,
-      `Investigate at ${currentLocation.name}`,
-    );
-
-    if (!testResult) {
-      return;
-    }
-
-    if (!testResult.success) {
-      set({
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
-        log: [...get().log, `Investigation failed at ${currentLocation.name}. 1 action spent.`],
-      });
-      return;
-    }
-
-    if (currentLocation.clues <= 0) {
-      set({
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
         log: [
-          ...get().log,
-          `Investigation succeeded at ${currentLocation.name}, but there were no clues to discover. 1 action spent.`,
+          ...log,
+          "Cannot investigate because the investigator is not at a location.",
         ],
       });
       return;
     }
 
-    const updatedLocations = get().locations.map((location) =>
-      location.id === currentLocation.id
-        ? { ...location, clues: location.clues - 1 }
-        : location,
+    get().beginSkillTest(
+      "intellect",
+      currentLocation.shroud,
+      `Investigate at ${currentLocation.name}`,
     );
 
     set({
-      investigator: {
-        ...get().investigator,
-        clues: get().investigator.clues + 1,
+      pendingTestResolution: {
+        kind: "investigate",
+        locationId: currentLocation.id,
       },
-      locations: updatedLocations,
-      turn: {
-        ...get().turn,
-        actionsRemaining: get().turn.actionsRemaining - 1,
-      },
-      log: [
-        ...get().log,
-        `Investigation succeeded at ${currentLocation.name}. Discovered 1 clue and spent 1 action.`,
-      ],
     });
   },
 
   fightAction: () => {
-    const { investigator, locations, enemies, turn, log } = get();
+    const { investigator, locations, enemies, turn, log, activeSkillTest } =
+      get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before starting another one.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -911,12 +1272,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot fight because the investigator is not at a location."],
+        log: [
+          ...log,
+          "Cannot fight because the investigator is not at a location.",
+        ],
       });
       return;
     }
 
-    const enemy = getEnemyAtInvestigator(enemies, currentLocation.id, investigator.id);
+    const enemy = getEnemyAtInvestigator(
+      enemies,
+      currentLocation.id,
+      investigator.id,
+    );
 
     if (!enemy) {
       set({
@@ -932,61 +1300,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const testResult = get().runSkillTest("combat", enemy.fight, `Fight ${enemy.name}`);
-
-    if (!testResult) {
-      return;
-    }
-
-    if (!testResult.success) {
-      set({
-        turn: {
-          ...get().turn,
-          actionsRemaining: get().turn.actionsRemaining - 1,
-        },
-        log: [...get().log, `Fight against ${enemy.name} failed. 1 action spent.`],
-      });
-      return;
-    }
-
-    const updatedEnemies = get().enemies
-      .map((currentEnemy) => {
-        if (currentEnemy.id !== enemy.id) {
-          return currentEnemy;
-        }
-
-        return {
-          ...currentEnemy,
-          damageOnEnemy: currentEnemy.damageOnEnemy + 1,
-        };
-      })
-      .filter((currentEnemy) => {
-        if (currentEnemy.id !== enemy.id) {
-          return true;
-        }
-
-        return currentEnemy.damageOnEnemy < currentEnemy.health;
-      });
-
-    const defeated = enemy.damageOnEnemy + 1 >= enemy.health;
-
+    get().beginSkillTest("combat", enemy.fight, `Fight ${enemy.name}`);
     set({
-      enemies: updatedEnemies,
-      turn: {
-        ...get().turn,
-        actionsRemaining: get().turn.actionsRemaining - 1,
-      },
-      log: [
-        ...get().log,
-        defeated
-          ? `Fight succeeded. ${enemy.name} was defeated. 1 action spent.`
-          : `Fight succeeded. Dealt 1 damage to ${enemy.name}. 1 action spent.`,
-      ],
+      pendingTestResolution: { kind: "fight", enemyId: enemy.id },
     });
   },
 
   evadeAction: () => {
-    const { investigator, locations, enemies, turn, log } = get();
+    const { investigator, locations, enemies, turn, log, activeSkillTest } =
+      get();
+
+    if (activeSkillTest) {
+      set({
+        log: [
+          ...log,
+          "Resolve or cancel the active skill test before starting another one.",
+        ],
+      });
+      return;
+    }
 
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
@@ -1004,12 +1336,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!currentLocation) {
       set({
-        log: [...log, "Cannot evade because the investigator is not at a location."],
+        log: [
+          ...log,
+          "Cannot evade because the investigator is not at a location.",
+        ],
       });
       return;
     }
 
-    const enemy = getEnemyAtInvestigator(enemies, currentLocation.id, investigator.id);
+    const enemy = getEnemyAtInvestigator(
+      enemies,
+      currentLocation.id,
+      investigator.id,
+    );
 
     if (!enemy) {
       set({
@@ -1025,45 +1364,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const testResult = get().runSkillTest("agility", enemy.evade, `Evade ${enemy.name}`);
-
-    if (!testResult) {
-      return;
-    }
-
-    if (!testResult.success) {
-      set({
-        turn: {
-          ...get().turn,
-          actionsRemaining: get().turn.actionsRemaining - 1,
-        },
-        log: [...get().log, `Evade against ${enemy.name} failed. 1 action spent.`],
-      });
-      return;
-    }
-
-    const updatedEnemies = get().enemies.map((currentEnemy) => {
-      if (currentEnemy.id !== enemy.id) {
-        return currentEnemy;
-      }
-
-      return {
-        ...currentEnemy,
-        exhausted: true,
-        engagedInvestigatorId: null,
-      };
-    });
-
+    get().beginSkillTest("agility", enemy.evade, `Evade ${enemy.name}`);
     set({
-      enemies: updatedEnemies,
-      turn: {
-        ...get().turn,
-        actionsRemaining: get().turn.actionsRemaining - 1,
-      },
-      log: [
-        ...get().log,
-        `Evade succeeded. ${enemy.name} is exhausted and disengaged. 1 action spent.`,
-      ],
+      pendingTestResolution: { kind: "evade", enemyId: enemy.id },
     });
   },
 }));

@@ -81,10 +81,23 @@ export interface SkillModifierDetail {
   amount: number;
 }
 
+export interface CommittedSkillCard {
+  card: PlayerCard;
+  matchingIcons: number;
+}
+
+export interface ActiveSkillTest {
+  skill: SkillType;
+  difficulty: number;
+  source: string;
+  committedCards: CommittedSkillCard[];
+}
+
 export interface SkillTestResult {
   skill: SkillType;
   baseValue: number;
   assetModifier: number;
+  committedModifier: number;
   modifierDetails: SkillModifierDetail[];
   difficulty: number;
   token: ChaosToken;
@@ -106,6 +119,6 @@ export interface GameState {
   log: string[];
   turn: TurnState;
   lastSkillTest: SkillTestResult | null;
+  activeSkillTest: ActiveSkillTest | null;
   draggedCardId: string | null;
 }
-

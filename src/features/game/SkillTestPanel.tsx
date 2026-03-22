@@ -25,9 +25,8 @@ export default function SkillTestPanel() {
           <div className="entity-card">
             <p className="entity-meta">Source: {lastSkillTest.source}</p>
             <p className="entity-meta">Base Value: {lastSkillTest.baseValue}</p>
-            <p className="entity-meta">
-              Asset Modifier: {lastSkillTest.assetModifier}
-            </p>
+            <p className="entity-meta">Asset Modifier: {lastSkillTest.assetModifier}</p>
+            <p className="entity-meta">Committed Modifier: {lastSkillTest.committedModifier}</p>
             <p className="entity-meta">
               Modifier Sources:{" "}
               {lastSkillTest.modifierDetails.length > 0
@@ -38,9 +37,7 @@ export default function SkillTestPanel() {
             </p>
             <p className="entity-meta">Difficulty: {lastSkillTest.difficulty}</p>
             <p className="entity-meta">Token: {String(lastSkillTest.token)}</p>
-            <p className="entity-meta">
-              Token Modifier: {lastSkillTest.tokenModifier}
-            </p>
+            <p className="entity-meta">Token Modifier: {lastSkillTest.tokenModifier}</p>
             <p className="entity-meta">
               Final Value:{" "}
               {lastSkillTest.token === "autoFail"
@@ -62,4 +59,3 @@ export default function SkillTestPanel() {
     </section>
   );
 }
-

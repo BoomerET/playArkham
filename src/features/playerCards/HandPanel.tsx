@@ -7,6 +7,7 @@ export default function HandPanel() {
   const playCard = useGameStore((state) => state.playCard);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
   const draggedCardId = useGameStore((state) => state.draggedCardId);
+  const activeSkillTest = useGameStore((state) => state.activeSkillTest);
 
   return (
     <section className="game-panel">
@@ -18,6 +19,8 @@ export default function HandPanel() {
         <div className="horizontal-card-grid">
           {hand.map((card) => {
             const isDragging = draggedCardId === card.id;
+            const draggable =
+              !!activeSkillTest ? card.type === "skill" : card.type !== "skill";
 
             return (
               <div
@@ -25,8 +28,9 @@ export default function HandPanel() {
                 className={`entity-card player-card ${getCardTypeClassName(card)} ${
                   isDragging ? "dragging-card" : ""
                 }`}
-                draggable
+                draggable={draggable}
                 onDragStart={(event) => {
+                  if (!draggable) return;
                   event.dataTransfer.setData("text/plain", card.id);
                   event.dataTransfer.effectAllowed = "move";
                   setDraggedCardId(card.id);
@@ -44,13 +48,16 @@ export default function HandPanel() {
 
                 <div className="entity-meta">
                   {card.cost !== undefined && <span>Cost: {card.cost}</span>}
+                  {card.icons && card.icons.length > 0 && (
+                    <span>Icons: {card.icons.join(", ")}</span>
+                  )}
                 </div>
 
                 {card.text && <p className="entity-text">{card.text}</p>}
 
                 <div className="card-actions">
-                  <button onClick={() => playCard(card.id)}>Play</button>
-                  <button onClick={() => discardCard(card.id)}>Discard</button>
+                  {!activeSkillTest && <button onClick={() => playCard(card.id)}>Play</button>}
+                  {!activeSkillTest && <button onClick={() => discardCard(card.id)}>Discard</button>}
                 </div>
               </div>
             );

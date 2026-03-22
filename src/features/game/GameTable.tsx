@@ -10,6 +10,7 @@ import DeckPanel from "../playerCards/DeckPanel";
 import DiscardPanel from "../playerCards/DiscardPanel";
 import HandPanel from "../playerCards/HandPanel";
 import PlayAreaPanel from "../playerCards/PlayAreaPanel";
+import ActiveSkillTestPanel from "./ActiveSkillTestPanel";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -29,6 +30,7 @@ export default function GameTable() {
 
       <TurnPanel />
       <InvestigatorPanel />
+      <ActiveSkillTestPanel />
 
       <div className="dashboard-grid">
         <DeckPanel />
