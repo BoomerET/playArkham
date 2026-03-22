@@ -1,62 +1,6 @@
+import SkillIcon, { normalizeSkillIcon } from "../../components/SkillIcon";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
-
-type SkillType = "willpower" | "intellect" | "combat" | "agility";
-
-const skillMeta: Record<
-  SkillType,
-  {
-    label: string;
-    short: string;
-    className: string;
-  }
-> = {
-  willpower: {
-    label: "Willpower",
-    short: "W",
-    className: "skill-pill-willpower",
-  },
-  intellect: {
-    label: "Intellect",
-    short: "I",
-    className: "skill-pill-intellect",
-  },
-  combat: {
-    label: "Combat",
-    short: "C",
-    className: "skill-pill-combat",
-  },
-  agility: {
-    label: "Agility",
-    short: "A",
-    className: "skill-pill-agility",
-  },
-};
-
-function normalizeSkillName(value: string): SkillType | null {
-  const normalized = value.trim().toLowerCase();
-
-  if (
-    normalized === "willpower" ||
-    normalized === "intellect" ||
-    normalized === "combat" ||
-    normalized === "agility"
-  ) {
-    return normalized;
-  }
-
-  return null;
-}
-
-function formatSkillList(icons: string[] | undefined) {
-  if (!icons || icons.length === 0) {
-    return [];
-  }
-
-  return icons
-    .map((icon) => normalizeSkillName(icon))
-    .filter((icon): icon is SkillType => icon !== null);
-}
 
 export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
@@ -95,7 +39,10 @@ export default function HandPanel() {
             const draggable = activeSkillTest
               ? card.type === "skill"
               : card.type !== "skill";
-            const cardIcons = formatSkillList(card.icons);
+
+            const cardIcons = (card.icons ?? [])
+              .map((icon) => normalizeSkillIcon(icon))
+              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
 
             return (
               <div
@@ -133,12 +80,15 @@ export default function HandPanel() {
                       {cardIcons.map((icon, index) => (
                         <span
                           key={`${card.id}-${icon}-${index}`}
-                          className={`skill-pill skill-pill-small ${skillMeta[icon].className}`}
-                          title={skillMeta[icon].label}
+                          className={`skill-icon-badge skill-${icon}`}
+                          title={icon}
+                          aria-label={icon}
                         >
-                          <span className="skill-pill-icon">
-                            {skillMeta[icon].short}
-                          </span>
+                          <SkillIcon
+                            skill={icon}
+                            className="skill-icon-svg"
+                            viewBox="0 0 24 24"
+                          />
                         </span>
                       ))}
                     </div>
@@ -149,7 +99,9 @@ export default function HandPanel() {
                   )}
                 </div>
 
-                {card.text && <p className="entity-text hand-card-text">{card.text}</p>}
+                {card.text && (
+                  <p className="entity-text hand-card-text">{card.text}</p>
+                )}
 
                 {!activeSkillTest && (
                   <div className="card-actions hand-card-actions">

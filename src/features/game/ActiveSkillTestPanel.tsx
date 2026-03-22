@@ -1,54 +1,35 @@
 import { useMemo, useState } from "react";
+import SkillIcon, {
+  normalizeSkillIcon,
+  type SkillIconType,
+} from "../../components/SkillIcon";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
-import "./gameTable.css";
-
-type SkillType = "willpower" | "intellect" | "combat" | "agility";
 
 const skillMeta: Record<
-  SkillType,
+  SkillIconType,
   {
     label: string;
-    short: string;
     className: string;
   }
 > = {
   willpower: {
     label: "Willpower",
-    short: "W",
-    className: "skill-pill-willpower",
+    className: "skill-willpower",
   },
   intellect: {
     label: "Intellect",
-    short: "I",
-    className: "skill-pill-intellect",
+    className: "skill-intellect",
   },
   combat: {
     label: "Combat",
-    short: "C",
-    className: "skill-pill-combat",
+    className: "skill-combat",
   },
   agility: {
     label: "Agility",
-    short: "A",
-    className: "skill-pill-agility",
+    className: "skill-agility",
   },
 };
-
-function normalizeSkillName(value: string): SkillType | null {
-  const normalized = value.trim().toLowerCase();
-
-  if (
-    normalized === "willpower" ||
-    normalized === "intellect" ||
-    normalized === "combat" ||
-    normalized === "agility"
-  ) {
-    return normalized;
-  }
-
-  return null;
-}
 
 function formatSkillList(icons: string[] | undefined) {
   if (!icons || icons.length === 0) {
@@ -56,8 +37,8 @@ function formatSkillList(icons: string[] | undefined) {
   }
 
   return icons
-    .map((icon) => normalizeSkillName(icon))
-    .filter((icon): icon is SkillType => icon !== null);
+    .map((icon) => normalizeSkillIcon(icon))
+    .filter((icon): icon is SkillIconType => icon !== null);
 }
 
 export default function ActiveSkillTestPanel() {
@@ -73,7 +54,7 @@ export default function ActiveSkillTestPanel() {
 
   const skillCards = useMemo(() => hand.filter((card) => card.type === "skill"), [hand]);
 
-  const activeSkill = normalizeSkillName(activeSkillTest?.skill ?? "");
+  const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
   const committedBonus = useMemo(() => {
     if (!activeSkillTest) {
       return 0;
@@ -129,9 +110,16 @@ export default function ActiveSkillTestPanel() {
             <span className="skill-value-label">Skill</span>
             <div className="skill-value-main">
               {activeSkill ? (
-                <span className={`skill-pill ${skillMeta[activeSkill].className}`}>
-                  <span className="skill-pill-icon">{skillMeta[activeSkill].short}</span>
-                  <span>{skillMeta[activeSkill].label}</span>
+                <span
+                  className={`skill-icon-badge skill-icon-badge-large ${skillMeta[activeSkill].className}`}
+                  title={skillMeta[activeSkill].label}
+                  aria-label={skillMeta[activeSkill].label}
+                >
+                  <SkillIcon
+                    skill={activeSkill}
+                    className="skill-icon-svg"
+                    viewBox="0 0 24 24"
+                  />
                 </span>
               ) : (
                 <strong>{activeSkillTest.skill}</strong>
@@ -190,10 +178,15 @@ export default function ActiveSkillTestPanel() {
                         committedIcons.map((icon, index) => (
                           <span
                             key={`${entry.card.id}-${icon}-${index}`}
-                            className={`skill-pill skill-pill-small ${skillMeta[icon].className}`}
+                            className={`skill-icon-badge ${skillMeta[icon].className}`}
                             title={skillMeta[icon].label}
+                            aria-label={skillMeta[icon].label}
                           >
-                            <span className="skill-pill-icon">{skillMeta[icon].short}</span>
+                            <SkillIcon
+                              skill={icon}
+                              className="skill-icon-svg"
+                              viewBox="0 0 24 24"
+                            />
                           </span>
                         ))
                       ) : (
@@ -253,10 +246,15 @@ export default function ActiveSkillTestPanel() {
                         cardIcons.map((icon, index) => (
                           <span
                             key={`${card.id}-${icon}-${index}`}
-                            className={`skill-pill skill-pill-small ${skillMeta[icon].className}`}
+                            className={`skill-icon-badge ${skillMeta[icon].className}`}
                             title={skillMeta[icon].label}
+                            aria-label={skillMeta[icon].label}
                           >
-                            <span className="skill-pill-icon">{skillMeta[icon].short}</span>
+                            <SkillIcon
+                              skill={icon}
+                              className="skill-icon-svg"
+                              viewBox="0 0 24 24"
+                            />
                           </span>
                         ))
                       ) : (

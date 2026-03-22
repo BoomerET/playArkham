@@ -1042,3 +1042,81 @@ button:hover {
   gap: 6px;
   align-items: center;
 }
+
+/* ---------- Skill SVG Icons ---------- */
+
+.skill-icon-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f7f2e8;
+}
+
+.skill-icon-badge-large {
+  width: 36px;
+  height: 36px;
+}
+
+.skill-icon-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.skill-icon-badge-large .skill-icon-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.skill-willpower,
+.skill-willpower.skill-icon-badge,
+.skill-icon-badge.skill-willpower,
+.skill-icon-badge.skill-pill-willpower,
+.skill-willpower {
+  background: rgba(111, 82, 196, 0.18);
+  border-color: rgba(151, 120, 235, 0.32);
+  color: #d8c9ff;
+}
+
+.skill-intellect,
+.skill-intellect.skill-icon-badge,
+.skill-icon-badge.skill-intellect,
+.skill-icon-badge.skill-pill-intellect,
+.skill-intellect {
+  background: rgba(65, 129, 214, 0.18);
+  border-color: rgba(104, 164, 243, 0.32);
+  color: #cde3ff;
+}
+
+.skill-combat,
+.skill-combat.skill-icon-badge,
+.skill-icon-badge.skill-combat,
+.skill-icon-badge.skill-pill-combat,
+.skill-combat {
+  background: rgba(190, 79, 79, 0.18);
+  border-color: rgba(229, 107, 107, 0.32);
+  color: #ffd1d1;
+}
+
+.skill-agility,
+.skill-agility.skill-icon-badge,
+.skill-icon-badge.skill-agility,
+.skill-icon-badge.skill-pill-agility,
+.skill-agility {
+  background: rgba(61, 152, 102, 0.18);
+  border-color: rgba(97, 196, 140, 0.32);
+  color: #d1ffe4;
+}
+
+.hand-card-icon-row,
+.active-skill-icon-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
