@@ -800,3 +800,39 @@ button:hover {
   }
 }
 
+.investigator-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.investigator-header-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+}
+
+.investigator-name {
+  margin: 0;
+  text-align: left;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.investigator-faction-row,
+.investigator-skill-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.investigator-skill-row .token-chip {
+  flex: 0 0 auto;
+}
