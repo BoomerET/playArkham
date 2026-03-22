@@ -1152,3 +1152,7 @@ button:hover {
 .skill-icon-badge:hover .skill-icon-svg {
   transform: scale(1.1);
 }
+
+.active-skill-icon-row .skill-icon-badge {
+  cursor: pointer;
+}
