@@ -11,16 +11,17 @@ import DiscardPanel from "../playerCards/DiscardPanel";
 import HandPanel from "../playerCards/HandPanel";
 import PlayAreaPanel from "../playerCards/PlayAreaPanel";
 import ActiveSkillTestPanel from "./ActiveSkillTestPanel";
+import "./gameTable.css";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
 
   return (
-    <main className="app-shell">
-      <header className="topbar">
-        <div>
-          <p className="eyebrow">Arkham Horror: The Card Game</p>
-          <h1 className="hero-title small">Play Arkham</h1>
+    <main className="game-table-shell">
+      <header className="game-table-header">
+        <div className="game-table-title-wrap">
+          <p className="game-table-eyebrow">Arkham Horror: The Card Game</p>
+          <h1 className="game-table-title">Play Arkham</h1>
         </div>
 
         <button className="secondary-button" onClick={returnToHome}>
@@ -28,22 +29,69 @@ export default function GameTable() {
         </button>
       </header>
 
-      <TurnPanel />
-      <InvestigatorPanel />
-      <ActiveSkillTestPanel />
+      <div className="game-table-layout">
+        <aside className="game-table-sidebar game-table-sidebar-left">
+          <section className="table-panel table-panel-compact">
+            <TurnPanel />
+          </section>
 
-      <div className="dashboard-grid">
-        <DeckPanel />
-        <DiscardPanel />
-        <ChaosBagPanel />
-        <SkillTestPanel />
+          <section className="table-panel">
+            <InvestigatorPanel />
+          </section>
+
+          <section className="table-panel">
+            <DeckPanel />
+          </section>
+
+          <section className="table-panel">
+            <DiscardPanel />
+          </section>
+        </aside>
+
+        <section className="game-table-center">
+          <div className="game-table-board">
+            <div className="game-table-board-inner">
+              <section className="table-panel table-panel-board">
+                <LocationRow />
+              </section>
+
+              <div className="game-table-board-lower">
+                <section className="table-panel game-table-play-area">
+                  <PlayAreaPanel />
+                </section>
+
+                <section className="table-panel game-table-enemies">
+                  <EnemyPanel />
+                </section>
+              </div>
+            </div>
+
+            <div className="game-table-skill-overlay">
+              <section className="table-panel table-panel-overlay">
+                <ActiveSkillTestPanel />
+              </section>
+            </div>
+          </div>
+
+          <section className="table-panel game-table-hand-dock">
+            <HandPanel />
+          </section>
+        </section>
+
+        <aside className="game-table-sidebar game-table-sidebar-right">
+          <section className="table-panel">
+            <ChaosBagPanel />
+          </section>
+
+          <section className="table-panel">
+            <SkillTestPanel />
+          </section>
+
+          <section className="table-panel game-table-log-panel">
+            <GameLog />
+          </section>
+        </aside>
       </div>
-
-      <PlayAreaPanel />
-      <EnemyPanel />
-      <HandPanel />
-      <LocationRow />
-      <GameLog />
     </main>
   );
 }
