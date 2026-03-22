@@ -17,6 +17,7 @@ export default function LocationCard({ location }: Props) {
   const moveInvestigator = useGameStore((state) => state.moveInvestigator);
   const investigator = useGameStore((state) => state.investigator);
   const locations = useGameStore((state) => state.locations);
+  const enemies = useGameStore((state) => state.enemies);
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
   );
@@ -36,6 +37,8 @@ export default function LocationCard({ location }: Props) {
     !!currentLocation &&
     currentLocation.id !== location.id &&
     !currentLocation.connections.includes(location.id);
+
+  const enemiesHere = enemies.filter((enemy) => enemy.locationId === location.id);
 
   function getInvestigatorDisplayName(id: string): string {
     return (
@@ -91,6 +94,11 @@ export default function LocationCard({ location }: Props) {
         {isCurrentLocation && <span className="token-chip success">Current</span>}
         {isLegalMove && <span className="token-chip">Move Available</span>}
         {isIllegalMove && <span className="token-chip danger">Not Connected</span>}
+        {enemiesHere.length > 0 && (
+          <span className="token-chip danger">
+            Enemies {enemiesHere.length}
+          </span>
+        )}
       </div>
 
       <div className="location-card-body">
@@ -113,7 +121,58 @@ export default function LocationCard({ location }: Props) {
               : "None"}
           </p>
         </div>
+
+        <div className="location-card-section">
+          <p className="location-card-section-label">Enemies Here</p>
+
+          {enemiesHere.length === 0 ? (
+            <p className="entity-meta location-card-section-value">None</p>
+          ) : (
+            <div className="location-enemy-list">
+              {enemiesHere.map((enemy) => {
+                const engagedName = enemy.engagedInvestigatorId
+                  ? getInvestigatorDisplayName(enemy.engagedInvestigatorId)
+                  : null;
+
+                return (
+                  <div
+                    key={enemy.id}
+                    className={`location-enemy-chip ${
+                      enemy.exhausted ? "location-enemy-chip-exhausted" : ""
+                    }`}
+                  >
+                    <div className="location-enemy-chip-top">
+                      <strong>{enemy.name}</strong>
+                      <span>
+                        {enemy.damageOnEnemy}/{enemy.health}
+                      </span>
+                    </div>
+
+                    <div className="location-enemy-chip-meta">
+                      <span>F {enemy.fight}</span>
+                      <span>E {enemy.evade}</span>
+                      <span>Dmg {enemy.damage}</span>
+                      <span>Hor {enemy.horror}</span>
+                    </div>
+
+                    <div className="location-enemy-chip-tags">
+                      {engagedName && (
+                        <span className="token-chip danger">
+                          Engaged: {engagedName}
+                        </span>
+                      )}
+                      {enemy.exhausted && (
+                        <span className="token-chip">Exhausted</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+

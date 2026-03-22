@@ -1157,3 +1157,49 @@ button:hover {
   cursor: pointer;
 }
 
+.location-enemy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-enemy-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 123, 123, 0.2);
+  background: rgba(255, 123, 123, 0.06);
+}
+
+.location-enemy-chip-exhausted {
+  opacity: 0.78;
+  border-style: dashed;
+}
+
+.location-enemy-chip-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.location-enemy-chip-top strong {
+  line-height: 1.2;
+}
+
+.location-enemy-chip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.location-enemy-chip-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
