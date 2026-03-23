@@ -1567,3 +1567,41 @@ button:hover {
   border-color: rgba(215, 180, 106, 0.28);
 }
 
+/* ---------- Secondary Button (Back to Home) ---------- */
+
+.secondary-button {
+  padding: 8px 14px;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  color: #f2f6f8; /* FIX: brighter readable text */
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 0 12px rgba(255, 255, 255, 0.12);
+
+  transform: translateY(-1px);
+}
+
+.secondary-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
