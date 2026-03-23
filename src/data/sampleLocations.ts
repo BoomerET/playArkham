@@ -9,6 +9,7 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: ["roland-banks"],
+    mapPosition: { x: 20, y: 42 },
   },
   {
     id: "hallway",
@@ -18,6 +19,7 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["study", "attic", "cellar"],
     investigatorsHere: [],
+    mapPosition: { x: 50, y: 42 },
   },
   {
     id: "attic",
@@ -27,6 +29,7 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: [],
+    mapPosition: { x: 50, y: 18 },
   },
   {
     id: "cellar",
@@ -36,6 +39,6 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: [],
+    mapPosition: { x: 50, y: 72 },
   },
 ];
-
