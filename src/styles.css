@@ -1681,10 +1681,7 @@ button:hover {
 }
 
 .location-map-node {
-  position: absolute;
-  width: 240px;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+  width: 190px;
 }
 
 .location-map-node .location-card {
@@ -1750,3 +1747,150 @@ button:hover {
   }
 }
 
+.location-card-compact {
+  min-height: 0;
+  padding: 12px;
+  gap: 10px;
+}
+
+.location-card-compact .location-card-title {
+  font-size: 0.98rem;
+  line-height: 1.15;
+}
+
+.location-card-compact .location-card-stats .token-chip,
+.location-card-compact .location-card-status-row .token-chip {
+  padding: 4px 8px;
+  font-size: 0.76rem;
+}
+
+.location-card-presence {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.location-card-presence-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.location-card-mini-label {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.location-card-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.location-presence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.74rem;
+  line-height: 1;
+  color: var(--text);
+}
+
+.location-presence-badge.danger {
+  background: rgba(255, 123, 123, 0.14);
+  border-color: rgba(255, 123, 123, 0.28);
+  color: #ffcbcb;
+}
+
+.location-presence-badge.warning {
+  background: rgba(215, 180, 106, 0.14);
+  border-color: rgba(215, 180, 106, 0.28);
+  color: #f1ddb0;
+}
+
+.location-card-mini-empty {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.location-map-node {
+  width: 210px;
+}
+
+@media (max-width: 1100px) {
+  .location-map-node {
+    width: 190px;
+  }
+}
+
+.location-card-tight {
+  min-height: 148px;
+  padding: 10px;
+  gap: 8px;
+}
+
+.location-card-tight .location-card-header {
+  gap: 8px;
+}
+
+.location-card-tight .location-card-title {
+  font-size: 0.94rem;
+  line-height: 1.1;
+}
+
+.location-card-tight .location-card-stats {
+  gap: 6px;
+}
+
+.location-card-tight .location-card-stats .token-chip,
+.location-card-tight .location-card-status-row .token-chip {
+  padding: 3px 7px;
+  font-size: 0.72rem;
+}
+
+.location-card-tight .location-card-status-row {
+  min-height: 24px;
+  gap: 6px;
+}
+
+.location-card-tight .location-card-presence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.location-card-tight .location-card-presence-block {
+  gap: 4px;
+  padding-top: 6px;
+}
+
+.location-card-tight .location-card-mini-label {
+  font-size: 0.64rem;
+}
+
+.location-card-tight .location-card-badge-row {
+  gap: 5px;
+}
+
+.location-card-tight .location-presence-badge {
+  padding: 3px 7px;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 1100px) {
+  .location-map-node {
+    width: 178px;
+  }
+}

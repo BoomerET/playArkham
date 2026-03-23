@@ -39,12 +39,18 @@ export default function LocationCard({ location }: Props) {
     !currentLocation.connections.includes(location.id);
 
   const enemiesHere = enemies.filter((enemy) => enemy.locationId === location.id);
+  const engagedEnemies = enemiesHere.filter(
+    (enemy) => enemy.engagedInvestigatorId !== null,
+  );
+  const exhaustedEnemies = enemiesHere.filter((enemy) => enemy.exhausted);
 
-  function getInvestigatorDisplayName(id: string): string {
-    return (
+  function getInvestigatorShortName(id: string): string {
+    const fullName =
       availableInvestigators.find((item) => item.id === id)?.name ??
-      formatName(id)
-    );
+      formatName(id);
+
+    const parts = fullName.split(" ");
+    return parts.length > 1 ? parts[0] : fullName;
   }
 
   function handleClick() {
@@ -69,10 +75,12 @@ export default function LocationCard({ location }: Props) {
         : "";
 
   const isInteractive = isLegalMove;
+  const hasInvestigators = location.investigatorsHere.length > 0;
+  const hasEnemies = enemiesHere.length > 0;
 
   return (
     <div
-      className={`entity-card location-card ${locationStateClass} ${
+      className={`entity-card location-card location-card-compact location-card-tight ${locationStateClass} ${
         isInteractive ? "clickable-location" : "static-location"
       }`}
       onClick={isInteractive ? handleClick : undefined}
@@ -85,93 +93,54 @@ export default function LocationCard({ location }: Props) {
         <p className="entity-title location-card-title">{location.name}</p>
 
         <div className="location-card-stats">
-          <span className="token-chip gold">Shroud {location.shroud}</span>
-          <span className="token-chip gold">Clues {location.clues}</span>
+          <span className="token-chip gold">S {location.shroud}</span>
+          <span className="token-chip gold">C {location.clues}</span>
         </div>
       </div>
 
-      <div className="token-row location-card-status-row">
+      <div className="location-card-status-row token-row">
         {isCurrentLocation && <span className="token-chip success">Current</span>}
-        {isLegalMove && <span className="token-chip">Move Available</span>}
-        {isIllegalMove && <span className="token-chip danger">Not Connected</span>}
-        {enemiesHere.length > 0 && (
-          <span className="token-chip danger">
-            Enemies {enemiesHere.length}
-          </span>
-        )}
+        {isLegalMove && <span className="token-chip">Move</span>}
+        {isIllegalMove && <span className="token-chip danger">Blocked</span>}
       </div>
 
-      <div className="location-card-body">
-        <div className="location-card-section">
-          <p className="location-card-section-label">Connections</p>
-          <p className="entity-meta location-card-section-value">
-            {location.connections.length > 0
-              ? location.connections.map(formatName).join(", ")
-              : "None"}
-          </p>
-        </div>
+      {(hasInvestigators || hasEnemies) && (
+        <div className="location-card-presence">
+          {hasInvestigators && (
+            <div className="location-card-presence-block">
+              <p className="location-card-mini-label">Investigators</p>
+              <div className="location-card-badge-row">
+                {location.investigatorsHere.map((id) => (
+                  <span key={id} className="location-presence-badge">
+                    {getInvestigatorShortName(id)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
-        <div className="location-card-section">
-          <p className="location-card-section-label">Investigators Here</p>
-          <p className="entity-meta location-card-section-value">
-            {location.investigatorsHere.length > 0
-              ? location.investigatorsHere
-                  .map(getInvestigatorDisplayName)
-                  .join(", ")
-              : "None"}
-          </p>
-        </div>
-
-        <div className="location-card-section">
-          <p className="location-card-section-label">Enemies Here</p>
-
-          {enemiesHere.length === 0 ? (
-            <p className="entity-meta location-card-section-value">None</p>
-          ) : (
-            <div className="location-enemy-list">
-              {enemiesHere.map((enemy) => {
-                const engagedName = enemy.engagedInvestigatorId
-                  ? getInvestigatorDisplayName(enemy.engagedInvestigatorId)
-                  : null;
-
-                return (
-                  <div
-                    key={enemy.id}
-                    className={`location-enemy-chip ${
-                      enemy.exhausted ? "location-enemy-chip-exhausted" : ""
-                    }`}
-                  >
-                    <div className="location-enemy-chip-top">
-                      <strong>{enemy.name}</strong>
-                      <span>
-                        {enemy.damageOnEnemy}/{enemy.health}
-                      </span>
-                    </div>
-
-                    <div className="location-enemy-chip-meta">
-                      <span>F {enemy.fight}</span>
-                      <span>E {enemy.evade}</span>
-                      <span>Dmg {enemy.damage}</span>
-                      <span>Hor {enemy.horror}</span>
-                    </div>
-
-                    <div className="location-enemy-chip-tags">
-                      {engagedName && (
-                        <span className="token-chip danger">
-                          Engaged: {engagedName}
-                        </span>
-                      )}
-                      {enemy.exhausted && (
-                        <span className="token-chip">Exhausted</span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+          {hasEnemies && (
+            <div className="location-card-presence-block">
+              <p className="location-card-mini-label">Enemies</p>
+              <div className="location-card-badge-row">
+                <span className="location-presence-badge danger">
+                  {enemiesHere.length} present
+                </span>
+                {engagedEnemies.length > 0 && (
+                  <span className="location-presence-badge warning">
+                    {engagedEnemies.length} engaged
+                  </span>
+                )}
+                {exhaustedEnemies.length > 0 && (
+                  <span className="location-presence-badge">
+                    {exhaustedEnemies.length} exhausted
+                  </span>
+                )}
+              </div>
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
