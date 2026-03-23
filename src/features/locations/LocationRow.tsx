@@ -4,48 +4,60 @@ import LocationCard from "./LocationCard";
 
 type ConnectionLine = {
   key: string;
-  fromIndex: number;
-  toIndex: number;
+  fromId: string;
+  toId: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
 };
 
 export default function LocationRow() {
   const locations = useGameStore((state) => state.locations);
 
-  const connectionLines = useMemo<ConnectionLine[]>(() => {
-    const locationIndexById = new Map(
-      locations.map((location, index) => [location.id, index]),
-    );
+  const allPositioned = locations.every((location) => location.mapPosition);
 
+  const connectionLines = useMemo<ConnectionLine[]>(() => {
+    if (!allPositioned) {
+      return [];
+    }
+
+    const locationById = new Map(locations.map((location) => [location.id, location]));
     const seen = new Set<string>();
     const lines: ConnectionLine[] = [];
 
-    locations.forEach((location, fromIndex) => {
+    locations.forEach((location) => {
       location.connections.forEach((connectedId) => {
-        const toIndex = locationIndexById.get(connectedId);
+        const connectedLocation = locationById.get(connectedId);
 
-        if (toIndex === undefined) {
+        if (!connectedLocation?.mapPosition || !location.mapPosition) {
           return;
         }
 
-        const low = Math.min(fromIndex, toIndex);
-        const high = Math.max(fromIndex, toIndex);
-        const key = `${low}-${high}`;
+        const a = location.id < connectedId ? location.id : connectedId;
+        const b = location.id < connectedId ? connectedId : location.id;
+        const key = `${a}-${b}`;
 
         if (seen.has(key)) {
           return;
         }
 
         seen.add(key);
+
         lines.push({
           key,
-          fromIndex,
-          toIndex,
+          fromId: location.id,
+          toId: connectedId,
+          x1: location.mapPosition.x,
+          y1: location.mapPosition.y,
+          x2: connectedLocation.mapPosition.x,
+          y2: connectedLocation.mapPosition.y,
         });
       });
     });
 
     return lines;
-  }, [locations]);
+  }, [locations, allPositioned]);
 
   return (
     <section className="location-row-panel">
@@ -66,31 +78,40 @@ export default function LocationRow() {
       </div>
 
       <div className="location-board-surface">
-        <div className="location-map-shell">
-          <svg
-            className="location-connection-layer"
-            aria-hidden="true"
-            viewBox={`0 0 ${Math.max(locations.length - 1, 1) * 100} 100`}
-            preserveAspectRatio="none"
-          >
-            {connectionLines.map((line) => {
-              const maxIndex = Math.max(locations.length - 1, 1);
-              const x1 = (line.fromIndex / maxIndex) * 100;
-              const x2 = (line.toIndex / maxIndex) * 100;
-
-              return (
+        {allPositioned ? (
+          <div className="location-map-canvas">
+            <svg
+              className="location-connection-layer"
+              aria-hidden="true"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              {connectionLines.map((line) => (
                 <line
                   key={line.key}
-                  x1={`${x1}%`}
-                  y1="50%"
-                  x2={`${x2}%`}
-                  y2="50%"
+                  x1={line.x1}
+                  y1={line.y1}
+                  x2={line.x2}
+                  y2={line.y2}
                   className="location-connection-line"
                 />
-              );
-            })}
-          </svg>
+              ))}
+            </svg>
 
+            {locations.map((location) => (
+              <div
+                key={location.id}
+                className="location-map-node"
+                style={{
+                  left: `${location.mapPosition!.x}%`,
+                  top: `${location.mapPosition!.y}%`,
+                }}
+              >
+                <LocationCard location={location} />
+              </div>
+            ))}
+          </div>
+        ) : (
           <div className="location-board-grid">
             {locations.map((location) => (
               <div key={location.id} className="location-board-cell">
@@ -98,8 +119,9 @@ export default function LocationRow() {
               </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
 }
+

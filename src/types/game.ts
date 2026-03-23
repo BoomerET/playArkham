@@ -53,6 +53,10 @@ export interface Location {
   revealed: boolean;
   connections: string[];
   investigatorsHere: string[];
+  mapPosition?: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface Enemy {
