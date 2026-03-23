@@ -1605,3 +1605,69 @@ button:hover {
   transform: translateY(0) scale(0.98);
 }
 
+/* ---------- Location Map Layout ---------- */
+
+.location-map-shell {
+  position: relative;
+}
+
+.location-connection-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.location-connection-line {
+  stroke: rgba(215, 180, 106, 0.28);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 6 6;
+  filter: drop-shadow(0 0 6px rgba(215, 180, 106, 0.12));
+}
+
+.location-board-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.location-board-cell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Give the board a bit more "table map" feeling */
+.location-board-surface {
+  position: relative;
+  border-radius: 18px;
+  padding: 22px;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.04), transparent 42%),
+    linear-gradient(180deg, rgba(24, 38, 32, 0.58), rgba(12, 20, 17, 0.68));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* Slight elevation over the connection lines */
+.location-board-cell .location-card {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 720px) {
+  .location-board-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .location-connection-layer {
+    display: none;
+  }
+}
