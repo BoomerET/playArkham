@@ -177,10 +177,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     availableScenarios: scenarios,
     selectedScenarioId: defaultScenarioId,
   }).locations,
-  enemies: getSelectedScenario({
-    availableScenarios: scenarios,
-    selectedScenarioId: defaultScenarioId,
-  }).enemies,
+  enemies: buildScenarioEnemies(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }).enemySpawns,
+  ),
   log: [],
   lastSkillTest: null,
   activeSkillTest: null,
@@ -219,8 +221,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      locations: selectedScenario.locations.map((location) => ({ ...location })),
-      enemies: selectedScenario.enemies.map((enemy) => ({ ...enemy })),
+      locations: selectedScenario.locations.map((location) => ({
+        ...location,
+      })),
+      enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
