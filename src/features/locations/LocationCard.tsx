@@ -14,6 +14,16 @@ function formatName(value: string): string {
     .join(" ");
 }
 
+function getEnemyTokenLabel(name: string): string {
+  const words = name.split(" ").filter(Boolean);
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${words[0][0] ?? ""}${words[1][0] ?? ""}`.toUpperCase();
+}
+
 export default function LocationCard({ location }: Props) {
   const moveInvestigator = useGameStore((state) => state.moveInvestigator);
   const investigator = useGameStore((state) => state.investigator);
@@ -64,10 +74,6 @@ export default function LocationCard({ location }: Props) {
     !currentLocation.connections.includes(location.id);
 
   const enemiesHere = enemies.filter((enemy) => enemy.locationId === location.id);
-  const engagedEnemies = enemiesHere.filter(
-    (enemy) => enemy.engagedInvestigatorId !== null,
-  );
-  const exhaustedEnemies = enemiesHere.filter((enemy) => enemy.exhausted);
 
   function getInvestigatorData(id: string) {
     return availableInvestigators.find((item) => item.id === id);
@@ -181,20 +187,41 @@ export default function LocationCard({ location }: Props) {
               {hasEnemies && (
                 <div className="location-card-presence-block">
                   <p className="location-card-mini-label">Enemies</p>
-                  <div className="location-card-badge-row">
-                    <span className="location-presence-badge danger">
-                      {enemiesHere.length} present
-                    </span>
-                    {engagedEnemies.length > 0 && (
-                      <span className="location-presence-badge warning">
-                        {engagedEnemies.length} engaged
-                      </span>
-                    )}
-                    {exhaustedEnemies.length > 0 && (
-                      <span className="location-presence-badge">
-                        {exhaustedEnemies.length} exhausted
-                      </span>
-                    )}
+                  <div className="location-enemy-token-row">
+                    {enemiesHere.map((enemy) => (
+                      <div
+                        key={enemy.id}
+                        className={`location-enemy-token ${
+                          enemy.exhausted ? "location-enemy-token-exhausted" : ""
+                        } ${
+                          enemy.engagedInvestigatorId ? "location-enemy-token-engaged" : ""
+                        }`}
+                        title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${
+                          enemy.engagedInvestigatorId ? " • engaged" : ""
+                        }${enemy.exhausted ? " • exhausted" : ""}`}
+                        aria-label={enemy.name}
+                      >
+                        <span className="location-enemy-token-skull" aria-hidden="true">
+                          ☠
+                        </span>
+                        <span className="location-enemy-token-label">
+                          {getEnemyTokenLabel(enemy.name)}
+                        </span>
+
+                        {enemy.damageOnEnemy > 0 && (
+                          <span className="location-enemy-token-damage">
+                            {enemy.damageOnEnemy}
+                          </span>
+                        )}
+
+                        {enemy.engagedInvestigatorId && (
+                          <span
+                            className="location-enemy-token-engaged-dot"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
