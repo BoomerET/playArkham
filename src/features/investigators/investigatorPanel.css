@@ -125,3 +125,180 @@
   font-size: 0.75rem;
   font-weight: 600;
 }
+
+.investigator-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.investigator-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.investigator-portrait-column {
+  flex: 0 0 auto;
+  width: 96px;
+}
+
+.investigator-portrait-frame {
+  width: 96px;
+  height: 96px;
+}
+
+.investigator-header-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: left;
+}
+
+.investigator-name {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  color: #e6edf3;
+  letter-spacing: 0.01em;
+  text-align: left;
+}
+
+.investigator-name-line {
+  display: block;
+}
+
+.investigator-faction-row,
+.investigator-skill-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.investigator-skill-row .token-chip {
+  flex: 0 0 auto;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.stat-box {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(18, 28, 40, 0.85);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-weight: bold;
+}
+
+.engaged-enemies-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.engaged-enemies-header {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.engaged-enemies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.engaged-enemy-card {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(180, 80, 80, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(70, 20, 20, 0.92),
+    rgba(42, 14, 14, 0.96)
+  );
+}
+
+.engaged-enemy-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.engaged-enemy-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.engaged-enemy-name {
+  font-weight: 700;
+  color: #f5d7d7;
+}
+
+.engaged-enemy-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f8e9c8;
+  background: rgba(120, 100, 45, 0.45);
+  border: 1px solid rgba(232, 201, 122, 0.28);
+}
+
+.engaged-enemy-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .investigator-header {
+    gap: 12px;
+  }
+
+  .investigator-portrait-column,
+  .investigator-portrait-frame {
+    width: 80px;
+  }
+
+  .investigator-portrait-frame {
+    height: 80px;
+  }
+
+  .investigator-name {
+    font-size: 0.88rem;
+  }
+
+  .faction-label {
+    font-size: 0.78rem;
+  }
+}

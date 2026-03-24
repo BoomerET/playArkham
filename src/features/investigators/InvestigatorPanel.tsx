@@ -30,6 +30,7 @@ function splitInvestigatorName(
 
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
+  const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
 
   const spendResource = useGameStore((state) => state.spendResource);
@@ -48,6 +49,10 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
+
+  const engagedEnemies = enemies.filter(
+    (enemy) => enemy.engagedInvestigatorId === investigator.id,
+  );
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -123,6 +128,46 @@ export default function InvestigatorPanel() {
           <span className="stat-value">{investigator.clues}</span>
         </div>
       </div>
+
+      {engagedEnemies.length > 0 && (
+        <>
+          <hr />
+
+          <div className="engaged-enemies-section">
+            <div className="engaged-enemies-header">
+              Engaged Enemies
+            </div>
+
+            <div className="engaged-enemies-list">
+              {engagedEnemies.map((enemy) => {
+                const remainingHealth = Math.max(enemy.health - enemy.damage, 0);
+
+                return (
+                  <div key={enemy.id} className="engaged-enemy-card">
+                    <div className="engaged-enemy-main">
+                      <div className="engaged-enemy-name-row">
+                        <span className="engaged-enemy-name">{enemy.name}</span>
+                        {enemy.exhausted && (
+                          <span className="engaged-enemy-tag">Exhausted</span>
+                        )}
+                      </div>
+
+                      <div className="engaged-enemy-meta">
+                        <span className="token-chip danger">
+                          Damage {enemy.damage}/{enemy.health}
+                        </span>
+                        <span className="token-chip">
+                          HP Left {remainingHealth}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       <hr />
 
