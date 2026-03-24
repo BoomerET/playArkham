@@ -1,6 +1,7 @@
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
+import "./investigatorPanel.css";
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
@@ -86,38 +87,38 @@ export default function InvestigatorPanel() {
         </div>
       </div>
 
-      <hr />
+      <hr className="investigator-divider" />
 
-      <div className="stat-grid">
-        <div className="stat-box">
-          <span className="stat-label">Health: </span>
-          <span className="stat-value">{investigator.health}</span>
+      <div className="investigator-stat-grid">
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Health: </span>
+          <span className="investigator-stat-value">{investigator.health}</span>
         </div>
-        <div className="stat-box">
-          <span className="stat-label">Sanity: </span>
-          <span className="stat-value">{investigator.sanity}</span>
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Sanity: </span>
+          <span className="investigator-stat-value">{investigator.sanity}</span>
         </div>
-        <div className="stat-box">
-          <span className="stat-label">Damage: </span>
-          <span className="stat-value">{investigator.damage}</span>
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Damage: </span>
+          <span className="investigator-stat-value">{investigator.damage}</span>
         </div>
-        <div className="stat-box">
-          <span className="stat-label">Horror: </span>
-          <span className="stat-value">{investigator.horror}</span>
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Horror: </span>
+          <span className="investigator-stat-value">{investigator.horror}</span>
         </div>
-        <div className="stat-box">
-          <span className="stat-label">Resources: </span>
-          <span className="stat-value">{investigator.resources}</span>
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Resources: </span>
+          <span className="investigator-stat-value">{investigator.resources}</span>
         </div>
-        <div className="stat-box">
-          <span className="stat-label">Clues: </span>
-          <span className="stat-value">{investigator.clues}</span>
+        <div className="investigator-stat-box">
+          <span className="investigator-stat-label">Clues: </span>
+          <span className="investigator-stat-value">{investigator.clues}</span>
         </div>
       </div>
 
-      <hr />
+      <hr className="investigator-divider" />
 
-      <div className="button-row">
+      <div className="button-row investigator-button-row">
         <button onClick={takeResourceAction} disabled={!canTakeAction}>
           Resource
         </button>
@@ -135,9 +136,9 @@ export default function InvestigatorPanel() {
         </button>
       </div>
 
-      <hr />
+      <hr className="investigator-divider" />
 
-      <div className="button-row">
+      <div className="button-row investigator-button-row">
         <button onClick={() => spendResource(1)}>-1 Resource</button>
         <button onClick={() => gainClue(1)}>+1 Clue</button>
         <button onClick={() => takeDamage(1)}>+1 Damage</button>
