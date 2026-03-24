@@ -35,9 +35,11 @@ type GameStore = GameState & {
   availableScenarios: ScenarioDefinition[];
   selectedInvestigatorId: string;
   selectedScenarioId: string;
+  selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   setSelectedInvestigator: (investigatorId: string) => void;
   setSelectedScenario: (scenarioId: string) => void;
+  setSelectedEnemyTarget: (enemyId: string | null) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -113,7 +115,22 @@ function getEnemyAtInvestigator(
   enemies: Enemy[],
   locationId: string,
   investigatorId: string,
+  selectedEnemyTargetId: string | null,
 ): Enemy | undefined {
+  const selectedEnemy =
+    selectedEnemyTargetId === null
+      ? undefined
+      : enemies.find(
+          (enemy) =>
+            enemy.id === selectedEnemyTargetId &&
+            enemy.locationId === locationId &&
+            enemy.engagedInvestigatorId === investigatorId,
+        );
+
+  if (selectedEnemy) {
+    return selectedEnemy;
+  }
+
   const engagedEnemy = enemies.find(
     (enemy) =>
       enemy.locationId === locationId &&
@@ -129,6 +146,33 @@ function getEnemyAtInvestigator(
       enemy.locationId === locationId &&
       enemy.engagedInvestigatorId === null,
   );
+}
+
+function getPreferredEnemyTargetId(
+  enemies: Enemy[],
+  locationId: string,
+  investigatorId: string,
+  currentTargetId: string | null,
+): string | null {
+  const engagedEnemies = enemies.filter(
+    (enemy) =>
+      enemy.locationId === locationId &&
+      enemy.engagedInvestigatorId === investigatorId,
+  );
+
+  if (engagedEnemies.length === 0) {
+    return null;
+  }
+
+  const currentTargetStillValid = engagedEnemies.some(
+    (enemy) => enemy.id === currentTargetId,
+  );
+
+  if (currentTargetStillValid) {
+    return currentTargetId;
+  }
+
+  return engagedEnemies[0]?.id ?? null;
 }
 
 function getCardCost(card: PlayerCard): number {
@@ -173,6 +217,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   availableScenarios: scenarios,
   selectedInvestigatorId: investigators[0].id,
   selectedScenarioId: defaultScenarioId,
+  selectedEnemyTargetId: null,
   draggedCardId: null,
   pendingTestResolution: null,
 
@@ -209,6 +254,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ selectedScenarioId: scenarioId });
   },
 
+  setSelectedEnemyTarget: (enemyId) => {
+    const { investigator, locations, enemies } = get();
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!currentLocation) {
+      set({ selectedEnemyTargetId: null });
+      return;
+    }
+
+    if (enemyId === null) {
+      set({
+        selectedEnemyTargetId: getPreferredEnemyTargetId(
+          enemies,
+          currentLocation.id,
+          investigator.id,
+          null,
+        ),
+      });
+      return;
+    }
+
+    const isValidTarget = enemies.some(
+      (enemy) =>
+        enemy.id === enemyId &&
+        enemy.locationId === currentLocation.id &&
+        enemy.engagedInvestigatorId === investigator.id,
+    );
+
+    set({
+      selectedEnemyTargetId: isValidTarget ? enemyId : null,
+    });
+  },
+
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
   },
@@ -238,6 +316,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastSkillTest: null,
       activeSkillTest: null,
       pendingTestResolution: null,
+      selectedEnemyTargetId: null,
       draggedCardId: null,
       turn: {
         round: 1,
@@ -288,6 +367,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastSkillTest: null,
       activeSkillTest: null,
       pendingTestResolution: null,
+      selectedEnemyTargetId: null,
       draggedCardId: null,
       turn: {
         round: 1,
@@ -557,7 +637,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   moveInvestigator: (locationId: string) => {
-    const { investigator, locations, log, turn, activeSkillTest } = get();
+    const {
+      investigator,
+      locations,
+      log,
+      turn,
+      activeSkillTest,
+      selectedEnemyTargetId,
+    } = get();
 
     if (activeSkillTest) {
       set({
@@ -567,9 +654,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find(
-      (location) => location.id === locationId,
-    );
+    const destination = locations.find((location) => location.id === locationId);
 
     if (!destination) {
       return;
@@ -621,6 +706,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       locations: updatedLocations,
+      selectedEnemyTargetId:
+        currentLocation?.id === locationId ? selectedEnemyTargetId : null,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
@@ -645,7 +732,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   engageEnemiesAtLocation: () => {
-    const { investigator, locations, enemies, log } = get();
+    const {
+      investigator,
+      locations,
+      enemies,
+      log,
+      selectedEnemyTargetId,
+    } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -671,11 +764,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     if (!didEngage) {
+      const preferredTargetId = getPreferredEnemyTargetId(
+        enemies,
+        currentLocation.id,
+        investigator.id,
+        selectedEnemyTargetId,
+      );
+
+      if (preferredTargetId !== selectedEnemyTargetId) {
+        set({ selectedEnemyTargetId: preferredTargetId });
+      }
+
       return;
     }
 
+    const preferredTargetId = getPreferredEnemyTargetId(
+      updatedEnemies,
+      currentLocation.id,
+      investigator.id,
+      selectedEnemyTargetId,
+    );
+
     set({
       enemies: updatedEnemies,
+      selectedEnemyTargetId: preferredTargetId,
       log: [
         ...log,
         `Enemies at ${currentLocation.name} engaged ${investigator.name}.`,
@@ -732,7 +844,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advancePhase: () => {
-    const { turn, log, investigator, deck, hand, activeSkillTest } = get();
+    const {
+      turn,
+      log,
+      investigator,
+      deck,
+      hand,
+      activeSkillTest,
+      enemies,
+      selectedEnemyTargetId,
+      locations,
+    } = get();
 
     if (activeSkillTest) {
       set({
@@ -801,6 +923,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       upkeepLog.push(`Round ${nextRound} begins.`);
       upkeepLog.push("Phase: Mythos");
 
+      const currentLocation = findCurrentLocation(locations, investigator.id);
+      const preferredTargetId = currentLocation
+        ? getPreferredEnemyTargetId(
+            enemies,
+            currentLocation.id,
+            investigator.id,
+            selectedEnemyTargetId,
+          )
+        : null;
+
       set({
         investigator: {
           ...investigator,
@@ -808,6 +940,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
         deck: updatedDeck,
         hand: updatedHand,
+        selectedEnemyTargetId: preferredTargetId,
         turn: {
           round: nextRound,
           phase: "mythos",
@@ -1060,6 +1193,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       turn,
+      selectedEnemyTargetId,
     } = get();
 
     if (!activeSkillTest) {
@@ -1313,6 +1447,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
+    const currentLocation = findCurrentLocation(updatedLocations, investigator.id);
+    const preferredTargetId = currentLocation
+      ? getPreferredEnemyTargetId(
+          updatedEnemies,
+          currentLocation.id,
+          investigator.id,
+          selectedEnemyTargetId,
+        )
+      : null;
+
     set({
       investigator: updatedInvestigator,
       locations: updatedLocations,
@@ -1323,6 +1467,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastSkillTest: result,
       activeSkillTest: null,
       pendingTestResolution: null,
+      selectedEnemyTargetId: preferredTargetId,
       draggedCardId: null,
       turn: {
         ...turn,
@@ -1386,8 +1531,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   fightAction: () => {
-    const { investigator, locations, enemies, turn, log, activeSkillTest } =
-      get();
+    const {
+      investigator,
+      locations,
+      enemies,
+      turn,
+      log,
+      activeSkillTest,
+      selectedEnemyTargetId,
+    } = get();
 
     if (activeSkillTest) {
       set({
@@ -1427,6 +1579,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies,
       currentLocation.id,
       investigator.id,
+      selectedEnemyTargetId,
     );
 
     if (!enemy) {
@@ -1450,8 +1603,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   evadeAction: () => {
-    const { investigator, locations, enemies, turn, log, activeSkillTest } =
-      get();
+    const {
+      investigator,
+      locations,
+      enemies,
+      turn,
+      log,
+      activeSkillTest,
+      selectedEnemyTargetId,
+    } = get();
 
     if (activeSkillTest) {
       set({
@@ -1491,6 +1651,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies,
       currentLocation.id,
       investigator.id,
+      selectedEnemyTargetId,
     );
 
     if (!enemy) {
