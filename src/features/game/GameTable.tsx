@@ -15,13 +15,23 @@ import "./gameTable.css";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
+  const selectedScenario = useGameStore((state) => state.selectedScenario);
 
   return (
     <main className="game-table-shell">
       <header className="game-table-header">
         <div className="game-table-title-wrap">
           <p className="game-table-eyebrow">Arkham Horror: The Card Game</p>
-          <h1 className="game-table-title">Play Arkham</h1>
+
+          <h1 className="game-table-title">
+            {selectedScenario?.name ?? "Play Arkham"}
+          </h1>
+
+          {selectedScenario?.description && (
+            <p className="game-table-subtitle">
+              {selectedScenario.description}
+            </p>
+          )}
         </div>
 
         <button className="secondary-button" onClick={returnToHome}>
@@ -95,4 +105,3 @@ export default function GameTable() {
     </main>
   );
 }
-
