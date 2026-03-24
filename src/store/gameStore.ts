@@ -11,9 +11,9 @@ import type {
   ChaosToken,
   CommittedSkillCard,
   Enemy,
+  GameLocation,
   GameState,
   Investigator,
-  GameLocation,
   Phase,
   PlayerCard,
   SkillTestResult,
@@ -85,7 +85,7 @@ const startingChaosBag: ChaosToken[] = [
 function findCurrentLocation(
   locations: GameLocation[],
   investigatorId: string,
-): Location | undefined {
+): GameLocation | undefined {
   return locations.find((location) =>
     location.investigatorsHere.includes(investigatorId),
   );
