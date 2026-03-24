@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { investigators } from "../data/investigators";
 import { sampleDeck } from "../data/sampleDeck";
-import { sampleEnemies } from "../data/sampleEnemies";
-import { sampleLocations } from "../data/sampleLocations";
+import { defaultScenarioId, scenarios } from "../data/scenarios";
+import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { shuffle } from "../lib/shuffle";
@@ -31,9 +31,12 @@ type PendingTestResolution =
 type GameStore = GameState & {
   screen: Screen;
   availableInvestigators: Investigator[];
+  availableScenarios: ScenarioDefinition[];
   selectedInvestigatorId: string;
+  selectedScenarioId: string;
   pendingTestResolution: PendingTestResolution;
   setSelectedInvestigator: (investigatorId: string) => void;
+  setSelectedScenario: (scenarioId: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -143,10 +146,23 @@ function hasCommittedCardByName(
   return committedCards.some((entry) => entry.card.name === cardName);
 }
 
+function getSelectedScenario(state: {
+  availableScenarios: ScenarioDefinition[];
+  selectedScenarioId: string;
+}): ScenarioDefinition {
+  return (
+    state.availableScenarios.find(
+      (scenario) => scenario.id === state.selectedScenarioId,
+    ) ?? state.availableScenarios[0]
+  );
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
+  availableScenarios: scenarios,
   selectedInvestigatorId: investigators[0].id,
+  selectedScenarioId: defaultScenarioId,
   draggedCardId: null,
   pendingTestResolution: null,
 
@@ -156,8 +172,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   discard: [],
   playArea: [],
   chaosBag: [...startingChaosBag],
-  locations: sampleLocations,
-  enemies: sampleEnemies,
+  locations: getSelectedScenario({
+    availableScenarios: scenarios,
+    selectedScenarioId: defaultScenarioId,
+  }).locations,
+  enemies: getSelectedScenario({
+    availableScenarios: scenarios,
+    selectedScenarioId: defaultScenarioId,
+  }).enemies,
   log: [],
   lastSkillTest: null,
   activeSkillTest: null,
@@ -171,6 +193,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ selectedInvestigatorId: investigatorId });
   },
 
+  setSelectedScenario: (scenarioId) => {
+    set({ selectedScenarioId: scenarioId });
+  },
+
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
   },
@@ -181,12 +207,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   returnToHome: () => {
+    const selectedScenario = getSelectedScenario(get());
+
     set({
       screen: "home",
       deck: [],
       hand: [],
       discard: [],
       playArea: [],
+      chaosBag: selectedScenario.chaosBag
+        ? [...selectedScenario.chaosBag]
+        : [...startingChaosBag],
+      locations: selectedScenario.locations.map((location) => ({ ...location })),
+      enemies: selectedScenario.enemies.map((enemy) => ({ ...enemy })),
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -205,6 +238,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       (investigator) => investigator.id === get().selectedInvestigatorId,
     );
 
+    const selectedScenario = getSelectedScenario(get());
+
     const chosenInvestigator = selected
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
@@ -217,15 +252,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      chaosBag: [...startingChaosBag],
-      locations: sampleLocations.map((location) => ({
+      chaosBag: selectedScenario.chaosBag
+        ? [...selectedScenario.chaosBag]
+        : [...startingChaosBag],
+      locations: selectedScenario.locations.map((location) => ({
         ...location,
         investigatorsHere:
-          location.id === "study" ? [chosenInvestigator.id] : [],
+          location.id === selectedScenario.startingLocationId
+            ? [chosenInvestigator.id]
+            : [],
       })),
-      enemies: sampleEnemies.map((enemy) => ({ ...enemy })),
+      enemies: selectedScenario.enemies.map((enemy) => ({ ...enemy })),
       log: [
         `Selected investigator: ${chosenInvestigator.name}`,
+        `Selected scenario: ${selectedScenario.name}`,
         "Game setup complete.",
         "Round 1 begins.",
         "First round: Mythos phase is skipped.",
