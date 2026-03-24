@@ -145,18 +145,3 @@ export interface EnemySpawn {
   exhausted?: boolean;
   damageOnEnemy?: number;
 }
-
-export interface Enemy {
-  id: string;
-  name: string;
-  fight: number;
-  evade: number;
-  health: number;
-  damage: number;
-  horror: number;
-  locationId: string;
-  engagedInvestigatorId: string | null;
-  exhausted: boolean;
-  damageOnEnemy: number;
-}
-

@@ -15,23 +15,24 @@ import "./gameTable.css";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
-  const selectedScenario = useGameStore((state) => state.selectedScenario);
+  const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
+  const availableScenarios = useGameStore((state) => state.availableScenarios);
+
+  const selectedScenario =
+    availableScenarios.find((scenario) => scenario.id === selectedScenarioId) ??
+    null;
 
   return (
     <main className="game-table-shell">
       <header className="game-table-header">
         <div className="game-table-title-wrap">
           <p className="game-table-eyebrow">Arkham Horror: The Card Game</p>
-
           <h1 className="game-table-title">
             {selectedScenario?.name ?? "Play Arkham"}
           </h1>
-
-          {selectedScenario?.description && (
-            <p className="game-table-subtitle">
-              {selectedScenario.description}
-            </p>
-          )}
+          {selectedScenario?.description ? (
+            <p className="game-table-subtitle">{selectedScenario.description}</p>
+          ) : null}
         </div>
 
         <button className="secondary-button" onClick={returnToHome}>
