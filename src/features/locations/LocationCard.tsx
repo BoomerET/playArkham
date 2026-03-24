@@ -27,14 +27,20 @@ export default function LocationCard({ location }: Props) {
 
   useEffect(() => {
     if (!wasRevealedRef.current && location.revealed) {
-      setIsRevealAnimating(true);
+      const startTimeout = window.setTimeout(() => {
+        setIsRevealAnimating(true);
+      }, 0);
 
-      const timeout = window.setTimeout(() => {
+      const endTimeout = window.setTimeout(() => {
         setIsRevealAnimating(false);
       }, 500);
 
       wasRevealedRef.current = true;
-      return () => window.clearTimeout(timeout);
+
+      return () => {
+        window.clearTimeout(startTimeout);
+        window.clearTimeout(endTimeout);
+      };
     }
 
     wasRevealedRef.current = location.revealed;
