@@ -58,7 +58,9 @@ export default function LocationCard({ location }: Props) {
     wasRevealedRef.current = location.revealed;
   }, [location.revealed]);
 
-  const isCurrentLocation = location.investigatorsHere.includes(investigator.id);
+  const isCurrentLocation = location.investigatorsHere.includes(
+    investigator.id,
+  );
 
   const currentLocation = locations.find((current) =>
     current.investigatorsHere.includes(investigator.id),
@@ -74,7 +76,9 @@ export default function LocationCard({ location }: Props) {
     currentLocation.id !== location.id &&
     !currentLocation.connections.includes(location.id);
 
-  const enemiesHere = enemies.filter((enemy) => enemy.locationId === location.id);
+  const enemiesHere = enemies.filter(
+    (enemy) => enemy.locationId === location.id && !enemy.engagedInvestigatorId,
+  );
 
   function getInvestigatorData(id: string) {
     return availableInvestigators.find((item) => item.id === id);
@@ -136,9 +140,13 @@ export default function LocationCard({ location }: Props) {
           </div>
 
           <div className="location-card-status-row token-row">
-            {isCurrentLocation && <span className="token-chip success">Current</span>}
+            {isCurrentLocation && (
+              <span className="token-chip success">Current</span>
+            )}
             {isLegalMove && <span className="token-chip">Move</span>}
-            {isIllegalMove && <span className="token-chip danger">Blocked</span>}
+            {isIllegalMove && (
+              <span className="token-chip danger">Blocked</span>
+            )}
           </div>
 
           {(hasInvestigators || hasEnemies) && (
@@ -168,7 +176,9 @@ export default function LocationCard({ location }: Props) {
                             />
                           ) : (
                             <span className="location-investigator-token-fallback">
-                              {getInvestigatorShortName(id).slice(0, 2).toUpperCase()}
+                              {getInvestigatorShortName(id)
+                                .slice(0, 2)
+                                .toUpperCase()}
                             </span>
                           )}
 
@@ -193,16 +203,23 @@ export default function LocationCard({ location }: Props) {
                       <div
                         key={enemy.id}
                         className={`location-enemy-token ${
-                          enemy.exhausted ? "location-enemy-token-exhausted" : ""
+                          enemy.exhausted
+                            ? "location-enemy-token-exhausted"
+                            : ""
                         } ${
-                          enemy.engagedInvestigatorId ? "location-enemy-token-engaged" : ""
+                          enemy.engagedInvestigatorId
+                            ? "location-enemy-token-engaged"
+                            : ""
                         }`}
                         title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${
                           enemy.engagedInvestigatorId ? " • engaged" : ""
                         }${enemy.exhausted ? " • exhausted" : ""}`}
                         aria-label={enemy.name}
                       >
-                        <span className="location-enemy-token-skull" aria-hidden="true">
+                        <span
+                          className="location-enemy-token-skull"
+                          aria-hidden="true"
+                        >
                           ☠
                         </span>
                         <span className="location-enemy-token-label">
