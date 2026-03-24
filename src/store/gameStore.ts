@@ -6,6 +6,7 @@ import { sampleLocations } from "../data/sampleLocations";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { shuffle } from "../lib/shuffle";
+import type { GameLocation } from "../../types/game";
 import type {
   ActiveSkillTest,
   ChaosToken,
@@ -13,7 +14,7 @@ import type {
   Enemy,
   GameState,
   Investigator,
-  Location,
+  GameLocation,
   Phase,
   PlayerCard,
   SkillTestResult,
@@ -83,7 +84,7 @@ const startingChaosBag: ChaosToken[] = [
 ];
 
 function findCurrentLocation(
-  locations: Location[],
+  locations: GameLocation[],
   investigatorId: string,
 ): Location | undefined {
   return locations.find((location) =>
