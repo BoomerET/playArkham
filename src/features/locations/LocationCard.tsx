@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 import type { GameLocation } from "../../types/game";
 
@@ -68,11 +69,12 @@ export default function LocationCard({ location }: Props) {
   );
   const exhaustedEnemies = enemiesHere.filter((enemy) => enemy.exhausted);
 
-  function getInvestigatorShortName(id: string): string {
-    const fullName =
-      availableInvestigators.find((item) => item.id === id)?.name ??
-      formatName(id);
+  function getInvestigatorData(id: string) {
+    return availableInvestigators.find((item) => item.id === id);
+  }
 
+  function getInvestigatorShortName(id: string): string {
+    const fullName = getInvestigatorData(id)?.name ?? formatName(id);
     const parts = fullName.split(" ");
     return parts.length > 1 ? parts[0] : fullName;
   }
@@ -137,12 +139,41 @@ export default function LocationCard({ location }: Props) {
               {hasInvestigators && (
                 <div className="location-card-presence-block">
                   <p className="location-card-mini-label">Investigators</p>
-                  <div className="location-card-badge-row">
-                    {location.investigatorsHere.map((id) => (
-                      <span key={id} className="location-presence-badge">
-                        {getInvestigatorShortName(id)}
-                      </span>
-                    ))}
+                  <div className="location-investigator-token-row">
+                    {location.investigatorsHere.map((id) => {
+                      const data = getInvestigatorData(id);
+                      const factionClass = data
+                        ? getFactionClassName(data.faction)
+                        : "faction-neutral";
+
+                      return (
+                        <div
+                          key={id}
+                          className={`location-investigator-token ${factionClass}`}
+                          title={data?.name ?? formatName(id)}
+                          aria-label={data?.name ?? formatName(id)}
+                        >
+                          {data?.portrait ? (
+                            <img
+                              src={data.portrait}
+                              alt={data.name}
+                              className="location-investigator-token-image"
+                            />
+                          ) : (
+                            <span className="location-investigator-token-fallback">
+                              {getInvestigatorShortName(id).slice(0, 2).toUpperCase()}
+                            </span>
+                          )}
+
+                          {id === investigator.id && (
+                            <span
+                              className="location-investigator-token-active-ring"
+                              aria-hidden="true"
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
