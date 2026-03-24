@@ -473,12 +473,9 @@ button:hover {
 /* ---------- Locations ---------- */
 
 .location-card {
-  transition:
-    transform 140ms ease,
-    border-color 140ms ease,
-    box-shadow 140ms ease,
-    background 140ms ease,
-    opacity 140ms ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .location-card.current-location {
@@ -851,13 +848,6 @@ button:hover {
 
 /* ---------- Location Card ---------- */
 
-.location-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 220px;
-  padding: 14px;
-}
 
 .location-card-header {
   display: flex;
@@ -1663,16 +1653,19 @@ button:hover {
 
 .location-map-canvas {
   position: relative;
-  min-height: 760px;
+  min-height: 820px; /* was ~760 */
   width: 100%;
-}
-
-.location-map-node {
-  width: 190px;
 }
 
 .location-map-node .location-card {
   min-height: 0;
+}
+
+.location-map-node {
+  position: absolute;
+  width: 200px;        /* stable width */
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .location-connection-layer {
@@ -1811,10 +1804,6 @@ button:hover {
   color: var(--muted);
 }
 
-.location-map-node {
-  width: 210px;
-}
-
 @media (max-width: 1100px) {
   .location-map-node {
     width: 190px;
@@ -1822,9 +1811,7 @@ button:hover {
 }
 
 .location-card-tight {
-  min-height: 148px;
-  padding: 10px;
-  gap: 8px;
+  min-height: 140px;   /* slightly shorter */
 }
 
 .location-card-tight .location-card-header {

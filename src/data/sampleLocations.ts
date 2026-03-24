@@ -1,5 +1,3 @@
-import type { Location } from "../types/game";
-
 export const sampleLocations: Location[] = [
   {
     id: "study",
@@ -9,7 +7,7 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: ["roland-banks"],
-    mapPosition: { x: 18, y: 50 },
+    mapPosition: { x: 22, y: 50 },
   },
   {
     id: "hallway",
@@ -29,7 +27,7 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: [],
-    mapPosition: { x: 50, y: 20 },
+    mapPosition: { x: 50, y: 18 },
   },
   {
     id: "cellar",
@@ -39,6 +37,6 @@ export const sampleLocations: Location[] = [
     revealed: true,
     connections: ["hallway"],
     investigatorsHere: [],
-    mapPosition: { x: 50, y: 80 },
+    mapPosition: { x: 50, y: 82 },
   },
 ];
