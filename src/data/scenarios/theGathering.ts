@@ -4,6 +4,7 @@ export const theGatheringScenario: ScenarioDefinition = {
   id: "the-gathering",
   name: "The Gathering",
   description: "A simple house map with a central hallway.",
+  startingLocationId: "study",
   locations: [
     {
       id: "study",
