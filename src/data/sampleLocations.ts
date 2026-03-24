@@ -1,4 +1,6 @@
-export const sampleLocations: Location[] = [
+import type { GameLocation } from "../types/game";
+
+export const sampleLocations: GameLocation[] = [
   {
     id: "study",
     name: "Study",

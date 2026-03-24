@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useGameStore } from "../../store/gameStore";
-import type { Location } from "../../types/game";
+import type { GameLocation } from "../../types/game";
 
 interface Props {
-  location: Location;
+  location: GameLocation;
 }
 
 function formatName(value: string): string {

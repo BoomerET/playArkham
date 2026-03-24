@@ -45,7 +45,7 @@ export interface PlayerCard {
   text?: string;
 }
 
-export interface Location {
+export interface GameLocation {
   id: string;
   name: string;
   shroud: number;
@@ -118,7 +118,7 @@ export interface GameState {
   discard: PlayerCard[];
   playArea: PlayerCard[];
   chaosBag: ChaosToken[];
-  locations: Location[];
+  locations: GameLocation[];
   enemies: Enemy[];
   log: string[];
   turn: TurnState;
