@@ -16,6 +16,18 @@ export default function HomeScreen() {
   const setSelectedInvestigator = useGameStore(
     (state) => state.setSelectedInvestigator,
   );
+
+  // ✅ NEW: scenario state
+  const availableScenarios = useGameStore(
+    (state) => state.availableScenarios,
+  );
+  const selectedScenarioId = useGameStore(
+    (state) => state.selectedScenarioId,
+  );
+  const setSelectedScenario = useGameStore(
+    (state) => state.setSelectedScenario,
+  );
+
   const startGame = useGameStore((state) => state.startGame);
 
   return (
@@ -83,6 +95,34 @@ export default function HomeScreen() {
               </button>
             );
           })}
+        </div>
+
+        {/* ✅ NEW: Scenario Selection */}
+        <div className="scenario-section">
+          <h2 className="section-title">Select Scenario</h2>
+
+          <div className="scenario-grid">
+            {availableScenarios.map((scenario) => {
+              const selected = scenario.id === selectedScenarioId;
+
+              return (
+                <button
+                  key={scenario.id}
+                  className={`scenario-card ${
+                    selected ? "selected" : ""
+                  }`}
+                  onClick={() => setSelectedScenario(scenario.id)}
+                >
+                  <div className="scenario-card-body">
+                    <span className="scenario-name">{scenario.name}</span>
+                    <p className="scenario-description">
+                      {scenario.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="home-actions">

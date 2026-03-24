@@ -2055,3 +2055,49 @@ button:hover {
     box-shadow 120ms ease,
     border-color 120ms ease;
 }
+
+/* Scenario Section */
+.scenario-section {
+  margin-top: 28px;
+}
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* Scenario Card */
+.scenario-card {
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.scenario-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.scenario-card.selected {
+  border-color: rgba(141, 243, 255, 0.7);
+  box-shadow: 0 0 10px rgba(141, 243, 255, 0.25);
+}
+
+/* Scenario text */
+.scenario-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #f4f7f9;
+}
+
+.scenario-description {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #aab6c4;
+}
