@@ -302,3 +302,11 @@
     font-size: 0.78rem;
   }
 }
+
+.investigator-panel hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 12px 0;
+  width: 100%;
+  display: block;
+}
