@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 import type { GameLocation } from "../../types/game";
+import "./locationCard.css";
 
 interface Props {
   location: GameLocation;

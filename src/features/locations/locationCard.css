@@ -1,0 +1,318 @@
+/* ---------- Location Card ---------- */
+
+.location-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease,
+    background 140ms ease;
+}
+
+.location-card.current-location {
+  border-color: rgba(215, 180, 106, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(215, 180, 106, 0.18),
+    0 0 26px rgba(110, 208, 214, 0.14),
+    0 0 18px rgba(215, 180, 106, 0.12);
+  background: linear-gradient(180deg, rgba(28, 42, 56, 0.98), rgba(13, 21, 31, 0.98));
+}
+
+.location-card.legal-location {
+  border-color: rgba(141, 243, 255, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.08),
+    0 0 18px rgba(110, 208, 214, 0.1);
+}
+
+.location-card.legal-location:hover {
+  transform: translateY(-2px);
+  border-color: var(--teal-strong);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.22),
+    0 0 28px rgba(141, 243, 255, 0.18);
+}
+
+.location-card.illegal-location {
+  opacity: 0.72;
+  border-color: rgba(168, 188, 199, 0.16);
+  box-shadow: none;
+}
+
+.location-card.illegal-location:hover {
+  transform: none;
+  border-color: rgba(255, 123, 123, 0.22);
+  box-shadow: 0 0 12px rgba(255, 123, 123, 0.08);
+}
+
+.clickable-location {
+  cursor: pointer;
+}
+
+.location-card:focus-visible {
+  outline: 2px solid var(--teal-strong);
+  outline-offset: 2px;
+}
+
+.static-location {
+  cursor: default;
+}
+
+.location-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.location-card-title {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.location-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.location-card-status-row {
+  min-height: 32px;
+  align-items: flex-start;
+}
+
+.location-card-presence {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.location-card-presence-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-card-mini-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.location-investigator-token-row,
+.location-enemy-token-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.location-investigator-token {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  background: rgba(17, 29, 43, 0.95);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.location-investigator-token-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.location-investigator-token-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: var(--text);
+}
+
+.location-investigator-token-active-ring {
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+  border: 2px solid rgba(141, 243, 255, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(141, 243, 255, 0.24),
+    0 0 12px rgba(141, 243, 255, 0.26);
+  pointer-events: none;
+}
+
+.location-enemy-token {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12), transparent 35%),
+    rgba(120, 24, 24, 0.88);
+  border: 2px solid rgba(255, 123, 123, 0.45);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  color: #ffe7e7;
+  overflow: hidden;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease,
+    opacity 120ms ease;
+}
+
+.location-enemy-token:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.32),
+    0 0 14px rgba(255, 123, 123, 0.12);
+}
+
+.location-enemy-token-exhausted {
+  opacity: 0.62;
+  border-style: dashed;
+  filter: saturate(0.8);
+}
+
+.location-enemy-token-engaged {
+  border-color: rgba(255, 188, 92, 0.6);
+}
+
+.location-enemy-token-skull {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  font-size: 0.58rem;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.location-enemy-token-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.location-enemy-token-damage {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 123, 123, 0.96);
+  border: 1px solid rgba(255, 225, 225, 0.4);
+  color: #fff5f5;
+  font-size: 0.56rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.location-enemy-token-engaged-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #ffd48b;
+  box-shadow: 0 0 10px rgba(255, 212, 139, 0.45);
+}
+
+.location-card-hidden-face {
+  min-height: 216px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.location-card-hidden-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.location-card-hidden-art {
+  width: 72px;
+  height: 104px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(141, 243, 255, 0.18);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(141, 243, 255, 0.14), transparent 35%),
+    linear-gradient(180deg, rgba(25, 39, 54, 0.98), rgba(11, 19, 29, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.location-card-hidden-glyph {
+  font-size: 2rem;
+  font-weight: 800;
+  color: rgba(141, 243, 255, 0.7);
+}
+
+.location-card-hidden-name {
+  margin: 0;
+  font-size: 0.94rem;
+  color: var(--muted);
+}
+
+.location-card-reveal-animating {
+  animation: location-card-reveal-pop 500ms ease;
+}
+
+@keyframes location-card-reveal-pop {
+  0% {
+    transform: scale(0.94);
+    opacity: 0.45;
+  }
+
+  55% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 720px) {
+  .location-card {
+    min-height: 0;
+  }
+
+  .location-card-hidden-face {
+    min-height: 180px;
+  }
+}
