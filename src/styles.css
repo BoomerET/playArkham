@@ -1898,7 +1898,7 @@ button:hover {
 }
 
 .location-map-node:hover .location-card {
-  transform: translate(-50%, -50%) translateY(-3px);
+  transform: translateY(-3px);
   box-shadow:
     0 12px 26px rgba(0, 0, 0, 0.35),
     0 0 14px rgba(141, 243, 255, 0.12);
