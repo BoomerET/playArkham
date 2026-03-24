@@ -13,7 +13,7 @@ export const theGatheringScenario: ScenarioDefinition = {
       clues: 2,
       revealed: true,
       connections: ["hallway"],
-      investigatorsHere: ["roland-banks"],
+      investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
     },
     {
@@ -47,19 +47,10 @@ export const theGatheringScenario: ScenarioDefinition = {
       mapPosition: { x: 50, y: 82 },
     },
   ],
-  enemies: [
+  enemySpawns: [
     {
-      id: "ghoul-priest",
-      name: "Ghoul Priest",
-      fight: 4,
-      evade: 4,
-      health: 5,
-      damage: 2,
-      horror: 2,
+      enemyId: "ghoul-priest",
       locationId: "cellar",
-      engagedInvestigatorId: null,
-      exhausted: false,
-      damageOnEnemy: 0,
     },
   ],
 };

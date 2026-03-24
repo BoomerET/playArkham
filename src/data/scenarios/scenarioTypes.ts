@@ -1,4 +1,4 @@
-import type { ChaosToken, Enemy, GameLocation } from "../../types/game";
+import type { ChaosToken, EnemySpawn, GameLocation } from "../../types/game";
 
 export interface ScenarioDefinition {
   id: string;
@@ -6,6 +6,6 @@ export interface ScenarioDefinition {
   description: string;
   startingLocationId: string;
   locations: GameLocation[];
-  enemies: Enemy[];
+  enemySpawns: EnemySpawn[];
   chaosBag?: ChaosToken[];
 }

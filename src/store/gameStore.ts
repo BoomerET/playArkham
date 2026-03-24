@@ -5,6 +5,7 @@ import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
+import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { shuffle } from "../lib/shuffle";
 import type {
   ActiveSkillTest,
@@ -262,7 +263,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ? [chosenInvestigator.id]
             : [],
       })),
-      enemies: selectedScenario.enemies.map((enemy) => ({ ...enemy })),
+      enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       log: [
         `Selected investigator: ${chosenInvestigator.name}`,
         `Selected scenario: ${selectedScenario.name}`,

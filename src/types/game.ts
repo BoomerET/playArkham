@@ -126,3 +126,37 @@ export interface GameState {
   activeSkillTest: ActiveSkillTest | null;
   draggedCardId: string | null;
 }
+
+export interface EnemyDefinition {
+  id: string;
+  name: string;
+  fight: number;
+  evade: number;
+  health: number;
+  damage: number;
+  horror: number;
+}
+
+export interface EnemySpawn {
+  enemyId: string;
+  instanceId?: string;
+  locationId: string;
+  engagedInvestigatorId?: string | null;
+  exhausted?: boolean;
+  damageOnEnemy?: number;
+}
+
+export interface Enemy {
+  id: string;
+  name: string;
+  fight: number;
+  evade: number;
+  health: number;
+  damage: number;
+  horror: number;
+  locationId: string;
+  engagedInvestigatorId: string | null;
+  exhausted: boolean;
+  damageOnEnemy: number;
+}
+
