@@ -316,3 +316,31 @@
     min-height: 180px;
   }
 }
+
+.location-investigator-token.faction-guardian {
+  border-color: rgba(74, 163, 255, 0.65);
+}
+
+.location-investigator-token.faction-seeker {
+  border-color: rgba(215, 180, 106, 0.65);
+}
+
+.location-investigator-token.faction-mystic {
+  border-color: rgba(154, 107, 255, 0.65);
+}
+
+.location-investigator-token.faction-rogue {
+  border-color: rgba(79, 209, 139, 0.65);
+}
+
+.location-investigator-token.faction-survivor {
+  border-color: rgba(217, 122, 82, 0.65);
+}
+
+.location-investigator-token:hover {
+  transform: translateY(-1px) scale(1.04);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease;
+}
