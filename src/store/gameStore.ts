@@ -114,11 +114,20 @@ function getEnemyAtInvestigator(
   locationId: string,
   investigatorId: string,
 ): Enemy | undefined {
+  const engagedEnemy = enemies.find(
+    (enemy) =>
+      enemy.locationId === locationId &&
+      enemy.engagedInvestigatorId === investigatorId,
+  );
+
+  if (engagedEnemy) {
+    return engagedEnemy;
+  }
+
   return enemies.find(
     (enemy) =>
       enemy.locationId === locationId &&
-      (enemy.engagedInvestigatorId === investigatorId ||
-        enemy.engagedInvestigatorId === null),
+      enemy.engagedInvestigatorId === null,
   );
 }
 
@@ -785,7 +794,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         upkeepLog.push(`Drew card during upkeep: ${drawnCardName}`);
       } else {
         upkeepLog.push(
-          "Tried to draw a card during upkeep, but the deck is empty.",
+          "Tried to draw a card during upkeep, but the deck was empty.",
         );
       }
 
