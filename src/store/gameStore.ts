@@ -6,7 +6,6 @@ import { sampleLocations } from "../data/sampleLocations";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { shuffle } from "../lib/shuffle";
-import type { GameLocation } from "../../types/game";
 import type {
   ActiveSkillTest,
   ChaosToken,
