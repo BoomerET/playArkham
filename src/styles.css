@@ -1967,3 +1967,17 @@ button:hover {
     opacity: 1;
   }
 }
+
+.chaos-token-icon-wrap {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chaos-token-icon-svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}

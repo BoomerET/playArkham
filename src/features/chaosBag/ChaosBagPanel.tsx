@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import ChaosTokenIcon from "../../components/ChaosTokenIcon";
 import type { ChaosToken } from "../../types/game";
 import { useGameStore } from "../../store/gameStore";
 
@@ -63,23 +64,15 @@ function getNumericTokenText(token: ChaosToken | null): string {
   return numericValue >= 0 ? `+${numericValue}` : String(numericValue);
 }
 
-function getSpecialTokenSymbol(token: ChaosToken | null): string {
-  switch (token) {
-    case "elderSign":
-      return "✦";
-    case "autoFail":
-      return "🕯";
-    case "skull":
-      return "☠";
-    case "cultist":
-      return "✠";
-    case "tablet":
-      return "▣";
-    case "elderThing":
-      return "◈";
-    default:
-      return "•";
-  }
+function isIconToken(token: ChaosToken | null): token is ChaosToken {
+  return (
+    token === "elderSign" ||
+    token === "autoFail" ||
+    token === "skull" ||
+    token === "cultist" ||
+    token === "tablet" ||
+    token === "elderThing"
+  );
 }
 
 export default function ChaosBagPanel() {
@@ -166,10 +159,6 @@ export default function ChaosBagPanel() {
     [shownToken],
   );
   const isNumeric = useMemo(() => isNumericToken(shownToken), [shownToken]);
-  const specialTokenSymbol = useMemo(
-    () => getSpecialTokenSymbol(shownToken),
-    [shownToken],
-  );
 
   return (
     <section className="game-panel chaos-bag-panel">
@@ -219,11 +208,21 @@ export default function ChaosBagPanel() {
                 <span className="chaos-token-symbol">{numericTokenText}</span>
                 <span className="chaos-token-caption">Modifier</span>
               </>
+            ) : shownToken && isIconToken(shownToken) ? (
+              <>
+                <span className="chaos-token-icon-wrap">
+                  <ChaosTokenIcon
+                    token={shownToken}
+                    className="chaos-token-icon-svg"
+                    viewBox="0 0 32 32"
+                    title={tokenLabel}
+                  />
+                </span>
+                <span className="chaos-token-caption">{tokenLabel}</span>
+              </>
             ) : (
               <>
-                <span className="chaos-token-special-symbol">
-                  {specialTokenSymbol}
-                </span>
+                <span className="chaos-token-symbol">•</span>
                 <span className="chaos-token-caption">{tokenLabel}</span>
               </>
             )}
@@ -261,4 +260,3 @@ export default function ChaosBagPanel() {
     </section>
   );
 }
-
