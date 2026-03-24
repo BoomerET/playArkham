@@ -7,10 +7,9 @@ function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
 }
 
-function splitInvestigatorName(name: string): {
-  firstLine: string;
-  secondLine: string | null;
-} {
+function splitInvestigatorName(
+  name: string,
+): { firstLine: string; secondLine: string | null } {
   const parts = name.trim().split(/\s+/);
 
   if (parts.length <= 1) {
@@ -28,13 +27,6 @@ function splitInvestigatorName(name: string): {
     secondLine: parts.slice(midpoint).join(" "),
   };
 }
-
-const enemies = useGameStore((s) => s.enemies);
-const investigatorId = investigator.id;
-
-const engagedEnemies = enemies.filter(
-  (e) => e.engagedInvestigatorId === investigatorId,
-);
 
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
@@ -102,15 +94,6 @@ export default function InvestigatorPanel() {
           </div>
         </div>
       </div>
-      {engagedEnemies.length > 0 && (
-        <div className="investigator-engaged-enemies">
-          {engagedEnemies.map((enemy) => (
-            <div key={enemy.id} className="engaged-enemy-chip">
-              {enemy.name}
-            </div>
-          ))}
-        </div>
-      )}
 
       <hr />
 
