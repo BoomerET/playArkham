@@ -7,7 +7,9 @@ function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
 }
 
-function splitInvestigatorName(name: string): { firstLine: string; secondLine: string | null } {
+function splitInvestigatorName(
+  name: string,
+): { firstLine: string; secondLine: string | null } {
   const parts = name.trim().split(/\s+/);
 
   if (parts.length <= 1) {
@@ -51,7 +53,9 @@ export default function InvestigatorPanel() {
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
         <div className="investigator-portrait-column">
-          <div className={`portrait-frame investigator-portrait-frame ${factionClass}`}>
+          <div
+            className={`portrait-frame investigator-portrait-frame ${factionClass}`}
+          >
             <img
               src={investigator.portrait}
               alt={investigator.name}
@@ -87,38 +91,38 @@ export default function InvestigatorPanel() {
         </div>
       </div>
 
-      <hr className="investigator-divider" />
+      <hr />
 
-      <div className="investigator-stat-grid">
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Health: </span>
-          <span className="investigator-stat-value">{investigator.health}</span>
+      <div className="stat-grid">
+        <div className="stat-box">
+          <span className="stat-label">Health: </span>
+          <span className="stat-value">{investigator.health}</span>
         </div>
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Sanity: </span>
-          <span className="investigator-stat-value">{investigator.sanity}</span>
+        <div className="stat-box">
+          <span className="stat-label">Sanity: </span>
+          <span className="stat-value">{investigator.sanity}</span>
         </div>
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Damage: </span>
-          <span className="investigator-stat-value">{investigator.damage}</span>
+        <div className="stat-box">
+          <span className="stat-label">Damage: </span>
+          <span className="stat-value">{investigator.damage}</span>
         </div>
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Horror: </span>
-          <span className="investigator-stat-value">{investigator.horror}</span>
+        <div className="stat-box">
+          <span className="stat-label">Horror: </span>
+          <span className="stat-value">{investigator.horror}</span>
         </div>
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Resources: </span>
-          <span className="investigator-stat-value">{investigator.resources}</span>
+        <div className="stat-box">
+          <span className="stat-label">Resources: </span>
+          <span className="stat-value">{investigator.resources}</span>
         </div>
-        <div className="investigator-stat-box">
-          <span className="investigator-stat-label">Clues: </span>
-          <span className="investigator-stat-value">{investigator.clues}</span>
+        <div className="stat-box">
+          <span className="stat-label">Clues: </span>
+          <span className="stat-value">{investigator.clues}</span>
         </div>
       </div>
 
-      <hr className="investigator-divider" />
+      <hr />
 
-      <div className="button-row investigator-button-row">
+      <div className="button-row">
         <button onClick={takeResourceAction} disabled={!canTakeAction}>
           Resource
         </button>
@@ -136,9 +140,9 @@ export default function InvestigatorPanel() {
         </button>
       </div>
 
-      <hr className="investigator-divider" />
+      <hr />
 
-      <div className="button-row investigator-button-row">
+      <div className="button-row">
         <button onClick={() => spendResource(1)}>-1 Resource</button>
         <button onClick={() => gainClue(1)}>+1 Clue</button>
         <button onClick={() => takeDamage(1)}>+1 Damage</button>

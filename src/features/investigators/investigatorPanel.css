@@ -1,14 +1,7 @@
 .investigator-panel {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.investigator-panel hr.investigator-divider {
-  width: 100%;
-  margin: 0;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 0;
 }
 
 .investigator-header {
@@ -72,30 +65,26 @@
   flex: 0 0 auto;
 }
 
-.investigator-stat-grid {
+.stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
 }
 
-.investigator-stat-box {
+.stat-box {
   padding: 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: rgba(18, 28, 40, 0.85);
 }
 
-.investigator-stat-label {
+.stat-label {
   font-size: 0.75rem;
   color: var(--muted);
 }
 
-.investigator-stat-value {
-  font-weight: 700;
-}
-
-.investigator-button-row {
-  width: 100%;
+.stat-value {
+  font-weight: bold;
 }
 
 @media (max-width: 640px) {
@@ -114,5 +103,9 @@
 
   .investigator-name {
     font-size: 0.88rem;
+  }
+
+  .faction-label {
+    font-size: 0.78rem;
   }
 }
