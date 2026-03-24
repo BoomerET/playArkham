@@ -310,3 +310,34 @@
   width: 100%;
   display: block;
 }
+
+.engaged-enemies-targeting-note {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.engaged-enemy-card-primary {
+  border-color: rgba(220, 170, 90, 0.45);
+  box-shadow: 0 0 0 1px rgba(220, 170, 90, 0.18);
+}
+
+.engaged-enemy-name-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.engaged-enemy-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.engaged-enemy-tag-primary {
+  color: #f8e9c8;
+  background: rgba(130, 95, 28, 0.55);
+  border: 1px solid rgba(232, 201, 122, 0.35);
+}

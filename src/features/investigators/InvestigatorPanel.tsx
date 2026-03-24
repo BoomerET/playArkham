@@ -54,6 +54,8 @@ export default function InvestigatorPanel() {
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
   );
 
+  const primaryTargetEnemy = engagedEnemies[0] ?? null;
+
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
@@ -134,31 +136,62 @@ export default function InvestigatorPanel() {
           <hr />
 
           <div className="engaged-enemies-section">
-            <div className="engaged-enemies-header">
-              Engaged Enemies
-            </div>
+            <div className="engaged-enemies-header">Engaged Enemies</div>
+
+            {engagedEnemies.length > 1 && primaryTargetEnemy && (
+              <p className="engaged-enemies-targeting-note">
+                Fight and Evade will target{" "}
+                <strong>{primaryTargetEnemy.name}</strong> first.
+              </p>
+            )}
 
             <div className="engaged-enemies-list">
-              {engagedEnemies.map((enemy) => {
-                const remainingHealth = Math.max(enemy.health - enemy.damage, 0);
+              {engagedEnemies.map((enemy, index) => {
+                const remainingHealth = Math.max(
+                  enemy.health - enemy.damageOnEnemy,
+                  0,
+                );
+                const isPrimaryTarget = index === 0;
 
                 return (
-                  <div key={enemy.id} className="engaged-enemy-card">
+                  <div
+                    key={enemy.id}
+                    className={`engaged-enemy-card ${
+                      isPrimaryTarget ? "engaged-enemy-card-primary" : ""
+                    }`}
+                  >
                     <div className="engaged-enemy-main">
                       <div className="engaged-enemy-name-row">
-                        <span className="engaged-enemy-name">{enemy.name}</span>
-                        {enemy.exhausted && (
-                          <span className="engaged-enemy-tag">Exhausted</span>
-                        )}
+                        <div className="engaged-enemy-name-stack">
+                          <span className="engaged-enemy-name">
+                            {enemy.name}
+                          </span>
+
+                          <div className="engaged-enemy-badges">
+                            {isPrimaryTarget && (
+                              <span className="engaged-enemy-tag engaged-enemy-tag-primary">
+                                Primary Target
+                              </span>
+                            )}
+
+                            {enemy.exhausted && (
+                              <span className="engaged-enemy-tag">
+                                Exhausted
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       <div className="engaged-enemy-meta">
                         <span className="token-chip danger">
-                          Damage {enemy.damage}/{enemy.health}
+                          Damage {enemy.damageOnEnemy}/{enemy.health}
                         </span>
                         <span className="token-chip">
                           HP Left {remainingHealth}
                         </span>
+                        <span className="token-chip">Fight {enemy.fight}</span>
+                        <span className="token-chip">Evade {enemy.evade}</span>
                       </div>
                     </div>
                   </div>
