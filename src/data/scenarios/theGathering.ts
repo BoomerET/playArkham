@@ -5,6 +5,7 @@ export const theGatheringScenario: ScenarioDefinition = {
   name: "The Gathering",
   description: "A simple house map with a central hallway.",
   startingLocationId: "study",
+
   locations: [
     {
       id: "study",
@@ -38,7 +39,6 @@ export const theGatheringScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 18 },
       isVisible: false,
-
     },
     {
       id: "cellar",
@@ -52,10 +52,57 @@ export const theGatheringScenario: ScenarioDefinition = {
       isVisible: false,
     },
   ],
+
   enemySpawns: [
     {
       enemyId: "ghoul-priest",
       locationId: "cellar",
+    },
+  ],
+
+  agendas: [
+    {
+      id: "gathering-agenda-1a",
+      kind: "agenda",
+      sequence: "1a",
+      title: "What's Going On?!",
+      text: "Something is terribly wrong inside your home. The darkness is closing in.",
+      threshold: 3,
+      thresholdLabel: "Doom",
+      startingProgress: 0,
+    },
+    {
+      id: "gathering-agenda-2a",
+      kind: "agenda",
+      sequence: "2a",
+      title: "The House Stirs",
+      text: "The unnatural presence in the house grows stronger with every passing moment.",
+      threshold: 5,
+      thresholdLabel: "Doom",
+      startingProgress: 0,
+    },
+  ],
+
+  acts: [
+    {
+      id: "gathering-act-1a",
+      kind: "act",
+      sequence: "1a",
+      title: "Trapped",
+      text: "You need to find a way through the house and discover what is causing these strange events.",
+      threshold: 2,
+      thresholdLabel: "Clues",
+      startingProgress: 0,
+    },
+    {
+      id: "gathering-act-2a",
+      kind: "act",
+      sequence: "2a",
+      title: "Into the Dark",
+      text: "The path deeper into the house opens. You steel yourself and press onward.",
+      threshold: 2,
+      thresholdLabel: "Clues",
+      startingProgress: 0,
     },
   ],
 };
