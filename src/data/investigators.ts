@@ -1,11 +1,13 @@
 import type { Investigator } from "../types/game";
 
+const base = import.meta.env.BASE_URL;
+
 export const investigators: Investigator[] = [
   {
     id: "roland-banks",
     name: "Roland Banks",
     faction: "guardian",
-    portrait: "/portraits/roland-banks.webp",
+    portrait: `${base}portraits/roland-banks.webp`,
     health: 9,
     sanity: 5,
     resources: 5,
@@ -21,7 +23,7 @@ export const investigators: Investigator[] = [
     id: "daisy-walker",
     name: "Daisy Walker",
     faction: "seeker",
-    portrait: "/portraits/daisy-walker.webp",
+    portrait: `${base}portraits/daisy-walker.webp`,
     health: 5,
     sanity: 9,
     resources: 5,
@@ -37,7 +39,7 @@ export const investigators: Investigator[] = [
     id: "agnes-baker",
     name: "Agnes Baker",
     faction: "mystic",
-    portrait: "/portraits/agnes-baker.webp",
+    portrait: `${base}portraits/agnes-baker.webp`,
     health: 6,
     sanity: 8,
     resources: 5,
@@ -53,7 +55,7 @@ export const investigators: Investigator[] = [
     id: "skids-otoole",
     name: '"Skids" O’Toole',
     faction: "rogue",
-    portrait: "/portraits/skids-otoole.webp",
+    portrait: `${base}portraits/skids-otoole.webp`,
     health: 8,
     sanity: 6,
     resources: 5,
@@ -69,7 +71,7 @@ export const investigators: Investigator[] = [
     id: "joe-diamond",
     name: "Joe Diamond",
     faction: "seeker",
-    portrait: "/portraits/joe-diamond.webp",
+    portrait: `${base}portraits/joe-diamond.webp`,
     health: 7,
     sanity: 7,
     resources: 5,
@@ -85,7 +87,7 @@ export const investigators: Investigator[] = [
     id: "daniela-reyes",
     name: "Daniela Reyes",
     faction: "guardian",
-    portrait: "/portraits/daniela-reyes.webp",
+    portrait: `${base}portraits/daniela-reyes.webp`,
     health: 9,
     sanity: 5,
     resources: 5,
@@ -101,7 +103,7 @@ export const investigators: Investigator[] = [
     id: "trish-scarborough",
     name: "Trish Scarborough",
     faction: "guardian",
-    portrait: "/portraits/trish-scarborough.webp",
+    portrait: `${base}portraits/trish-scarborough.webp`,
     health: 8,
     sanity: 6,
     resources: 5,
