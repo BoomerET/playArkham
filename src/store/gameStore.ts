@@ -178,8 +178,7 @@ function getEnemyAtInvestigator(
 
   return enemies.find(
     (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === null,
+      enemy.locationId === locationId && enemy.engagedInvestigatorId === null,
   );
 }
 
@@ -504,12 +503,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const scenario = getSelectedScenario(get());
+    const agendas = scenario.agendas ?? [];
+
+    const currentIndex = agendas.findIndex((entry) => entry.id === agenda.id);
+
+    if (currentIndex === -1) {
+      set({
+        agenda: {
+          ...agenda,
+          progress: agenda.threshold,
+        },
+        log: [...log, `Agenda ${agenda.sequence} is ready to advance.`],
+      });
+      return;
+    }
+
+    const nextDefinition = agendas[currentIndex + 1];
+
+    if (!nextDefinition) {
+      set({
+        agenda: {
+          ...agenda,
+          progress: agenda.threshold,
+        },
+        log: [
+          ...log,
+          `Agenda ${agenda.sequence} has no further side to advance to.`,
+        ],
+      });
+      return;
+    }
+
     set({
-      agenda: {
-        ...agenda,
-        progress: agenda.threshold,
-      },
-      log: [...log, `Agenda ${agenda.sequence} is ready to advance.`],
+      agenda: buildScenarioCardState(nextDefinition),
+      log: [
+        ...log,
+        `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+      ],
     });
   },
 
@@ -520,12 +551,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const scenario = getSelectedScenario(get());
+    const acts = scenario.acts ?? [];
+
+    const currentIndex = acts.findIndex((entry) => entry.id === act.id);
+
+    if (currentIndex === -1) {
+      set({
+        act: {
+          ...act,
+          progress: act.threshold,
+        },
+        log: [...log, `Act ${act.sequence} is ready to advance.`],
+      });
+      return;
+    }
+
+    const nextDefinition = acts[currentIndex + 1];
+
+    if (!nextDefinition) {
+      set({
+        act: {
+          ...act,
+          progress: act.threshold,
+        },
+        log: [...log, `Act ${act.sequence} has no further side to advance to.`],
+      });
+      return;
+    }
+
     set({
-      act: {
-        ...act,
-        progress: act.threshold,
-      },
-      log: [...log, `Act ${act.sequence} is ready to advance.`],
+      act: buildScenarioCardState(nextDefinition),
+      log: [
+        ...log,
+        `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+      ],
     });
   },
 
@@ -896,7 +956,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find((location) => location.id === locationId);
+    const destination = locations.find(
+      (location) => location.id === locationId,
+    );
 
     if (!destination) {
       return;
@@ -986,13 +1048,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   engageEnemiesAtLocation: () => {
-    const {
-      investigator,
-      locations,
-      enemies,
-      log,
-      selectedEnemyTargetId,
-    } = get();
+    const { investigator, locations, enemies, log, selectedEnemyTargetId } =
+      get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -1701,7 +1758,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    const currentLocation = findCurrentLocation(updatedLocations, investigator.id);
+    const currentLocation = findCurrentLocation(
+      updatedLocations,
+      investigator.id,
+    );
     const preferredTargetId = currentLocation
       ? getPreferredEnemyTargetId(
           updatedEnemies,
