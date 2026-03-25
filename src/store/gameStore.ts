@@ -281,6 +281,44 @@ function getInitialAgendaState(
   return buildScenarioCardState(definition);
 }
 
+function applyScenarioActAdvanceEffects(
+  scenarioId: string,
+  actId: string,
+  state: Pick<GameStore, "locations" | "log">,
+): Pick<GameStore, "locations" | "log"> {
+  if (scenarioId === "the-gathering" && actId === "gathering-act-2a") {
+    const hallway = state.locations.find(
+      (location) => location.id === "hallway",
+    );
+
+    if (!hallway) {
+      return state;
+    }
+
+    const hallwayAlreadyVisibleAndRevealed =
+      hallway.isVisible && hallway.revealed;
+
+    if (hallwayAlreadyVisibleAndRevealed) {
+      return state;
+    }
+
+    return {
+      locations: state.locations.map((location) =>
+        location.id === "hallway"
+          ? {
+              ...location,
+              isVisible: true,
+              revealed: true,
+            }
+          : location,
+      ),
+      log: [...state.log, "Act effect: The Hallway is revealed."],
+    };
+  }
+
+  return state;
+}
+
 function getInitialActState(
   scenario: ScenarioDefinition,
 ): ScenarioCardState | null {
@@ -545,7 +583,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advanceAct: () => {
-    const { act, log } = get();
+    const { act, log, locations } = get();
 
     if (!act) {
       return;
@@ -580,12 +618,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const advancedLog = [
+      ...log,
+      `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+    ];
+
+    const scenarioEffectResult = applyScenarioActAdvanceEffects(
+      scenario.id,
+      nextDefinition.id,
+      {
+        locations,
+        log: advancedLog,
+      },
+    );
+
     set({
       act: buildScenarioCardState(nextDefinition),
-      log: [
-        ...log,
-        `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
-      ],
+      locations: scenarioEffectResult.locations,
+      log: scenarioEffectResult.log,
     });
   },
 
