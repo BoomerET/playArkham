@@ -341,3 +341,30 @@
   background: rgba(130, 95, 28, 0.55);
   border: 1px solid rgba(232, 201, 122, 0.35);
 }
+
+.engaged-enemy-card {
+  width: 100%;
+  text-align: left;
+}
+
+.engaged-enemy-card-selectable {
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.engaged-enemy-card-selectable:hover {
+  transform: translateY(-1px);
+}
+
+.engaged-enemy-card-selectable:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.engaged-enemy-card:focus-visible {
+  outline: 2px solid rgba(232, 201, 122, 0.55);
+  outline-offset: 2px;
+}

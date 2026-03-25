@@ -32,6 +32,12 @@ export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
   const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
+  const selectedEnemyTargetId = useGameStore(
+    (state) => state.selectedEnemyTargetId,
+  );
+  const setSelectedEnemyTarget = useGameStore(
+    (state) => state.setSelectedEnemyTarget,
+  );
 
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
@@ -54,7 +60,13 @@ export default function InvestigatorPanel() {
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
   );
 
-  const primaryTargetEnemy = engagedEnemies[0] ?? null;
+  const activeTargetId =
+    engagedEnemies.some((enemy) => enemy.id === selectedEnemyTargetId)
+      ? selectedEnemyTargetId
+      : (engagedEnemies[0]?.id ?? null);
+
+  const activeTargetEnemy =
+    engagedEnemies.find((enemy) => enemy.id === activeTargetId) ?? null;
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -138,27 +150,37 @@ export default function InvestigatorPanel() {
           <div className="engaged-enemies-section">
             <div className="engaged-enemies-header">Engaged Enemies</div>
 
-            {engagedEnemies.length > 1 && primaryTargetEnemy && (
+            {engagedEnemies.length > 1 && activeTargetEnemy && (
               <p className="engaged-enemies-targeting-note">
-                Fight and Evade will target{" "}
-                <strong>{primaryTargetEnemy.name}</strong> first.
+                Click an enemy to choose the current target. Fight and Evade
+                will target <strong>{activeTargetEnemy.name}</strong>.
               </p>
             )}
 
             <div className="engaged-enemies-list">
-              {engagedEnemies.map((enemy, index) => {
+              {engagedEnemies.map((enemy) => {
                 const remainingHealth = Math.max(
                   enemy.health - enemy.damageOnEnemy,
                   0,
                 );
-                const isPrimaryTarget = index === 0;
+                const isSelectedTarget = enemy.id === activeTargetId;
+                const isSelectable = engagedEnemies.length > 1;
 
                 return (
-                  <div
+                  <button
                     key={enemy.id}
+                    type="button"
                     className={`engaged-enemy-card ${
-                      isPrimaryTarget ? "engaged-enemy-card-primary" : ""
-                    }`}
+                      isSelectedTarget ? "engaged-enemy-card-primary" : ""
+                    } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                    onClick={() => setSelectedEnemyTarget(enemy.id)}
+                    disabled={!isSelectable}
+                    aria-pressed={isSelectedTarget}
+                    title={
+                      isSelectable
+                        ? `Select ${enemy.name} as the current target`
+                        : undefined
+                    }
                   >
                     <div className="engaged-enemy-main">
                       <div className="engaged-enemy-name-row">
@@ -168,9 +190,9 @@ export default function InvestigatorPanel() {
                           </span>
 
                           <div className="engaged-enemy-badges">
-                            {isPrimaryTarget && (
+                            {isSelectedTarget && (
                               <span className="engaged-enemy-tag engaged-enemy-tag-primary">
-                                Primary Target
+                                Current Target
                               </span>
                             )}
 
@@ -194,7 +216,7 @@ export default function InvestigatorPanel() {
                         <span className="token-chip">Evade {enemy.evade}</span>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
