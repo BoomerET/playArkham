@@ -35,3 +35,11 @@ export interface ScenarioDefinition {
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
 }
+
+export interface ScenarioAdvanceEffects {
+  showLocationIds?: string[];
+  revealLocationIds?: string[];
+  spawnEnemies?: EnemySpawn[];
+  engageOnSpawn?: boolean;
+  logEntries?: string[];
+}

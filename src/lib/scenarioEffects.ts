@@ -27,6 +27,7 @@ function applyCardAdvanceEffects(
     showLocationIds = [],
     revealLocationIds = [],
     spawnEnemies = [],
+    engageOnSpawn = true,
     logEntries = [],
   } = card.onAdvance;
 
@@ -57,6 +58,7 @@ function applyCardAdvanceEffects(
 
   const spawnedEnemies = rawSpawnedEnemies.map((enemy) => {
     const shouldEngageOnSpawn =
+      engageOnSpawn &&
       state.currentLocationId !== null &&
       enemy.locationId === state.currentLocationId &&
       enemy.engagedInvestigatorId === null &&

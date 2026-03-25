@@ -83,6 +83,7 @@ export const theGatheringScenario: ScenarioDefinition = {
             locationId: "cellar",
           },
         ],
+        engageOnSpawn: false,
         logEntries: [
           "Agenda effect: The Cellar is now visible.",
           "Agenda effect: A terrible presence stirs below.",
