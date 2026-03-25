@@ -4,7 +4,11 @@ import LocationCard from "./LocationCard";
 export default function LocationRow() {
   const locations = useGameStore((state) => state.locations);
 
-  const allPositioned = locations.every((location) => location.mapPosition);
+  const visibleLocations = locations.filter((location) => location.isVisible);
+
+  const allPositioned =
+    visibleLocations.length > 0 &&
+    visibleLocations.every((location) => location.mapPosition);
 
   return (
     <section className="location-row-panel">
@@ -19,15 +23,32 @@ export default function LocationRow() {
 
         <div className="location-row-summary">
           <span className="token-chip gold">
-            {locations.length} {locations.length === 1 ? "Location" : "Locations"}
+            {visibleLocations.length}{" "}
+            {visibleLocations.length === 1 ? "Location" : "Locations"}
           </span>
         </div>
       </div>
 
       <div className="location-board-surface">
-        {allPositioned ? (
+        {visibleLocations.length === 0 ? (
+          <div className="location-board-grid">
+            <div className="location-board-cell">
+              <div className="entity-card location-card location-card-hidden">
+                <div className="location-card-hidden-face">
+                  <p className="location-card-hidden-label">No Visible Locations</p>
+                  <div className="location-card-hidden-art" aria-hidden="true">
+                    <span className="location-card-hidden-glyph">?</span>
+                  </div>
+                  <p className="location-card-hidden-name">
+                    A scenario effect will reveal the next location.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : allPositioned ? (
           <div className="location-map-canvas">
-            {locations.map((location) => (
+            {visibleLocations.map((location) => (
               <div
                 key={location.id}
                 className="location-map-node"
@@ -42,7 +63,7 @@ export default function LocationRow() {
           </div>
         ) : (
           <div className="location-board-grid">
-            {locations.map((location) => (
+            {visibleLocations.map((location) => (
               <div key={location.id} className="location-board-cell">
                 <LocationCard location={location} />
               </div>

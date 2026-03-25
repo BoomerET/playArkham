@@ -10,6 +10,7 @@ export const sampleLocations: GameLocation[] = [
     connections: ["hallway"],
     investigatorsHere: ["roland-banks"],
     mapPosition: { x: 22, y: 50 },
+    isVisible: true,
   },
   {
     id: "hallway",
@@ -20,6 +21,7 @@ export const sampleLocations: GameLocation[] = [
     connections: ["study", "attic", "cellar"],
     investigatorsHere: [],
     mapPosition: { x: 50, y: 50 },
+    isVisible: true,
   },
   {
     id: "attic",
@@ -30,6 +32,7 @@ export const sampleLocations: GameLocation[] = [
     connections: ["hallway"],
     investigatorsHere: [],
     mapPosition: { x: 50, y: 18 },
+    isVisible: true,
   },
   {
     id: "cellar",
@@ -40,5 +43,6 @@ export const sampleLocations: GameLocation[] = [
     connections: ["hallway"],
     investigatorsHere: [],
     mapPosition: { x: 50, y: 82 },
+    isVisible: true,
   },
 ];
