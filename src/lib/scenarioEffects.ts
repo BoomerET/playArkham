@@ -4,7 +4,7 @@ import type {
 } from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "./buildScenarioEnemies";
 import { getPreferredEnemyTargetId } from "./gameStateHelpers";
-import type { Enemy, GameLocation } from "../types/game";
+import type { Enemy, GameLocation, ScenarioCardState } from "../types/game";
 
 type ScenarioEffectState = {
   locations: GameLocation[];
@@ -13,6 +13,8 @@ type ScenarioEffectState = {
   investigatorId: string;
   currentLocationId: string | null;
   selectedEnemyTargetId: string | null;
+  agenda: ScenarioCardState | null;
+  act: ScenarioCardState | null;
 };
 
 function applyCardAdvanceEffects(
@@ -30,6 +32,10 @@ function applyCardAdvanceEffects(
     engageOnSpawn = true,
     revealSpawnLocations = false,
     logEntries = [],
+    agendaProgressDelta,
+    actProgressDelta,
+    setAgendaProgress,
+    setActProgress,
   } = card.onAdvance;
 
   const showSet = new Set(showLocationIds);
@@ -101,6 +107,27 @@ function applyCardAdvanceEffects(
       ? ["Scenario effect: A newly spawned enemy engaged the investigator."]
       : [];
 
+  const updatedAgenda = state.agenda
+    ? {
+        ...state.agenda,
+        progress: Math.max(
+          0,
+          setAgendaProgress ??
+            state.agenda.progress + (agendaProgressDelta ?? 0),
+        ),
+      }
+    : null;
+
+  const updatedAct = state.act
+    ? {
+        ...state.act,
+        progress: Math.max(
+          0,
+          setActProgress ?? state.act.progress + (actProgressDelta ?? 0),
+        ),
+      }
+    : null;
+
   return {
     locations: updatedLocations,
     enemies: updatedEnemies,
@@ -108,6 +135,8 @@ function applyCardAdvanceEffects(
     investigatorId: state.investigatorId,
     currentLocationId: state.currentLocationId,
     selectedEnemyTargetId,
+    agenda: updatedAgenda,
+    act: updatedAct,
   };
 }
 

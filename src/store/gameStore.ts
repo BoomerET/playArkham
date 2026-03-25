@@ -323,6 +323,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   advanceAgenda: () => {
     const {
       agenda,
+      act,
       log,
       locations,
       enemies,
@@ -383,11 +384,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
+        agenda: buildScenarioCardState(nextDefinition),
+        act,
       },
     );
 
     set({
-      agenda: buildScenarioCardState(nextDefinition),
+      agenda: scenarioEffectResult.agenda,
+      act: scenarioEffectResult.act,
       locations: scenarioEffectResult.locations,
       enemies: scenarioEffectResult.enemies,
       selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
@@ -397,6 +401,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   advanceAct: () => {
     const {
+      agenda,
       act,
       log,
       locations,
@@ -455,11 +460,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
+        agenda,
+        act: buildScenarioCardState(nextDefinition),
       },
     );
 
     set({
-      act: buildScenarioCardState(nextDefinition),
+      agenda: scenarioEffectResult.agenda,
+      act: scenarioEffectResult.act,
       locations: scenarioEffectResult.locations,
       enemies: scenarioEffectResult.enemies,
       selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
