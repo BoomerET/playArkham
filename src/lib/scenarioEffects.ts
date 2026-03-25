@@ -28,6 +28,7 @@ function applyCardAdvanceEffects(
     revealLocationIds = [],
     spawnEnemies = [],
     engageOnSpawn = true,
+    revealSpawnLocations = false,
     logEntries = [],
   } = card.onAdvance;
 
@@ -35,7 +36,7 @@ function applyCardAdvanceEffects(
   const revealSet = new Set(revealLocationIds);
 
   const updatedLocations = state.locations.map((location) => {
-    if (revealSet.has(location.id)) {
+    if (revealSet.has(location.id) || spawnedLocationIds.has(location.id)) {
       return {
         ...location,
         isVisible: true,
@@ -73,6 +74,10 @@ function applyCardAdvanceEffects(
       engagedInvestigatorId: state.investigatorId,
     };
   });
+
+  const spawnedLocationIds = new Set(
+    revealSpawnLocations ? spawnedEnemies.map((enemy) => enemy.locationId) : [],
+  );
 
   const updatedEnemies = [...state.enemies, ...spawnedEnemies];
 

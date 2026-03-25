@@ -43,3 +43,12 @@ export interface ScenarioAdvanceEffects {
   engageOnSpawn?: boolean;
   logEntries?: string[];
 }
+
+export interface ScenarioAdvanceEffects {
+  showLocationIds?: string[];
+  revealLocationIds?: string[];
+  spawnEnemies?: EnemySpawn[];
+  engageOnSpawn?: boolean;
+  revealSpawnLocations?: boolean;
+  logEntries?: string[];
+}
