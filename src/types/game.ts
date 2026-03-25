@@ -39,7 +39,14 @@ export interface Investigator {
 export interface PlayerCard {
   id: string;
   name: string;
-  type: "asset" | "event" | "skill" | "treachery" | "enemy" | "location" | "investigator";
+  type:
+    | "asset"
+    | "event"
+    | "skill"
+    | "treachery"
+    | "enemy"
+    | "location"
+    | "investigator";
   cost?: number;
   icons?: string[];
   text?: string;
@@ -51,6 +58,7 @@ export interface GameLocation {
   shroud: number;
   clues: number;
   revealed: boolean;
+  isVisible: boolean;
   connections: string[];
   investigatorsHere: string[];
   mapPosition?: {

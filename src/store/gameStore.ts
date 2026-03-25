@@ -40,6 +40,8 @@ type GameStore = GameState & {
   setSelectedInvestigator: (investigatorId: string) => void;
   setSelectedScenario: (scenarioId: string) => void;
   setSelectedEnemyTarget: (enemyId: string | null) => void;
+  setLocationVisible: (locationId: string, visible?: boolean) => void;
+  revealLocation: (locationId: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -87,6 +89,31 @@ const startingChaosBag: ChaosToken[] = [
   "autoFail",
   "elderSign",
 ];
+
+function normalizeScenarioLocations(
+  locations: GameLocation[],
+  investigatorId?: string,
+  startingLocationId?: string,
+): GameLocation[] {
+  return locations.map((location) => {
+    const shouldPlaceInvestigator =
+      investigatorId !== undefined && location.id === startingLocationId;
+
+    return {
+      ...location,
+      isVisible: location.isVisible ?? true,
+      investigatorsHere: shouldPlaceInvestigator ? [investigatorId] : [],
+    };
+  });
+}
+
+function cloneScenarioLocations(locations: GameLocation[]): GameLocation[] {
+  return locations.map((location) => ({
+    ...location,
+    isVisible: location.isVisible ?? true,
+    investigatorsHere: [...location.investigatorsHere],
+  }));
+}
 
 function findCurrentLocation(
   locations: GameLocation[],
@@ -227,10 +254,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   discard: [],
   playArea: [],
   chaosBag: [...startingChaosBag],
-  locations: getSelectedScenario({
-    availableScenarios: scenarios,
-    selectedScenarioId: defaultScenarioId,
-  }).locations,
+  locations: cloneScenarioLocations(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }).locations,
+  ),
   enemies: buildScenarioEnemies(
     getSelectedScenario({
       availableScenarios: scenarios,
@@ -287,6 +316,53 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  setLocationVisible: (locationId, visible = true) => {
+    const { locations, log } = get();
+    const location = locations.find((entry) => entry.id === locationId);
+
+    if (!location) {
+      return;
+    }
+
+    if (location.isVisible === visible) {
+      return;
+    }
+
+    set({
+      locations: locations.map((entry) =>
+        entry.id === locationId ? { ...entry, isVisible: visible } : entry,
+      ),
+      log: [
+        ...log,
+        visible
+          ? `${location.name} is now visible on the board.`
+          : `${location.name} is no longer visible on the board.`,
+      ],
+    });
+  },
+
+  revealLocation: (locationId) => {
+    const { locations, log } = get();
+    const location = locations.find((entry) => entry.id === locationId);
+
+    if (!location) {
+      return;
+    }
+
+    if (location.isVisible && location.revealed) {
+      return;
+    }
+
+    set({
+      locations: locations.map((entry) =>
+        entry.id === locationId
+          ? { ...entry, isVisible: true, revealed: true }
+          : entry,
+      ),
+      log: [...log, `${location.name} was revealed.`],
+    });
+  },
+
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
   },
@@ -308,9 +384,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      locations: selectedScenario.locations.map((location) => ({
-        ...location,
-      })),
+      locations: cloneScenarioLocations(selectedScenario.locations),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       log: [],
       lastSkillTest: null,
@@ -348,13 +422,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      locations: selectedScenario.locations.map((location) => ({
-        ...location,
-        investigatorsHere:
-          location.id === selectedScenario.startingLocationId
-            ? [chosenInvestigator.id]
-            : [],
-      })),
+      locations: normalizeScenarioLocations(
+        selectedScenario.locations,
+        chosenInvestigator.id,
+        selectedScenario.startingLocationId,
+      ),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       log: [
         `Selected investigator: ${chosenInvestigator.name}`,
@@ -660,6 +732,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (!destination.isVisible) {
+      set({
+        log: [...log, `Cannot move to ${destination.name}. It is not visible yet.`],
+      });
+      return;
+    }
+
     if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
       const message =
         turn.phase !== "investigation"
@@ -695,6 +774,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         return {
           ...location,
           investigatorsHere: [...withoutInvestigator, investigator.id],
+          isVisible: true,
+          revealed: true,
         };
       }
 
