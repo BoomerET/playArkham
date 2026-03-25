@@ -76,6 +76,7 @@ export const theGatheringScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
       startingProgress: 0,
       onAdvance: {
+        showLocationIds: ["cellar"],
         spawnEnemies: [
           {
             enemyId: "ghoul-priest",
@@ -83,9 +84,9 @@ export const theGatheringScenario: ScenarioDefinition = {
           },
         ],
         engageOnSpawn: false,
-        revealSpawnLocations: true,
+        setActProgress: 0,
         logEntries: [
-          "Agenda effect: The Cellar is revealed.",
+          "Agenda effect: The Cellar is now visible.",
           "Agenda effect: A terrible presence stirs below.",
         ],
       },
