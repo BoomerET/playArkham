@@ -68,6 +68,14 @@ export default function InvestigatorPanel() {
   const activeTargetEnemy =
     engagedEnemies.find((enemy) => enemy.id === activeTargetId) ?? null;
 
+  const fightLabel = activeTargetEnemy
+    ? `Fight ${activeTargetEnemy.name}`
+    : "Fight";
+
+  const evadeLabel = activeTargetEnemy
+    ? `Evade ${activeTargetEnemy.name}`
+    : "Evade";
+
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
@@ -237,10 +245,10 @@ export default function InvestigatorPanel() {
           Investigate
         </button>
         <button onClick={fightAction} disabled={!canTakeAction}>
-          Fight
+          {fightLabel}
         </button>
         <button onClick={evadeAction} disabled={!canTakeAction}>
-          Evade
+          {evadeLabel}
         </button>
       </div>
 
