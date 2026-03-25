@@ -2,7 +2,10 @@ import { create } from "zustand";
 import { investigators } from "../data/investigators";
 import { sampleDeck } from "../data/sampleDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
-import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
+import type {
+  ScenarioCardDefinition,
+  ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
@@ -11,23 +14,12 @@ import {
   applyScenarioActAdvanceEffects,
   applyScenarioAgendaAdvanceEffects,
 } from "../lib/scenarioEffects";
-import {
-  buildScenarioCardState,
-  getInitialActState,
-  getInitialAgendaState,
-} from "../lib/scenarioCards";
 import type {
   ActiveSkillTest,
   ChaosToken,
   CommittedSkillCard,
-  Enemy,
-  GameLocation,
-  GameState,
-  Investigator,
-  Phase,
-  PlayerCard,
+  ScenarioCardState,
   SkillTestResult,
-  SkillType,
 } from "../types/game";
 
 type Screen = "home" | "game";
@@ -103,131 +95,6 @@ const startingChaosBag: ChaosToken[] = [
   "elderSign",
 ];
 
-function normalizeScenarioLocations(
-  locations: GameLocation[],
-  investigatorId?: string,
-  startingLocationId?: string,
-): GameLocation[] {
-  return locations.map((location) => {
-    const shouldPlaceInvestigator =
-      investigatorId !== undefined && location.id === startingLocationId;
-
-    return {
-      ...location,
-      isVisible: location.isVisible ?? true,
-      investigatorsHere: shouldPlaceInvestigator ? [investigatorId] : [],
-    };
-  });
-}
-
-function cloneScenarioLocations(locations: GameLocation[]): GameLocation[] {
-  return locations.map((location) => ({
-    ...location,
-    isVisible: location.isVisible ?? true,
-    investigatorsHere: [...location.investigatorsHere],
-  }));
-}
-
-function findCurrentLocation(
-  locations: GameLocation[],
-  investigatorId: string,
-): GameLocation | undefined {
-  return locations.find((location) =>
-    location.investigatorsHere.includes(investigatorId),
-  );
-}
-
-function canSpendInvestigationAction(
-  phase: Phase,
-  actionsRemaining: number,
-): boolean {
-  return phase === "investigation" && actionsRemaining > 0;
-}
-
-function getInvestigatorSkillValue(
-  investigator: GameState["investigator"],
-  skill: SkillType,
-): number {
-  return investigator[skill];
-}
-
-function getEnemyAtInvestigator(
-  enemies: Enemy[],
-  locationId: string,
-  investigatorId: string,
-  selectedEnemyTargetId: string | null,
-): Enemy | undefined {
-  const selectedEnemy =
-    selectedEnemyTargetId === null
-      ? undefined
-      : enemies.find(
-          (enemy) =>
-            enemy.id === selectedEnemyTargetId &&
-            enemy.locationId === locationId &&
-            enemy.engagedInvestigatorId === investigatorId,
-        );
-
-  if (selectedEnemy) {
-    return selectedEnemy;
-  }
-
-  const engagedEnemy = enemies.find(
-    (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === investigatorId,
-  );
-
-  if (engagedEnemy) {
-    return engagedEnemy;
-  }
-
-  return enemies.find(
-    (enemy) =>
-      enemy.locationId === locationId && enemy.engagedInvestigatorId === null,
-  );
-}
-
-function getPreferredEnemyTargetId(
-  enemies: Enemy[],
-  locationId: string,
-  investigatorId: string,
-  currentTargetId: string | null,
-): string | null {
-  const engagedEnemies = enemies.filter(
-    (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === investigatorId,
-  );
-
-  if (engagedEnemies.length === 0) {
-    return null;
-  }
-
-  const currentTargetStillValid = engagedEnemies.some(
-    (enemy) => enemy.id === currentTargetId,
-  );
-
-  if (currentTargetStillValid) {
-    return currentTargetId;
-  }
-
-  return engagedEnemies[0]?.id ?? null;
-}
-
-function getCardCost(card: PlayerCard): number {
-  return card.cost ?? 0;
-}
-
-function createGameInvestigator(investigator: Investigator): Investigator {
-  return {
-    ...investigator,
-    resources: 5,
-    clues: 0,
-    damage: 0,
-    horror: 0,
-  };
-}
-
 function countMatchingIcons(card: PlayerCard, skill: SkillType): number {
   return (card.icons ?? []).filter((icon) => icon === skill).length;
 }
@@ -248,6 +115,63 @@ function getSelectedScenario(state: {
       (scenario) => scenario.id === state.selectedScenarioId,
     ) ?? state.availableScenarios[0]
   );
+}
+
+function buildScenarioCardState(
+  definition: ScenarioCardDefinition,
+): ScenarioCardState {
+  return {
+    id: definition.id,
+    kind: definition.kind,
+    sequence: definition.sequence,
+    title: definition.title,
+    text: definition.text,
+    progress: definition.startingProgress ?? 0,
+    threshold: definition.threshold,
+    thresholdLabel: definition.thresholdLabel,
+  };
+}
+
+function getInitialAgendaState(
+  scenario: ScenarioDefinition,
+): ScenarioCardState | null {
+  const definition = scenario.agendas?.[0];
+
+  if (!definition) {
+    return {
+      id: `${scenario.id}-agenda-placeholder`,
+      kind: "agenda",
+      sequence: "A",
+      title: scenario.name,
+      text: "No agenda data has been defined for this scenario yet.",
+      progress: 0,
+      threshold: 3,
+      thresholdLabel: "Doom",
+    };
+  }
+
+  return buildScenarioCardState(definition);
+}
+
+function getInitialActState(
+  scenario: ScenarioDefinition,
+): ScenarioCardState | null {
+  const definition = scenario.acts?.[0];
+
+  if (!definition) {
+    return {
+      id: `${scenario.id}-act-placeholder`,
+      kind: "act",
+      sequence: "1a",
+      title: scenario.name,
+      text: "No act data has been defined for this scenario yet.",
+      progress: 0,
+      threshold: 2,
+      thresholdLabel: "Clues",
+    };
+  }
+
+  return buildScenarioCardState(definition);
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
