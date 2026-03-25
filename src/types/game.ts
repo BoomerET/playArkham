@@ -119,6 +119,19 @@ export interface SkillTestResult {
   source: string;
 }
 
+export type ScenarioCardKind = "agenda" | "act";
+
+export interface ScenarioCardState {
+  id: string;
+  kind: ScenarioCardKind;
+  sequence: string;
+  title: string;
+  text: string;
+  progress: number;
+  threshold: number;
+  thresholdLabel: string;
+}
+
 export interface GameState {
   investigator: Investigator;
   deck: PlayerCard[];
@@ -128,6 +141,8 @@ export interface GameState {
   chaosBag: ChaosToken[];
   locations: GameLocation[];
   enemies: Enemy[];
+  agenda: ScenarioCardState | null;
+  act: ScenarioCardState | null;
   log: string[];
   turn: TurnState;
   lastSkillTest: SkillTestResult | null;

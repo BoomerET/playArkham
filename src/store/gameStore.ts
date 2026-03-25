@@ -2,7 +2,10 @@ import { create } from "zustand";
 import { investigators } from "../data/investigators";
 import { sampleDeck } from "../data/sampleDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
-import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
+import type {
+  ScenarioCardDefinition,
+  ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
@@ -17,6 +20,7 @@ import type {
   Investigator,
   Phase,
   PlayerCard,
+  ScenarioCardState,
   SkillTestResult,
   SkillType,
 } from "../types/game";
@@ -42,6 +46,10 @@ type GameStore = GameState & {
   setSelectedEnemyTarget: (enemyId: string | null) => void;
   setLocationVisible: (locationId: string, visible?: boolean) => void;
   revealLocation: (locationId: string) => void;
+  setAgendaProgress: (progress: number) => void;
+  setActProgress: (progress: number) => void;
+  advanceAgenda: () => void;
+  advanceAct: () => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -238,6 +246,63 @@ function getSelectedScenario(state: {
   );
 }
 
+function buildScenarioCardState(
+  definition: ScenarioCardDefinition,
+): ScenarioCardState {
+  return {
+    id: definition.id,
+    kind: definition.kind,
+    sequence: definition.sequence,
+    title: definition.title,
+    text: definition.text,
+    progress: definition.startingProgress ?? 0,
+    threshold: definition.threshold,
+    thresholdLabel: definition.thresholdLabel,
+  };
+}
+
+function getInitialAgendaState(
+  scenario: ScenarioDefinition,
+): ScenarioCardState | null {
+  const definition = scenario.agendas?.[0];
+
+  if (!definition) {
+    return {
+      id: `${scenario.id}-agenda-placeholder`,
+      kind: "agenda",
+      sequence: "A",
+      title: scenario.name,
+      text: "No agenda data has been defined for this scenario yet.",
+      progress: 0,
+      threshold: 3,
+      thresholdLabel: "Doom",
+    };
+  }
+
+  return buildScenarioCardState(definition);
+}
+
+function getInitialActState(
+  scenario: ScenarioDefinition,
+): ScenarioCardState | null {
+  const definition = scenario.acts?.[0];
+
+  if (!definition) {
+    return {
+      id: `${scenario.id}-act-placeholder`,
+      kind: "act",
+      sequence: "1a",
+      title: scenario.name,
+      text: "No act data has been defined for this scenario yet.",
+      progress: 0,
+      threshold: 2,
+      thresholdLabel: "Clues",
+    };
+  }
+
+  return buildScenarioCardState(definition);
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
@@ -265,6 +330,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
     }).enemySpawns,
+  ),
+  agenda: getInitialAgendaState(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }),
+  ),
+  act: getInitialActState(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }),
   ),
   log: [],
   lastSkillTest: null,
@@ -378,6 +455,80 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  setAgendaProgress: (progress) => {
+    const { agenda, log } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    const nextProgress = Math.max(0, progress);
+
+    set({
+      agenda: {
+        ...agenda,
+        progress: nextProgress,
+      },
+      log: [
+        ...log,
+        `${agenda.thresholdLabel} on agenda set to ${nextProgress}/${agenda.threshold}.`,
+      ],
+    });
+  },
+
+  setActProgress: (progress) => {
+    const { act, log } = get();
+
+    if (!act) {
+      return;
+    }
+
+    const nextProgress = Math.max(0, progress);
+
+    set({
+      act: {
+        ...act,
+        progress: nextProgress,
+      },
+      log: [
+        ...log,
+        `${act.thresholdLabel} on act set to ${nextProgress}/${act.threshold}.`,
+      ],
+    });
+  },
+
+  advanceAgenda: () => {
+    const { agenda, log } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    set({
+      agenda: {
+        ...agenda,
+        progress: agenda.threshold,
+      },
+      log: [...log, `Agenda ${agenda.sequence} is ready to advance.`],
+    });
+  },
+
+  advanceAct: () => {
+    const { act, log } = get();
+
+    if (!act) {
+      return;
+    }
+
+    set({
+      act: {
+        ...act,
+        progress: act.threshold,
+      },
+      log: [...log, `Act ${act.sequence} is ready to advance.`],
+    });
+  },
+
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
   },
@@ -401,6 +552,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         : [...startingChaosBag],
       locations: cloneScenarioLocations(selectedScenario.locations),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      agenda: getInitialAgendaState(selectedScenario),
+      act: getInitialActState(selectedScenario),
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -443,6 +596,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         selectedScenario.startingLocationId,
       ),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      agenda: getInitialAgendaState(selectedScenario),
+      act: getInitialActState(selectedScenario),
       log: [
         `Selected investigator: ${chosenInvestigator.name}`,
         `Selected scenario: ${selectedScenario.name}`,
@@ -749,7 +904,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!destination.isVisible) {
       set({
-        log: [...log, `Cannot move to ${destination.name}. It is not visible yet.`],
+        log: [
+          ...log,
+          `Cannot move to ${destination.name}. It is not visible yet.`,
+        ],
       });
       return;
     }
