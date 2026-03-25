@@ -6,9 +6,9 @@ import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
 } from "../data/scenarios/scenarioTypes";
+import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
-import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { shuffle } from "../lib/shuffle";
 import type {
   ActiveSkillTest,
@@ -178,7 +178,8 @@ function getEnemyAtInvestigator(
 
   return enemies.find(
     (enemy) =>
-      enemy.locationId === locationId && enemy.engagedInvestigatorId === null,
+      enemy.locationId === locationId &&
+      enemy.engagedInvestigatorId === null,
   );
 }
 
@@ -281,24 +282,40 @@ function getInitialAgendaState(
   return buildScenarioCardState(definition);
 }
 
+function getInitialActState(
+  scenario: ScenarioDefinition,
+): ScenarioCardState | null {
+  const definition = scenario.acts?.[0];
+
+  if (!definition) {
+    return {
+      id: `${scenario.id}-act-placeholder`,
+      kind: "act",
+      sequence: "1a",
+      title: scenario.name,
+      text: "No act data has been defined for this scenario yet.",
+      progress: 0,
+      threshold: 2,
+      thresholdLabel: "Clues",
+    };
+  }
+
+  return buildScenarioCardState(definition);
+}
+
 function applyScenarioActAdvanceEffects(
   scenarioId: string,
   actId: string,
   state: Pick<GameStore, "locations" | "log">,
 ): Pick<GameStore, "locations" | "log"> {
   if (scenarioId === "the-gathering" && actId === "gathering-act-2a") {
-    const hallway = state.locations.find(
-      (location) => location.id === "hallway",
-    );
+    const hallway = state.locations.find((location) => location.id === "hallway");
 
     if (!hallway) {
       return state;
     }
 
-    const hallwayAlreadyVisibleAndRevealed =
-      hallway.isVisible && hallway.revealed;
-
-    if (hallwayAlreadyVisibleAndRevealed) {
+    if (hallway.isVisible && hallway.revealed) {
       return state;
     }
 
@@ -319,25 +336,36 @@ function applyScenarioActAdvanceEffects(
   return state;
 }
 
-function getInitialActState(
-  scenario: ScenarioDefinition,
-): ScenarioCardState | null {
-  const definition = scenario.acts?.[0];
+function applyScenarioAgendaAdvanceEffects(
+  scenarioId: string,
+  agendaId: string,
+  state: Pick<GameStore, "locations" | "log">,
+): Pick<GameStore, "locations" | "log"> {
+  if (scenarioId === "the-gathering" && agendaId === "gathering-agenda-2a") {
+    const cellar = state.locations.find((location) => location.id === "cellar");
 
-  if (!definition) {
+    if (!cellar) {
+      return state;
+    }
+
+    if (cellar.isVisible) {
+      return state;
+    }
+
     return {
-      id: `${scenario.id}-act-placeholder`,
-      kind: "act",
-      sequence: "1a",
-      title: scenario.name,
-      text: "No act data has been defined for this scenario yet.",
-      progress: 0,
-      threshold: 2,
-      thresholdLabel: "Clues",
+      locations: state.locations.map((location) =>
+        location.id === "cellar"
+          ? {
+              ...location,
+              isVisible: true,
+            }
+          : location,
+      ),
+      log: [...state.log, "Agenda effect: The Cellar is now visible."],
     };
   }
 
-  return buildScenarioCardState(definition);
+  return state;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -535,7 +563,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advanceAgenda: () => {
-    const { agenda, log } = get();
+    const { agenda, log, locations } = get();
 
     if (!agenda) {
       return;
@@ -573,12 +601,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const advancedLog = [
+      ...log,
+      `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+    ];
+
+    const scenarioEffectResult = applyScenarioAgendaAdvanceEffects(
+      scenario.id,
+      nextDefinition.id,
+      {
+        locations,
+        log: advancedLog,
+      },
+    );
+
     set({
       agenda: buildScenarioCardState(nextDefinition),
-      log: [
-        ...log,
-        `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
-      ],
+      locations: scenarioEffectResult.locations,
+      log: scenarioEffectResult.log,
     });
   },
 
@@ -1006,9 +1046,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find(
-      (location) => location.id === locationId,
-    );
+    const destination = locations.find((location) => location.id === locationId);
 
     if (!destination) {
       return;
@@ -1098,8 +1136,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   engageEnemiesAtLocation: () => {
-    const { investigator, locations, enemies, log, selectedEnemyTargetId } =
-      get();
+    const {
+      investigator,
+      locations,
+      enemies,
+      log,
+      selectedEnemyTargetId,
+    } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -1808,10 +1851,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    const currentLocation = findCurrentLocation(
-      updatedLocations,
-      investigator.id,
-    );
+    const currentLocation = findCurrentLocation(updatedLocations, investigator.id);
     const preferredTargetId = currentLocation
       ? getPreferredEnemyTargetId(
           updatedEnemies,
