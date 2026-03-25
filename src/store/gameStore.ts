@@ -38,8 +38,6 @@ import type {
   GameState,
   Investigator,
   Phase,
-  PlayerCard,
-  ScenarioCardState,
   SkillTestResult,
   SkillType,
 } from "../types/game";

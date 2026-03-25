@@ -1,4 +1,3 @@
-import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import type { GameLocation } from "../types/game";
 
 type ScenarioEffectState = {
