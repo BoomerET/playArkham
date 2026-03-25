@@ -53,12 +53,7 @@ export const theGatheringScenario: ScenarioDefinition = {
     },
   ],
 
-  enemySpawns: [
-    {
-      enemyId: "ghoul-priest",
-      locationId: "cellar",
-    },
-  ],
+  enemySpawns: [],
 
   agendas: [
     {
@@ -80,6 +75,19 @@ export const theGatheringScenario: ScenarioDefinition = {
       threshold: 5,
       thresholdLabel: "Doom",
       startingProgress: 0,
+      onAdvance: {
+        showLocationIds: ["cellar"],
+        spawnEnemies: [
+          {
+            enemyId: "ghoul-priest",
+            locationId: "cellar",
+          },
+        ],
+        logEntries: [
+          "Agenda effect: The Cellar is now visible.",
+          "Agenda effect: A terrible presence stirs below.",
+        ],
+      },
     },
   ],
 
@@ -103,6 +111,10 @@ export const theGatheringScenario: ScenarioDefinition = {
       threshold: 2,
       thresholdLabel: "Clues",
       startingProgress: 0,
+      onAdvance: {
+        revealLocationIds: ["hallway"],
+        logEntries: ["Act effect: The Hallway is revealed."],
+      },
     },
   ],
 };

@@ -1,71 +1,74 @@
-import type { GameLocation } from "../types/game";
+import { buildScenarioEnemies } from "./buildScenarioEnemies";
+import type { ScenarioCardDefinition, ScenarioDefinition } from "../data/scenarios/scenarioTypes";
+import type { Enemy, GameLocation } from "../types/game";
 
 type ScenarioEffectState = {
   locations: GameLocation[];
+  enemies: Enemy[];
   log: string[];
 };
 
+function applyCardAdvanceEffects(
+  card: ScenarioCardDefinition | undefined,
+  state: ScenarioEffectState,
+): ScenarioEffectState {
+  if (!card?.onAdvance) {
+    return state;
+  }
+
+  const {
+    showLocationIds = [],
+    revealLocationIds = [],
+    spawnEnemies = [],
+    logEntries = [],
+  } = card.onAdvance;
+
+  const showSet = new Set(showLocationIds);
+  const revealSet = new Set(revealLocationIds);
+
+  const updatedLocations = state.locations.map((location) => {
+    if (revealSet.has(location.id)) {
+      return {
+        ...location,
+        isVisible: true,
+        revealed: true,
+      };
+    }
+
+    if (showSet.has(location.id)) {
+      return {
+        ...location,
+        isVisible: true,
+      };
+    }
+
+    return location;
+  });
+
+  const spawnedEnemies =
+    spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
+
+  return {
+    locations: updatedLocations,
+    enemies: [...state.enemies, ...spawnedEnemies],
+    log: [...state.log, ...logEntries],
+  };
+}
+
 export function applyScenarioActAdvanceEffects(
-  scenarioId: string,
+  scenario: ScenarioDefinition,
   actId: string,
   state: ScenarioEffectState,
 ): ScenarioEffectState {
-  if (scenarioId === "the-gathering" && actId === "gathering-act-2a") {
-    const hallway = state.locations.find((location) => location.id === "hallway");
-
-    if (!hallway) {
-      return state;
-    }
-
-    if (hallway.isVisible && hallway.revealed) {
-      return state;
-    }
-
-    return {
-      locations: state.locations.map((location) =>
-        location.id === "hallway"
-          ? {
-              ...location,
-              isVisible: true,
-              revealed: true,
-            }
-          : location,
-      ),
-      log: [...state.log, "Act effect: The Hallway is revealed."],
-    };
-  }
-
-  return state;
+  const act = scenario.acts?.find((entry) => entry.id === actId);
+  return applyCardAdvanceEffects(act, state);
 }
 
 export function applyScenarioAgendaAdvanceEffects(
-  scenarioId: string,
+  scenario: ScenarioDefinition,
   agendaId: string,
   state: ScenarioEffectState,
 ): ScenarioEffectState {
-  if (scenarioId === "the-gathering" && agendaId === "gathering-agenda-2a") {
-    const cellar = state.locations.find((location) => location.id === "cellar");
-
-    if (!cellar) {
-      return state;
-    }
-
-    if (cellar.isVisible) {
-      return state;
-    }
-
-    return {
-      locations: state.locations.map((location) =>
-        location.id === "cellar"
-          ? {
-              ...location,
-              isVisible: true,
-            }
-          : location,
-      ),
-      log: [...state.log, "Agenda effect: The Cellar is now visible."],
-    };
-  }
-
-  return state;
+  const agenda = scenario.agendas?.find((entry) => entry.id === agendaId);
+  return applyCardAdvanceEffects(agenda, state);
 }

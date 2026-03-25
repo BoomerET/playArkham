@@ -5,6 +5,13 @@ import type {
   ScenarioCardKind,
 } from "../../types/game";
 
+export interface ScenarioAdvanceEffects {
+  showLocationIds?: string[];
+  revealLocationIds?: string[];
+  spawnEnemies?: EnemySpawn[];
+  logEntries?: string[];
+}
+
 export interface ScenarioCardDefinition {
   id: string;
   kind: ScenarioCardKind;
@@ -14,6 +21,7 @@ export interface ScenarioCardDefinition {
   threshold: number;
   thresholdLabel: string;
   startingProgress?: number;
+  onAdvance?: ScenarioAdvanceEffects;
 }
 
 export interface ScenarioDefinition {

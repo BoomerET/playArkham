@@ -321,7 +321,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advanceAgenda: () => {
-    const { agenda, log, locations } = get();
+    const { agenda, log, locations, enemies } = get();
 
     if (!agenda) {
       return;
@@ -365,10 +365,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const scenarioEffectResult = applyScenarioAgendaAdvanceEffects(
-      scenario.id,
+      scenario,
       nextDefinition.id,
       {
         locations,
+        enemies,
         log: advancedLog,
       },
     );
@@ -376,12 +377,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       agenda: buildScenarioCardState(nextDefinition),
       locations: scenarioEffectResult.locations,
+      enemies: scenarioEffectResult.enemies,
       log: scenarioEffectResult.log,
     });
   },
 
   advanceAct: () => {
-    const { act, log, locations } = get();
+    const { act, log, locations, enemies } = get();
 
     if (!act) {
       return;
@@ -422,10 +424,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const scenarioEffectResult = applyScenarioActAdvanceEffects(
-      scenario.id,
+      scenario,
       nextDefinition.id,
       {
         locations,
+        enemies,
         log: advancedLog,
       },
     );
@@ -433,6 +436,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       act: buildScenarioCardState(nextDefinition),
       locations: scenarioEffectResult.locations,
+      enemies: scenarioEffectResult.enemies,
       log: scenarioEffectResult.log,
     });
   },
@@ -804,7 +808,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    const destination = locations.find((location) => location.id === locationId);
+    const destination = locations.find(
+      (location) => location.id === locationId,
+    );
 
     if (!destination) {
       return;
@@ -894,13 +900,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   engageEnemiesAtLocation: () => {
-    const {
-      investigator,
-      locations,
-      enemies,
-      log,
-      selectedEnemyTargetId,
-    } = get();
+    const { investigator, locations, enemies, log, selectedEnemyTargetId } =
+      get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -1609,7 +1610,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    const currentLocation = findCurrentLocation(updatedLocations, investigator.id);
+    const currentLocation = findCurrentLocation(
+      updatedLocations,
+      investigator.id,
+    );
     const preferredTargetId = currentLocation
       ? getPreferredEnemyTargetId(
           updatedEnemies,
