@@ -8,9 +8,16 @@ function prettyPhase(phase: string): string {
 export default function TurnPanel() {
   const turn = useGameStore((state) => state.turn);
   const locations = useGameStore((state) => state.locations);
+  const agenda = useGameStore((state) => state.agenda);
+  const act = useGameStore((state) => state.act);
+
   const advancePhase = useGameStore((state) => state.advancePhase);
   const setLocationVisible = useGameStore((state) => state.setLocationVisible);
   const revealLocation = useGameStore((state) => state.revealLocation);
+  const setAgendaProgress = useGameStore((state) => state.setAgendaProgress);
+  const setActProgress = useGameStore((state) => state.setActProgress);
+  const advanceAgenda = useGameStore((state) => state.advanceAgenda);
+  const advanceAct = useGameStore((state) => state.advanceAct);
 
   const hiddenLocations = useMemo(
     () => locations.filter((location) => !location.isVisible),
@@ -18,10 +25,7 @@ export default function TurnPanel() {
   );
 
   const visibleUnrevealedLocations = useMemo(
-    () =>
-      locations.filter(
-        (location) => location.isVisible && !location.revealed,
-      ),
+    () => locations.filter((location) => location.isVisible && !location.revealed),
     [locations],
   );
 
@@ -52,6 +56,62 @@ export default function TurnPanel() {
         <button onClick={advancePhase}>
           {turn.phase === "upkeep" ? "Start Next Round" : "Advance Phase"}
         </button>
+      </div>
+
+      <hr />
+
+      <div>
+        <h3 style={{ margin: "0 0 10px" }}>Scenario Progress</h3>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {agenda && (
+            <div>
+              <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
+                Agenda: {agenda.title}
+              </p>
+
+              <div className="button-row">
+                <button
+                  onClick={() =>
+                    setAgendaProgress(Math.max(0, agenda.progress - 1))
+                  }
+                >
+                  -1 {agenda.thresholdLabel}
+                </button>
+
+                <button
+                  onClick={() => setAgendaProgress(agenda.progress + 1)}
+                >
+                  +1 {agenda.thresholdLabel}
+                </button>
+
+                <button onClick={advanceAgenda}>Advance Agenda</button>
+              </div>
+            </div>
+          )}
+
+          {act && (
+            <div>
+              <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
+                Act: {act.title}
+              </p>
+
+              <div className="button-row">
+                <button
+                  onClick={() => setActProgress(Math.max(0, act.progress - 1))}
+                >
+                  -1 {act.thresholdLabel}
+                </button>
+
+                <button onClick={() => setActProgress(act.progress + 1)}>
+                  +1 {act.thresholdLabel}
+                </button>
+
+                <button onClick={advanceAct}>Advance Act</button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <hr />
