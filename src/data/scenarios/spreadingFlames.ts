@@ -9,8 +9,8 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
     {
       id: "friends-room",
       name: "Your Friend's Room",
-      shroud: 0,
-      clues: 0,
+      shroud: 2,
+      clues: 2,
       revealed: true,
       connections: [],
       investigatorsHere: [],
