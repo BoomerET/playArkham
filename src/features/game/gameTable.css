@@ -45,6 +45,11 @@
   color: #f8f4ea;
 }
 
+.game-table-subtitle {
+  margin: 0;
+  color: rgba(243, 239, 228, 0.8);
+}
+
 .game-table-layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) 320px;
@@ -88,6 +93,17 @@
   flex-direction: column;
   gap: 16px;
   min-height: 520px;
+}
+
+.game-table-scenario-rail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.game-table-scenario-panel {
+  padding: 12px;
 }
 
 .game-table-board-lower {
@@ -149,6 +165,105 @@
   min-height: 220px;
 }
 
+.scenario-card-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scenario-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scenario-card-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d8c79b;
+}
+
+.scenario-card-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.scenario-card-body {
+  display: flex;
+}
+
+.scenario-card-face {
+  width: 100%;
+  min-height: 150px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.scenario-card-panel-agenda .scenario-card-face {
+  background:
+    linear-gradient(180deg, rgba(95, 34, 34, 0.78), rgba(52, 18, 18, 0.92)),
+    rgba(0, 0, 0, 0.2);
+}
+
+.scenario-card-panel-act .scenario-card-face {
+  background:
+    linear-gradient(180deg, rgba(58, 73, 32, 0.78), rgba(31, 43, 19, 0.92)),
+    rgba(0, 0, 0, 0.2);
+}
+
+.scenario-card-face-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.scenario-card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f8f4ea;
+}
+
+.scenario-card-doom,
+.scenario-card-clue-goal {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(248, 244, 234, 0.86);
+}
+
+.scenario-card-name {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #f8f4ea;
+}
+
+.scenario-card-text {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(248, 244, 234, 0.84);
+}
+
 @media (max-width: 1280px) {
   .game-table-layout {
     grid-template-columns: 240px minmax(0, 1fr) 280px;
@@ -187,6 +302,12 @@
 
   .game-table-skill-overlay .table-panel-overlay {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .game-table-scenario-rail {
+    grid-template-columns: 1fr;
   }
 }
 
