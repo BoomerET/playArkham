@@ -15,6 +15,7 @@ export const theGatheringScenario: ScenarioDefinition = {
       connections: ["hallway"],
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
+      isVisible: true,
     },
     {
       id: "hallway",
@@ -25,6 +26,7 @@ export const theGatheringScenario: ScenarioDefinition = {
       connections: ["study", "attic", "cellar"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 50 },
+      isVisible: false,
     },
     {
       id: "attic",
@@ -35,6 +37,8 @@ export const theGatheringScenario: ScenarioDefinition = {
       connections: ["hallway"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 18 },
+      isVisible: false,
+
     },
     {
       id: "cellar",
@@ -45,6 +49,7 @@ export const theGatheringScenario: ScenarioDefinition = {
       connections: ["hallway"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 82 },
+      isVisible: false,
     },
   ],
   enemySpawns: [

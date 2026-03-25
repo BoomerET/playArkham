@@ -15,6 +15,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       connections: [],
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
+      isVisible: true,
     },
   ],
   enemySpawns: [

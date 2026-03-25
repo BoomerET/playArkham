@@ -15,6 +15,7 @@ export const theBeachScenario: ScenarioDefinition = {
       connections: ["beach"],
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
+      isVisible: true,
     },
     {
       id: "beach",
@@ -25,6 +26,7 @@ export const theBeachScenario: ScenarioDefinition = {
       connections: ["changeroom"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 50 },
+      isVisible: true,
     },
     {
       id: "lifeguard-tower",
@@ -35,6 +37,7 @@ export const theBeachScenario: ScenarioDefinition = {
       connections: ["beach"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 18 },
+      isVisible: true,
     },
     {
       id: "water",
@@ -45,6 +48,7 @@ export const theBeachScenario: ScenarioDefinition = {
       connections: ["beach"],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 82 },
+      isVisible: true,
     },
   ],
   enemySpawns: [
