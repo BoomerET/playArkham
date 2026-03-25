@@ -3,19 +3,45 @@ import { investigators } from "../data/investigators";
 import { sampleDeck } from "../data/sampleDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
-import { getChaosTokenModifier } from "../lib/chaosToken";
-import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
+import { getChaosTokenModifier } from "../lib/chaosToken";
+import {
+  canSpendInvestigationAction,
+  cloneScenarioLocations,
+  createGameInvestigator,
+  findCurrentLocation,
+  getCardCost,
+  getEnemyAtInvestigator,
+  getInvestigatorSkillValue,
+  getPreferredEnemyTargetId,
+  normalizeScenarioLocations,
+} from "../lib/gameStateHelpers";
+import {
+  applyScenarioActAdvanceEffects,
+  applyScenarioAgendaAdvanceEffects,
+} from "../lib/scenarioEffects";
+import {
+  buildScenarioCardState,
+  getInitialActState,
+  getInitialAgendaState,
+} from "../lib/scenarioCards";
 import { shuffle } from "../lib/shuffle";
+import {
+  countMatchingIcons,
+  hasCommittedCardByName,
+} from "../lib/skillTestHelpers";
+import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import type {
   ActiveSkillTest,
   ChaosToken,
-  Enemy,
-  GameLocation,
+  CommittedSkillCard,
   GameState,
   Investigator,
   Phase,
+  PlayerCard,
+  ScenarioCardState,
   SkillTestResult,
+  SkillType,
 } from "../types/game";
 
 type Screen = "home" | "game";
@@ -39,6 +65,10 @@ type GameStore = GameState & {
   setSelectedEnemyTarget: (enemyId: string | null) => void;
   setLocationVisible: (locationId: string, visible?: boolean) => void;
   revealLocation: (locationId: string) => void;
+  setAgendaProgress: (progress: number) => void;
+  setActProgress: (progress: number) => void;
+  advanceAgenda: () => void;
+  advanceAct: () => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -87,132 +117,6 @@ const startingChaosBag: ChaosToken[] = [
   "elderSign",
 ];
 
-function normalizeScenarioLocations(
-  locations: GameLocation[],
-  investigatorId?: string,
-  startingLocationId?: string,
-): GameLocation[] {
-  return locations.map((location) => {
-    const shouldPlaceInvestigator =
-      investigatorId !== undefined && location.id === startingLocationId;
-
-    return {
-      ...location,
-      isVisible: location.isVisible ?? true,
-      investigatorsHere: shouldPlaceInvestigator ? [investigatorId] : [],
-    };
-  });
-}
-
-function cloneScenarioLocations(locations: GameLocation[]): GameLocation[] {
-  return locations.map((location) => ({
-    ...location,
-    isVisible: location.isVisible ?? true,
-    investigatorsHere: [...location.investigatorsHere],
-  }));
-}
-
-function findCurrentLocation(
-  locations: GameLocation[],
-  investigatorId: string,
-): GameLocation | undefined {
-  return locations.find((location) =>
-    location.investigatorsHere.includes(investigatorId),
-  );
-}
-
-function canSpendInvestigationAction(
-  phase: Phase,
-  actionsRemaining: number,
-): boolean {
-  return phase === "investigation" && actionsRemaining > 0;
-}
-
-function getInvestigatorSkillValue(
-  investigator: GameState["investigator"],
-  skill: SkillType,
-): number {
-  return investigator[skill];
-}
-
-function getEnemyAtInvestigator(
-  enemies: Enemy[],
-  locationId: string,
-  investigatorId: string,
-  selectedEnemyTargetId: string | null,
-): Enemy | undefined {
-  const selectedEnemy =
-    selectedEnemyTargetId === null
-      ? undefined
-      : enemies.find(
-          (enemy) =>
-            enemy.id === selectedEnemyTargetId &&
-            enemy.locationId === locationId &&
-            enemy.engagedInvestigatorId === investigatorId,
-        );
-
-  if (selectedEnemy) {
-    return selectedEnemy;
-  }
-
-  const engagedEnemy = enemies.find(
-    (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === investigatorId,
-  );
-
-  if (engagedEnemy) {
-    return engagedEnemy;
-  }
-
-  return enemies.find(
-    (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === null,
-  );
-}
-
-function getPreferredEnemyTargetId(
-  enemies: Enemy[],
-  locationId: string,
-  investigatorId: string,
-  currentTargetId: string | null,
-): string | null {
-  const engagedEnemies = enemies.filter(
-    (enemy) =>
-      enemy.locationId === locationId &&
-      enemy.engagedInvestigatorId === investigatorId,
-  );
-
-  if (engagedEnemies.length === 0) {
-    return null;
-  }
-
-  const currentTargetStillValid = engagedEnemies.some(
-    (enemy) => enemy.id === currentTargetId,
-  );
-
-  if (currentTargetStillValid) {
-    return currentTargetId;
-  }
-
-  return engagedEnemies[0]?.id ?? null;
-}
-
-function getCardCost(card: PlayerCard): number {
-  return card.cost ?? 0;
-}
-
-function createGameInvestigator(investigator: Investigator): Investigator {
-  return {
-    ...investigator,
-    resources: 5,
-    clues: 0,
-    damage: 0,
-    horror: 0,
-  };
-}
-
 function getSelectedScenario(state: {
   availableScenarios: ScenarioDefinition[];
   selectedScenarioId: string;
@@ -251,6 +155,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
     }).enemySpawns,
+  ),
+  agenda: getInitialAgendaState(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }),
+  ),
+  act: getInitialActState(
+    getSelectedScenario({
+      availableScenarios: scenarios,
+      selectedScenarioId: defaultScenarioId,
+    }),
   ),
   log: [],
   lastSkillTest: null,
@@ -364,6 +280,165 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  setAgendaProgress: (progress) => {
+    const { agenda, log } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    const nextProgress = Math.max(0, progress);
+
+    set({
+      agenda: {
+        ...agenda,
+        progress: nextProgress,
+      },
+      log: [
+        ...log,
+        `${agenda.thresholdLabel} on agenda set to ${nextProgress}/${agenda.threshold}.`,
+      ],
+    });
+  },
+
+  setActProgress: (progress) => {
+    const { act, log } = get();
+
+    if (!act) {
+      return;
+    }
+
+    const nextProgress = Math.max(0, progress);
+
+    set({
+      act: {
+        ...act,
+        progress: nextProgress,
+      },
+      log: [
+        ...log,
+        `${act.thresholdLabel} on act set to ${nextProgress}/${act.threshold}.`,
+      ],
+    });
+  },
+
+  advanceAgenda: () => {
+    const { agenda, log, locations } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    const scenario = getSelectedScenario(get());
+    const agendas = scenario.agendas ?? [];
+
+    const currentIndex = agendas.findIndex((entry) => entry.id === agenda.id);
+
+    if (currentIndex === -1) {
+      set({
+        agenda: {
+          ...agenda,
+          progress: agenda.threshold,
+        },
+        log: [...log, `Agenda ${agenda.sequence} is ready to advance.`],
+      });
+      return;
+    }
+
+    const nextDefinition = agendas[currentIndex + 1];
+
+    if (!nextDefinition) {
+      set({
+        agenda: {
+          ...agenda,
+          progress: agenda.threshold,
+        },
+        log: [
+          ...log,
+          `Agenda ${agenda.sequence} has no further side to advance to.`,
+        ],
+      });
+      return;
+    }
+
+    const advancedLog = [
+      ...log,
+      `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+    ];
+
+    const scenarioEffectResult = applyScenarioAgendaAdvanceEffects(
+      scenario.id,
+      nextDefinition.id,
+      {
+        locations,
+        log: advancedLog,
+      },
+    );
+
+    set({
+      agenda: buildScenarioCardState(nextDefinition),
+      locations: scenarioEffectResult.locations,
+      log: scenarioEffectResult.log,
+    });
+  },
+
+  advanceAct: () => {
+    const { act, log, locations } = get();
+
+    if (!act) {
+      return;
+    }
+
+    const scenario = getSelectedScenario(get());
+    const acts = scenario.acts ?? [];
+
+    const currentIndex = acts.findIndex((entry) => entry.id === act.id);
+
+    if (currentIndex === -1) {
+      set({
+        act: {
+          ...act,
+          progress: act.threshold,
+        },
+        log: [...log, `Act ${act.sequence} is ready to advance.`],
+      });
+      return;
+    }
+
+    const nextDefinition = acts[currentIndex + 1];
+
+    if (!nextDefinition) {
+      set({
+        act: {
+          ...act,
+          progress: act.threshold,
+        },
+        log: [...log, `Act ${act.sequence} has no further side to advance to.`],
+      });
+      return;
+    }
+
+    const advancedLog = [
+      ...log,
+      `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+    ];
+
+    const scenarioEffectResult = applyScenarioActAdvanceEffects(
+      scenario.id,
+      nextDefinition.id,
+      {
+        locations,
+        log: advancedLog,
+      },
+    );
+
+    set({
+      act: buildScenarioCardState(nextDefinition),
+      locations: scenarioEffectResult.locations,
+      log: scenarioEffectResult.log,
+    });
+  },
+
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
   },
@@ -387,6 +462,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         : [...startingChaosBag],
       locations: cloneScenarioLocations(selectedScenario.locations),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      agenda: getInitialAgendaState(selectedScenario),
+      act: getInitialActState(selectedScenario),
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -429,6 +506,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         selectedScenario.startingLocationId,
       ),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      agenda: getInitialAgendaState(selectedScenario),
+      act: getInitialActState(selectedScenario),
       log: [
         `Selected investigator: ${chosenInvestigator.name}`,
         `Selected scenario: ${selectedScenario.name}`,
@@ -735,7 +814,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!destination.isVisible) {
       set({
-        log: [...log, `Cannot move to ${destination.name}. It is not visible yet.`],
+        log: [
+          ...log,
+          `Cannot move to ${destination.name}. It is not visible yet.`,
+        ],
       });
       return;
     }

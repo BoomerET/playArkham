@@ -1,4 +1,8 @@
-import type { CommittedSkillCard, PlayerCard, SkillType } from "../types/game";
+import type {
+  CommittedSkillCard,
+  PlayerCard,
+  SkillType,
+} from "../types/game";
 
 export function countMatchingIcons(card: PlayerCard, skill: SkillType): number {
   return (card.icons ?? []).filter((icon) => icon === skill).length;

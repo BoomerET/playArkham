@@ -1,9 +1,10 @@
+import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import type { GameLocation } from "../types/game";
 
-export interface ScenarioEffectState {
+type ScenarioEffectState = {
   locations: GameLocation[];
   log: string[];
-}
+};
 
 export function applyScenarioActAdvanceEffects(
   scenarioId: string,
