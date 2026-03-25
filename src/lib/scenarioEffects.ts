@@ -1,11 +1,18 @@
+import type {
+  ScenarioCardDefinition,
+  ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "./buildScenarioEnemies";
-import type { ScenarioCardDefinition, ScenarioDefinition } from "../data/scenarios/scenarioTypes";
+import { getPreferredEnemyTargetId } from "./gameStateHelpers";
 import type { Enemy, GameLocation } from "../types/game";
 
 type ScenarioEffectState = {
   locations: GameLocation[];
   enemies: Enemy[];
   log: string[];
+  investigatorId: string;
+  currentLocationId: string | null;
+  selectedEnemyTargetId: string | null;
 };
 
 function applyCardAdvanceEffects(
@@ -45,13 +52,55 @@ function applyCardAdvanceEffects(
     return location;
   });
 
-  const spawnedEnemies =
+  const rawSpawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
+
+  const spawnedEnemies = rawSpawnedEnemies.map((enemy) => {
+    const shouldEngageOnSpawn =
+      state.currentLocationId !== null &&
+      enemy.locationId === state.currentLocationId &&
+      enemy.engagedInvestigatorId === null &&
+      !enemy.exhausted;
+
+    if (!shouldEngageOnSpawn) {
+      return enemy;
+    }
+
+    return {
+      ...enemy,
+      engagedInvestigatorId: state.investigatorId,
+    };
+  });
+
+  const updatedEnemies = [...state.enemies, ...spawnedEnemies];
+
+  const spawnedEngagedEnemy = spawnedEnemies.find(
+    (enemy) => enemy.engagedInvestigatorId === state.investigatorId,
+  );
+
+  const selectedEnemyTargetId = state.currentLocationId
+    ? getPreferredEnemyTargetId(
+        updatedEnemies,
+        state.currentLocationId,
+        state.investigatorId,
+        spawnedEngagedEnemy?.id ?? state.selectedEnemyTargetId,
+      )
+    : null;
+
+  const engagementLogEntries =
+    spawnedEnemies.some(
+      (enemy) => enemy.engagedInvestigatorId === state.investigatorId,
+    ) && state.currentLocationId
+      ? ["Scenario effect: A newly spawned enemy engaged the investigator."]
+      : [];
 
   return {
     locations: updatedLocations,
-    enemies: [...state.enemies, ...spawnedEnemies],
-    log: [...state.log, ...logEntries],
+    enemies: updatedEnemies,
+    log: [...state.log, ...logEntries, ...engagementLogEntries],
+    investigatorId: state.investigatorId,
+    currentLocationId: state.currentLocationId,
+    selectedEnemyTargetId,
   };
 }
 

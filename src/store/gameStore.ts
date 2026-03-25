@@ -321,7 +321,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   advanceAgenda: () => {
-    const { agenda, log, locations, enemies } = get();
+    const {
+      agenda,
+      log,
+      locations,
+      enemies,
+      investigator,
+      selectedEnemyTargetId,
+    } = get();
 
     if (!agenda) {
       return;
@@ -359,6 +366,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
     const advancedLog = [
       ...log,
       `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
@@ -371,6 +380,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         locations,
         enemies,
         log: advancedLog,
+        investigatorId: investigator.id,
+        currentLocationId: currentLocation?.id ?? null,
+        selectedEnemyTargetId,
       },
     );
 
@@ -378,12 +390,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       agenda: buildScenarioCardState(nextDefinition),
       locations: scenarioEffectResult.locations,
       enemies: scenarioEffectResult.enemies,
+      selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
       log: scenarioEffectResult.log,
     });
   },
 
   advanceAct: () => {
-    const { act, log, locations, enemies } = get();
+    const {
+      act,
+      log,
+      locations,
+      enemies,
+      investigator,
+      selectedEnemyTargetId,
+    } = get();
 
     if (!act) {
       return;
@@ -418,6 +438,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
     const advancedLog = [
       ...log,
       `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
@@ -430,6 +452,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         locations,
         enemies,
         log: advancedLog,
+        investigatorId: investigator.id,
+        currentLocationId: currentLocation?.id ?? null,
+        selectedEnemyTargetId,
       },
     );
 
@@ -437,6 +462,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act: buildScenarioCardState(nextDefinition),
       locations: scenarioEffectResult.locations,
       enemies: scenarioEffectResult.enemies,
+      selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
       log: scenarioEffectResult.log,
     });
   },
