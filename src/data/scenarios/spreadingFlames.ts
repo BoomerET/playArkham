@@ -28,6 +28,17 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       mapPosition: { x: 50, y: 50 },
       isVisible: false,
     },
+    {
+      id: "miskatonic-quad",
+      name: "Miskatonic Quad",
+      shroud: 1,
+      clues: 0,
+      revealed: false,
+      connections: ["dormitories"],
+      investigatorsHere: [],
+      mapPosition: { x: 50, y: 78 },
+      isVisible: false,
+    },
   ],
   enemySpawns: [
     {
