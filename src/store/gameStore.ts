@@ -255,7 +255,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setSelectedEnemyTarget: (enemyId) => {
-    const { investigator, locations, enemies } = get();
+    const { investigator, locations, enemies, log, selectedEnemyTargetId } =
+      get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -264,26 +265,40 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (enemyId === null) {
+      const preferredTargetId = getPreferredEnemyTargetId(
+        enemies,
+        currentLocation.id,
+        investigator.id,
+        null,
+      );
+
       set({
-        selectedEnemyTargetId: getPreferredEnemyTargetId(
-          enemies,
-          currentLocation.id,
-          investigator.id,
-          null,
-        ),
+        selectedEnemyTargetId: preferredTargetId,
       });
       return;
     }
 
-    const isValidTarget = enemies.some(
+    const selectedEnemy = enemies.find(
       (enemy) =>
         enemy.id === enemyId &&
         enemy.locationId === currentLocation.id &&
         enemy.engagedInvestigatorId === investigator.id,
     );
 
+    if (!selectedEnemy) {
+      set({
+        selectedEnemyTargetId: null,
+      });
+      return;
+    }
+
+    if (selectedEnemyTargetId === selectedEnemy.id) {
+      return;
+    }
+
     set({
-      selectedEnemyTargetId: isValidTarget ? enemyId : null,
+      selectedEnemyTargetId: selectedEnemy.id,
+      log: [...log, `Current enemy target: ${selectedEnemy.name}.`],
     });
   },
 
@@ -1596,6 +1611,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    set({
+      log: [...log, `Fight action targeting ${enemy.name}.`],
+    });
+
     get().beginSkillTest("combat", enemy.fight, `Fight ${enemy.name}`);
     set({
       pendingTestResolution: { kind: "fight", enemyId: enemy.id },
@@ -1667,6 +1686,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
       return;
     }
+
+    set({
+      log: [...log, `Evade action targeting ${enemy.name}.`],
+    });
 
     get().beginSkillTest("agility", enemy.evade, `Evade ${enemy.name}`);
     set({
