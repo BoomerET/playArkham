@@ -4,12 +4,17 @@ import type {
 } from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "./buildScenarioEnemies";
 import { getPreferredEnemyTargetId } from "./gameStateHelpers";
-import type { Enemy, GameLocation, ScenarioCardState } from "../types/game";
+import type {
+  Enemy,
+  GameLocation,
+  GameLogItem,
+  ScenarioCardState,
+} from "../types/game";
 
 export type ScenarioEffectState = {
   locations: GameLocation[];
   enemies: Enemy[];
-  log: string[];
+  log: GameLogItem[];
   investigatorId: string;
   currentLocationId: string | null;
   selectedEnemyTargetId: string | null;
