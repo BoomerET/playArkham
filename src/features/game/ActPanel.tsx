@@ -1,7 +1,49 @@
+import { useMemo } from "react";
 import { useGameStore } from "../../store/gameStore";
 
 export default function ActPanel() {
   const act = useGameStore((state) => state.act);
+  const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
+  const availableScenarios = useGameStore((state) => state.availableScenarios);
+
+  const nextAdvanceHint = useMemo(() => {
+    if (!act) {
+      return null;
+    }
+
+    const scenario = availableScenarios.find(
+      (entry) => entry.id === selectedScenarioId,
+    );
+
+    const acts = scenario?.acts ?? [];
+    const currentIndex = acts.findIndex((entry) => entry.id === act.id);
+
+    if (currentIndex === -1) {
+      return null;
+    }
+
+    const nextAct = acts[currentIndex + 1];
+
+    if (!nextAct?.onAdvance) {
+      return null;
+    }
+
+    if (nextAct.onAdvance.winScenario) {
+      return {
+        kind: "win" as const,
+        text: "Next advance will win the scenario.",
+      };
+    }
+
+    if (nextAct.onAdvance.loseScenario) {
+      return {
+        kind: "lose" as const,
+        text: "Next advance will lose the scenario.",
+      };
+    }
+
+    return null;
+  }, [act, availableScenarios, selectedScenarioId]);
 
   if (!act) {
     return (
@@ -41,6 +83,14 @@ export default function ActPanel() {
           <h4 className="scenario-card-name">{act.title}</h4>
 
           <p className="scenario-card-text">{act.text}</p>
+
+          {nextAdvanceHint ? (
+            <div
+              className={`scenario-card-hint scenario-card-hint-${nextAdvanceHint.kind}`}
+            >
+              {nextAdvanceHint.text}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>
