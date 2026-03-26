@@ -1,24 +1,20 @@
-//import FactionIcon from "../../components/FactionIcon";
-//import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
-
-//function formatFaction(faction: string): string {
-//  return faction.charAt(0).toUpperCase() + faction.slice(1);
-//}
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
   {
     eager: true,
     import: "default",
-  }
+  },
 ) as Record<string, string>;
 
 function getInvestigatorImageUrl(imageName?: string): string | null {
-  if (!imageName) return null;
+  if (!imageName) {
+    return null;
+  }
 
   const match = Object.entries(investigatorImages).find(([path]) =>
-    path.endsWith(`/${imageName}`)
+    path.endsWith(`/${imageName}`),
   );
 
   return match?.[1] ?? null;
@@ -35,7 +31,6 @@ export default function HomeScreen() {
     (state) => state.setSelectedInvestigator,
   );
 
-  // ✅ NEW: scenario state
   const availableScenarios = useGameStore((state) => state.availableScenarios);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const setSelectedScenario = useGameStore(
@@ -60,12 +55,14 @@ export default function HomeScreen() {
         <div className="investigator-grid">
           {availableInvestigators.map((investigator) => {
             const imageUrl = getInvestigatorImageUrl(investigator.portrait);
+            const selected = investigator.id === selectedInvestigatorId;
 
             return (
-              <div
+              <button
                 key={investigator.id}
-                className="investigator-card"
-                onClick={() => selectInvestigator(investigator.id)}
+                type="button"
+                className={`investigator-card ${selected ? "selected" : ""}`}
+                onClick={() => setSelectedInvestigator(investigator.id)}
               >
                 {imageUrl ? (
                   <>
@@ -87,17 +84,15 @@ export default function HomeScreen() {
                     </div>
                   </>
                 ) : (
-                  // fallback (your current card UI)
                   <div className="investigator-fallback">
                     {investigator.name}
                   </div>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
 
-        {/* ✅ NEW: Scenario Selection */}
         <div className="scenario-section">
           <h2 className="section-title">Select Scenario</h2>
 
