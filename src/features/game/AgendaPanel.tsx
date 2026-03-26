@@ -1,6 +1,29 @@
 import { useMemo } from "react";
 import { useGameStore } from "../../store/gameStore";
 
+function getThreatText(
+  thresholdLabel: string,
+  progress: number,
+  threshold: number,
+): string {
+  const remaining = Math.max(threshold - progress, 0);
+  const normalizedLabel = thresholdLabel.toLowerCase();
+
+  if (normalizedLabel === "doom") {
+    if (remaining === 0) {
+      return "The agenda is ready to advance.";
+    }
+
+    return `${remaining} more doom will advance the agenda.`;
+  }
+
+  if (remaining === 0) {
+    return "The agenda is ready to advance.";
+  }
+
+  return `The agenda advances at ${threshold} ${thresholdLabel.toLowerCase()} (${remaining} remaining).`;
+}
+
 export default function AgendaPanel() {
   const agenda = useGameStore((state) => state.agenda);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
@@ -65,6 +88,11 @@ export default function AgendaPanel() {
   }
 
   const progressText = `${agenda.thresholdLabel} ${agenda.progress} / ${agenda.threshold}`;
+  const threatText = getThreatText(
+    agenda.thresholdLabel,
+    agenda.progress,
+    agenda.threshold,
+  );
 
   return (
     <section className="scenario-card-panel scenario-card-panel-agenda">
@@ -83,6 +111,11 @@ export default function AgendaPanel() {
           <h4 className="scenario-card-name">{agenda.title}</h4>
 
           <p className="scenario-card-text">{agenda.text}</p>
+
+          <div className="scenario-card-objective">
+            <div className="scenario-card-objective-label">Current Threat</div>
+            <div className="scenario-card-objective-text">{threatText}</div>
+          </div>
 
           {nextAdvanceHint ? (
             <div
