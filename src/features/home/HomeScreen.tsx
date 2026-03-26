@@ -1,9 +1,27 @@
-import FactionIcon from "../../components/FactionIcon";
-import { getFactionClassName } from "../../lib/ui";
+//import FactionIcon from "../../components/FactionIcon";
+//import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 
-function formatFaction(faction: string): string {
-  return faction.charAt(0).toUpperCase() + faction.slice(1);
+//function formatFaction(faction: string): string {
+//  return faction.charAt(0).toUpperCase() + faction.slice(1);
+//}
+
+const investigatorImages = import.meta.glob(
+  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  }
+) as Record<string, string>;
+
+function getInvestigatorImageUrl(imageName?: string): string | null {
+  if (!imageName) return null;
+
+  const match = Object.entries(investigatorImages).find(([path]) =>
+    path.endsWith(`/${imageName}`)
+  );
+
+  return match?.[1] ?? null;
 }
 
 export default function HomeScreen() {
