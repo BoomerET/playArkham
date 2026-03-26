@@ -6,7 +6,7 @@ import { buildScenarioEnemies } from "./buildScenarioEnemies";
 import { getPreferredEnemyTargetId } from "./gameStateHelpers";
 import type { Enemy, GameLocation, ScenarioCardState } from "../types/game";
 
-type ScenarioEffectState = {
+export type ScenarioEffectState = {
   locations: GameLocation[];
   enemies: Enemy[];
   log: string[];
@@ -17,12 +17,21 @@ type ScenarioEffectState = {
   act: ScenarioCardState | null;
 };
 
+export type ScenarioEffectResult = ScenarioEffectState & {
+  advanceAgendaRequested: boolean;
+  advanceActRequested: boolean;
+};
+
 function applyCardAdvanceEffects(
   card: ScenarioCardDefinition | undefined,
   state: ScenarioEffectState,
-): ScenarioEffectState {
+): ScenarioEffectResult {
   if (!card?.onAdvance) {
-    return state;
+    return {
+      ...state,
+      advanceAgendaRequested: false,
+      advanceActRequested: false,
+    };
   }
 
   const {
@@ -36,29 +45,9 @@ function applyCardAdvanceEffects(
     actProgressDelta,
     setAgendaProgress,
     setActProgress,
+    advanceAgenda = false,
+    advanceAct = false,
   } = card.onAdvance;
-
-  const showSet = new Set(showLocationIds);
-  const revealSet = new Set(revealLocationIds);
-
-  const updatedLocations = state.locations.map((location) => {
-    if (revealSet.has(location.id) || spawnedLocationIds.has(location.id)) {
-      return {
-        ...location,
-        isVisible: true,
-        revealed: true,
-      };
-    }
-
-    if (showSet.has(location.id)) {
-      return {
-        ...location,
-        isVisible: true,
-      };
-    }
-
-    return location;
-  });
 
   const rawSpawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
@@ -81,9 +70,30 @@ function applyCardAdvanceEffects(
     };
   });
 
-  const spawnedLocationIds = new Set(
+  const revealSet = new Set(revealLocationIds);
+  const showSet = new Set(showLocationIds);
+  const spawnedRevealSet = new Set(
     revealSpawnLocations ? spawnedEnemies.map((enemy) => enemy.locationId) : [],
   );
+
+  const updatedLocations = state.locations.map((location) => {
+    if (revealSet.has(location.id) || spawnedRevealSet.has(location.id)) {
+      return {
+        ...location,
+        isVisible: true,
+        revealed: true,
+      };
+    }
+
+    if (showSet.has(location.id)) {
+      return {
+        ...location,
+        isVisible: true,
+      };
+    }
+
+    return location;
+  });
 
   const updatedEnemies = [...state.enemies, ...spawnedEnemies];
 
@@ -137,6 +147,8 @@ function applyCardAdvanceEffects(
     selectedEnemyTargetId,
     agenda: updatedAgenda,
     act: updatedAct,
+    advanceAgendaRequested: advanceAgenda,
+    advanceActRequested: advanceAct,
   };
 }
 
@@ -144,7 +156,7 @@ export function applyScenarioActAdvanceEffects(
   scenario: ScenarioDefinition,
   actId: string,
   state: ScenarioEffectState,
-): ScenarioEffectState {
+): ScenarioEffectResult {
   const act = scenario.acts?.find((entry) => entry.id === actId);
   return applyCardAdvanceEffects(act, state);
 }
@@ -153,7 +165,7 @@ export function applyScenarioAgendaAdvanceEffects(
   scenario: ScenarioDefinition,
   agendaId: string,
   state: ScenarioEffectState,
-): ScenarioEffectState {
+): ScenarioEffectResult {
   const agenda = scenario.agendas?.find((entry) => entry.id === agendaId);
   return applyCardAdvanceEffects(agenda, state);
 }

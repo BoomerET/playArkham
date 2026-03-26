@@ -65,4 +65,7 @@ export interface ScenarioAdvanceEffects {
   actProgressDelta?: number;
   setAgendaProgress?: number;
   setActProgress?: number;
+
+  advanceAgenda?: boolean;
+  advanceAct?: boolean;
 }

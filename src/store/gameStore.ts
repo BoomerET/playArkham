@@ -19,6 +19,7 @@ import {
 import {
   applyScenarioActAdvanceEffects,
   applyScenarioAgendaAdvanceEffects,
+  type ScenarioEffectState,
 } from "../lib/scenarioEffects";
 import {
   buildScenarioCardState,
@@ -124,6 +125,215 @@ function getSelectedScenario(state: {
       (scenario) => scenario.id === state.selectedScenarioId,
     ) ?? state.availableScenarios[0]
   );
+}
+
+function advanceAgendaState(
+  scenario: ScenarioDefinition,
+  state: ScenarioEffectState,
+  allowChain = true,
+): Pick<
+  GameStore,
+  "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
+> {
+  const currentAgenda = state.agenda;
+
+  if (!currentAgenda) {
+    return {
+      agenda: null,
+      act: state.act,
+      locations: state.locations,
+      enemies: state.enemies,
+      log: state.log,
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const agendas = scenario.agendas ?? [];
+  const currentIndex = agendas.findIndex(
+    (entry) => entry.id === currentAgenda.id,
+  );
+
+  if (currentIndex === -1) {
+    return {
+      agenda: {
+        ...currentAgenda,
+        progress: currentAgenda.threshold,
+      },
+      act: state.act,
+      locations: state.locations,
+      enemies: state.enemies,
+      log: [
+        ...state.log,
+        `Agenda ${currentAgenda.sequence} is ready to advance.`,
+      ],
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const nextDefinition = agendas[currentIndex + 1];
+
+  if (!nextDefinition) {
+    return {
+      agenda: {
+        ...currentAgenda,
+        progress: currentAgenda.threshold,
+      },
+      act: state.act,
+      locations: state.locations,
+      enemies: state.enemies,
+      log: [
+        ...state.log,
+        `Agenda ${currentAgenda.sequence} has no further side to advance to.`,
+      ],
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const nextAgenda = buildScenarioCardState(nextDefinition);
+
+  const effectResult = applyScenarioAgendaAdvanceEffects(
+    scenario,
+    nextDefinition.id,
+    {
+      ...state,
+      agenda: nextAgenda,
+      log: [
+        ...state.log,
+        `Agenda advanced from ${currentAgenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+      ],
+    },
+  );
+
+  let result = {
+    agenda: effectResult.agenda,
+    act: effectResult.act,
+    locations: effectResult.locations,
+    enemies: effectResult.enemies,
+    log: effectResult.log,
+    selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+  };
+
+  if (allowChain && effectResult.advanceActRequested) {
+    const chained = advanceActState(
+      scenario,
+      {
+        ...effectResult,
+        agenda: result.agenda,
+        act: result.act,
+        locations: result.locations,
+        enemies: result.enemies,
+        log: result.log,
+        selectedEnemyTargetId: result.selectedEnemyTargetId,
+      },
+      false,
+    );
+
+    result = chained;
+  }
+
+  return result;
+}
+
+function advanceActState(
+  scenario: ScenarioDefinition,
+  state: ScenarioEffectState,
+  allowChain = true,
+): Pick<
+  GameStore,
+  "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
+> {
+  const currentAct = state.act;
+
+  if (!currentAct) {
+    return {
+      agenda: state.agenda,
+      act: null,
+      locations: state.locations,
+      enemies: state.enemies,
+      log: state.log,
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const acts = scenario.acts ?? [];
+  const currentIndex = acts.findIndex((entry) => entry.id === currentAct.id);
+
+  if (currentIndex === -1) {
+    return {
+      agenda: state.agenda,
+      act: {
+        ...currentAct,
+        progress: currentAct.threshold,
+      },
+      locations: state.locations,
+      enemies: state.enemies,
+      log: [...state.log, `Act ${currentAct.sequence} is ready to advance.`],
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const nextDefinition = acts[currentIndex + 1];
+
+  if (!nextDefinition) {
+    return {
+      agenda: state.agenda,
+      act: {
+        ...currentAct,
+        progress: currentAct.threshold,
+      },
+      locations: state.locations,
+      enemies: state.enemies,
+      log: [
+        ...state.log,
+        `Act ${currentAct.sequence} has no further side to advance to.`,
+      ],
+      selectedEnemyTargetId: state.selectedEnemyTargetId,
+    };
+  }
+
+  const nextAct = buildScenarioCardState(nextDefinition);
+
+  const effectResult = applyScenarioActAdvanceEffects(
+    scenario,
+    nextDefinition.id,
+    {
+      ...state,
+      act: nextAct,
+      log: [
+        ...state.log,
+        `Act advanced from ${currentAct.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+      ],
+    },
+  );
+
+  let result = {
+    agenda: effectResult.agenda,
+    act: effectResult.act,
+    locations: effectResult.locations,
+    enemies: effectResult.enemies,
+    log: effectResult.log,
+    selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+  };
+
+  if (allowChain && effectResult.advanceAgendaRequested) {
+    const chained = advanceAgendaState(
+      scenario,
+      {
+        ...effectResult,
+        agenda: result.agenda,
+        act: result.act,
+        locations: result.locations,
+        enemies: result.enemies,
+        log: result.log,
+        selectedEnemyTargetId: result.selectedEnemyTargetId,
+      },
+      false,
+    );
+
+    result = chained;
+  }
+
+  return result;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -331,72 +541,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedEnemyTargetId,
     } = get();
 
-    if (!agenda) {
-      return;
-    }
-
     const scenario = getSelectedScenario(get());
-    const agendas = scenario.agendas ?? [];
-
-    const currentIndex = agendas.findIndex((entry) => entry.id === agenda.id);
-
-    if (currentIndex === -1) {
-      set({
-        agenda: {
-          ...agenda,
-          progress: agenda.threshold,
-        },
-        log: [...log, `Agenda ${agenda.sequence} is ready to advance.`],
-      });
-      return;
-    }
-
-    const nextDefinition = agendas[currentIndex + 1];
-
-    if (!nextDefinition) {
-      set({
-        agenda: {
-          ...agenda,
-          progress: agenda.threshold,
-        },
-        log: [
-          ...log,
-          `Agenda ${agenda.sequence} has no further side to advance to.`,
-        ],
-      });
-      return;
-    }
-
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
-    const advancedLog = [
-      ...log,
-      `Agenda advanced from ${agenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
-    ];
-
-    const scenarioEffectResult = applyScenarioAgendaAdvanceEffects(
+    const result = advanceAgendaState(
       scenario,
-      nextDefinition.id,
       {
+        agenda,
+        act,
         locations,
         enemies,
-        log: advancedLog,
+        log,
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
-        agenda: buildScenarioCardState(nextDefinition),
-        act,
       },
+      true,
     );
 
-    set({
-      agenda: scenarioEffectResult.agenda,
-      act: scenarioEffectResult.act,
-      locations: scenarioEffectResult.locations,
-      enemies: scenarioEffectResult.enemies,
-      selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
-      log: scenarioEffectResult.log,
-    });
+    set(result);
   },
 
   advanceAct: () => {
@@ -410,69 +573,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedEnemyTargetId,
     } = get();
 
-    if (!act) {
-      return;
-    }
-
     const scenario = getSelectedScenario(get());
-    const acts = scenario.acts ?? [];
-
-    const currentIndex = acts.findIndex((entry) => entry.id === act.id);
-
-    if (currentIndex === -1) {
-      set({
-        act: {
-          ...act,
-          progress: act.threshold,
-        },
-        log: [...log, `Act ${act.sequence} is ready to advance.`],
-      });
-      return;
-    }
-
-    const nextDefinition = acts[currentIndex + 1];
-
-    if (!nextDefinition) {
-      set({
-        act: {
-          ...act,
-          progress: act.threshold,
-        },
-        log: [...log, `Act ${act.sequence} has no further side to advance to.`],
-      });
-      return;
-    }
-
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
-    const advancedLog = [
-      ...log,
-      `Act advanced from ${act.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
-    ];
-
-    const scenarioEffectResult = applyScenarioActAdvanceEffects(
+    const result = advanceActState(
       scenario,
-      nextDefinition.id,
       {
+        agenda,
+        act,
         locations,
         enemies,
-        log: advancedLog,
+        log,
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
-        agenda,
-        act: buildScenarioCardState(nextDefinition),
       },
+      true,
     );
 
-    set({
-      agenda: scenarioEffectResult.agenda,
-      act: scenarioEffectResult.act,
-      locations: scenarioEffectResult.locations,
-      enemies: scenarioEffectResult.enemies,
-      selectedEnemyTargetId: scenarioEffectResult.selectedEnemyTargetId,
-      log: scenarioEffectResult.log,
-    });
+    set(result);
   },
 
   setDraggedCardId: (cardId) => {
