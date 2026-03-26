@@ -47,7 +47,6 @@ import type {
   SkillType,
   ScenarioStatus,
 } from "../types/game";
-import { playerDeck } from "../data/playerDeck";
 
 type Screen = "home" | "game";
 
