@@ -60,6 +60,14 @@ export interface PlayerCard {
     | "Accessory"
     | "Head"
     | "Body";
+  traits?: string[];
+  faction:
+    | "neutral"
+    | "guardian"
+    | "rogue"
+    | "seeker"
+    | "mystic"
+    | "survivor";
 }
 
 export interface GameLocation {

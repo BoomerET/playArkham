@@ -11,13 +11,24 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "wild"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool",
+      "Weapon",
+      "Melee"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "in-harms-way-3",
     "name": "In Harm's Way",
     "type": "treachery",
-    "text": "Revelation - Put In Harm's Way into play in your threat area. Forced - After you deal damage to an enemy: Take 1 damage and place 1 damage on In Harm's Way. If there is 3 or more damage on this card, discard it. Forced - When the game ends: Suffer 1 physical trauma."
+    "text": "Revelation - Put In Harm's Way into play in your threat area. Forced - After you deal damage to an enemy: Take 1 damage and place 1 damage on In Harm's Way. If there is 3 or more damage on this card, discard it. Forced - When the game ends: Suffer 1 physical trauma.",
+    "traits": [
+      "Flaw"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "detectives-intuition-5",
@@ -29,14 +40,22 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "intellect",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Insight"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "dead-ends-6",
     "name": "Dead Ends",
     "type": "event",
     "text": "Forced - When you search your deck and Dead Ends is among the searched cards: Draw it, cancel the effects of the search, and shuffle your deck. Forced - When the game ends or you are eliminated, if this card is in your hand: You earn 2 fewer experience.",
-    "cost": 5
+    "cost": 5,
+    "traits": [
+      "Blunder"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "covert-ops-8",
@@ -48,13 +67,23 @@ export const playerDeck: PlayerCard[] = [
       "intellect",
       "agility",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Talent",
+      "Illicit"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "black-chamber-operative-9",
     "name": "Black Chamber Operative",
     "type": "enemy",
-    "text": "Hunter. Prey (Trish Scarborough only). Forced - After you evade Black Chamber Operative: Place 1 of your clues on your location. If you cannot, this enemy readies, engages you, and makes an immediate attack."
+    "text": "Hunter. Prey (Trish Scarborough only). Forced - After you evade Black Chamber Operative: Place 1 of your clues on your location. If you cannot, this enemy readies, engages you, and makes an immediate attack.",
+    "traits": [
+      "Humanoid",
+      "Coterie"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "for-my-next-trick-1",
@@ -66,14 +95,25 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "agility",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Spell",
+      "Trick"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "the-necronomicon-2",
     "name": "The Necronomicon",
     "type": "asset",
     "text": "Revelation - Put The Necronomicon into play in your threat area. It cannot leave play except by the Action: ability below. You cannot play assets or trigger abilities on other assets you control. Action:: Test willpower (5). If you succeed, discard The Necronomicon. If you fail, shuffle it into your deck and take 1 horror.",
-    "slot": "Arcane"
+    "slot": "Arcane",
+    "traits": [
+      "Item",
+      "Tome",
+      "Cursed"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "isabelles-twin-45s-4",
@@ -86,13 +126,23 @@ export const playerDeck: PlayerCard[] = [
       "agility",
       "wild"
     ],
-    "slot": "Hand x2"
+    "slot": "Hand x2",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Firearm"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "breaking-point-5",
     "name": "Breaking Point",
     "type": "treachery",
-    "text": "Revelation - Take 1 direct damage. Then, if you have 6 or fewer remaining sanity, take 1 direct damage. Then, if you have 3 or fewer remaining sanity, take 1 direct damage."
+    "text": "Revelation - Take 1 direct damage. Then, if you have 6 or fewer remaining sanity, take 1 direct damage. Then, if you have 3 or fewer remaining sanity, take 1 direct damage.",
+    "traits": [
+      "Hardship"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "bodyguard-6",
@@ -103,7 +153,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "endurance-7",
@@ -114,7 +168,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "logan-hastings-8",
@@ -125,7 +183,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally",
+      "Hunter"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "m1911-9",
@@ -136,7 +199,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Firearm"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "machete-0",
@@ -147,7 +216,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Melee"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "resilience-1",
@@ -157,7 +232,11 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "willpower"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "lesson-learned-2",
@@ -168,7 +247,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "combat"
-    ]
+    ],
+    "traits": [
+      "Insight",
+      "Spirit"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "right-tool-for-the-job-3",
@@ -178,7 +262,11 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Insight"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "scene-of-the-crime-4",
@@ -189,7 +277,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "combat"
-    ]
+    ],
+    "traits": [
+      "Insight",
+      "Bold"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "vicious-blow-5",
@@ -198,7 +291,11 @@ export const playerDeck: PlayerCard[] = [
     "text": "If this skill test is successful during an attack, that attack deals +1 damage.",
     "icons": [
       "combat"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "counterattack-6",
@@ -209,7 +306,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Spirit",
+      "Tactic"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "bodyguard-7",
@@ -221,7 +323,11 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "wild"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "sledgehammer-8",
@@ -233,7 +339,14 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "combat"
     ],
-    "slot": "Hand x2"
+    "slot": "Hand x2",
+    "traits": [
+      "Item",
+      "Tool",
+      "Weapon",
+      "Melee"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "winchester-model-12-9",
@@ -245,7 +358,13 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "combat"
     ],
-    "slot": "Hand x2"
+    "slot": "Hand x2",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Firearm"
+    ],
+    "faction": "guardian"
   },
   {
     "id": "dorothy-simmons-0",
@@ -256,7 +375,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally",
+      "Miskatonic"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "fingerprint-kit-1",
@@ -267,7 +391,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "laboratory-assistant-2",
@@ -278,7 +407,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally",
+      "Miskatonic",
+      "Science"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "local-map-3",
@@ -289,7 +424,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "magnifying-glass-4",
@@ -300,7 +439,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "sharp-rhetoric-5",
@@ -311,7 +455,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "gather-intel-6",
@@ -322,7 +470,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Insight"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "through-the-cracks-7",
@@ -332,7 +484,12 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "agility"
-    ]
+    ],
+    "traits": [
+      "Insight",
+      "Trick"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "working-a-hunch-8",
@@ -343,7 +500,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Insight"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "deduction-9",
@@ -352,7 +513,11 @@ export const playerDeck: PlayerCard[] = [
     "text": "If this skill test is successful while investigating a location, discover 1 additional clue at that location.",
     "icons": [
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "mysterious-grimoire-0",
@@ -364,7 +529,12 @@ export const playerDeck: PlayerCard[] = [
       "intellect",
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tome"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "through-the-cracks-1",
@@ -375,13 +545,22 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Insight",
+      "Trick"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "studious-2",
     "name": "Studious",
     "type": "asset",
-    "text": "Permanent. You begin each game with 1 additional card in your opening hand."
+    "text": "Permanent. You begin each game with 1 additional card in your opening hand.",
+    "traits": [
+      "Talent"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "unbridled-knowledge-3",
@@ -393,7 +572,11 @@ export const playerDeck: PlayerCard[] = [
       "intellect",
       "intellect",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Insight"
+    ],
+    "faction": "seeker"
   },
   {
     "id": "lucky-cigarette-case-4",
@@ -404,7 +587,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Accessory"
+    "slot": "Accessory",
+    "traits": [
+      "Item",
+      "Charm"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "m1903-hammerless-5",
@@ -415,7 +603,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Firearm"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "olivier-bishop-6",
@@ -426,7 +620,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally",
+      "Criminal",
+      "Socialite"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "silver-tongue-7",
@@ -437,7 +637,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "sticky-fingers-8",
@@ -447,7 +651,11 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "thieves-kit-9",
@@ -458,7 +666,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool",
+      "Illicit"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "breaking-and-entering-0",
@@ -469,7 +683,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Trick"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "paint-the-town-red-1",
@@ -480,7 +698,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Fortune",
+      "Gambit"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "prestidigitation-2",
@@ -491,7 +714,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Trick"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "out-of-sight-3",
@@ -500,7 +727,11 @@ export const playerDeck: PlayerCard[] = [
     "text": "Max 1 committed per skill test. If this test is successful by 2 or more, the performing investigator may disengage from each enemy and move to a revealed connecting location.",
     "icons": [
       "agility"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "sticky-fingers-4",
@@ -511,7 +742,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "decisive-strike-5",
@@ -522,13 +757,22 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Tactic",
+      "Gambit"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "another-day-another-dollar-6",
     "name": "Another Day, Another Dollar",
     "type": "asset",
-    "text": "Permanent. You begin each game with 2 additional resources."
+    "text": "Permanent. You begin each game with 2 additional resources.",
+    "traits": [
+      "Talent"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "out-of-sight-7",
@@ -539,7 +783,12 @@ export const playerDeck: PlayerCard[] = [
       "agility",
       "agility",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Practiced",
+      "Expert"
+    ],
+    "faction": "rogue"
   },
   {
     "id": "cloak-of-resonance-8",
@@ -550,7 +799,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Body"
+    "slot": "Body",
+    "traits": [
+      "Item",
+      "Clothing",
+      "Alchemy"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "cosmic-flame-9",
@@ -561,7 +816,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Arcane"
+    "slot": "Arcane",
+    "traits": [
+      "Spell"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "jim-culver-0",
@@ -572,7 +831,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally",
+      "Performer"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "lucky-charm-1",
@@ -583,7 +847,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Accessory"
+    "slot": "Accessory",
+    "traits": [
+      "Item",
+      "Charm",
+      "Blessed"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "second-sight-2",
@@ -594,7 +864,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Arcane"
+    "slot": "Arcane",
+    "traits": [
+      "Spell"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "spiritual-intuition-3",
@@ -605,7 +879,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "combat"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "premonition-4",
@@ -616,7 +894,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Augury"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "ward-of-protection-5",
@@ -626,7 +908,12 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "wild"
-    ]
+    ],
+    "traits": [
+      "Spell",
+      "Spirit"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "will-of-the-cosmos-6",
@@ -636,7 +923,12 @@ export const playerDeck: PlayerCard[] = [
     "cost": 0,
     "icons": [
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Insight",
+      "Augury"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "soul-link-7",
@@ -647,7 +939,12 @@ export const playerDeck: PlayerCard[] = [
       "wild",
       "wild",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Innate",
+      "Spell"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "mask-of-silenus-8",
@@ -658,7 +955,14 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "wild"
     ],
-    "slot": "Head"
+    "slot": "Head",
+    "traits": [
+      "Item",
+      "Mask",
+      "Relic",
+      "Cursed"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "fearless-9",
@@ -668,7 +972,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "willpower"
-    ]
+    ],
+    "traits": [
+      "Innate",
+      "Developed"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "augur-of-elokoss-0",
@@ -680,7 +989,12 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "intellect",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Spell",
+      "Augury"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "cosmic-flame-1",
@@ -693,7 +1007,11 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "wild"
     ],
-    "slot": "Arcane"
+    "slot": "Arcane",
+    "traits": [
+      "Spell"
+    ],
+    "faction": "mystic"
   },
   {
     "id": "aleksey-saburov-2",
@@ -704,7 +1022,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Ally"
+    "slot": "Ally",
+    "traits": [
+      "Ally"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "bandages-3",
@@ -714,7 +1036,11 @@ export const playerDeck: PlayerCard[] = [
     "cost": 2,
     "icons": [
       "agility"
-    ]
+    ],
+    "traits": [
+      "Item"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "hunters-instinct-4",
@@ -725,7 +1051,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "jumpsuit-5",
@@ -736,7 +1066,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Body"
+    "slot": "Body",
+    "traits": [
+      "Item",
+      "Clothing"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "levelheaded-6",
@@ -747,7 +1082,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "meat-cleaver-7",
@@ -758,7 +1097,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Melee"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "look-what-i-found-8",
@@ -769,7 +1114,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Fortune"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "shove-off-9",
@@ -780,7 +1129,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Tactic"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "slippery-0",
@@ -789,7 +1142,11 @@ export const playerDeck: PlayerCard[] = [
     "text": "If this skill test is successful while evading a non-[[Elite]] enemy, that enemy does not ready during the next upkeep phase.",
     "icons": [
       "agility"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "timely-intervention-1",
@@ -800,7 +1157,11 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "agility",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Fortune"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "scrape-by-2",
@@ -810,7 +1171,11 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "wild"
-    ]
+    ],
+    "traits": [
+      "Fortune"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "old-compass-3",
@@ -822,7 +1187,12 @@ export const playerDeck: PlayerCard[] = [
       "intellect",
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "on-the-brink-4",
@@ -832,7 +1202,12 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "wild",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Gambit",
+      "Desperate"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "meat-cleaver-5",
@@ -845,7 +1220,13 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "wild"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Melee"
+    ],
+    "faction": "survivor"
   },
   {
     "id": "broken-bottle-6",
@@ -856,7 +1237,14 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Weapon",
+      "Melee",
+      "Improvised"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "fedora-7",
@@ -867,7 +1255,13 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility"
     ],
-    "slot": "Head"
+    "slot": "Head",
+    "traits": [
+      "Item",
+      "Apparel",
+      "Headwear"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "hand-crank-flashlight-8",
@@ -878,14 +1272,23 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect"
     ],
-    "slot": "Hand"
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "emergency-cache-9",
     "name": "Emergency Cache",
     "type": "event",
     "text": "Gain 3 resources.",
-    "cost": 0
+    "cost": 0,
+    "traits": [
+      "Supply"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "guts-0",
@@ -895,7 +1298,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "willpower",
       "willpower"
-    ]
+    ],
+    "traits": [
+      "Innate"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "manual-dexterity-1",
@@ -905,7 +1312,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "agility",
       "agility"
-    ]
+    ],
+    "traits": [
+      "Innate"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "overpower-2",
@@ -915,7 +1326,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "combat"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "perception-3",
@@ -925,7 +1340,11 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "intellect"
-    ]
+    ],
+    "traits": [
+      "Practiced"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "unexpected-courage-4",
@@ -935,67 +1354,116 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "wild",
       "wild"
-    ]
+    ],
+    "traits": [
+      "Innate"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "charisma-5",
     "name": "Charisma",
     "type": "asset",
-    "text": "Permanent. You have 1 additional ally slot."
+    "text": "Permanent. You have 1 additional ally slot.",
+    "traits": [
+      "Talent"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "relic-hunter-6",
     "name": "Relic Hunter",
     "type": "asset",
-    "text": "Permanent. You have 1 additional accessory slot."
+    "text": "Permanent. You have 1 additional accessory slot.",
+    "traits": [
+      "Talent"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "amnesia-7",
     "name": "Amnesia",
     "type": "treachery",
-    "text": "Revelation - Choose and discard all but 1 card from your hand."
+    "text": "Revelation - Choose and discard all but 1 card from your hand.",
+    "traits": [
+      "Madness"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "the-gold-bug-8",
     "name": "The Gold Bug",
     "type": "asset",
     "text": "Revelation - Put The Gold Bug into play in your threat area. It cannot leave play except by the Action: ability below. You get -1 health and -1 sanity. Action:: Shuffle the Gold Bug into your deck.",
-    "slot": "Accessory"
+    "slot": "Accessory",
+    "traits": [
+      "Item",
+      "Relic",
+      "Alchemy",
+      "Cursed"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "the-nameless-lurker-9",
     "name": "The Nameless Lurker",
     "type": "enemy",
-    "text": "Aloof. Spawn - Farthest empty location. Forced - When the investigation phase ends, if The Nameless Lurker is ready and has no doom on it: Place 1 doom on it."
+    "text": "Aloof. Spawn - Farthest empty location. Forced - When the investigation phase ends, if The Nameless Lurker is ready and has no doom on it: Place 1 doom on it.",
+    "traits": [
+      "Humanoid",
+      "Monster"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "overzealous-0",
     "name": "Overzealous",
     "type": "treachery",
-    "text": "Revelation - Draw the top card of the encounter deck. That card gains surge."
+    "text": "Revelation - Draw the top card of the encounter deck. That card gains surge.",
+    "traits": [
+      "Flaw"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "paranoia-1",
     "name": "Paranoia",
     "type": "treachery",
-    "text": "Revelation - Discard all your resources."
+    "text": "Revelation - Discard all your resources.",
+    "traits": [
+      "Madness"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "pursued-2",
     "name": "Pursued",
     "type": "treachery",
-    "text": "Revelation - Put Pursued into play in your threat area. Forced - After an enemy enters <i>(moves into or spawns at)</i> your location: Take 1 horror. Action:Action:: Discard Pursued."
+    "text": "Revelation - Put Pursued into play in your threat area. Forced - After an enemy enters <i>(moves into or spawns at)</i> your location: Take 1 horror. Action:Action:: Discard Pursued.",
+    "traits": [
+      "Terror"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "syndicate-obligations-3",
     "name": "Syndicate Obligations",
     "type": "treachery",
-    "text": "Revelation - Put Syndicate Obligations into play in your threat area. Forced - After you spend 1 or more resources: Take 1 damage. Action:Action:: Discard Syndicate Obligations."
+    "text": "Revelation - Put Syndicate Obligations into play in your threat area. Forced - After you spend 1 or more resources: Take 1 damage. Action:Action:: Discard Syndicate Obligations.",
+    "traits": [
+      "Pact",
+      "Syndicate"
+    ],
+    "faction": "neutral"
   },
   {
     "id": "wounded-4",
     "name": "Wounded",
     "type": "treachery",
-    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded."
+    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "traits": [
+      "Injury"
+    ],
+    "faction": "neutral"
   }
 ];
