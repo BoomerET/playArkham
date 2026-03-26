@@ -487,6 +487,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }),
   ),
   scenarioStatus: "inProgress",
+  scenarioResolutionTitle: null,
+  scenarioResolutionSubtitle: null,
   scenarioResolutionText: null,
   log: [],
   lastSkillTest: null,
