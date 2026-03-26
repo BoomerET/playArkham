@@ -72,16 +72,6 @@ export default function HomeScreen() {
                       className="investigator-card-image"
                     />
 
-                    <div className="investigator-card-overlay">
-                      <h3 className="investigator-name">{investigator.name}</h3>
-
-                      <div className="investigator-stats">
-                        <span>🧠 {investigator.willpower}</span>
-                        <span>📚 {investigator.intellect}</span>
-                        <span>💪 {investigator.combat}</span>
-                        <span>🏃 {investigator.agility}</span>
-                      </div>
-                    </div>
                   </>
                 ) : (
                   <div className="investigator-fallback">

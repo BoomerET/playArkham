@@ -1574,53 +1574,11 @@ button:hover {
   background: #111;
 }
 
-.hand-card-image-topbar {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.hand-card-cost-chip {
-  min-width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: rgba(10, 16, 24, 0.82);
-  color: #f6ead1;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-weight: 800;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
-}
-
-.hand-card-cost-chip-empty {
-  opacity: 0.6;
-}
-
 .hand-card-image-type {
   background: rgba(10, 16, 24, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--text);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
-}
-
-.hand-card-image-icons {
-  position: absolute;
-  top: 56px;
-  left: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  max-width: calc(100% - 20px);
-  pointer-events: none;
 }
 
 .play-area-image-grid {
@@ -1662,67 +1620,11 @@ button:hover {
   background: #111;
 }
 
-.play-area-image-topbar {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.play-area-cost-chip {
-  min-width: 34px;
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: rgba(10, 16, 24, 0.82);
-  color: #f6ead1;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-weight: 800;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
-}
-
-.play-area-cost-chip-empty {
-  opacity: 0.6;
-}
-
 .play-area-image-type {
   background: rgba(10, 16, 24, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--text);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.28);
-}
-
-.play-area-image-icons {
-  position: absolute;
-  top: 56px;
-  left: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  max-width: calc(100% - 20px);
-  pointer-events: none;
-}
-
-.play-area-image-footer {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 12px 14px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(7, 10, 16, 0) 0%,
-      rgba(7, 10, 16, 0.3) 18%,
-      rgba(7, 10, 16, 0.86) 68%,
-      rgba(7, 10, 16, 0.96) 100%
-    );
 }
 
 .play-area-image-title {
@@ -1784,7 +1686,7 @@ button:hover {
 .investigator-card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
