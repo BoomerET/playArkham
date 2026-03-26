@@ -20,6 +20,12 @@ export default function GameTable() {
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const availableScenarios = useGameStore((state) => state.availableScenarios);
   const scenarioStatus = useGameStore((state) => state.scenarioStatus);
+  const scenarioResolutionTitle = useGameStore(
+    (state) => state.scenarioResolutionTitle,
+  );
+  const scenarioResolutionSubtitle = useGameStore(
+    (state) => state.scenarioResolutionSubtitle,
+  );
   const scenarioResolutionText = useGameStore(
     (state) => state.scenarioResolutionText,
   );
@@ -29,6 +35,17 @@ export default function GameTable() {
     null;
 
   const showResolutionBanner = scenarioStatus !== "inProgress";
+
+  const fallbackTitle =
+    scenarioStatus === "won" ? "Scenario Complete" : "Scenario Failed";
+
+  const fallbackSubtitle =
+    scenarioStatus === "won" ? "You survived." : "You were defeated.";
+
+  const fallbackText =
+    scenarioStatus === "won"
+      ? "The investigators achieved their objective."
+      : "The investigators failed to complete their objective.";
 
   return (
     <main className="game-table-shell">
@@ -73,16 +90,13 @@ export default function GameTable() {
               color: scenarioStatus === "won" ? "#dcf5e4" : "#ffdada",
             }}
           >
-            {scenarioStatus === "won" ? "Scenario Complete" : "Scenario Failed"}
+            {scenarioResolutionTitle ?? fallbackTitle}
           </p>
           <h2 style={{ margin: "8px 0 6px", fontSize: "1.35rem" }}>
-            {scenarioStatus === "won" ? "You survived." : "You were defeated."}
+            {scenarioResolutionSubtitle ?? fallbackSubtitle}
           </h2>
           <p style={{ margin: 0, color: "rgba(243, 239, 228, 0.92)" }}>
-            {scenarioResolutionText ??
-              (scenarioStatus === "won"
-                ? "The investigators achieved their objective."
-                : "The investigators failed to complete their objective.")}
+            {scenarioResolutionText ?? fallbackText}
           </p>
         </section>
       ) : null}

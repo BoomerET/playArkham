@@ -163,6 +163,8 @@ export interface GameState {
   agenda: ScenarioCardState | null;
   act: ScenarioCardState | null;
   scenarioStatus: ScenarioStatus;
+  scenarioResolutionTitle: string | null;
+  scenarioResolutionSubtitle: string | null;
   scenarioResolutionText: string | null;
   log: GameLogItem[];
   turn: TurnState;

@@ -20,6 +20,8 @@ export interface ScenarioAdvanceEffects {
   advanceAct?: boolean;
   winScenario?: boolean;
   loseScenario?: boolean;
+  resolutionTitle?: string;
+  resolutionSubtitle?: string;
   resolutionText?: string;
 }
 

@@ -101,11 +101,11 @@ export const theGatheringScenario: ScenarioDefinition = {
       startingProgress: 0,
       onAdvance: {
         loseScenario: true,
+        resolutionTitle: "The House Claims You",
+        resolutionSubtitle: "There is no escaping the nightmare.",
         resolutionText:
           "The darkness in your home overwhelms you. You are consumed by the nightmare within.",
-        logEntries: [
-          "Agenda effect: The house closes in around you.",
-        ],
+        logEntries: ["Agenda effect: The house closes in around you."],
       },
     },
   ],
@@ -146,6 +146,8 @@ export const theGatheringScenario: ScenarioDefinition = {
       startingProgress: 0,
       onAdvance: {
         winScenario: true,
+        resolutionTitle: "Escaped the Nightmare",
+        resolutionSubtitle: "You survived the house... for now.",
         resolutionText:
           "You escape your house alive, shaken by what you have seen, but determined to uncover the truth.",
         logEntries: [
