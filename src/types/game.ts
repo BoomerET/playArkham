@@ -19,6 +19,8 @@ export type Faction =
   | "survivor"
   | "neutral";
 
+export type ScenarioStatus = "inProgress" | "won" | "lost";
+
 export interface Investigator {
   id: string;
   name: string;
@@ -160,6 +162,8 @@ export interface GameState {
   enemies: Enemy[];
   agenda: ScenarioCardState | null;
   act: ScenarioCardState | null;
+  scenarioStatus: ScenarioStatus;
+  scenarioResolutionText: string | null;
   log: GameLogItem[];
   turn: TurnState;
   lastSkillTest: SkillTestResult | null;

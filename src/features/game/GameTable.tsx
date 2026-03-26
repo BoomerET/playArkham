@@ -19,10 +19,16 @@ export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const availableScenarios = useGameStore((state) => state.availableScenarios);
+  const scenarioStatus = useGameStore((state) => state.scenarioStatus);
+  const scenarioResolutionText = useGameStore(
+    (state) => state.scenarioResolutionText,
+  );
 
   const selectedScenario =
     availableScenarios.find((scenario) => scenario.id === selectedScenarioId) ??
     null;
+
+  const showResolutionBanner = scenarioStatus !== "inProgress";
 
   return (
     <main className="game-table-shell">
@@ -41,6 +47,45 @@ export default function GameTable() {
           Back to Home
         </button>
       </header>
+
+      {showResolutionBanner ? (
+        <section
+          className="table-panel"
+          style={{
+            marginBottom: 16,
+            borderColor:
+              scenarioStatus === "won"
+                ? "rgba(104, 182, 130, 0.4)"
+                : "rgba(197, 84, 84, 0.4)",
+            background:
+              scenarioStatus === "won"
+                ? "rgba(43, 99, 61, 0.22)"
+                : "rgba(118, 36, 36, 0.22)",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: scenarioStatus === "won" ? "#dcf5e4" : "#ffdada",
+            }}
+          >
+            {scenarioStatus === "won" ? "Scenario Complete" : "Scenario Failed"}
+          </p>
+          <h2 style={{ margin: "8px 0 6px", fontSize: "1.35rem" }}>
+            {scenarioStatus === "won" ? "You survived." : "You were defeated."}
+          </h2>
+          <p style={{ margin: 0, color: "rgba(243, 239, 228, 0.92)" }}>
+            {scenarioResolutionText ??
+              (scenarioStatus === "won"
+                ? "The investigators achieved their objective."
+                : "The investigators failed to complete their objective.")}
+          </p>
+        </section>
+      ) : null}
 
       <div className="game-table-layout">
         <aside className="game-table-sidebar game-table-sidebar-left">

@@ -12,14 +12,15 @@ export interface ScenarioAdvanceEffects {
   engageOnSpawn?: boolean;
   revealSpawnLocations?: boolean;
   logEntries?: string[];
-
   agendaProgressDelta?: number;
   actProgressDelta?: number;
   setAgendaProgress?: number;
   setActProgress?: number;
-
   advanceAgenda?: boolean;
   advanceAct?: boolean;
+  winScenario?: boolean;
+  loseScenario?: boolean;
+  resolutionText?: string;
 }
 
 export interface ScenarioCardDefinition {
