@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { investigators } from "../data/investigators";
-import { sampleDeck } from "../data/sampleDeck";
+import { playerDeck } from "../data/playerDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type {
   ScenarioCardDefinition,
@@ -47,6 +47,7 @@ import type {
   SkillType,
   ScenarioStatus,
 } from "../types/game";
+import { playerDeck } from "../data/playerDeck";
 
 type Screen = "home" | "game";
 
@@ -152,11 +153,15 @@ type AdvanceStoreSlice = Pick<
   | "selectedEnemyTargetId"
   | "scenarioStatus"
   | "scenarioResolutionText"
+  | "scenarioResolutionTitle"
+  | "scenarioResolutionSubtitle"
 >;
 
 type AdvanceState = ScenarioEffectState & {
   scenarioStatus: ScenarioStatus;
   scenarioResolutionText: string | null;
+  scenarioResolutionTitle: string | null;
+  scenarioResolutionSubtitle: string | null;
 };
 
 function applyAdvanceOutcome(
@@ -171,6 +176,9 @@ function applyAdvanceOutcome(
 
   let scenarioStatus = result.scenarioStatus;
   let scenarioResolutionText = result.scenarioResolutionText;
+  let scenarioResolutionTitle = result.scenarioResolutionTitle;
+  let scenarioResolutionSubtitle = result.scenarioResolutionSubtitle;
+
   let log = result.log;
 
   if (effects.winScenario) {
@@ -188,6 +196,8 @@ function applyAdvanceOutcome(
     ...result,
     scenarioStatus,
     scenarioResolutionText,
+    scenarioResolutionTitle,
+    scenarioResolutionSubtitle,
     log,
   };
 }
@@ -219,6 +229,8 @@ function advanceAgendaState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -246,6 +258,8 @@ function advanceAgendaState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -270,6 +284,8 @@ function advanceAgendaState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -300,6 +316,8 @@ function advanceAgendaState(
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
     scenarioStatus: state.scenarioStatus,
     scenarioResolutionText: state.scenarioResolutionText,
+    scenarioResolutionTitle: state.scenarioResolutionTitle,
+    scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);
@@ -317,6 +335,8 @@ function advanceAgendaState(
         selectedEnemyTargetId: result.selectedEnemyTargetId,
         scenarioStatus: result.scenarioStatus,
         scenarioResolutionText: result.scenarioResolutionText,
+        scenarioResolutionTitle: result.scenarioResolutionTitle,
+        scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
       },
       false,
     );
@@ -342,6 +362,8 @@ function advanceActState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -367,6 +389,8 @@ function advanceActState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -391,6 +415,8 @@ function advanceActState(
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
       scenarioResolutionText: state.scenarioResolutionText,
+      scenarioResolutionTitle: state.scenarioResolutionTitle,
+      scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     };
   }
 
@@ -421,6 +447,8 @@ function advanceActState(
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
     scenarioStatus: state.scenarioStatus,
     scenarioResolutionText: state.scenarioResolutionText,
+    scenarioResolutionTitle: state.scenarioResolutionTitle,
+    scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);
@@ -438,6 +466,8 @@ function advanceActState(
         selectedEnemyTargetId: result.selectedEnemyTargetId,
         scenarioStatus: result.scenarioStatus,
         scenarioResolutionText: result.scenarioResolutionText,
+        scenarioResolutionTitle: result.scenarioResolutionTitle,
+        scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
       },
       false,
     );
@@ -488,6 +518,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   ),
   scenarioStatus: "inProgress",
   scenarioResolutionText: null,
+  scenarioResolutionTitle: null,
+  scenarioResolutionSubtitle: null,
   log: [],
   lastSkillTest: null,
   activeSkillTest: null,
@@ -678,6 +710,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         selectedEnemyTargetId,
         scenarioStatus: get().scenarioStatus,
         scenarioResolutionText: get().scenarioResolutionText,
+        scenarioResolutionTitle: get().scenarioResolutionTitle,
+        scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
       },
       true,
     );
@@ -712,6 +746,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         selectedEnemyTargetId,
         scenarioStatus: get().scenarioStatus,
         scenarioResolutionText: get().scenarioResolutionText,
+        scenarioResolutionTitle: get().scenarioResolutionTitle,
+        scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
       },
       true,
     );
@@ -746,6 +782,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
+      scenarioResolutionTitle: null,
+      scenarioResolutionSubtitle: null,
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -771,7 +809,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
 
-    const shuffledDeck = shuffle(sampleDeck);
+    const shuffledDeck = shuffle(playerDeck);
 
     set({
       investigator: chosenInvestigator,
@@ -792,6 +830,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
+      scenarioResolutionTitle: null,
+      scenarioResolutionSubtitle: null,
       log: [
         createLogEntry(
           "system",
