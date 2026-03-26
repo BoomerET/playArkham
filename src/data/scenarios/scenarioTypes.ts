@@ -9,7 +9,17 @@ export interface ScenarioAdvanceEffects {
   showLocationIds?: string[];
   revealLocationIds?: string[];
   spawnEnemies?: EnemySpawn[];
+  engageOnSpawn?: boolean;
+  revealSpawnLocations?: boolean;
   logEntries?: string[];
+
+  agendaProgressDelta?: number;
+  actProgressDelta?: number;
+  setAgendaProgress?: number;
+  setActProgress?: number;
+
+  advanceAgenda?: boolean;
+  advanceAct?: boolean;
 }
 
 export interface ScenarioCardDefinition {
@@ -34,38 +44,4 @@ export interface ScenarioDefinition {
   chaosBag?: ChaosToken[];
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
-}
-
-export interface ScenarioAdvanceEffects {
-  showLocationIds?: string[];
-  revealLocationIds?: string[];
-  spawnEnemies?: EnemySpawn[];
-  engageOnSpawn?: boolean;
-  logEntries?: string[];
-}
-
-export interface ScenarioAdvanceEffects {
-  showLocationIds?: string[];
-  revealLocationIds?: string[];
-  spawnEnemies?: EnemySpawn[];
-  engageOnSpawn?: boolean;
-  revealSpawnLocations?: boolean;
-  logEntries?: string[];
-}
-
-export interface ScenarioAdvanceEffects {
-  showLocationIds?: string[];
-  revealLocationIds?: string[];
-  spawnEnemies?: EnemySpawn[];
-  engageOnSpawn?: boolean;
-  revealSpawnLocations?: boolean;
-  logEntries?: string[];
-
-  agendaProgressDelta?: number;
-  actProgressDelta?: number;
-  setAgendaProgress?: number;
-  setActProgress?: number;
-
-  advanceAgenda?: boolean;
-  advanceAct?: boolean;
 }
