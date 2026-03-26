@@ -1,7 +1,8 @@
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
-import { useGameStore } from "../../store/gameStore";
+import { renderCardText } from "../../lib/renderCardText";
 import { getCardTypeClassName } from "../../lib/ui";
+import { useGameStore } from "../../store/gameStore";
 
 export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
@@ -101,7 +102,9 @@ export default function HandPanel() {
                 </div>
 
                 {card.text && (
-                  <p className="entity-text hand-card-text">{card.text}</p>
+                  <div className="entity-text hand-card-text">
+                    {renderCardText(card.text)}
+                  </div>
                 )}
 
                 {!activeSkillTest && (

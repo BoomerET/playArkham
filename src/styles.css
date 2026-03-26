@@ -1705,3 +1705,64 @@ button:hover {
   font-size: 0.8rem;
   color: #aab6c4;
 }
+
+.card-rules-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-rules-line {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.card-rules-line-ability {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.card-rules-line-text {
+  flex: 1;
+}
+
+.card-text-emphasis {
+  font-style: italic;
+  color: rgba(243, 239, 228, 0.82);
+}
+
+.card-ability-badge {
+  flex-shrink: 0;
+  min-width: 78px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7f2e8;
+}
+
+.card-ability-badge-action {
+  background: rgba(162, 124, 55, 0.28);
+  border-color: rgba(208, 167, 92, 0.34);
+}
+
+.card-ability-badge-double-action {
+  background: rgba(146, 87, 47, 0.32);
+  border-color: rgba(208, 136, 82, 0.38);
+}
+
+.card-ability-badge-reaction {
+  background: rgba(68, 97, 148, 0.28);
+  border-color: rgba(109, 146, 211, 0.36);
+}
+
+.card-ability-badge-free {
+  background: rgba(76, 126, 89, 0.28);
+  border-color: rgba(112, 176, 129, 0.36);
+}
