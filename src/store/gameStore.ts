@@ -747,6 +747,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
+      scenarioResolutionTitle: null,
+      scenarioResolutionSubtitle: null,
       scenarioResolutionText: null,
       log: [],
       lastSkillTest: null,
@@ -794,6 +796,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
+      scenarioResolutionTitle: null,
+      scenarioResolutionSubtitle: null,
       log: [
         createLogEntry(
           "system",
