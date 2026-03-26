@@ -1,6 +1,6 @@
 import type { Investigator } from "../types/game";
 
-const base = import.meta.env.BASE_URL;
+//const base = import.meta.env.BASE_URL;
 
 export const investigators: Investigator[] = [
   {
