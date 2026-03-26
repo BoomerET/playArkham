@@ -19,7 +19,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "guardian",
-    "image": "Danielas_Wrench.jpg"
+    "image": "players/Danielas_Wrench.jpg"
   },
   {
     "id": "in-harms-way-3",
@@ -30,7 +30,7 @@ export const playerDeck: PlayerCard[] = [
       "Flaw"
     ],
     "faction": "neutral",
-    "image": "In_Harms_Way.jpg"
+    "image": "players/In_Harms_Way.jpg"
   },
   {
     "id": "detectives-intuition-5",
@@ -47,7 +47,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "seeker",
-    "image": "Detectives_Intuition.jpg"
+    "image": "players/Detectives_Intuition.jpg"
   },
   {
     "id": "dead-ends-6",
@@ -59,7 +59,7 @@ export const playerDeck: PlayerCard[] = [
       "Blunder"
     ],
     "faction": "neutral",
-    "image": "Dead_Ends.jpg"
+    "image": "players/Dead_Ends.jpg"
   },
   {
     "id": "covert-ops-8",
@@ -77,7 +77,7 @@ export const playerDeck: PlayerCard[] = [
       "Illicit"
     ],
     "faction": "rogue",
-    "image": "Covert_Ops.jpg"
+    "image": "players/Covert_Ops.jpg"
   },
   {
     "id": "black-chamber-operative-9",
@@ -89,7 +89,7 @@ export const playerDeck: PlayerCard[] = [
       "Coterie"
     ],
     "faction": "neutral",
-    "image": "Black_Chamber_Operative.jpg"
+    "image": "players/Black_Chamber_Operative.jpg"
   },
   {
     "id": "for-my-next-trick-1",
@@ -107,7 +107,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "mystic",
-    "image": "For_my_next_trick.jpg"
+    "image": "players/For_my_next_trick.jpg"
   },
   {
     "id": "the-necronomicon-2",
@@ -121,7 +121,7 @@ export const playerDeck: PlayerCard[] = [
       "Cursed"
     ],
     "faction": "neutral",
-    "image": "The_Necronomicon.jpg"
+    "image": "players/The_Necronomicon.jpg"
   },
   {
     "id": "isabelles-twin-45s-4",
@@ -141,7 +141,7 @@ export const playerDeck: PlayerCard[] = [
       "Firearm"
     ],
     "faction": "survivor",
-    "image": "Isabelles_Twin_45s.jpg"
+    "image": "players/Isabelles_Twin_45s.jpg"
   },
   {
     "id": "breaking-point-5",
@@ -152,7 +152,7 @@ export const playerDeck: PlayerCard[] = [
       "Hardship"
     ],
     "faction": "neutral",
-    "image": "Breaking_Point.jpg"
+    "image": "players/Breaking_Point.jpg"
   },
   {
     "id": "bodyguard-6",
@@ -168,7 +168,7 @@ export const playerDeck: PlayerCard[] = [
       "Ally"
     ],
     "faction": "guardian",
-    "image": "Bodyguard.jpg"
+    "image": "players/Bodyguard.jpg"
   },
   {
     "id": "endurance-7",
@@ -184,7 +184,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "guardian",
-    "image": "Endurance.jpg"
+    "image": "players/Endurance.jpg"
   },
   {
     "id": "logan-hastings-8",
@@ -201,7 +201,7 @@ export const playerDeck: PlayerCard[] = [
       "Hunter"
     ],
     "faction": "guardian",
-    "image": "Logan_Hastings.jpg"
+    "image": "players/Logan_Hastings.jpg"
   },
   {
     "id": "m1911-9",
@@ -219,7 +219,7 @@ export const playerDeck: PlayerCard[] = [
       "Firearm"
     ],
     "faction": "guardian",
-    "image": "M1911.jpg"
+    "image": "players/M1911.jpg"
   },
   {
     "id": "machete-0",
@@ -237,7 +237,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "guardian",
-    "image": "Machete.jpg"
+    "image": "players/Machete.jpg"
   },
   {
     "id": "resilience-1",
@@ -252,7 +252,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "guardian",
-    "image": "Resilience.jpg"
+    "image": "players/Resilience.jpg"
   },
   {
     "id": "lesson-learned-2",
@@ -269,7 +269,7 @@ export const playerDeck: PlayerCard[] = [
       "Spirit"
     ],
     "faction": "guardian",
-    "image": "Lesson_Learned.jpg"
+    "image": "players/Lesson_Learned.jpg"
   },
   {
     "id": "right-tool-for-the-job-3",
@@ -284,7 +284,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "guardian",
-    "image": "Right_Tool_for_the_Job.jpg"
+    "image": "players/Right_Tool_for_the_Job.jpg"
   },
   {
     "id": "scene-of-the-crime-4",
@@ -301,7 +301,7 @@ export const playerDeck: PlayerCard[] = [
       "Bold"
     ],
     "faction": "guardian",
-    "image": "Scene_of_the_Crime.jpg"
+    "image": "players/Scene_of_the_Crime.jpg"
   },
   {
     "id": "vicious-blow-5",
@@ -315,7 +315,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "guardian",
-    "image": "Vicious_Blow.jpg"
+    "image": "players/Vicious_Blow.jpg"
   },
   {
     "id": "counterattack-6",
@@ -332,7 +332,7 @@ export const playerDeck: PlayerCard[] = [
       "Tactic"
     ],
     "faction": "guardian",
-    "image": "Counterattack.jpg"
+    "image": "players/Counterattack.jpg"
   },
   {
     "id": "bodyguard-7",
@@ -349,7 +349,7 @@ export const playerDeck: PlayerCard[] = [
       "Ally"
     ],
     "faction": "guardian",
-    "image": "Bodyguard.jpg"
+    "image": "players/Bodyguard.jpg"
   },
   {
     "id": "sledgehammer-8",
@@ -369,7 +369,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "guardian",
-    "image": "Sledgehammer.jpg"
+    "image": "players/Sledgehammer.jpg"
   },
   {
     "id": "winchester-model-12-9",
@@ -388,7 +388,7 @@ export const playerDeck: PlayerCard[] = [
       "Firearm"
     ],
     "faction": "guardian",
-    "image": "Winchester_Model_12.jpg"
+    "image": "players/Winchester_Model_12.jpg"
   },
   {
     "id": "dorothy-simmons-0",
@@ -405,7 +405,7 @@ export const playerDeck: PlayerCard[] = [
       "Miskatonic"
     ],
     "faction": "seeker",
-    "image": "Dorothy_Simmons.jpg"
+    "image": "players/Dorothy_Simmons.jpg"
   },
   {
     "id": "fingerprint-kit-1",
@@ -422,7 +422,7 @@ export const playerDeck: PlayerCard[] = [
       "Tool"
     ],
     "faction": "seeker",
-    "image": "Fingerprint_Kit.jpg"
+    "image": "players/Fingerprint_Kit.jpg"
   },
   {
     "id": "laboratory-assistant-2",
@@ -440,7 +440,7 @@ export const playerDeck: PlayerCard[] = [
       "Science"
     ],
     "faction": "seeker",
-    "image": "Laboratory_Assistant.jpg"
+    "image": "players/Laboratory_Assistant.jpg"
   },
   {
     "id": "local-map-3",
@@ -456,7 +456,7 @@ export const playerDeck: PlayerCard[] = [
       "Item"
     ],
     "faction": "seeker",
-    "image": "Local_Map.jpg"
+    "image": "players/Local_Map.jpg"
   },
   {
     "id": "magnifying-glass-4",
@@ -473,7 +473,7 @@ export const playerDeck: PlayerCard[] = [
       "Tool"
     ],
     "faction": "seeker",
-    "image": "Magnifying_Glass.jpg"
+    "image": "players/Magnifying_Glass.jpg"
   },
   {
     "id": "sharp-rhetoric-5",
@@ -489,7 +489,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "seeker",
-    "image": "Sharp_Rhetoric.jpg"
+    "image": "players/Sharp_Rhetoric.jpg"
   },
   {
     "id": "gather-intel-6",
@@ -505,7 +505,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "seeker",
-    "image": "Gather_Intel.jpg"
+    "image": "players/Gather_Intel.jpg"
   },
   {
     "id": "through-the-cracks-7",
@@ -521,7 +521,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "seeker",
-    "image": "Through_the_Cracks.jpg"
+    "image": "players/Through_the_Cracks.jpg"
   },
   {
     "id": "working-a-hunch-8",
@@ -537,7 +537,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "seeker",
-    "image": "Working_a_Hunch.jpg"
+    "image": "players/Working_a_Hunch.jpg"
   },
   {
     "id": "deduction-9",
@@ -551,7 +551,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "seeker",
-    "image": "Deduction.jpg"
+    "image": "players/Deduction.jpg"
   },
   {
     "id": "mysterious-grimoire-0",
@@ -569,7 +569,7 @@ export const playerDeck: PlayerCard[] = [
       "Tome"
     ],
     "faction": "seeker",
-    "image": "Mysterious_Grimoire.jpg"
+    "image": "players/Mysterious_Grimoire.jpg"
   },
   {
     "id": "through-the-cracks-1",
@@ -586,7 +586,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "seeker",
-    "image": "Through_the_Cracks.jpg"
+    "image": "players/Through_the_Cracks.jpg"
   },
   {
     "id": "studious-2",
@@ -597,7 +597,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "seeker",
-    "image": "Studious.jpg"
+    "image": "players/Studious.jpg"
   },
   {
     "id": "unbridled-knowledge-3",
@@ -614,7 +614,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "seeker",
-    "image": "Unbridled_Knowledge.jpg"
+    "image": "players/Unbridled_Knowledge.jpg"
   },
   {
     "id": "lucky-cigarette-case-4",
@@ -631,7 +631,7 @@ export const playerDeck: PlayerCard[] = [
       "Charm"
     ],
     "faction": "rogue",
-    "image": "Lucky_Cigarette_Case.jpg"
+    "image": "players/Lucky_Cigarette_Case.jpg"
   },
   {
     "id": "m1903-hammerless-5",
@@ -649,7 +649,7 @@ export const playerDeck: PlayerCard[] = [
       "Firearm"
     ],
     "faction": "rogue",
-    "image": "M1903_Hammerless.jpg"
+    "image": "players/M1903_Hammerless.jpg"
   },
   {
     "id": "olivier-bishop-6",
@@ -667,7 +667,7 @@ export const playerDeck: PlayerCard[] = [
       "Socialite"
     ],
     "faction": "rogue",
-    "image": "Olivier_Bishop.jpg"
+    "image": "players/Olivier_Bishop.jpg"
   },
   {
     "id": "silver-tongue-7",
@@ -683,7 +683,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "rogue",
-    "image": "Silver_Tongue.jpg"
+    "image": "players/Silver_Tongue.jpg"
   },
   {
     "id": "sticky-fingers-8",
@@ -698,7 +698,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "rogue",
-    "image": "Sticky_Fingers.jpg"
+    "image": "players/Sticky_Fingers.jpg"
   },
   {
     "id": "thieves-kit-9",
@@ -716,7 +716,7 @@ export const playerDeck: PlayerCard[] = [
       "Illicit"
     ],
     "faction": "rogue",
-    "image": "Thieves_Kit.jpg"
+    "image": "players/Thieves_Kit.jpg"
   },
   {
     "id": "breaking-and-entering-0",
@@ -732,7 +732,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "rogue",
-    "image": "Breaking_and_Entering.jpg"
+    "image": "players/Breaking_and_Entering.jpg"
   },
   {
     "id": "paint-the-town-red-1",
@@ -749,7 +749,7 @@ export const playerDeck: PlayerCard[] = [
       "Gambit"
     ],
     "faction": "rogue",
-    "image": "Paint_the_Town_Red.jpg"
+    "image": "players/Paint_the_Town_Red.jpg"
   },
   {
     "id": "prestidigitation-2",
@@ -765,7 +765,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "rogue",
-    "image": "Prestidigitation.jpg"
+    "image": "players/Prestidigitation.jpg"
   },
   {
     "id": "out-of-sight-3",
@@ -779,7 +779,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "rogue",
-    "image": "Out_of_Sight.jpg"
+    "image": "players/Out_of_Sight.jpg"
   },
   {
     "id": "sticky-fingers-4",
@@ -795,7 +795,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "rogue",
-    "image": "Sticky_Fingers.jpg"
+    "image": "players/Sticky_Fingers.jpg"
   },
   {
     "id": "decisive-strike-5",
@@ -812,7 +812,7 @@ export const playerDeck: PlayerCard[] = [
       "Gambit"
     ],
     "faction": "rogue",
-    "image": "Decisive_Strike.jpg"
+    "image": "players/Decisive_Strike.jpg"
   },
   {
     "id": "another-day-another-dollar-6",
@@ -823,7 +823,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "rogue",
-    "image": "Another_Day_Another_Dollar.jpg"
+    "image": "players/Another_Day_Another_Dollar.jpg"
   },
   {
     "id": "out-of-sight-7",
@@ -840,7 +840,7 @@ export const playerDeck: PlayerCard[] = [
       "Expert"
     ],
     "faction": "rogue",
-    "image": "Out_of_Sight.jpg"
+    "image": "players/Out_of_Sight.jpg"
   },
   {
     "id": "cloak-of-resonance-8",
@@ -858,7 +858,7 @@ export const playerDeck: PlayerCard[] = [
       "Alchemy"
     ],
     "faction": "mystic",
-    "image": "Cloak_of_Resonance.jpg"
+    "image": "players/Cloak_of_Resonance.jpg"
   },
   {
     "id": "cosmic-flame-9",
@@ -874,7 +874,7 @@ export const playerDeck: PlayerCard[] = [
       "Spell"
     ],
     "faction": "mystic",
-    "image": "Cosmic_Flame.jpg"
+    "image": "players/Cosmic_Flame.jpg"
   },
   {
     "id": "jim-culver-0",
@@ -891,7 +891,7 @@ export const playerDeck: PlayerCard[] = [
       "Performer"
     ],
     "faction": "mystic",
-    "image": "Jim_Culver.jpg"
+    "image": "players/Jim_Culver.jpg"
   },
   {
     "id": "lucky-charm-1",
@@ -909,7 +909,7 @@ export const playerDeck: PlayerCard[] = [
       "Blessed"
     ],
     "faction": "mystic",
-    "image": "Lucky_Charm.jpg"
+    "image": "players/Lucky_Charm.jpg"
   },
   {
     "id": "second-sight-2",
@@ -925,7 +925,7 @@ export const playerDeck: PlayerCard[] = [
       "Spell"
     ],
     "faction": "mystic",
-    "image": "Second_Sight.jpg"
+    "image": "players/Second_Sight.jpg"
   },
   {
     "id": "spiritual-intuition-3",
@@ -941,7 +941,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "mystic",
-    "image": "Spiritual_Intuition.jpg"
+    "image": "players/Spiritual_Intuition.jpg"
   },
   {
     "id": "premonition-4",
@@ -957,7 +957,7 @@ export const playerDeck: PlayerCard[] = [
       "Augury"
     ],
     "faction": "mystic",
-    "image": "Premonition.jpg"
+    "image": "players/Premonition.jpg"
   },
   {
     "id": "ward-of-protection-5",
@@ -973,7 +973,7 @@ export const playerDeck: PlayerCard[] = [
       "Spirit"
     ],
     "faction": "mystic",
-    "image": "Ward_of_Protection.jpg"
+    "image": "players/Ward_of_Protection.jpg"
   },
   {
     "id": "will-of-the-cosmos-6",
@@ -989,7 +989,7 @@ export const playerDeck: PlayerCard[] = [
       "Augury"
     ],
     "faction": "mystic",
-    "image": "Will_of_the_Cosmos.jpg"
+    "image": "players/Will_of_the_Cosmos.jpg"
   },
   {
     "id": "soul-link-7",
@@ -1006,7 +1006,7 @@ export const playerDeck: PlayerCard[] = [
       "Spell"
     ],
     "faction": "mystic",
-    "image": "Soul_Link.jpg"
+    "image": "players/Soul_Link.jpg"
   },
   {
     "id": "mask-of-silenus-8",
@@ -1025,7 +1025,7 @@ export const playerDeck: PlayerCard[] = [
       "Cursed"
     ],
     "faction": "mystic",
-    "image": "Mask_of_Silenus.jpg"
+    "image": "players/Mask_of_Silenus.jpg"
   },
   {
     "id": "fearless-9",
@@ -1041,7 +1041,7 @@ export const playerDeck: PlayerCard[] = [
       "Developed"
     ],
     "faction": "mystic",
-    "image": "Fearless.jpg"
+    "image": "players/Fearless.jpg"
   },
   {
     "id": "augur-of-elokoss-0",
@@ -1059,7 +1059,7 @@ export const playerDeck: PlayerCard[] = [
       "Augury"
     ],
     "faction": "mystic",
-    "image": "Augur_of_Elokoss.jpg"
+    "image": "players/Augur_of_Elokoss.jpg"
   },
   {
     "id": "cosmic-flame-1",
@@ -1077,7 +1077,7 @@ export const playerDeck: PlayerCard[] = [
       "Spell"
     ],
     "faction": "mystic",
-    "image": "Cosmic_Flame.jpg"
+    "image": "players/Cosmic_Flame.jpg"
   },
   {
     "id": "aleksey-saburov-2",
@@ -1093,7 +1093,7 @@ export const playerDeck: PlayerCard[] = [
       "Ally"
     ],
     "faction": "survivor",
-    "image": "Aleksey_Saburov.jpg"
+    "image": "players/Aleksey_Saburov.jpg"
   },
   {
     "id": "bandages-3",
@@ -1108,7 +1108,7 @@ export const playerDeck: PlayerCard[] = [
       "Item"
     ],
     "faction": "survivor",
-    "image": "Bandages.jpg"
+    "image": "players/Bandages.jpg"
   },
   {
     "id": "hunters-instinct-4",
@@ -1124,7 +1124,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "survivor",
-    "image": "Hunters_Instinct.jpg"
+    "image": "players/Hunters_Instinct.jpg"
   },
   {
     "id": "jumpsuit-5",
@@ -1141,7 +1141,7 @@ export const playerDeck: PlayerCard[] = [
       "Clothing"
     ],
     "faction": "survivor",
-    "image": "Jumpsuit.jpg"
+    "image": "players/Jumpsuit.jpg"
   },
   {
     "id": "levelheaded-6",
@@ -1157,7 +1157,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "survivor",
-    "image": "Levelheaded.jpg"
+    "image": "players/Levelheaded.jpg"
   },
   {
     "id": "meat-cleaver-7",
@@ -1175,7 +1175,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "survivor",
-    "image": "Meat_Cleaver.jpg"
+    "image": "players/Meat_Cleaver.jpg"
   },
   {
     "id": "look-what-i-found-8",
@@ -1191,7 +1191,7 @@ export const playerDeck: PlayerCard[] = [
       "Fortune"
     ],
     "faction": "survivor",
-    "image": "Look_what_I_found.jpg"
+    "image": "players/Look_what_I_found.jpg"
   },
   {
     "id": "shove-off-9",
@@ -1207,7 +1207,7 @@ export const playerDeck: PlayerCard[] = [
       "Tactic"
     ],
     "faction": "survivor",
-    "image": "Shove_off.jpg"
+    "image": "players/Shove_off.jpg"
   },
   {
     "id": "slippery-0",
@@ -1221,7 +1221,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "survivor",
-    "image": "Slippery.jpg"
+    "image": "players/Slippery.jpg"
   },
   {
     "id": "timely-intervention-1",
@@ -1237,7 +1237,7 @@ export const playerDeck: PlayerCard[] = [
       "Fortune"
     ],
     "faction": "survivor",
-    "image": "Timely_Intervention.jpg"
+    "image": "players/Timely_Intervention.jpg"
   },
   {
     "id": "scrape-by-2",
@@ -1252,7 +1252,7 @@ export const playerDeck: PlayerCard[] = [
       "Fortune"
     ],
     "faction": "survivor",
-    "image": "Scrape_By.jpg"
+    "image": "players/Scrape_By.jpg"
   },
   {
     "id": "old-compass-3",
@@ -1270,7 +1270,7 @@ export const playerDeck: PlayerCard[] = [
       "Tool"
     ],
     "faction": "survivor",
-    "image": "Old_Compass.jpg"
+    "image": "players/Old_Compass.jpg"
   },
   {
     "id": "on-the-brink-4",
@@ -1286,7 +1286,7 @@ export const playerDeck: PlayerCard[] = [
       "Desperate"
     ],
     "faction": "survivor",
-    "image": "On_the_Brink.jpg"
+    "image": "players/On_the_Brink.jpg"
   },
   {
     "id": "meat-cleaver-5",
@@ -1306,7 +1306,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "survivor",
-    "image": "Meat_Cleaver.jpg"
+    "image": "players/Meat_Cleaver.jpg"
   },
   {
     "id": "broken-bottle-6",
@@ -1325,7 +1325,7 @@ export const playerDeck: PlayerCard[] = [
       "Improvised"
     ],
     "faction": "neutral",
-    "image": "Broken_Bottle.jpg"
+    "image": "players/Broken_Bottle.jpg"
   },
   {
     "id": "fedora-7",
@@ -1343,7 +1343,7 @@ export const playerDeck: PlayerCard[] = [
       "Headwear"
     ],
     "faction": "neutral",
-    "image": "Fedora.jpg"
+    "image": "players/Fedora.jpg"
   },
   {
     "id": "hand-crank-flashlight-8",
@@ -1360,7 +1360,7 @@ export const playerDeck: PlayerCard[] = [
       "Tool"
     ],
     "faction": "neutral",
-    "image": "Hand-Crank_Flashlight.jpg"
+    "image": "players/Hand-Crank_Flashlight.jpg"
   },
   {
     "id": "emergency-cache-9",
@@ -1372,7 +1372,7 @@ export const playerDeck: PlayerCard[] = [
       "Supply"
     ],
     "faction": "neutral",
-    "image": "Emergency_Cache.jpg"
+    "image": "players/Emergency_Cache.jpg"
   },
   {
     "id": "guts-0",
@@ -1387,7 +1387,7 @@ export const playerDeck: PlayerCard[] = [
       "Innate"
     ],
     "faction": "neutral",
-    "image": "Guts.jpg"
+    "image": "players/Guts.jpg"
   },
   {
     "id": "manual-dexterity-1",
@@ -1402,7 +1402,7 @@ export const playerDeck: PlayerCard[] = [
       "Innate"
     ],
     "faction": "neutral",
-    "image": "Manual_Dexterity.jpg"
+    "image": "players/Manual_Dexterity.jpg"
   },
   {
     "id": "overpower-2",
@@ -1417,7 +1417,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "neutral",
-    "image": "Overpower.jpg"
+    "image": "players/Overpower.jpg"
   },
   {
     "id": "perception-3",
@@ -1432,7 +1432,7 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "neutral",
-    "image": "Perception.jpg"
+    "image": "players/Perception.jpg"
   },
   {
     "id": "unexpected-courage-4",
@@ -1447,7 +1447,7 @@ export const playerDeck: PlayerCard[] = [
       "Innate"
     ],
     "faction": "neutral",
-    "image": "Unexpected_Courage.jpg"
+    "image": "players/Unexpected_Courage.jpg"
   },
   {
     "id": "charisma-5",
@@ -1458,7 +1458,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "neutral",
-    "image": "Charisma.jpg"
+    "image": "players/Charisma.jpg"
   },
   {
     "id": "relic-hunter-6",
@@ -1469,7 +1469,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "neutral",
-    "image": "Relic_Hunter.jpg"
+    "image": "players/Relic_Hunter.jpg"
   },
   {
     "id": "amnesia-7",
@@ -1480,7 +1480,7 @@ export const playerDeck: PlayerCard[] = [
       "Madness"
     ],
     "faction": "neutral",
-    "image": "Amnesia.jpg"
+    "image": "players/Amnesia.jpg"
   },
   {
     "id": "the-gold-bug-8",
@@ -1495,7 +1495,7 @@ export const playerDeck: PlayerCard[] = [
       "Cursed"
     ],
     "faction": "neutral",
-    "image": "The_Gold_Bug.jpg"
+    "image": "players/The_Gold_Bug.jpg"
   },
   {
     "id": "the-nameless-lurker-9",
@@ -1507,7 +1507,7 @@ export const playerDeck: PlayerCard[] = [
       "Monster"
     ],
     "faction": "neutral",
-    "image": "The_Nameless_Lurker.jpg"
+    "image": "players/The_Nameless_Lurker.jpg"
   },
   {
     "id": "overzealous-0",
@@ -1518,7 +1518,7 @@ export const playerDeck: PlayerCard[] = [
       "Flaw"
     ],
     "faction": "neutral",
-    "image": "Overzealous.jpg"
+    "image": "players/Overzealous.jpg"
   },
   {
     "id": "paranoia-1",
@@ -1529,7 +1529,7 @@ export const playerDeck: PlayerCard[] = [
       "Madness"
     ],
     "faction": "neutral",
-    "image": "Paranoia.jpg"
+    "image": "players/Paranoia.jpg"
   },
   {
     "id": "pursued-2",
@@ -1540,7 +1540,7 @@ export const playerDeck: PlayerCard[] = [
       "Terror"
     ],
     "faction": "neutral",
-    "image": "Pursued.jpg"
+    "image": "players/Pursued.jpg"
   },
   {
     "id": "syndicate-obligations-3",
@@ -1552,7 +1552,7 @@ export const playerDeck: PlayerCard[] = [
       "Syndicate"
     ],
     "faction": "neutral",
-    "image": "Syndicate_Obligations.jpg"
+    "image": "players/Syndicate_Obligations.jpg"
   },
   {
     "id": "wounded-4",
@@ -1563,6 +1563,6 @@ export const playerDeck: PlayerCard[] = [
       "Injury"
     ],
     "faction": "neutral",
-    "image": "Wounded.jpg"
+    "image": "players/Wounded.jpg"
   }
 ];
