@@ -340,16 +340,6 @@ button:hover {
   gap: 16px;
 }
 
-/* ---------- Log ---------- */
-
-.log-list {
-  padding-left: 20px;
-}
-
-.log-entry {
-  margin-bottom: 6px;
-}
-
 /* ---------- Drag / Drop ---------- */
 
 .dragging-card {
