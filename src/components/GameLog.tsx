@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useGameStore } from "../store/gameStore";
 import type { GameLogEntry, GameLogItem, GameLogKind } from "../types/game";
+import "./components.css";
 
 function classifyLegacyLogEntry(text: string): GameLogKind {
   const normalized = text.toLowerCase();
