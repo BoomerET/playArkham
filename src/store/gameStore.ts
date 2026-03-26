@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import { investigators } from "../data/investigators";
-import { playerDeck } from "../data/playerDeck";
+import { sampleDeck } from "../data/sampleDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
-import type { ScenarioDefinition } from "../data/scenarios/scenarioTypes";
+import type {
+  ScenarioCardDefinition,
+  ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import {
@@ -42,6 +45,7 @@ import type {
   Phase,
   SkillTestResult,
   SkillType,
+  ScenarioStatus,
 } from "../types/game";
 
 type Screen = "home" | "game";
@@ -138,14 +142,71 @@ function createLogEntry(kind: GameLogKind, text: string) {
   } as const;
 }
 
+type AdvanceStoreSlice = Pick<
+  GameStore,
+  | "agenda"
+  | "act"
+  | "locations"
+  | "enemies"
+  | "log"
+  | "selectedEnemyTargetId"
+  | "scenarioStatus"
+  | "scenarioResolutionText"
+>;
+
+type AdvanceState = ScenarioEffectState & {
+  scenarioStatus: ScenarioStatus;
+  scenarioResolutionText: string | null;
+};
+
+function applyAdvanceOutcome(
+  card: ScenarioCardDefinition,
+  result: AdvanceStoreSlice,
+): AdvanceStoreSlice {
+  const effects = card.onAdvance;
+
+  if (!effects) {
+    return result;
+  }
+
+  let scenarioStatus = result.scenarioStatus;
+  let scenarioResolutionText = result.scenarioResolutionText;
+  let log = result.log;
+
+  if (effects.winScenario) {
+    scenarioStatus = "won";
+  } else if (effects.loseScenario) {
+    scenarioStatus = "lost";
+  }
+
+  if (effects.resolutionText) {
+    scenarioResolutionText = effects.resolutionText;
+    log = [...log, createLogEntry("scenario", effects.resolutionText)];
+  }
+
+  return {
+    ...result,
+    scenarioStatus,
+    scenarioResolutionText,
+    log,
+  };
+}
+
+function isScenarioResolved(status: ScenarioStatus): boolean {
+  return status !== "inProgress";
+}
+
+function getScenarioResolvedMessage(status: ScenarioStatus): string {
+  return status === "won"
+    ? "The scenario is already complete. Return to home to start again."
+    : "The scenario is over. Return to home to try again.";
+}
+
 function advanceAgendaState(
   scenario: ScenarioDefinition,
-  state: ScenarioEffectState,
+  state: AdvanceState,
   allowChain = true,
-): Pick<
-  GameStore,
-  "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
-> {
+): AdvanceStoreSlice {
   const currentAgenda = state.agenda;
 
   if (!currentAgenda) {
@@ -156,6 +217,8 @@ function advanceAgendaState(
       enemies: state.enemies,
       log: state.log,
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -181,6 +244,8 @@ function advanceAgendaState(
         ),
       ],
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -203,6 +268,8 @@ function advanceAgendaState(
         ),
       ],
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -224,17 +291,18 @@ function advanceAgendaState(
     },
   );
 
-  let result: Pick<
-    GameStore,
-    "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
-  > = {
+  let result: AdvanceStoreSlice = {
     agenda: effectResult.agenda,
     act: effectResult.act,
     locations: effectResult.locations,
     enemies: effectResult.enemies,
     log: effectResult.log,
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+    scenarioStatus: state.scenarioStatus,
+    scenarioResolutionText: state.scenarioResolutionText,
   };
+
+  result = applyAdvanceOutcome(nextDefinition, result);
 
   if (allowChain && effectResult.advanceActRequested) {
     result = advanceActState(
@@ -247,6 +315,8 @@ function advanceAgendaState(
         enemies: result.enemies,
         log: result.log,
         selectedEnemyTargetId: result.selectedEnemyTargetId,
+        scenarioStatus: result.scenarioStatus,
+        scenarioResolutionText: result.scenarioResolutionText,
       },
       false,
     );
@@ -257,12 +327,9 @@ function advanceAgendaState(
 
 function advanceActState(
   scenario: ScenarioDefinition,
-  state: ScenarioEffectState,
+  state: AdvanceState,
   allowChain = true,
-): Pick<
-  GameStore,
-  "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
-> {
+): AdvanceStoreSlice {
   const currentAct = state.act;
 
   if (!currentAct) {
@@ -273,6 +340,8 @@ function advanceActState(
       enemies: state.enemies,
       log: state.log,
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -296,6 +365,8 @@ function advanceActState(
         ),
       ],
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -318,6 +389,8 @@ function advanceActState(
         ),
       ],
       selectedEnemyTargetId: state.selectedEnemyTargetId,
+      scenarioStatus: state.scenarioStatus,
+      scenarioResolutionText: state.scenarioResolutionText,
     };
   }
 
@@ -339,17 +412,18 @@ function advanceActState(
     },
   );
 
-  let result: Pick<
-    GameStore,
-    "agenda" | "act" | "locations" | "enemies" | "log" | "selectedEnemyTargetId"
-  > = {
+  let result: AdvanceStoreSlice = {
     agenda: effectResult.agenda,
     act: effectResult.act,
     locations: effectResult.locations,
     enemies: effectResult.enemies,
     log: effectResult.log,
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+    scenarioStatus: state.scenarioStatus,
+    scenarioResolutionText: state.scenarioResolutionText,
   };
+
+  result = applyAdvanceOutcome(nextDefinition, result);
 
   if (allowChain && effectResult.advanceAgendaRequested) {
     result = advanceAgendaState(
@@ -362,6 +436,8 @@ function advanceActState(
         enemies: result.enemies,
         log: result.log,
         selectedEnemyTargetId: result.selectedEnemyTargetId,
+        scenarioStatus: result.scenarioStatus,
+        scenarioResolutionText: result.scenarioResolutionText,
       },
       false,
     );
@@ -410,6 +486,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenarioId: defaultScenarioId,
     }),
   ),
+  scenarioStatus: "inProgress",
+  scenarioResolutionText: null,
   log: [],
   lastSkillTest: null,
   activeSkillTest: null,
@@ -598,6 +676,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
+        scenarioStatus: get().scenarioStatus,
+        scenarioResolutionText: get().scenarioResolutionText,
       },
       true,
     );
@@ -630,6 +710,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigatorId: investigator.id,
         currentLocationId: currentLocation?.id ?? null,
         selectedEnemyTargetId,
+        scenarioStatus: get().scenarioStatus,
+        scenarioResolutionText: get().scenarioResolutionText,
       },
       true,
     );
@@ -662,6 +744,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
+      scenarioStatus: "inProgress",
+      scenarioResolutionText: null,
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -687,7 +771,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
 
-    const shuffledDeck = shuffle(playerDeck);
+    const shuffledDeck = shuffle(sampleDeck);
 
     set({
       investigator: chosenInvestigator,
@@ -706,6 +790,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
+      scenarioStatus: "inProgress",
+      scenarioResolutionText: null,
       log: [
         createLogEntry(
           "system",
@@ -761,7 +847,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   discardCard: (cardId: string) => {
-    const { hand, discard, activeSkillTest } = get();
+    const { hand, discard, activeSkillTest, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
@@ -786,8 +877,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   playCard: (cardId: string) => {
-    const { hand, discard, playArea, investigator, turn, activeSkillTest } =
-      get();
+    const {
+      hand,
+      discard,
+      playArea,
+      investigator,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      set({ draggedCardId: null });
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       set({ draggedCardId: null });
@@ -987,7 +1091,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       turn,
       activeSkillTest,
       selectedEnemyTargetId,
+      scenarioStatus,
     } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog("system", "Cannot move while a skill test is active.");
@@ -1315,7 +1425,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeResourceAction: () => {
-    const { investigator, turn, activeSkillTest } = get();
+    const { investigator, turn, activeSkillTest, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
@@ -1353,7 +1468,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeDrawAction: () => {
-    const { deck, hand, turn, activeSkillTest } = get();
+    const { deck, hand, turn, activeSkillTest, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
@@ -1405,7 +1525,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   beginSkillTest: (skill, difficulty, source) => {
-    const { activeSkillTest } = get();
+    const { activeSkillTest, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog("system", "A skill test is already active.");
@@ -1876,7 +2001,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   investigateAction: () => {
-    const { investigator, locations, turn, activeSkillTest } = get();
+    const { investigator, locations, turn, activeSkillTest, scenarioStatus } =
+      get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
@@ -1928,7 +2059,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       turn,
       activeSkillTest,
       selectedEnemyTargetId,
+      scenarioStatus,
     } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
@@ -1994,7 +2131,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       turn,
       activeSkillTest,
       selectedEnemyTargetId,
+      scenarioStatus,
     } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
 
     if (activeSkillTest) {
       get().pushLog(
