@@ -4,7 +4,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { getCardTypeClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 
-const cardImages = import.meta.glob("../../assets/images/*.{jpg,jpeg,png,webp}", {
+const cardImages = import.meta.glob("../../assets/images/players/*.{jpg,jpeg,png,webp}", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
