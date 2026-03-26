@@ -1,4 +1,8 @@
 import type { ReactNode } from "react";
+import actionIcon from "../assets/icons/arkham/action.svg";
+import doubleActionIcon from "../assets/icons/arkham/double-action.svg";
+import reactionIcon from "../assets/icons/arkham/reaction.svg";
+import freeIcon from "../assets/icons/arkham/free.svg";
 
 function renderInlineFormatting(text: string): ReactNode[] {
   const parts = text.split(/(<i>.*?<\/i>)/gi);
@@ -55,14 +59,28 @@ function getAbilityPrefix(line: string):
   return null;
 }
 
+function getAbilityIcon(kind: "action" | "double-action" | "reaction" | "free") {
+  switch (kind) {
+    case "double-action":
+      return doubleActionIcon;
+    case "reaction":
+      return reactionIcon;
+    case "free":
+      return freeIcon;
+    case "action":
+    default:
+      return actionIcon;
+  }
+}
+
 function getAbilityLabel(kind: "action" | "double-action" | "reaction" | "free") {
   switch (kind) {
     case "double-action":
-      return "Action ×2";
+      return "Double Action";
     case "reaction":
       return "Reaction";
     case "free":
-      return "Free";
+      return "Free Trigger";
     case "action":
     default:
       return "Action";
@@ -90,8 +108,16 @@ export function renderCardText(text: string): ReactNode {
 
         return (
           <p key={`line-${index}`} className="card-rules-line card-rules-line-ability">
-            <span className={`card-ability-badge card-ability-badge-${prefix.kind}`}>
-              {getAbilityLabel(prefix.kind)}
+            <span
+              className={`card-ability-badge card-ability-badge-${prefix.kind}`}
+              title={getAbilityLabel(prefix.kind)}
+              aria-label={getAbilityLabel(prefix.kind)}
+            >
+              <img
+                src={getAbilityIcon(prefix.kind)}
+                alt=""
+                className="card-ability-icon"
+              />
             </span>
             <span className="card-rules-line-text">
               {renderInlineFormatting(prefix.rest)}
