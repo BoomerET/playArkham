@@ -302,7 +302,6 @@ function advanceAgendaState(
     scenarioResolutionText: state.scenarioResolutionText,
   };
 
-
   result = applyAdvanceOutcome(nextDefinition, result);
 
   if (allowChain && effectResult.advanceActRequested) {
@@ -316,6 +315,8 @@ function advanceAgendaState(
         enemies: result.enemies,
         log: result.log,
         selectedEnemyTargetId: result.selectedEnemyTargetId,
+        scenarioStatus: result.scenarioStatus,
+        scenarioResolutionText: result.scenarioResolutionText,
       },
       false,
     );
@@ -422,7 +423,6 @@ function advanceActState(
     scenarioResolutionText: state.scenarioResolutionText,
   };
 
-
   result = applyAdvanceOutcome(nextDefinition, result);
 
   if (allowChain && effectResult.advanceAgendaRequested) {
@@ -436,6 +436,8 @@ function advanceActState(
         enemies: result.enemies,
         log: result.log,
         selectedEnemyTargetId: result.selectedEnemyTargetId,
+        scenarioStatus: result.scenarioStatus,
+        scenarioResolutionText: result.scenarioResolutionText,
       },
       false,
     );
@@ -845,7 +847,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   discardCard: (cardId: string) => {
-    const { hand, discard, activeSkillTest } = get();
+    const { hand, discard, activeSkillTest, scenarioStatus } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -1309,7 +1311,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedEnemyTargetId,
       locations,
       log,
-      scenarioStatus,
     } = get();
 
     if (activeSkillTest) {
@@ -2000,7 +2001,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   investigateAction: () => {
-    const { investigator, locations, turn, activeSkillTest, scenarioStatus } = get();
+    const { investigator, locations, turn, activeSkillTest, scenarioStatus } =
+      get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
