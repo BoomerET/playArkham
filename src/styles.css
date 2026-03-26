@@ -2079,6 +2079,11 @@ button:hover {
 }
 
 .investigator-card {
+  padding: 0;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  color: inherit;
   position: relative;
   width: 320px;
   aspect-ratio: 16 / 9;
@@ -2093,6 +2098,7 @@ button:hover {
     box-shadow 160ms ease,
     border-color 160ms ease;
 }
+
 
 .investigator-card:hover {
   transform: translateY(-6px) scale(1.02);
