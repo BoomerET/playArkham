@@ -132,6 +132,23 @@ export interface ScenarioCardState {
   thresholdLabel: string;
 }
 
+export type GameLogKind =
+  | "system"
+  | "scenario"
+  | "player"
+  | "enemy"
+  | "combat"
+  | "skill-test";
+
+export interface GameLogEntry {
+  id: string;
+  kind: GameLogKind;
+  text: string;
+  createdAt?: number;
+}
+
+export type GameLogItem = string | GameLogEntry;
+
 export interface GameState {
   investigator: Investigator;
   deck: PlayerCard[];
@@ -143,7 +160,7 @@ export interface GameState {
   enemies: Enemy[];
   agenda: ScenarioCardState | null;
   act: ScenarioCardState | null;
-  log: string[];
+  log: GameLogItem[];
   turn: TurnState;
   lastSkillTest: SkillTestResult | null;
   activeSkillTest: ActiveSkillTest | null;
