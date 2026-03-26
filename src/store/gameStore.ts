@@ -36,6 +36,7 @@ import type {
   ActiveSkillTest,
   ChaosToken,
   CommittedSkillCard,
+  GameLogKind,
   GameState,
   Investigator,
   Phase,
@@ -68,6 +69,7 @@ type GameStore = GameState & {
   setActProgress: (progress: number) => void;
   advanceAgenda: () => void;
   advanceAct: () => void;
+  pushLog: (kind: GameLogKind, text: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => void;
   returnToHome: () => void;
@@ -437,8 +439,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       selectedEnemyTargetId: selectedEnemy.id,
-      log: [...log, `Current enemy target: ${selectedEnemy.name}.`],
     });
+    get().pushLog("enemy", `Current enemy target: ${selectedEnemy.name}.`);
   },
 
   setLocationVisible: (locationId, visible = true) => {
@@ -596,6 +598,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setDraggedCardId: (cardId) => {
     set({ draggedCardId: cardId });
+  },
+
+  pushLog: (kind, text) => {
+    set((state) => ({
+      log: [
+        ...state.log,
+        {
+          id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          kind,
+          text,
+          createdAt: Date.now(),
+        },
+      ],
+    }));
   },
 
   startGame: () => {
