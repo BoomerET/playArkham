@@ -68,6 +68,7 @@ export interface PlayerCard {
     | "seeker"
     | "mystic"
     | "survivor";
+  image: string;
 }
 
 export interface GameLocation {
