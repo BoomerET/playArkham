@@ -104,47 +104,12 @@ section {
 
 /* ---------- Buttons ---------- */
 
-.primary-button,
-.secondary-button {
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-
-.primary-button {
-  background: rgba(110, 208, 214, 0.18);
-}
-
-.secondary-button {
-  background: rgba(215, 180, 106, 0.12);
-}
-
 button:hover {
   border-color: var(--border-strong);
   box-shadow: 0 0 14px rgba(110, 208, 214, 0.2);
 }
 
 /* ---------- Investigator Selection Grid ---------- */
-
-.investigator-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
-}
-
-.investigator-card {
-  position: relative;
-  display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(17, 29, 43, 0.95);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    border-color 160ms ease;
-}
 
 .investigator-card:hover {
   transform: translateY(-2px);
@@ -205,56 +170,12 @@ button:hover {
     0 0 22px rgba(141, 243, 255, 0.18);
 }
 
-.investigator-title-block {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.investigator-title-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
 .investigator-stats {
   color: var(--text);
   font-size: 0.95rem;
   margin-top: 4px;
   line-height: 1.35;
 }
-
-.investigator-health {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Portrait ---------- */
-
-.portrait-frame {
-  width: 96px;
-  height: 96px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition:
-    transform 140ms ease,
-    border-color 140ms ease,
-    box-shadow 140ms ease;
-}
-
-.portrait-frame.large {
-  width: 88px;
-  height: 88px;
-}
-
-.portrait-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 /* ---------- Tokens ---------- */
 
 .token-row {
@@ -272,52 +193,6 @@ button:hover {
 
 .token-chip.gold {
   background: rgba(215, 180, 106, 0.15);
-}
-
-/* ---------- Cards ---------- */
-
-.entity-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  background: rgba(19, 30, 44, 0.95);
-}
-
-.entity-card.highlight {
-  border-color: var(--gold);
-}
-
-.entity-card.dim {
-  opacity: 0.7;
-}
-
-.entity-title {
-  font-weight: bold;
-}
-
-.entity-meta {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Card Types ---------- */
-
-.card-type-badge {
-  font-size: 0.7rem;
-  padding: 4px 8px;
-  border-radius: 999px;
-}
-
-.card-type-asset {
-  background: rgba(74, 163, 255, 0.15);
-}
-
-.card-type-event {
-  background: rgba(79, 209, 139, 0.15);
-}
-
-.card-type-skill {
-  background: rgba(154, 107, 255, 0.15);
 }
 
 /* ---------- Layout Helpers ---------- */
@@ -640,24 +515,6 @@ button:hover {
   background: rgba(255, 255, 255, 0.02);
 }
 
-.hand-card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
-  gap: 14px;
-}
-
-.hand-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 220px;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    border-color 160ms ease,
-    opacity 160ms ease;
-}
-
 .hand-card-draggable:hover {
   transform: translateY(-4px);
   box-shadow:
@@ -667,28 +524,6 @@ button:hover {
 
 .hand-card-static {
   opacity: 0.82;
-}
-
-.hand-card-title {
-  margin: 0;
-  line-height: 1.2;
-}
-
-.hand-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.hand-card-text {
-  margin: 0;
-  color: var(--text);
-  line-height: 1.45;
-}
-
-.hand-card-actions {
-  margin-top: auto;
 }
 
 .hand-card-icon-row {
