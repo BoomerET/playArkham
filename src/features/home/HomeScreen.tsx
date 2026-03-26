@@ -18,12 +18,8 @@ export default function HomeScreen() {
   );
 
   // ✅ NEW: scenario state
-  const availableScenarios = useGameStore(
-    (state) => state.availableScenarios,
-  );
-  const selectedScenarioId = useGameStore(
-    (state) => state.selectedScenarioId,
-  );
+  const availableScenarios = useGameStore((state) => state.availableScenarios);
+  const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const setSelectedScenario = useGameStore(
     (state) => state.setSelectedScenario,
   );
@@ -45,54 +41,40 @@ export default function HomeScreen() {
 
         <div className="investigator-grid">
           {availableInvestigators.map((investigator) => {
-            const selected = investigator.id === selectedInvestigatorId;
-            const factionClass = getFactionClassName(investigator.faction);
+            const imageUrl = getInvestigatorImageUrl(investigator.portrait);
 
             return (
-              <button
+              <div
                 key={investigator.id}
-                className={`investigator-card ${factionClass} ${
-                  selected ? "selected" : ""
-                }`}
-                onClick={() => setSelectedInvestigator(investigator.id)}
+                className="investigator-card"
+                onClick={() => selectInvestigator(investigator.id)}
               >
-                <div className="investigator-card-top">
-                  <div className={`portrait-frame large ${factionClass}`}>
+                {imageUrl ? (
+                  <>
                     <img
-                      src={investigator.portrait}
+                      src={imageUrl}
                       alt={investigator.name}
-                      className="portrait-image"
+                      className="investigator-card-image"
                     />
+
+                    <div className="investigator-card-overlay">
+                      <h3 className="investigator-name">{investigator.name}</h3>
+
+                      <div className="investigator-stats">
+                        <span>🧠 {investigator.willpower}</span>
+                        <span>📚 {investigator.intellect}</span>
+                        <span>💪 {investigator.combat}</span>
+                        <span>🏃 {investigator.agility}</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // fallback (your current card UI)
+                  <div className="investigator-fallback">
+                    {investigator.name}
                   </div>
-
-                  <div className="investigator-card-body">
-                    <div className="investigator-title-block">
-                      <span className="investigator-name">
-                        {investigator.name}
-                      </span>
-
-                      <span className={`faction-label ${factionClass}`}>
-                        <FactionIcon
-                          faction={investigator.faction}
-                          className="faction-icon"
-                        />
-                        {formatFaction(investigator.faction)}
-                      </span>
-                    </div>
-
-                    <div className="investigator-stats">
-                      WIL {investigator.willpower} · INT{" "}
-                      {investigator.intellect} · COM {investigator.combat} · AGI{" "}
-                      {investigator.agility}
-                    </div>
-
-                    <div className="investigator-health">
-                      Health {investigator.health} · Sanity{" "}
-                      {investigator.sanity}
-                    </div>
-                  </div>
-                </div>
-              </button>
+                )}
+              </div>
             );
           })}
         </div>
@@ -108,9 +90,7 @@ export default function HomeScreen() {
               return (
                 <button
                   key={scenario.id}
-                  className={`scenario-card ${
-                    selected ? "selected" : ""
-                  }`}
+                  className={`scenario-card ${selected ? "selected" : ""}`}
                   onClick={() => setSelectedScenario(scenario.id)}
                 >
                   <div className="scenario-card-body">
