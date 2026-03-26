@@ -642,7 +642,7 @@ button:hover {
 
 .hand-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
   gap: 14px;
 }
 
@@ -902,7 +902,7 @@ button:hover {
 
 .enemy-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 240px));
   gap: 14px;
 }
 
@@ -1779,14 +1779,19 @@ button:hover {
 }
 
 .hand-card-grid-image {
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
+  gap: 14px;
+  justify-content: start;
+  align-items: start;
 }
 
 .hand-card-image-shell {
   position: relative;
+  width: 220px;
+  aspect-ratio: 300 / 420;
   border-radius: 16px;
   overflow: hidden;
-  min-height: 420px;
   border: 1px solid var(--border);
   background: rgba(10, 16, 24, 0.94);
   box-shadow: var(--shadow);
@@ -1809,9 +1814,18 @@ button:hover {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 420px;
   object-fit: cover;
   background: #111;
+}
+
+@media (max-width: 720px) {
+  .hand-card-grid-image {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
+  }
+
+  .hand-card-image-shell {
+    width: 180px;
+  }
 }
 
 .hand-card-image-topbar {
