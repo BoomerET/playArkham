@@ -175,8 +175,8 @@ function applyAdvanceOutcome(
 
   let scenarioStatus = result.scenarioStatus;
   let scenarioResolutionText = result.scenarioResolutionText;
-  let scenarioResolutionTitle = result.scenarioResolutionTitle;
-  let scenarioResolutionSubtitle = result.scenarioResolutionSubtitle;
+  const scenarioResolutionTitle = result.scenarioResolutionTitle;
+  const scenarioResolutionSubtitle = result.scenarioResolutionSubtitle;
 
   let log = result.log;
 
