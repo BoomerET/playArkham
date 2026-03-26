@@ -69,7 +69,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y:10 },
+      mapPosition: { x: 50, y:22 },
       isVisible: false,
     },
   ],
