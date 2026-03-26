@@ -10,7 +10,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "wild"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "in-harms-way-3",
@@ -71,7 +72,8 @@ export const playerDeck: PlayerCard[] = [
     "id": "the-necronomicon-2",
     "name": "The Necronomicon",
     "type": "asset",
-    "text": "Revelation - Put The Necronomicon into play in your threat area. It cannot leave play except by the Action: ability below. You cannot play assets or trigger abilities on other assets you control. Action:: Test willpower (5). If you succeed, discard The Necronomicon. If you fail, shuffle it into your deck and take 1 horror."
+    "text": "Revelation - Put The Necronomicon into play in your threat area. It cannot leave play except by the Action: ability below. You cannot play assets or trigger abilities on other assets you control. Action:: Test willpower (5). If you succeed, discard The Necronomicon. If you fail, shuffle it into your deck and take 1 horror.",
+    "slot": "Arcane"
   },
   {
     "id": "isabelles-twin-45s-4",
@@ -83,7 +85,8 @@ export const playerDeck: PlayerCard[] = [
       "combat",
       "agility",
       "wild"
-    ]
+    ],
+    "slot": "Hand x2"
   },
   {
     "id": "breaking-point-5",
@@ -99,7 +102,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "endurance-7",
@@ -120,7 +124,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 4,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "m1911-9",
@@ -130,7 +135,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "agility"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "machete-0",
@@ -140,7 +146,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "resilience-1",
@@ -213,7 +220,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "wild"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "sledgehammer-8",
@@ -224,7 +232,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "combat"
-    ]
+    ],
+    "slot": "Hand x2"
   },
   {
     "id": "winchester-model-12-9",
@@ -235,7 +244,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "combat",
       "combat"
-    ]
+    ],
+    "slot": "Hand x2"
   },
   {
     "id": "dorothy-simmons-0",
@@ -245,7 +255,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "fingerprint-kit-1",
@@ -255,7 +266,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 4,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "laboratory-assistant-2",
@@ -265,7 +277,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 2,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "local-map-3",
@@ -275,7 +288,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "agility"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "magnifying-glass-4",
@@ -285,7 +299,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "sharp-rhetoric-5",
@@ -348,7 +363,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "through-the-cracks-1",
@@ -387,7 +403,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 2,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Accessory"
   },
   {
     "id": "m1903-hammerless-5",
@@ -397,7 +414,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "agility"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "olivier-bishop-6",
@@ -407,7 +425,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 4,
     "icons": [
       "agility"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "silver-tongue-7",
@@ -438,7 +457,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "breaking-and-entering-0",
@@ -529,7 +549,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Body"
   },
   {
     "id": "cosmic-flame-9",
@@ -539,7 +560,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Arcane"
   },
   {
     "id": "jim-culver-0",
@@ -549,7 +571,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 4,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "lucky-charm-1",
@@ -559,7 +582,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 2,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Accessory"
   },
   {
     "id": "second-sight-2",
@@ -569,7 +593,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 4,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Arcane"
   },
   {
     "id": "spiritual-intuition-3",
@@ -632,7 +657,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "wild"
-    ]
+    ],
+    "slot": "Head"
   },
   {
     "id": "fearless-9",
@@ -666,7 +692,8 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "combat",
       "wild"
-    ]
+    ],
+    "slot": "Arcane"
   },
   {
     "id": "aleksey-saburov-2",
@@ -676,7 +703,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Ally"
   },
   {
     "id": "bandages-3",
@@ -707,7 +735,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Body"
   },
   {
     "id": "levelheaded-6",
@@ -728,7 +757,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 3,
     "icons": [
       "willpower"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "look-what-i-found-8",
@@ -791,7 +821,8 @@ export const playerDeck: PlayerCard[] = [
     "icons": [
       "intellect",
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "on-the-brink-4",
@@ -813,7 +844,8 @@ export const playerDeck: PlayerCard[] = [
       "willpower",
       "combat",
       "wild"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "broken-bottle-6",
@@ -823,7 +855,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "combat"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "fedora-7",
@@ -833,7 +866,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 2,
     "icons": [
       "agility"
-    ]
+    ],
+    "slot": "Head"
   },
   {
     "id": "hand-crank-flashlight-8",
@@ -843,7 +877,8 @@ export const playerDeck: PlayerCard[] = [
     "cost": 1,
     "icons": [
       "intellect"
-    ]
+    ],
+    "slot": "Hand"
   },
   {
     "id": "emergency-cache-9",
@@ -924,7 +959,8 @@ export const playerDeck: PlayerCard[] = [
     "id": "the-gold-bug-8",
     "name": "The Gold Bug",
     "type": "asset",
-    "text": "Revelation - Put The Gold Bug into play in your threat area. It cannot leave play except by the Action: ability below. You get -1 health and -1 sanity. Action:: Shuffle the Gold Bug into your deck."
+    "text": "Revelation - Put The Gold Bug into play in your threat area. It cannot leave play except by the Action: ability below. You get -1 health and -1 sanity. Action:: Shuffle the Gold Bug into your deck.",
+    "slot": "Accessory"
   },
   {
     "id": "the-nameless-lurker-9",

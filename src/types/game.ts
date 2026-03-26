@@ -52,6 +52,14 @@ export interface PlayerCard {
   cost?: number;
   icons?: string[];
   text?: string;
+  slot?:
+    | "Hand"
+    | "Arcane"
+    | "Hand x2"
+    | "Ally"
+    | "Accessory"
+    | "Head"
+    | "Body";
 }
 
 export interface GameLocation {
