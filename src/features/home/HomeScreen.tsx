@@ -28,12 +28,12 @@ export default function HomeScreen() {
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
   );
-  const selectedInvestigatorId = useGameStore(
-    (state) => state.selectedInvestigatorId,
-  );
-  const setSelectedInvestigator = useGameStore(
-    (state) => state.setSelectedInvestigator,
-  );
+  //const selectedInvestigatorId = useGameStore(
+  //  (state) => state.selectedInvestigatorId,
+  //);
+  //const setSelectedInvestigator = useGameStore(
+  //  (state) => state.setSelectedInvestigator,
+  //);
 
   // ✅ NEW: scenario state
   const availableScenarios = useGameStore((state) => state.availableScenarios);
