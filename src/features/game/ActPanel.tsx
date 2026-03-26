@@ -1,6 +1,29 @@
 import { useMemo } from "react";
 import { useGameStore } from "../../store/gameStore";
 
+function getObjectiveText(
+  thresholdLabel: string,
+  progress: number,
+  threshold: number,
+): string {
+  const remaining = Math.max(threshold - progress, 0);
+  const normalizedLabel = thresholdLabel.toLowerCase();
+
+  if (normalizedLabel === "clues") {
+    if (remaining === 0) {
+      return "Objective complete. Advance the Act.";
+    }
+
+    return `Discover ${remaining} more clue${remaining === 1 ? "" : "s"} to advance.`;
+  }
+
+  if (remaining === 0) {
+    return `Objective complete. Advance the Act.`;
+  }
+
+  return `Reach ${threshold} ${thresholdLabel.toLowerCase()} to advance (${remaining} remaining).`;
+}
+
 export default function ActPanel() {
   const act = useGameStore((state) => state.act);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
@@ -65,6 +88,11 @@ export default function ActPanel() {
   }
 
   const progressText = `${act.thresholdLabel} ${act.progress} / ${act.threshold}`;
+  const objectiveText = getObjectiveText(
+    act.thresholdLabel,
+    act.progress,
+    act.threshold,
+  );
 
   return (
     <section className="scenario-card-panel scenario-card-panel-act">
@@ -83,6 +111,11 @@ export default function ActPanel() {
           <h4 className="scenario-card-name">{act.title}</h4>
 
           <p className="scenario-card-text">{act.text}</p>
+
+          <div className="scenario-card-objective">
+            <div className="scenario-card-objective-label">Current Objective</div>
+            <div className="scenario-card-objective-text">{objectiveText}</div>
+          </div>
 
           {nextAdvanceHint ? (
             <div

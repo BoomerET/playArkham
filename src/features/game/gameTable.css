@@ -565,3 +565,27 @@
   background: rgba(118, 36, 36, 0.22);
   border-color: rgba(197, 84, 84, 0.34);
 }
+
+
+.scenario-card-objective {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scenario-card-objective-label {
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(248, 244, 234, 0.68);
+}
+
+.scenario-card-objective-text {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: rgba(248, 244, 234, 0.92);
+}
