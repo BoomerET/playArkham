@@ -1935,3 +1935,9 @@ button:hover {
     max-height: 90px;
   }
 }
+
+.hand-card-image-shell:hover {
+  transform: scale(1.04) translateY(-6px);
+  z-index: 10;
+}
+
