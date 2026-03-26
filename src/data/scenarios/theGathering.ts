@@ -84,10 +84,27 @@ export const theGatheringScenario: ScenarioDefinition = {
           },
         ],
         engageOnSpawn: false,
-        setActProgress: 0,
         logEntries: [
           "Agenda effect: The Cellar is now visible.",
           "Agenda effect: A terrible presence stirs below.",
+        ],
+      },
+    },
+    {
+      id: "gathering-agenda-3a",
+      kind: "agenda",
+      sequence: "3a",
+      title: "Consumed by the House",
+      text: "The house has fully awakened, and there is no escape from the darkness within.",
+      threshold: 99,
+      thresholdLabel: "Doom",
+      startingProgress: 0,
+      onAdvance: {
+        loseScenario: true,
+        resolutionText:
+          "The darkness in your home overwhelms you. You are consumed by the nightmare within.",
+        logEntries: [
+          "Agenda effect: The house closes in around you.",
         ],
       },
     },
@@ -116,6 +133,24 @@ export const theGatheringScenario: ScenarioDefinition = {
       onAdvance: {
         revealLocationIds: ["hallway"],
         logEntries: ["Act effect: The Hallway is revealed."],
+      },
+    },
+    {
+      id: "gathering-act-3a",
+      kind: "act",
+      sequence: "3a",
+      title: "Escape the House",
+      text: "You have discovered enough to flee the nightmare before it consumes you.",
+      threshold: 1,
+      thresholdLabel: "Clues",
+      startingProgress: 0,
+      onAdvance: {
+        winScenario: true,
+        resolutionText:
+          "You escape your house alive, shaken by what you have seen, but determined to uncover the truth.",
+        logEntries: [
+          "Act effect: You have survived the nightmare in your home.",
+        ],
       },
     },
   ],
