@@ -117,10 +117,7 @@ export default function GameLog() {
       ) : (
         <ol className="log-list" ref={listRef}>
           {normalizedLog.map((entry) => (
-            <li
-              key={entry.id}
-              className={`log-entry log-entry-${entry.kind}`}
-            >
+            <li key={entry.id} className={`log-entry log-entry-${entry.kind}`}>
               <span className={`log-entry-badge log-entry-badge-${entry.kind}`}>
                 {formatKindLabel(entry.kind)}
               </span>
