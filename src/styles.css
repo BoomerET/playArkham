@@ -1938,12 +1938,16 @@ button:hover {
 
 .play-area-image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
   gap: 14px;
+  justify-content: start;
+  align-items: start;
 }
 
 .play-area-image-card {
   position: relative;
+  width: 180px;
+  aspect-ratio: 300 / 420;
   border-radius: 16px;
   overflow: hidden;
   min-height: 320px;
