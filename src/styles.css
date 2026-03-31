@@ -1731,3 +1731,25 @@ button:hover {
 .hand-card-image-shell.hand-card-static {
   cursor: default;
 }
+
+.investigator-card {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* existing hover stays subtle */
+.investigator-card:hover {
+  transform: translateY(-4px);
+}
+
+/* 🔥 zoom mode */
+.investigator-card.zoomed {
+  transform: scale(1.6);
+  z-index: 50;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* prevent layout shift issues */
+.investigator-grid {
+  overflow: visible;
+}

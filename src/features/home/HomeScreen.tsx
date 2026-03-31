@@ -1,4 +1,5 @@
 import { useGameStore } from "../../store/gameStore";
+import { useEffect, useState } from "react";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
@@ -7,6 +8,9 @@ const investigatorImages = import.meta.glob(
     import: "default",
   },
 ) as Record<string, string>;
+
+const zoomHeld = useModifierKey("Shift");
+const [hoveredId, setHoveredId] = useState<string | null>(null);
 
 function getInvestigatorImageUrl(imageName?: string): string | null {
   if (!imageName) {
@@ -18,6 +22,30 @@ function getInvestigatorImageUrl(imageName?: string): string | null {
   );
 
   return match?.[1] ?? null;
+}
+
+export function useModifierKey(key: "Alt" | "Shift") {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === key) setActive(true);
+    };
+
+    const up = (e: KeyboardEvent) => {
+      if (e.key === key) setActive(false);
+    };
+
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+    };
+  }, [key]);
+
+  return active;
 }
 
 export default function HomeScreen() {
@@ -61,7 +89,17 @@ export default function HomeScreen() {
               <button
                 key={investigator.id}
                 type="button"
-                className={`investigator-card ${selected ? "selected" : ""}`}
+                
+                <div
+  className={cn(
+    "investigator-card",
+    hoveredId === investigator.id && "hovered",
+    hoveredId === investigator.id && zoomHeld && "zoomed"
+  )}
+  onMouseEnter={() => setHoveredId(investigator.id)}
+  onMouseLeave={() => setHoveredId(null)}
+></div>
+                {/*className={`investigator-card ${selected ? "selected" : ""}`} */}
                 onClick={() => setSelectedInvestigator(investigator.id)}
               >
                 {imageUrl ? (
