@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+\import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 
 const investigatorImages = import.meta.glob(
@@ -14,8 +14,10 @@ function getInvestigatorImageUrl(imageName?: string): string | null {
     return null;
   }
 
+  const normalized = imageName.toLowerCase();
+
   const match = Object.entries(investigatorImages).find(([path]) =>
-    path.endsWith(`/${imageName}`),
+    path.toLowerCase().endsWith(`/${normalized}`),
   );
 
   return match?.[1] ?? null;
@@ -114,10 +116,6 @@ export default function HomeScreen() {
   }, [availableInvestigators, hoveredId, zoomHeld]);
 
   useEffect(() => {
-    setPreviewSide("front");
-  }, [hoveredId]);
-
-  useEffect(() => {
     if (!previewInvestigator) {
       return;
     }
@@ -128,7 +126,10 @@ export default function HomeScreen() {
         return;
       }
 
-      if ((event.key === "f" || event.key === "F") && previewInvestigator.backImageUrl) {
+      if (
+        (event.key === "f" || event.key === "F") &&
+        previewInvestigator.backImageUrl
+      ) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
@@ -174,7 +175,10 @@ export default function HomeScreen() {
                 type="button"
                 className={`investigator-card ${selected ? "selected" : ""}`}
                 onClick={() => setSelectedInvestigator(investigator.id)}
-                onMouseEnter={() => setHoveredId(investigator.id)}
+                onMouseEnter={() => {
+                  setHoveredId(investigator.id);
+                  setPreviewSide("front");
+                }}
                 onMouseLeave={() =>
                   setHoveredId((current) =>
                     current === investigator.id ? null : current,

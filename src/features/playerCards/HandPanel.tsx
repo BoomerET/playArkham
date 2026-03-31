@@ -174,10 +174,6 @@ export default function HandPanel() {
   }, [hand, hoveredCardId, zoomHeld]);
 
   useEffect(() => {
-    setPreviewSide("front");
-  }, [hoveredCardId]);
-
-  useEffect(() => {
     if (!previewCard) {
       return;
     }
@@ -188,10 +184,7 @@ export default function HandPanel() {
         return;
       }
 
-      if (
-        (event.key === "f" || event.key === "F") &&
-        previewCard.backImageUrl
-      ) {
+      if ((event.key === "f" || event.key === "F") && previewCard.backImageUrl) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
@@ -264,7 +257,10 @@ export default function HandPanel() {
                 onDragEnd={() => {
                   setDraggedCardId(null);
                 }}
-                onMouseEnter={() => setHoveredCardId(card.id)}
+                onMouseEnter={() => {
+                  setHoveredCardId(card.id);
+                  setPreviewSide("front");
+                }}
                 onMouseLeave={() =>
                   setHoveredCardId((current) =>
                     current === card.id ? null : current,
@@ -348,9 +344,13 @@ export default function HandPanel() {
                     ) : (
                       <div className="hand-card-image-commit-status">
                         {card.type === "skill" ? (
-                          <span className="token-chip gold">Draggable to commit</span>
+                          <span className="token-chip gold">
+                            Draggable to commit
+                          </span>
                         ) : (
-                          <span className="token-chip danger">Not committable</span>
+                          <span className="token-chip danger">
+                            Not committable
+                          </span>
                         )}
                       </div>
                     )}

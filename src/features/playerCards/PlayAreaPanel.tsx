@@ -171,10 +171,6 @@ export default function PlayAreaPanel() {
   }, [hoveredCardId, playArea, zoomHeld]);
 
   useEffect(() => {
-    setPreviewSide("front");
-  }, [hoveredCardId]);
-
-  useEffect(() => {
     if (!previewCard) {
       return;
     }
@@ -185,10 +181,7 @@ export default function PlayAreaPanel() {
         return;
       }
 
-      if (
-        (event.key === "f" || event.key === "F") &&
-        previewCard.backImageUrl
-      ) {
+      if ((event.key === "f" || event.key === "F") && previewCard.backImageUrl) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
@@ -258,7 +251,10 @@ export default function PlayAreaPanel() {
               <div
                 key={card.id}
                 className="play-area-image-card"
-                onMouseEnter={() => setHoveredCardId(card.id)}
+                onMouseEnter={() => {
+                  setHoveredCardId(card.id);
+                  setPreviewSide("front");
+                }}
                 onMouseLeave={() =>
                   setHoveredCardId((current) =>
                     current === card.id ? null : current,
@@ -314,7 +310,9 @@ export default function PlayAreaPanel() {
 
                 <div className="play-area-image-footer">
                   <p className="play-area-image-title">{card.name}</p>
-                  {card.text ? <p className="play-area-image-text">{card.text}</p> : null}
+                  {card.text ? (
+                    <p className="play-area-image-text">{card.text}</p>
+                  ) : null}
                 </div>
               </div>
             );
