@@ -58,7 +58,8 @@ function useModifierKey(key: "Alt" | "Shift") {
 type PreviewInvestigator = {
   id: string;
   name: string;
-  imageUrl: string;
+  frontImageUrl: string;
+  backImageUrl: string | null;
 };
 
 export default function HomeScreen() {
@@ -82,6 +83,7 @@ export default function HomeScreen() {
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
     if (!zoomHeld || !hoveredId) {
@@ -96,33 +98,49 @@ export default function HomeScreen() {
       return null;
     }
 
-    const imageUrl = getInvestigatorImageUrl(investigator.portrait);
+    const frontImageUrl = getInvestigatorImageUrl(investigator.portrait);
+    const backImageUrl = getInvestigatorImageUrl(investigator.portraitBack);
 
-    if (!imageUrl) {
+    if (!frontImageUrl) {
       return null;
     }
 
     return {
       id: investigator.id,
       name: investigator.name,
-      imageUrl,
+      frontImageUrl,
+      backImageUrl,
     };
   }, [availableInvestigators, hoveredId, zoomHeld]);
 
   useEffect(() => {
-    if (!zoomHeld) {
+    setPreviewSide("front");
+  }, [hoveredId]);
+
+  useEffect(() => {
+    if (!previewInvestigator) {
       return;
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setHoveredId(null);
+        return;
+      }
+
+      if ((event.key === "f" || event.key === "F") && previewInvestigator.backImageUrl) {
+        setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [zoomHeld]);
+  }, [previewInvestigator]);
+
+  const previewImageUrl =
+    previewSide === "back" && previewInvestigator?.backImageUrl
+      ? previewInvestigator.backImageUrl
+      : previewInvestigator?.frontImageUrl ?? null;
 
   return (
     <main className="app-shell">
@@ -136,13 +154,15 @@ export default function HomeScreen() {
 
       <section className="panel">
         <h2 className="section-title">Select Investigator</h2>
+
         <div
-          className={`investigator-zoom-hint ${
-            hoveredId ? "visible" : ""
-          } ${zoomHeld ? "active" : ""}`}
+          className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${
+            zoomHeld ? "active" : ""
+          }`}
         >
-          Hold <kbd>Shift</kbd> to zoom
+          Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
         </div>
+
         <div className="investigator-grid">
           {availableInvestigators.map((investigator) => {
             const imageUrl = getInvestigatorImageUrl(investigator.portrait);
@@ -227,16 +247,30 @@ export default function HomeScreen() {
         </div>
       </section>
 
-      {previewInvestigator && (
+      {previewInvestigator && previewImageUrl && (
         <div
           className="investigator-preview-overlay"
           aria-hidden="true"
           onMouseLeave={() => setHoveredId(null)}
         >
           <div className="investigator-preview-frame">
+            {previewInvestigator.backImageUrl && (
+              <button
+                type="button"
+                className="investigator-preview-flip-button"
+                onClick={() =>
+                  setPreviewSide((current) =>
+                    current === "front" ? "back" : "front",
+                  )
+                }
+              >
+                {previewSide === "front" ? "Show Back" : "Show Front"}
+              </button>
+            )}
+
             <img
-              src={previewInvestigator.imageUrl}
-              alt={previewInvestigator.name}
+              src={previewImageUrl}
+              alt={`${previewInvestigator.name} ${previewSide}`}
               className="investigator-preview-image"
               draggable={false}
             />
