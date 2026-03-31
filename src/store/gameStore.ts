@@ -159,10 +159,6 @@ function createLogEntry(kind: GameLogKind, text: string) {
   } as const;
 }
 
-function isOpeningHandWeakness(card: PlayerCard): boolean {
-  return card.type === "treachery" || card.type === "enemy";
-}
-
 type AdvanceStoreSlice = Pick<
   GameStore,
   | "agenda"
