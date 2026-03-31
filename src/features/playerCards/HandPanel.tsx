@@ -143,6 +143,7 @@ export default function HandPanel() {
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
+  const shuffleDeck = useGameStore((state) => state.shuffleDeck);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
@@ -184,7 +185,10 @@ export default function HandPanel() {
         return;
       }
 
-      if ((event.key === "f" || event.key === "F") && previewCard.backImageUrl) {
+      if (
+        (event.key === "f" || event.key === "F") &&
+        previewCard.backImageUrl
+      ) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
@@ -196,7 +200,7 @@ export default function HandPanel() {
   const previewImageUrl =
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
-      : previewCard?.frontImageUrl ?? null;
+      : (previewCard?.frontImageUrl ?? null);
 
   return (
     <section className="game-panel hand-panel">
@@ -219,6 +223,13 @@ export default function HandPanel() {
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
         </div>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={shuffleDeck}
+        >
+          Shuffle Deck
+        </button>
       </div>
 
       {hand.length === 0 ? (
@@ -236,7 +247,9 @@ export default function HandPanel() {
 
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
-              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
+              .filter(
+                (icon): icon is NonNullable<typeof icon> => icon !== null,
+              );
 
             return (
               <div
@@ -296,7 +309,10 @@ export default function HandPanel() {
                 </div>
 
                 {cardIcons.length > 0 && (
-                  <div className="hand-card-image-icons" aria-label="Card icons">
+                  <div
+                    className="hand-card-image-icons"
+                    aria-label="Card icons"
+                  >
                     {cardIcons.map((icon, index) => (
                       <span
                         key={`${card.id}-${icon}-${index}`}

@@ -80,6 +80,7 @@ type GameStore = GameState & {
   setupGame: () => void;
   drawCard: () => void;
   drawStartingHand: (count?: number) => void;
+  shuffleDeck: () => void;
   discardCard: (cardId: string) => void;
   playCard: (cardId: string) => void;
   togglePlayAreaCardExhausted: (cardId: string) => void;
@@ -132,6 +133,21 @@ function getSelectedScenario(state: {
       (scenario) => scenario.id === state.selectedScenarioId,
     ) ?? state.availableScenarios[0]
   );
+}
+
+function shuffleArray<T>(items: T[]): T[] {
+  const result = [...items];
+
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+function isOpeningHandWeakness(card: PlayerCard): boolean {
+  return card.type === "treachery" || card.type === "enemy";
 }
 
 function createLogEntry(kind: GameLogKind, text: string) {
@@ -892,6 +908,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("player", `Drew card: ${topCard.name}`);
   },
 
+  shuffleDeck: () => {
+    const { deck } = get();
+
+    if (deck.length <= 1) {
+      return;
+    }
+
+    set({
+      deck: shuffleArray(deck),
+    });
+
+    get().pushLog("player", "Shuffled the player deck.");
+  },
+
   drawStartingHand: (count = 5) => {
     let { deck, hand } = get();
     let cardsDrawn = 0;
@@ -905,7 +935,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         skippedWeaknesses.push(topCard);
         get().pushLog(
           "player",
-          `Skipped opening-hand weakness: ${topCard.name}`,
+          `Set aside opening-hand weakness: ${topCard.name}`,
         );
         continue;
       }
@@ -916,7 +946,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (skippedWeaknesses.length > 0) {
-      deck = [...deck, ...skippedWeaknesses];
+      deck = shuffleArray([...deck, ...skippedWeaknesses]);
+      get().pushLog(
+        "player",
+        `Shuffled ${skippedWeaknesses.length} weakness${
+          skippedWeaknesses.length === 1 ? "" : "es"
+        } back into the player deck.`,
+      );
     }
 
     set({
@@ -927,7 +963,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (cardsDrawn < count) {
       get().pushLog(
         "system",
-        `Opening hand drew ${cardsDrawn} card${cardsDrawn === 1 ? "" : "s"} because the deck ran out of non-weakness cards.`,
+        `Opening hand drew ${cardsDrawn} card${
+          cardsDrawn === 1 ? "" : "s"
+        } because the deck ran out of non-weakness cards.`,
       );
     }
   },
