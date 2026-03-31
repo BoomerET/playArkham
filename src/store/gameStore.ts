@@ -42,6 +42,7 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
+  PlayerCard,
   Phase,
   SkillTestResult,
   SkillType,
