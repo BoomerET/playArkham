@@ -82,6 +82,7 @@ type GameStore = GameState & {
   drawStartingHand: (count?: number) => void;
   discardCard: (cardId: string) => void;
   playCard: (cardId: string) => void;
+  togglePlayAreaCardExhausted: (cardId: string) => void;
   drawChaosToken: () => ChaosToken | null;
   gainResource: (amount?: number) => void;
   spendResource: (amount?: number) => void;
@@ -996,7 +997,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         investigator: updatedInvestigator,
         hand: updatedHand,
-        playArea: [...playArea, card],
+        playArea: [...playArea, { ...card, exhausted: false }],
         turn: updatedTurn,
         draggedCardId: null,
       });
@@ -1048,6 +1049,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
       "system",
       `Playing ${card.name} is not implemented for card type ${card.type}.`,
     );
+  },
+
+    togglePlayAreaCardExhausted: (cardId: string) => {
+    const { playArea, log } = get();
+
+    const card = playArea.find((entry) => entry.id === cardId);
+
+    if (!card) {
+      return;
+    }
+
+    const nextExhausted = !card.exhausted;
+
+    set({
+      playArea: playArea.map((entry) =>
+        entry.id === cardId
+          ? { ...entry, exhausted: nextExhausted }
+          : entry,
+      ),
+      log: [
+        ...log,
+        nextExhausted
+          ? `${card.name} was exhausted.`
+          : `${card.name} was readied.`,
+      ],
+    });
   },
 
   drawChaosToken: () => {

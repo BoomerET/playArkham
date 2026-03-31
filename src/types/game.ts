@@ -70,6 +70,7 @@ export interface PlayerCard {
     | "mystic"
     | "survivor";
   image?: string;
+  exhausted?: boolean;
 }
 
 export interface GameLocation {

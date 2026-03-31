@@ -139,6 +139,9 @@ type PreviewCard = {
 export default function PlayAreaPanel() {
   const playArea = useGameStore((state) => state.playArea);
   const playCard = useGameStore((state) => state.playCard);
+  const togglePlayAreaCardExhausted = useGameStore(
+    (state) => state.togglePlayAreaCardExhausted,
+  );
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
 
@@ -181,7 +184,10 @@ export default function PlayAreaPanel() {
         return;
       }
 
-      if ((event.key === "f" || event.key === "F") && previewCard.backImageUrl) {
+      if (
+        (event.key === "f" || event.key === "F") &&
+        previewCard.backImageUrl
+      ) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
     };
@@ -250,7 +256,9 @@ export default function PlayAreaPanel() {
             return (
               <div
                 key={card.id}
-                className="play-area-image-card"
+                className={`play-area-image-card ${
+                  card.exhausted ? "play-area-card-exhausted" : ""
+                }`}
                 onMouseEnter={() => {
                   setHoveredCardId(card.id);
                   setPreviewSide("front");
@@ -307,6 +315,24 @@ export default function PlayAreaPanel() {
                     ))}
                   </div>
                 ) : null}
+
+                <div className="play-area-card-state-row">
+                  <button
+                    type="button"
+                    className={`play-area-state-button ${
+                      card.exhausted ? "is-exhausted" : "is-ready"
+                    }`}
+                    onClick={() => togglePlayAreaCardExhausted(card.id)}
+                  >
+                    {card.exhausted ? "Ready" : "Exhaust"}
+                  </button>
+
+                  {card.exhausted ? (
+                    <span className="play-area-state-badge">Exhausted</span>
+                  ) : (
+                    <span className="play-area-state-badge ready">Ready</span>
+                  )}
+                </div>
 
                 <div className="play-area-image-footer">
                   <p className="play-area-image-title">{card.name}</p>
