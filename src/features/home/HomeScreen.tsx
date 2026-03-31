@@ -136,7 +136,13 @@ export default function HomeScreen() {
 
       <section className="panel">
         <h2 className="section-title">Select Investigator</h2>
-
+        <div
+          className={`investigator-zoom-hint ${
+            hoveredId ? "visible" : ""
+          } ${zoomHeld ? "active" : ""}`}
+        >
+          Hold <kbd>Shift</kbd> to zoom
+        </div>
         <div className="investigator-grid">
           {availableInvestigators.map((investigator) => {
             const imageUrl = getInvestigatorImageUrl(investigator.portrait);
@@ -149,9 +155,11 @@ export default function HomeScreen() {
                 className={`investigator-card ${selected ? "selected" : ""}`}
                 onClick={() => setSelectedInvestigator(investigator.id)}
                 onMouseEnter={() => setHoveredId(investigator.id)}
-                onMouseLeave={() => setHoveredId((current) =>
-                  current === investigator.id ? null : current,
-                )}
+                onMouseLeave={() =>
+                  setHoveredId((current) =>
+                    current === investigator.id ? null : current,
+                  )
+                }
                 aria-pressed={selected}
                 aria-label={`Select investigator ${investigator.name}`}
               >
