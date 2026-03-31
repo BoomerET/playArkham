@@ -2138,3 +2138,25 @@ button:hover {
     transform: rotate(90deg) scale(0.88);
   }
 }
+
+.play-area-card-interactive {
+  cursor: pointer;
+}
+
+.play-area-image-card::after {
+  content: "Double-click to exhaust";
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  opacity: 0;
+  pointer-events: none;
+  color: rgba(255,255,255,0.6);
+  transition: opacity 0.2s ease;
+}
+
+.play-area-image-card:hover::after {
+  opacity: 1;
+}
+
