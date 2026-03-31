@@ -1,5 +1,5 @@
+import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
-import { useEffect, useState } from "react";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
@@ -8,9 +8,6 @@ const investigatorImages = import.meta.glob(
     import: "default",
   },
 ) as Record<string, string>;
-
-const zoomHeld = useModifierKey("Shift");
-const [hoveredId, setHoveredId] = useState<string | null>(null);
 
 function getInvestigatorImageUrl(imageName?: string): string | null {
   if (!imageName) {
@@ -24,29 +21,45 @@ function getInvestigatorImageUrl(imageName?: string): string | null {
   return match?.[1] ?? null;
 }
 
-export function useModifierKey(key: "Alt" | "Shift") {
+function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === key) setActive(true);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(true);
+      }
     };
 
-    const up = (e: KeyboardEvent) => {
-      if (e.key === key) setActive(false);
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(false);
+      }
     };
 
-    window.addEventListener("keydown", down);
-    window.addEventListener("keyup", up);
+    const onWindowBlur = () => {
+      setActive(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onWindowBlur);
 
     return () => {
-      window.removeEventListener("keydown", down);
-      window.removeEventListener("keyup", up);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onWindowBlur);
     };
   }, [key]);
 
   return active;
 }
+
+type PreviewInvestigator = {
+  id: string;
+  name: string;
+  imageUrl: string;
+};
 
 export default function HomeScreen() {
   const availableInvestigators = useGameStore(
@@ -66,6 +79,50 @@ export default function HomeScreen() {
   );
 
   const startGame = useGameStore((state) => state.startGame);
+
+  const zoomHeld = useModifierKey("Shift");
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
+    if (!zoomHeld || !hoveredId) {
+      return null;
+    }
+
+    const investigator = availableInvestigators.find(
+      (item) => item.id === hoveredId,
+    );
+
+    if (!investigator) {
+      return null;
+    }
+
+    const imageUrl = getInvestigatorImageUrl(investigator.portrait);
+
+    if (!imageUrl) {
+      return null;
+    }
+
+    return {
+      id: investigator.id,
+      name: investigator.name,
+      imageUrl,
+    };
+  }, [availableInvestigators, hoveredId, zoomHeld]);
+
+  useEffect(() => {
+    if (!zoomHeld) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setHoveredId(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [zoomHeld]);
 
   return (
     <main className="app-shell">
@@ -89,18 +146,14 @@ export default function HomeScreen() {
               <button
                 key={investigator.id}
                 type="button"
-                
-                <div
-  className={cn(
-    "investigator-card",
-    hoveredId === investigator.id && "hovered",
-    hoveredId === investigator.id && zoomHeld && "zoomed"
-  )}
-  onMouseEnter={() => setHoveredId(investigator.id)}
-  onMouseLeave={() => setHoveredId(null)}
-></div>
-                {/*className={`investigator-card ${selected ? "selected" : ""}`} */}
+                className={`investigator-card ${selected ? "selected" : ""}`}
                 onClick={() => setSelectedInvestigator(investigator.id)}
+                onMouseEnter={() => setHoveredId(investigator.id)}
+                onMouseLeave={() => setHoveredId((current) =>
+                  current === investigator.id ? null : current,
+                )}
+                aria-pressed={selected}
+                aria-label={`Select investigator ${investigator.name}`}
               >
                 {imageUrl ? (
                   <>
@@ -108,8 +161,19 @@ export default function HomeScreen() {
                       src={imageUrl}
                       alt={investigator.name}
                       className="investigator-card-image"
+                      draggable={false}
                     />
-
+                    <div className="investigator-card-overlay">
+                      <div className="investigator-name">
+                        {investigator.name}
+                      </div>
+                      <div className="investigator-stats">
+                        <span>Will {investigator.willpower}</span>
+                        <span>Int {investigator.intellect}</span>
+                        <span>Com {investigator.combat}</span>
+                        <span>Agi {investigator.agility}</span>
+                      </div>
+                    </div>
                   </>
                 ) : (
                   <div className="investigator-fallback">
@@ -131,8 +195,10 @@ export default function HomeScreen() {
               return (
                 <button
                   key={scenario.id}
+                  type="button"
                   className={`scenario-card ${selected ? "selected" : ""}`}
                   onClick={() => setSelectedScenario(scenario.id)}
+                  aria-pressed={selected}
                 >
                   <div className="scenario-card-body">
                     <span className="scenario-name">{scenario.name}</span>
@@ -147,11 +213,28 @@ export default function HomeScreen() {
         </div>
 
         <div className="home-actions">
-          <button className="primary-button" onClick={startGame}>
+          <button type="button" className="primary-button" onClick={startGame}>
             Start Game
           </button>
         </div>
       </section>
+
+      {previewInvestigator && (
+        <div
+          className="investigator-preview-overlay"
+          aria-hidden="true"
+          onMouseLeave={() => setHoveredId(null)}
+        >
+          <div className="investigator-preview-frame">
+            <img
+              src={previewInvestigator.imageUrl}
+              alt={previewInvestigator.name}
+              className="investigator-preview-image"
+              draggable={false}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
