@@ -1,0 +1,36 @@
+Rule of thumb going forward
+
+Use:
+
+showLocationIds when the location should appear face-down
+revealLocationIds when it should flip face-up immediately
+revealSpawnLocations when spawning an enemy should also reveal where it appears
+engageOnSpawn when that spawned enemy should immediately engage if it appears at the investigator’s location
+
+That gives you a nice scenario-authoring vocabulary without more store complexity.
+
+Good rule of thumb
+
+Use:
+
+agendaProgressDelta / actProgressDelta for small nudges
+setAgendaProgress / setActProgress when the scenario text implies a reset or exact value
+
+onAdvance: {
+  revealLocationIds: ["hallway"],
+  logEntries: ["Act effect: The Hallway is revealed."],
+  advanceAgenda: true,
+}
+
+onAdvance: {
+  spawnEnemies: [
+    {
+      enemyId: "ghoul-priest",
+      locationId: "cellar",
+    },
+  ],
+  engageOnSpawn: false,
+  revealSpawnLocations: true,
+  logEntries: ["Agenda effect: A terrible presence stirs below."],
+  advanceAct: true,
+}
