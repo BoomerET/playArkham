@@ -47,6 +47,7 @@ import type {
   SkillTestResult,
   SkillType,
   ScenarioStatus,
+  CardCounterType,
 } from "../types/game";
 
 type Screen = "home" | "game";
@@ -110,6 +111,14 @@ type GameStore = GameState & {
   commitSkillCard: (cardId: string) => void;
   cancelActiveSkillTest: () => void;
   resolveActiveSkillTest: () => SkillTestResult | null;
+  incrementPlayAreaCardCounter: (
+    cardId: string,
+    counterType: CardCounterType,
+  ) => void;
+  decrementPlayAreaCardCounter: (
+    cardId: string,
+    counterType: CardCounterType,
+  ) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -145,6 +154,27 @@ function shuffleArray<T>(items: T[]): T[] {
   }
 
   return result;
+}
+
+function normalizeCardCounters(
+  counters: Partial<Record<CardCounterType, number>> | undefined,
+) {
+  const normalized: Partial<Record<CardCounterType, number>> = {};
+
+  if (!counters) {
+    return normalized;
+  }
+
+  for (const [key, value] of Object.entries(counters)) {
+    const typedKey = key as CardCounterType;
+    const typedValue = typeof value === "number" ? value : 0;
+
+    if (typedValue > 0) {
+      normalized[typedKey] = typedValue;
+    }
+  }
+
+  return normalized;
 }
 
 function isOpeningHandWeakness(card: PlayerCard): boolean {
@@ -1070,7 +1100,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         investigator: updatedInvestigator,
         hand: updatedHand,
-        playArea: [...playArea, { ...card, exhausted: false }],
+        playArea: [
+          ...playArea,
+          {
+            ...card,
+            exhausted: false,
+            counters: normalizeCardCounters(card.counters),
+          },
+        ],
         turn: updatedTurn,
         draggedCardId: null,
       });
@@ -1145,6 +1182,68 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ? `${card.name} was exhausted.`
           : `${card.name} was readied.`,
       ],
+    });
+  },
+
+  incrementPlayAreaCardCounter: (cardId, counterType) => {
+    const { playArea, log } = get();
+
+    const card = playArea.find((entry) => entry.id === cardId);
+    if (!card) {
+      return;
+    }
+
+    const currentValue = card.counters?.[counterType] ?? 0;
+    const nextValue = currentValue + 1;
+
+    set({
+      playArea: playArea.map((entry) =>
+        entry.id === cardId
+          ? {
+              ...entry,
+              counters: {
+                ...entry.counters,
+                [counterType]: nextValue,
+              },
+            }
+          : entry,
+      ),
+      log: [...log, `${card.name}: ${counterType} increased to ${nextValue}.`],
+    });
+  },
+
+  decrementPlayAreaCardCounter: (cardId, counterType) => {
+    const { playArea, log } = get();
+
+    const card = playArea.find((entry) => entry.id === cardId);
+    if (!card) {
+      return;
+    }
+
+    const currentValue = card.counters?.[counterType] ?? 0;
+    const nextValue = Math.max(0, currentValue - 1);
+
+    set({
+      playArea: playArea.map((entry) => {
+        if (entry.id !== cardId) {
+          return entry;
+        }
+
+        const nextCounters = {
+          ...entry.counters,
+          [counterType]: nextValue,
+        };
+
+        if (nextValue === 0) {
+          delete nextCounters[counterType];
+        }
+
+        return {
+          ...entry,
+          counters: nextCounters,
+        };
+      }),
+      log: [...log, `${card.name}: ${counterType} decreased to ${nextValue}.`],
     });
   },
 

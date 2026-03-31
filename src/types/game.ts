@@ -71,7 +71,21 @@ export interface PlayerCard {
     | "survivor";
   image?: string;
   exhausted?: boolean;
+  counters?: CardCounters;
 }
+
+export type CardCounterType =
+  | "ammo"
+  | "charge"
+  | "secret"
+  | "supply"
+  | "resource"
+  | "clue"
+  | "doom"
+  | "damage"
+  | "horror";
+
+export type CardCounters = Partial<Record<CardCounterType, number>>;
 
 export interface GameLocation {
   id: string;

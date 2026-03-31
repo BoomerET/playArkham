@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
-import type { PlayerCard } from "../../types/game";
+import type { CardCounterType, PlayerCard } from "../../types/game";
 
 const playerCardImages = import.meta.glob(
   [
@@ -16,6 +16,18 @@ const playerCardImages = import.meta.glob(
     import: "default",
   },
 ) as Record<string, string>;
+
+const COUNTER_TYPES: CardCounterType[] = [
+  "ammo",
+  "charge",
+  "secret",
+  "supply",
+  "resource",
+  "clue",
+  "doom",
+  "damage",
+  "horror",
+];
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -129,6 +141,31 @@ function getCardBackImageUrl(card: PlayerCard): string | null {
   ]);
 }
 
+function formatCounterLabel(counterType: CardCounterType) {
+  switch (counterType) {
+    case "ammo":
+      return "Ammo";
+    case "charge":
+      return "Charge";
+    case "secret":
+      return "Secret";
+    case "supply":
+      return "Supply";
+    case "resource":
+      return "Resource";
+    case "clue":
+      return "Clue";
+    case "doom":
+      return "Doom";
+    case "damage":
+      return "Damage";
+    case "horror":
+      return "Horror";
+    default:
+      return counterType;
+  }
+}
+
 type PreviewCard = {
   id: string;
   name: string;
@@ -141,6 +178,12 @@ export default function PlayAreaPanel() {
   const playCard = useGameStore((state) => state.playCard);
   const togglePlayAreaCardExhausted = useGameStore(
     (state) => state.togglePlayAreaCardExhausted,
+  );
+  const incrementPlayAreaCardCounter = useGameStore(
+    (state) => state.incrementPlayAreaCardCounter,
+  );
+  const decrementPlayAreaCardCounter = useGameStore(
+    (state) => state.decrementPlayAreaCardCounter,
   );
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
@@ -199,7 +242,7 @@ export default function PlayAreaPanel() {
   const previewImageUrl =
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
-      : (previewCard?.frontImageUrl ?? null);
+      : previewCard?.frontImageUrl ?? null;
 
   return (
     <section
@@ -215,8 +258,7 @@ export default function PlayAreaPanel() {
       onDrop={(event) => {
         event.preventDefault();
 
-        const cardId =
-          event.dataTransfer.getData("text/plain") || draggedCardId;
+        const cardId = event.dataTransfer.getData("text/plain") || draggedCardId;
         setIsDragOver(false);
         setDraggedCardId(null);
 
@@ -229,8 +271,7 @@ export default function PlayAreaPanel() {
         <div>
           <p className="hand-panel-kicker">In Play</p>
           <h2 className="hand-panel-title">
-            Play Area{" "}
-            <span className="hand-panel-count">({playArea.length})</span>
+            Play Area <span className="hand-panel-count">({playArea.length})</span>
           </h2>
           <p className="panel-subtitle">
             Drag cards here from your hand to play them. Double-click a card to
@@ -254,9 +295,11 @@ export default function PlayAreaPanel() {
             const imageUrl = getCardImageUrl(card);
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
-              .filter(
-                (icon): icon is NonNullable<typeof icon> => icon !== null,
-              );
+              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
+
+            const visibleCounters = COUNTER_TYPES.filter(
+              (counterType) => (card.counters?.[counterType] ?? 0) > 0,
+            );
 
             return (
               <div
@@ -296,9 +339,7 @@ export default function PlayAreaPanel() {
                   <div className="play-area-image-topbar">
                     <span
                       className={`play-area-cost-chip ${
-                        card.cost === undefined
-                          ? "play-area-cost-chip-empty"
-                          : ""
+                        card.cost === undefined ? "play-area-cost-chip-empty" : ""
                       }`}
                     >
                       {card.cost ?? "—"}
@@ -310,10 +351,7 @@ export default function PlayAreaPanel() {
                   </div>
 
                   {cardIcons.length > 0 ? (
-                    <div
-                      className="play-area-image-icons"
-                      aria-label="Card icons"
-                    >
+                    <div className="play-area-image-icons" aria-label="Card icons">
                       {cardIcons.map((icon, index) => (
                         <span
                           key={`${card.id}-${icon}-${index}`}
@@ -337,6 +375,75 @@ export default function PlayAreaPanel() {
                     ) : (
                       <span className="play-area-state-badge ready">Ready</span>
                     )}
+                  </div>
+
+                  {visibleCounters.length > 0 ? (
+                    <div className="play-area-counter-badges">
+                      {visibleCounters.map((counterType) => (
+                        <span
+                          key={`${card.id}-${counterType}-badge`}
+                          className={`play-area-counter-badge counter-${counterType}`}
+                        >
+                          {formatCounterLabel(counterType)}{" "}
+                          {card.counters?.[counterType] ?? 0}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <div className="play-area-counter-controls">
+                    <div className="play-area-counter-controls-inner">
+                      {COUNTER_TYPES.map((counterType) => {
+                        const value = card.counters?.[counterType] ?? 0;
+
+                        return (
+                          <div
+                            key={`${card.id}-${counterType}`}
+                            className="play-area-counter-row"
+                          >
+                            <span
+                              className={`play-area-counter-label counter-${counterType}`}
+                            >
+                              {formatCounterLabel(counterType)}
+                            </span>
+
+                            <div className="play-area-counter-buttons">
+                              <button
+                                type="button"
+                                className="play-area-counter-button"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  decrementPlayAreaCardCounter(
+                                    card.id,
+                                    counterType,
+                                  );
+                                }}
+                              >
+                                −
+                              </button>
+
+                              <span className="play-area-counter-value">
+                                {value}
+                              </span>
+
+                              <button
+                                type="button"
+                                className="play-area-counter-button"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  incrementPlayAreaCardCounter(
+                                    card.id,
+                                    counterType,
+                                  );
+                                }}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="play-area-image-footer">
