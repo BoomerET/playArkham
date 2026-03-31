@@ -1,4 +1,4 @@
-\import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 
 const investigatorImages = import.meta.glob(
