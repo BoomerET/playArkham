@@ -231,7 +231,8 @@ export default function PlayAreaPanel() {
             Play Area <span className="hand-panel-count">({playArea.length})</span>
           </h2>
           <p className="panel-subtitle">
-            Drag cards here from your hand to play them.
+            Drag cards here from your hand to play them. Double-click a card to
+            exhaust or ready it.
           </p>
           <div
             className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
@@ -269,76 +270,85 @@ export default function PlayAreaPanel() {
                   )
                 }
               >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt={card.name}
-                    className="play-area-card-image"
-                    draggable={false}
-                  />
-                ) : (
-                  <div className="card-image-fallback">
-                    <strong>{card.name}</strong>
-                    <span>{card.type}</span>
-                  </div>
-                )}
-
-                <div className="play-area-image-topbar">
-                  <span
-                    className={`play-area-cost-chip ${
-                      card.cost === undefined ? "play-area-cost-chip-empty" : ""
-                    }`}
-                  >
-                    {card.cost ?? "—"}
-                  </span>
-
-                  <span className="play-area-cost-chip play-area-image-type">
-                    {card.type}
-                  </span>
-                </div>
-
-                {cardIcons.length > 0 ? (
-                  <div className="play-area-image-icons" aria-label="Card icons">
-                    {cardIcons.map((icon, index) => (
-                      <span
-                        key={`${card.id}-${icon}-${index}`}
-                        className={`skill-icon-badge skill-${icon}`}
-                        title={icon}
-                        aria-label={icon}
-                      >
-                        <SkillIcon
-                          skill={icon}
-                          className="skill-icon-svg"
-                          viewBox="0 0 24 24"
-                        />
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-
-                <div className="play-area-card-state-row">
-                  <button
-                    type="button"
-                    className={`play-area-state-button ${
-                      card.exhausted ? "is-exhausted" : "is-ready"
-                    }`}
-                    onClick={() => togglePlayAreaCardExhausted(card.id)}
-                  >
-                    {card.exhausted ? "Ready" : "Exhaust"}
-                  </button>
-
-                  {card.exhausted ? (
-                    <span className="play-area-state-badge">Exhausted</span>
+                <div
+                  className="play-area-card-interactive"
+                  onDoubleClick={() => togglePlayAreaCardExhausted(card.id)}
+                  title="Double-click to exhaust or ready"
+                >
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={card.name}
+                      className="play-area-card-image"
+                      draggable={false}
+                    />
                   ) : (
-                    <span className="play-area-state-badge ready">Ready</span>
+                    <div className="card-image-fallback">
+                      <strong>{card.name}</strong>
+                      <span>{card.type}</span>
+                    </div>
                   )}
-                </div>
 
-                <div className="play-area-image-footer">
-                  <p className="play-area-image-title">{card.name}</p>
-                  {card.text ? (
-                    <p className="play-area-image-text">{card.text}</p>
+                  <div className="play-area-image-topbar">
+                    <span
+                      className={`play-area-cost-chip ${
+                        card.cost === undefined ? "play-area-cost-chip-empty" : ""
+                      }`}
+                    >
+                      {card.cost ?? "—"}
+                    </span>
+
+                    <span className="play-area-cost-chip play-area-image-type">
+                      {card.type}
+                    </span>
+                  </div>
+
+                  {cardIcons.length > 0 ? (
+                    <div className="play-area-image-icons" aria-label="Card icons">
+                      {cardIcons.map((icon, index) => (
+                        <span
+                          key={`${card.id}-${icon}-${index}`}
+                          className={`skill-icon-badge skill-${icon}`}
+                          title={icon}
+                          aria-label={icon}
+                        >
+                          <SkillIcon
+                            skill={icon}
+                            className="skill-icon-svg"
+                            viewBox="0 0 24 24"
+                          />
+                        </span>
+                      ))}
+                    </div>
                   ) : null}
+
+                  <div className="play-area-card-state-row">
+                    <button
+                      type="button"
+                      className={`play-area-state-button ${
+                        card.exhausted ? "is-exhausted" : "is-ready"
+                      }`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        togglePlayAreaCardExhausted(card.id);
+                      }}
+                    >
+                      {card.exhausted ? "Ready" : "Exhaust"}
+                    </button>
+
+                    {card.exhausted ? (
+                      <span className="play-area-state-badge">Exhausted</span>
+                    ) : (
+                      <span className="play-area-state-badge ready">Ready</span>
+                    )}
+                  </div>
+
+                  <div className="play-area-image-footer">
+                    <p className="play-area-image-title">{card.name}</p>
+                    {card.text ? (
+                      <p className="play-area-image-text">{card.text}</p>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             );
