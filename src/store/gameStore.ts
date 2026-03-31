@@ -143,6 +143,10 @@ function createLogEntry(kind: GameLogKind, text: string) {
   } as const;
 }
 
+function isOpeningHandWeakness(card: PlayerCard): boolean {
+  return card.type === "treachery" || card.type === "enemy";
+}
+
 type AdvanceStoreSlice = Pick<
   GameStore,
   | "agenda"
@@ -889,8 +893,42 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   drawStartingHand: (count = 5) => {
-    for (let i = 0; i < count; i += 1) {
-      get().drawCard();
+    let { deck, hand } = get();
+    let cardsDrawn = 0;
+    const skippedWeaknesses: PlayerCard[] = [];
+
+    while (cardsDrawn < count && deck.length > 0) {
+      const [topCard, ...remainingDeck] = deck;
+      deck = remainingDeck;
+
+      if (isOpeningHandWeakness(topCard)) {
+        skippedWeaknesses.push(topCard);
+        get().pushLog(
+          "player",
+          `Skipped opening-hand weakness: ${topCard.name}`,
+        );
+        continue;
+      }
+
+      hand = [...hand, topCard];
+      cardsDrawn += 1;
+      get().pushLog("player", `Drew opening hand card: ${topCard.name}`);
+    }
+
+    if (skippedWeaknesses.length > 0) {
+      deck = [...deck, ...skippedWeaknesses];
+    }
+
+    set({
+      deck,
+      hand,
+    });
+
+    if (cardsDrawn < count) {
+      get().pushLog(
+        "system",
+        `Opening hand drew ${cardsDrawn} card${cardsDrawn === 1 ? "" : "s"} because the deck ran out of non-weakness cards.`,
+      );
     }
   },
 
@@ -1051,7 +1089,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
 
-    togglePlayAreaCardExhausted: (cardId: string) => {
+  togglePlayAreaCardExhausted: (cardId: string) => {
     const { playArea, log } = get();
 
     const card = playArea.find((entry) => entry.id === cardId);
@@ -1064,9 +1102,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) =>
-        entry.id === cardId
-          ? { ...entry, exhausted: nextExhausted }
-          : entry,
+        entry.id === cardId ? { ...entry, exhausted: nextExhausted } : entry,
       ),
       log: [
         ...log,
