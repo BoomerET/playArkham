@@ -3,7 +3,8 @@ import type { ScenarioDefinition } from "./scenarioTypes";
 export const spreadingFlamesScenario: ScenarioDefinition = {
   id: "spreading-flames",
   name: "Spreading Flames",
-  description: "A recent spate of fires and grisly “accidents” have the entire city on edge.",
+  description:
+    "A recent spate of fires and grisly “accidents” have the entire city on edge.",
   startingLocationId: "friends-room",
   locations: [
     {
@@ -34,9 +35,15 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       shroud: 1,
       clues: 0,
       revealed: false,
-      connections: ["dormitories", "science-hall", "science-hall", "orne-library", "warren-observatory"],
+      connections: [
+        "dormitories",
+        "science-hall",
+        "science-hall",
+        "orne-library",
+        "warren-observatory",
+      ],
       investigatorsHere: [],
-      mapPosition: { x: 50, y:50 },
+      mapPosition: { x: 50, y: 50 },
       isVisible: false,
     },
     {
@@ -47,7 +54,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 78, y:50 },
+      mapPosition: { x: 78, y: 50 },
       isVisible: false,
     },
     {
@@ -58,7 +65,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 22, y:50 },
+      mapPosition: { x: 22, y: 50 },
       isVisible: false,
     },
     {
@@ -69,7 +76,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y:22 },
+      mapPosition: { x: 50, y: 22 },
       isVisible: false,
     },
   ],
@@ -79,5 +86,21 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       locationId: "cellar",
     },
   ],
+  acts: [
+    {
+      id: "spreading-flames-act-1",
+      kind: "act",
+      sequence: "1a",
+      title: "Where There's Smoke",
+      text: "You are searching the dormitories for nay sign of your friend.",
+      threshold: 2,
+      thresholdLabel: "Clues",
+      onAdvance: {
+        showLocationIds: ["dormitories", "miskatonic-quad"],
+        logEntries: [
+          "Act effect: The Dormitories and Miskatonic Quad locations are revealed.",
+        ]
+      }
+    },
+  ],
 };
-
