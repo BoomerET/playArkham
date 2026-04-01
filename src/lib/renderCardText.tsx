@@ -3,6 +3,7 @@ import actionIcon from "../assets/icons/arkham/action.svg";
 import doubleActionIcon from "../assets/icons/arkham/double-action.svg";
 import reactionIcon from "../assets/icons/arkham/reaction.svg";
 import freeIcon from "../assets/icons/arkham/free.svg";
+import "./renderCardText.css";
 
 function renderInlineFormatting(text: string): ReactNode[] {
   const parts = text.split(/(<i>.*?<\/i>)/gi);
