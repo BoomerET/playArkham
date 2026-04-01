@@ -16,6 +16,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 78 },
       isVisible: true,
+      onAdvance: {
+        showLocationIds: ["dormitories", "miskatonic-quad"],
+        logEntries: ["Act effect: The Hallway is revealed."],
+        advanceAgenda: true,
+      }
     },
     {
       id: "dormitories",
@@ -36,7 +41,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["dormitories", "science-hall", "science-hall", "orne-library", "warren-observatory"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y:50 },
+      mapPosition: { x: 50, y: 50 },
       isVisible: false,
     },
     {
@@ -47,7 +52,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 78, y:50 },
+      mapPosition: { x: 78, y: 50 },
       isVisible: false,
     },
     {
@@ -58,7 +63,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 22, y:50 },
+      mapPosition: { x: 22, y: 50 },
       isVisible: false,
     },
     {
@@ -69,7 +74,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y:22 },
+      mapPosition: { x: 50, y: 22 },
       isVisible: false,
     },
   ],
