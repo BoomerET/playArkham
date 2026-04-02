@@ -7,9 +7,10 @@ function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
 }
 
-function splitInvestigatorName(
-  name: string,
-): { firstLine: string; secondLine: string | null } {
+function splitInvestigatorName(name: string): {
+  firstLine: string;
+  secondLine: string | null;
+} {
   const parts = name.trim().split(/\s+/);
 
   if (parts.length <= 1) {
@@ -26,6 +27,28 @@ function splitInvestigatorName(
     firstLine: parts.slice(0, midpoint).join(" "),
     secondLine: parts.slice(midpoint).join(" "),
   };
+}
+
+const investigatorImages = import.meta.glob(
+  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function getInvestigatorImageUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
 }
 
 export default function InvestigatorPanel() {
@@ -55,15 +78,17 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
+  const portraitUrl = getInvestigatorImageUrl(investigator.portrait);
 
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
   );
 
-  const activeTargetId =
-    engagedEnemies.some((enemy) => enemy.id === selectedEnemyTargetId)
-      ? selectedEnemyTargetId
-      : (engagedEnemies[0]?.id ?? null);
+  const activeTargetId = engagedEnemies.some(
+    (enemy) => enemy.id === selectedEnemyTargetId,
+  )
+    ? selectedEnemyTargetId
+    : (engagedEnemies[0]?.id ?? null);
 
   const activeTargetEnemy =
     engagedEnemies.find((enemy) => enemy.id === activeTargetId) ?? null;
@@ -83,11 +108,18 @@ export default function InvestigatorPanel() {
           <div
             className={`portrait-frame investigator-portrait-frame ${factionClass}`}
           >
-            <img
-              src={investigator.portrait}
-              alt={investigator.name}
-              className="portrait-image"
-            />
+            {portraitUrl ? (
+              <img
+                src={portraitUrl}
+                alt={investigator.name}
+                className="portrait-image"
+                draggable={false}
+              />
+            ) : (
+              <div className="investigator-portrait-fallback">
+                {investigator.name}
+              </div>
+            )}
           </div>
         </div>
 
