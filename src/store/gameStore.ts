@@ -43,7 +43,6 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
-  InvestigatorSlotCounts,
   Phase,
   PlayerCard,
   ScenarioStatus,
@@ -54,8 +53,6 @@ import type {
 import {
   canPlayInAvailableSlots,
   getBlockedSlot,
-  getSlotCapacity,
-  getUsedSlots,
 } from "../features/playerCards/slots";
 
 type Screen = "home" | "game";
@@ -1190,16 +1187,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       `Playing ${card.name} is not implemented for card type ${card.type}.`,
     );
   },
-
-  //getUsedEquipmentSlots: () => {
-  //  const { playArea } = get();
-  //  return getUsedSlots(playArea);
-  //},
-
-  //getEquipmentSlotCapacity: () => {
-  //  const { investigator } = get();
-  //  return getSlotCapacity(investigator);
-  //},
 
   canPlayCardInSlots: (cardId: string) => {
     const { hand, playArea, investigator } = get();
