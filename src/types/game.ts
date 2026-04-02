@@ -27,6 +27,7 @@ export interface Investigator {
   faction: Faction;
   portrait: string;
   portraitBack?: string;
+  portraitHead?: string;
   health: number;
   sanity: number;
   resources: number;

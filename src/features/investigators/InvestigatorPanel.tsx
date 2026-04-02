@@ -37,6 +37,28 @@ const investigatorImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const investigatorHeadImages = import.meta.glob(
+  "../../assets/images/investigatorHeads/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function getInvestigatorHeadUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorHeadImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
+}
+
 function getInvestigatorImageUrl(imageName?: string): string | null {
   if (!imageName) {
     return null;
@@ -78,7 +100,9 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
-  const portraitUrl = getInvestigatorImageUrl(investigator.portrait);
+  const portraitUrl = getInvestigatorHeadUrl(
+    (investigator as any).portraitHead ?? investigator.portrait,
+  );
 
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
