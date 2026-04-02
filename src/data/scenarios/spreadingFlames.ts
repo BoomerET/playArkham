@@ -107,5 +107,26 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         showLocationIds: ["dormitories", "miskatonic-quad"],
       }
     },
+    {
+      id: "spreading-flames-act-3",
+      kind: "act",
+      sequence: "3a",
+      title: "Searching for Dr. Armitage",
+      text: "Your friend had mentioned visiting the head librarian, Dr. Henry Armitage. With more and more strange figures arriving, you must scour the campus for his whereabouts.",
+      threshold: 3,
+      thresholdLabel: "Clues",
+      onAdvance: {
+        showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
+      }
+    },
+    {
+      id: "spreading-flames-act-4",
+      kind: "act",
+      sequence: "4a",
+      title: "Blaze of Glory",
+      text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
+      threshold: 3,
+      thresholdLabel: "Clues"
+    },
   ],
 };
