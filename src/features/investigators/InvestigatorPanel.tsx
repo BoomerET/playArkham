@@ -29,13 +29,13 @@ function splitInvestigatorName(name: string): {
   };
 }
 
-const investigatorImages = import.meta.glob(
-  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
-  {
-    eager: true,
-    import: "default",
-  },
-) as Record<string, string>;
+//const investigatorImages = import.meta.glob(
+//  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
+//  {
+//    eager: true,
+//    import: "default",
+//  },
+//) as Record<string, string>;
 
 const investigatorHeadImages = import.meta.glob(
   "../../assets/images/investigatorHeads/*.{jpg,jpeg,png,webp}",
