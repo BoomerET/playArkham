@@ -158,14 +158,5 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       threshold: 10,
       thresholdLabel: "Doom",
     },
-    {
-      id: "spreading-flames-agenda-4",
-      kind: "agenda",
-      sequence: "4a",
-      title: "Blaze of Glory",
-      text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
-      threshold: 3,
-      thresholdLabel: "Clues"
-    },
   ],
 };
