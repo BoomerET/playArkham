@@ -399,3 +399,33 @@
   background: rgba(255,255,255,0.04);
   pointer-events: none;
 }
+
+.investigator-panel__section {
+  margin-top: 12px;
+}
+
+.investigator-panel__section-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.investigator-panel__slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.investigator-panel__slot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.investigator-panel__slot-value {
+  font-weight: 700;
+}
+
+.investigator-panel__slot-value--full {
+  color: #c65b5b;
+}

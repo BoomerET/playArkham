@@ -50,6 +50,13 @@ import type {
   CardCounterType,
 } from "../types/game";
 
+import {
+  canPlayInAvailableSlots,
+  getBlockedSlot,
+  getSlotCapacity,
+  getUsedSlots,
+} from "../features/playerCards/slots";
+
 type Screen = "home" | "game";
 
 type PendingTestResolution =
@@ -85,6 +92,9 @@ type GameStore = GameState & {
   shuffleDeck: () => void;
   discardCard: (cardId: string) => void;
   playCard: (cardId: string) => void;
+  getUsedEquipmentSlots: () => InvestigatorSlotCounts;
+  getEquipmentSlotCapacity: () => InvestigatorSlotCounts;
+  canPlayCardInSlots: (cardId: string) => boolean;
   togglePlayAreaCardExhausted: (cardId: string) => void;
   drawChaosToken: () => ChaosToken | null;
   gainResource: (amount?: number) => void;
@@ -1086,6 +1096,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (card.type === "asset") {
+      const canPlayInSlots = canPlayInAvailableSlots(
+        card,
+        playArea,
+        investigator,
+      );
+
+      if (!canPlayInSlots) {
+        const blockedSlot = getBlockedSlot(card, playArea, investigator);
+
+        set({ draggedCardId: null });
+        get().pushLog(
+          "system",
+          blockedSlot
+            ? `Cannot play ${card.name}. ${blockedSlot} slot is full.`
+            : `Cannot play ${card.name}. No available equipment slots.`,
+        );
+        return;
+      }
+    }
+
     const updatedHand = hand.filter((currentCard) => currentCard.id !== cardId);
     const updatedInvestigator = {
       ...investigator,
@@ -1159,6 +1190,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       "system",
       `Playing ${card.name} is not implemented for card type ${card.type}.`,
     );
+  },
+
+  getUsedEquipmentSlots: () => {
+    const { playArea } = get();
+    return getUsedSlots(playArea);
+  },
+
+  getEquipmentSlotCapacity: () => {
+    const { investigator } = get();
+    return getSlotCapacity(investigator);
+  },
+
+  canPlayCardInSlots: (cardId: string) => {
+    const { hand, playArea, investigator } = get();
+    const card = hand.find((entry) => entry.id === cardId);
+
+    if (!card) {
+      return false;
+    }
+
+    return canPlayInAvailableSlots(card, playArea, investigator);
   },
 
   togglePlayAreaCardExhausted: (cardId: string) => {

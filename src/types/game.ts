@@ -21,6 +21,18 @@ export type Faction =
 
 export type ScenarioStatus = "inProgress" | "won" | "lost";
 
+export type InvestigatorSlotType =
+  | "Hand"
+  | "Arcane"
+  | "Ally"
+  | "Accessory"
+  | "Head"
+  | "Body";
+
+export type InvestigatorSlotCounts = Record<InvestigatorSlotType, number>;
+
+export type PlayerCardSlot = InvestigatorSlotType | "Hand x2";
+
 export interface Investigator {
   id: string;
   name: string;
@@ -38,7 +50,21 @@ export interface Investigator {
   intellect: number;
   combat: number;
   agility: number;
+  slotCapacity?: InvestigatorSlotCounts;
 }
+
+export type CardCounterType =
+  | "ammo"
+  | "charge"
+  | "secret"
+  | "supply"
+  | "resource"
+  | "clue"
+  | "doom"
+  | "damage"
+  | "horror";
+
+export type CardCounters = Partial<Record<CardCounterType, number>>;
 
 export interface PlayerCard {
   id: string;
@@ -54,39 +80,13 @@ export interface PlayerCard {
   cost?: number;
   icons?: string[];
   text?: string;
-  slot?:
-    | "Hand"
-    | "Arcane"
-    | "Hand x2"
-    | "Ally"
-    | "Accessory"
-    | "Head"
-    | "Body";
+  slot?: PlayerCardSlot;
   traits?: string[];
-  faction:
-    | "neutral"
-    | "guardian"
-    | "rogue"
-    | "seeker"
-    | "mystic"
-    | "survivor";
+  faction: Faction;
   image?: string;
   exhausted?: boolean;
   counters?: CardCounters;
 }
-
-export type CardCounterType =
-  | "ammo"
-  | "charge"
-  | "secret"
-  | "supply"
-  | "resource"
-  | "clue"
-  | "doom"
-  | "damage"
-  | "horror";
-
-export type CardCounters = Partial<Record<CardCounterType, number>>;
 
 export interface GameLocation {
   id: string;

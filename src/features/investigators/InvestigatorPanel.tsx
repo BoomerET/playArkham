@@ -29,13 +29,30 @@ function splitInvestigatorName(name: string): {
   };
 }
 
-//const investigatorImages = import.meta.glob(
-//  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
-//  {
-//    eager: true,
-//    import: "default",
-//  },
-//) as Record<string, string>;
+type SlotRowProps = {
+  label: string;
+  used: number;
+  max: number;
+};
+
+function SlotRow({ label, used, max }: SlotRowProps) {
+  const full = used >= max;
+
+  return (
+    <div className="investigator-panel__slot-row">
+      <span className="investigator-panel__slot-label">{label}</span>
+      <span
+        className={
+          full
+            ? "investigator-panel__slot-value investigator-panel__slot-value--full"
+            : "investigator-panel__slot-value"
+        }
+      >
+        {used}/{max}
+      </span>
+    </div>
+  );
+}
 
 const investigatorHeadImages = import.meta.glob(
   "../../assets/images/investigatorHeads/*.{jpg,jpeg,png,webp}",
@@ -125,6 +142,10 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
+  const usedSlots = useGameStore((state) => state.getUsedEquipmentSlots());
+  const slotCapacity = useGameStore((state) =>
+    state.getEquipmentSlotCapacity(),
+  );
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
@@ -177,6 +198,27 @@ export default function InvestigatorPanel() {
           </div>
         </div>
       </div>
+
+      <section className="investigator-panel__section">
+        <h3 className="investigator-panel__section-title">Equipment Slots</h3>
+
+        <div className="investigator-panel__slots">
+          <SlotRow label="Hand" used={usedSlots.Hand} max={slotCapacity.Hand} />
+          <SlotRow
+            label="Arcane"
+            used={usedSlots.Arcane}
+            max={slotCapacity.Arcane}
+          />
+          <SlotRow label="Ally" used={usedSlots.Ally} max={slotCapacity.Ally} />
+          <SlotRow
+            label="Accessory"
+            used={usedSlots.Accessory}
+            max={slotCapacity.Accessory}
+          />
+          <SlotRow label="Head" used={usedSlots.Head} max={slotCapacity.Head} />
+          <SlotRow label="Body" used={usedSlots.Body} max={slotCapacity.Body} />
+        </div>
+      </section>
 
       <hr />
 
