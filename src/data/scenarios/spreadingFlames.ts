@@ -130,4 +130,42 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues"
     },
   ],
+  agendas: [
+    {
+      id: "spreading-flames-agenda-1",
+      kind: "agenda",
+      sequence: "1a",
+      title: "Past Curfew",
+      text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
+      threshold: 3,
+      thresholdLabel: "Doom",
+    },
+    {
+      id: "spreading-flames-agenda-2",
+      kind: "agenda",
+      sequence: "2a",
+      title: "Lit Up",
+      text: "The sky glows a faint orange as the flames spread.",
+      threshold: 5,
+      thresholdLabel: "Doom",
+    },
+    {
+      id: "spreading-flames-agenda-3",
+      kind: "agenda",
+      sequence: "3a",
+      title: "Wild Flames",
+      text: "The campus is ablaze!",
+      threshold: 10,
+      thresholdLabel: "Doom",
+    },
+    {
+      id: "spreading-flames-agenda-4",
+      kind: "agenda",
+      sequence: "4a",
+      title: "Blaze of Glory",
+      text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
+      threshold: 3,
+      thresholdLabel: "Clues"
+    },
+  ],
 };
