@@ -38,7 +38,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       connections: [
         "dormitories",
         "science-hall",
-        "science-hall",
         "orne-library",
         "warren-observatory",
       ],
