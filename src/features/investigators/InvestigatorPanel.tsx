@@ -76,22 +76,15 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
   return match?.[1] ?? null;
 }
 
-//function getInvestigatorImageUrl(imageName?: string): string | null {
-//  if (!imageName) {
-//    return null;
-//  }
-//
-//  const normalized = imageName.toLowerCase();
-//
-//  const match = Object.entries(investigatorImages).find(([path]) =>
-//    path.toLowerCase().endsWith(`/${normalized}`),
-//  );
-//
-//  return match?.[1] ?? null;
-//}
-
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
+  const playArea = useGameStore((state) => state.playArea);
+
+  const usedSlots = useMemo(() => getUsedSlots(playArea), [playArea]);
+  const slotCapacity = useMemo(
+    () => getSlotCapacity(investigator),
+    [investigator],
+  );
   const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
   const selectedEnemyTargetId = useGameStore(
@@ -142,10 +135,8 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
-  const usedSlots = useGameStore((state) => state.getUsedEquipmentSlots());
-  const slotCapacity = useGameStore((state) =>
-    state.getEquipmentSlotCapacity(),
-  );
+  import { useMemo } from "react";
+  import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">

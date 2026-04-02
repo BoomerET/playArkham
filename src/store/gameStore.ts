@@ -93,8 +93,8 @@ type GameStore = GameState & {
   shuffleDeck: () => void;
   discardCard: (cardId: string) => void;
   playCard: (cardId: string) => void;
-  getUsedEquipmentSlots: () => InvestigatorSlotCounts;
-  getEquipmentSlotCapacity: () => InvestigatorSlotCounts;
+  //getUsedEquipmentSlots: () => InvestigatorSlotCounts;
+  //getEquipmentSlotCapacity: () => InvestigatorSlotCounts;
   canPlayCardInSlots: (cardId: string) => boolean;
   togglePlayAreaCardExhausted: (cardId: string) => void;
   drawChaosToken: () => ChaosToken | null;
@@ -1193,15 +1193,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
 
-  getUsedEquipmentSlots: () => {
-    const { playArea } = get();
-    return getUsedSlots(playArea);
-  },
+  //getUsedEquipmentSlots: () => {
+  //  const { playArea } = get();
+  //  return getUsedSlots(playArea);
+  //},
 
-  getEquipmentSlotCapacity: () => {
-    const { investigator } = get();
-    return getSlotCapacity(investigator);
-  },
+  //getEquipmentSlotCapacity: () => {
+  //  const { investigator } = get();
+  //  return getSlotCapacity(investigator);
+  //},
 
   canPlayCardInSlots: (cardId: string) => {
     const { hand, playArea, investigator } = get();
