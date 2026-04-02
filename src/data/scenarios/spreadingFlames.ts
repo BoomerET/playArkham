@@ -102,9 +102,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
-        logEntries: [
-          "Act effect: The Dormitories and Miskatonic Quad locations are revealed.",
-        ]
       }
     },
   ],

@@ -21,6 +21,8 @@ export interface ScenarioAdvanceEffects {
   winScenario?: boolean;
   loseScenario?: boolean;
   resolutionText?: string;
+  resolutionTitle?: string;
+  resolutionSubtitle?: string;
 }
 
 export interface ScenarioCardDefinition {
