@@ -80,10 +80,14 @@ export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
   const playArea = useGameStore((state) => state.playArea);
 
-  const usedSlots = useMemo(() => getUsedSlots(playArea), [playArea]);
+  const usedSlots = useMemo(
+    () => getUsedSlots(playArea),
+    [playArea, getUsedSlots],
+  );
+
   const slotCapacity = useMemo(
     () => getSlotCapacity(investigator),
-    [investigator],
+    [investigator, getSlotCapacity],
   );
   const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
