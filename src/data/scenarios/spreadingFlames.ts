@@ -92,11 +92,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       kind: "act",
       sequence: "1a",
       title: "Where There's Smoke",
-      text: "You are searching the dormitories for nay sign of your friend.",
+      text: "You are searching the dormitories for any sign of your friend.",
       threshold: 2,
       thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
+        revealLocationIds: ["dormitories", "miskatonic-quad"],
       }
     },
   ],
