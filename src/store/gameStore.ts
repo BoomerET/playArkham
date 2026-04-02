@@ -37,17 +37,18 @@ import {
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
 import type {
   ActiveSkillTest,
+  CardCounterType,
   ChaosToken,
   CommittedSkillCard,
   GameLogKind,
   GameState,
   Investigator,
-  PlayerCard,
+  InvestigatorSlotCounts,
   Phase,
+  PlayerCard,
+  ScenarioStatus,
   SkillTestResult,
   SkillType,
-  ScenarioStatus,
-  CardCounterType,
 } from "../types/game";
 
 import {
