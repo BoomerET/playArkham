@@ -25,6 +25,23 @@ function getEnemyTokenLabel(name: string): string {
   return `${words[0][0] ?? ""}${words[1][0] ?? ""}`.toUpperCase();
 }
 
+function getInvestigatorInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length === 0) {
+    return "?";
+  }
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  const first = parts[0][0] ?? "";
+  const last = parts[parts.length - 1][0] ?? "";
+
+  return `${first}${last}`.toUpperCase();
+}
+
 export default function LocationCard({ location }: Props) {
   const moveInvestigator = useGameStore((state) => state.moveInvestigator);
   const investigator = useGameStore((state) => state.investigator);
@@ -58,7 +75,9 @@ export default function LocationCard({ location }: Props) {
     wasRevealedRef.current = location.revealed;
   }, [location.revealed]);
 
-  const isCurrentLocation = location.investigatorsHere.includes(investigator.id);
+  const isCurrentLocation = location.investigatorsHere.includes(
+    investigator.id,
+  );
 
   const currentLocation = locations.find((current) =>
     current.investigatorsHere.includes(investigator.id),
@@ -81,12 +100,6 @@ export default function LocationCard({ location }: Props) {
 
   function getInvestigatorData(id: string) {
     return availableInvestigators.find((item) => item.id === id);
-  }
-
-  function getInvestigatorShortName(id: string): string {
-    const fullName = getInvestigatorData(id)?.name ?? formatName(id);
-    const parts = fullName.split(" ");
-    return parts.length > 1 ? parts[0] : fullName;
   }
 
   function handleClick() {
@@ -139,9 +152,13 @@ export default function LocationCard({ location }: Props) {
           </div>
 
           <div className="location-card-status-row token-row">
-            {isCurrentLocation && <span className="token-chip success">Current</span>}
+            {isCurrentLocation && (
+              <span className="token-chip success">Current</span>
+            )}
             {isLegalMove && <span className="token-chip">Move</span>}
-            {isIllegalMove && <span className="token-chip danger">Blocked</span>}
+            {isIllegalMove && (
+              <span className="token-chip danger">Blocked</span>
+            )}
           </div>
 
           {(hasInvestigators || hasEnemies) && (
@@ -152,6 +169,7 @@ export default function LocationCard({ location }: Props) {
                   <div className="location-investigator-token-row">
                     {location.investigatorsHere.map((id) => {
                       const data = getInvestigatorData(id);
+                      const fullName = data?.name ?? formatName(id);
                       const factionClass = data
                         ? getFactionClassName(data.faction)
                         : "faction-neutral";
@@ -160,20 +178,12 @@ export default function LocationCard({ location }: Props) {
                         <div
                           key={id}
                           className={`location-investigator-token ${factionClass}`}
-                          title={data?.name ?? formatName(id)}
-                          aria-label={data?.name ?? formatName(id)}
+                          title={fullName}
+                          aria-label={fullName}
                         >
-                          {data?.portrait ? (
-                            <img
-                              src={data.portrait}
-                              alt={data.name}
-                              className="location-investigator-token-image"
-                            />
-                          ) : (
-                            <span className="location-investigator-token-fallback">
-                              {getInvestigatorShortName(id).slice(0, 2).toUpperCase()}
-                            </span>
-                          )}
+                          <span className="location-investigator-token-initials">
+                            {getInvestigatorInitials(fullName)}
+                          </span>
 
                           {id === investigator.id && (
                             <span
@@ -196,14 +206,19 @@ export default function LocationCard({ location }: Props) {
                       <div
                         key={enemy.id}
                         className={`location-enemy-token ${
-                          enemy.exhausted ? "location-enemy-token-exhausted" : ""
+                          enemy.exhausted
+                            ? "location-enemy-token-exhausted"
+                            : ""
                         }`}
                         title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${
                           enemy.exhausted ? " • exhausted" : ""
                         }`}
                         aria-label={enemy.name}
                       >
-                        <span className="location-enemy-token-skull" aria-hidden="true">
+                        <span
+                          className="location-enemy-token-skull"
+                          aria-hidden="true"
+                        >
                           ☠
                         </span>
                         <span className="location-enemy-token-label">
