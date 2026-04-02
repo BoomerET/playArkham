@@ -2791,3 +2791,75 @@ button:hover {
     max-height: min(64vh, 620px);
   }
 }
+
+.card-preview-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(7, 10, 14, 0.82);
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
+.card-preview-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-preview-image {
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+}
+
+.card-preview-flip-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  pointer-events: auto;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(15, 20, 28, 0.88);
+  color: #eef4f8;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.card-preview-flip-button:hover {
+  background: rgba(25, 32, 43, 0.96);
+}
+
+.hand-preview-overlay {
+  z-index: 999999;
+  padding: 1rem;
+}
+
+.hand-preview-frame {
+  width: min(64vw, 560px);
+  height: min(72vh, 760px);
+}
+
+.hand-preview-image {
+  max-width: min(64vw, 560px);
+  max-height: min(72vh, 760px);
+}
+
+@media (max-width: 900px) {
+  .hand-preview-frame {
+    width: min(82vw, 460px);
+    height: min(64vh, 620px);
+  }
+
+  .hand-preview-image {
+    max-width: min(82vw, 460px);
+    max-height: min(64vh, 620px);
+  }
+}

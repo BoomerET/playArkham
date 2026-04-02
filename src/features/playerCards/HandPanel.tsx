@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
@@ -140,10 +141,11 @@ export default function HandPanel() {
   const hand = useGameStore((state) => state.hand);
   const discardCard = useGameStore((state) => state.discardCard);
   const playCard = useGameStore((state) => state.playCard);
+  const shuffleDeck = useGameStore((state) => state.shuffleDeck);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
-  const shuffleDeck = useGameStore((state) => state.shuffleDeck);
+  const deckCount = useGameStore((state) => state.deck.length);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
@@ -200,7 +202,7 @@ export default function HandPanel() {
   const previewImageUrl =
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
-      : (previewCard?.frontImageUrl ?? null);
+      : previewCard?.frontImageUrl ?? null;
 
   return (
     <section className="game-panel hand-panel">
@@ -223,13 +225,18 @@ export default function HandPanel() {
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
         </div>
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={shuffleDeck}
-        >
-          Shuffle Deck
-        </button>
+
+        {!activeSkillTest && (
+          <div className="hand-panel-actions">
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={shuffleDeck}
+            >
+              Shuffle Deck ({deckCount})
+            </button>
+          </div>
+        )}
       </div>
 
       {hand.length === 0 ? (
@@ -247,9 +254,7 @@ export default function HandPanel() {
 
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
-              .filter(
-                (icon): icon is NonNullable<typeof icon> => icon !== null,
-              );
+              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
 
             return (
               <div
@@ -309,10 +314,7 @@ export default function HandPanel() {
                 </div>
 
                 {cardIcons.length > 0 && (
-                  <div
-                    className="hand-card-image-icons"
-                    aria-label="Card icons"
-                  >
+                  <div className="hand-card-image-icons" aria-label="Card icons">
                     {cardIcons.map((icon, index) => (
                       <span
                         key={`${card.id}-${icon}-${index}`}
@@ -378,36 +380,39 @@ export default function HandPanel() {
         </div>
       )}
 
-      {previewCard && previewImageUrl && (
-        <div
-          className="card-preview-overlay"
-          aria-hidden="true"
-          onMouseLeave={() => setHoveredCardId(null)}
-        >
-          <div className="card-preview-frame">
-            {previewCard.backImageUrl ? (
-              <button
-                type="button"
-                className="card-preview-flip-button"
-                onClick={() =>
-                  setPreviewSide((current) =>
-                    current === "front" ? "back" : "front",
-                  )
-                }
-              >
-                {previewSide === "front" ? "Show Back" : "Show Front"}
-              </button>
-            ) : null}
+      {previewCard &&
+        previewImageUrl &&
+        createPortal(
+          <div
+            className="card-preview-overlay hand-preview-overlay"
+            aria-hidden="true"
+            onMouseLeave={() => setHoveredCardId(null)}
+          >
+            <div className="card-preview-frame hand-preview-frame">
+              {previewCard.backImageUrl ? (
+                <button
+                  type="button"
+                  className="card-preview-flip-button"
+                  onClick={() =>
+                    setPreviewSide((current) =>
+                      current === "front" ? "back" : "front",
+                    )
+                  }
+                >
+                  {previewSide === "front" ? "Show Back" : "Show Front"}
+                </button>
+              ) : null}
 
-            <img
-              src={previewImageUrl}
-              alt={`${previewCard.name} ${previewSide}`}
-              className="card-preview-image"
-              draggable={false}
-            />
-          </div>
-        </div>
-      )}
+              <img
+                src={previewImageUrl}
+                alt={`${previewCard.name} ${previewSide}`}
+                className="card-preview-image hand-preview-image"
+                draggable={false}
+              />
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
