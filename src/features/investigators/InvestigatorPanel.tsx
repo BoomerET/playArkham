@@ -101,7 +101,7 @@ export default function InvestigatorPanel() {
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
   const portraitUrl = getInvestigatorHeadUrl(
-    (investigator as any).portraitHead ?? investigator.portrait,
+    investigator.portraitHead ?? investigator.portrait,
   );
 
   const engagedEnemies = enemies.filter(
