@@ -1,6 +1,7 @@
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
+import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
 
 function formatFaction(faction: string): string {
@@ -79,16 +80,6 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
   const playArea = useGameStore((state) => state.playArea);
-
-  const usedSlots = useMemo(
-    () => getUsedSlots(playArea),
-    [playArea, getUsedSlots],
-  );
-
-  const slotCapacity = useMemo(
-    () => getSlotCapacity(investigator),
-    [investigator, getSlotCapacity],
-  );
   const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
   const selectedEnemyTargetId = useGameStore(
@@ -108,6 +99,9 @@ export default function InvestigatorPanel() {
   const investigateAction = useGameStore((state) => state.investigateAction);
   const fightAction = useGameStore((state) => state.fightAction);
   const evadeAction = useGameStore((state) => state.evadeAction);
+
+  const usedSlots = getUsedSlots(playArea);
+  const slotCapacity = getSlotCapacity(investigator);
 
   const canTakeAction =
     turn.phase === "investigation" && turn.actionsRemaining > 0;
@@ -139,8 +133,6 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
-  import { useMemo } from "react";
-  import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
