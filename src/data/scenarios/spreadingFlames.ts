@@ -95,9 +95,17 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "You are searching the dormitories for any sign of your friend.",
       threshold: 2,
       thresholdLabel: "Clues",
+    },
+    {
+      id: "spreading-flames-act-2",
+      kind: "act",
+      sequence: "2a",
+      title: "Escape the Dorms",
+      text: "A burning apparition stands between you and the exit. You must escape the dormitories.",
+      threshold: 2,
+      thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
-        revealLocationIds: ["dormitories", "miskatonic-quad"],
       }
     },
   ],
