@@ -37,6 +37,8 @@ function applyCardAdvanceEffects(
   const {
     showLocationIds = [],
     revealLocationIds = [],
+    hideLocationIds = [],
+    unrevealLocationIds = [],
     spawnEnemies = [],
     logEntries = [],
     advanceAgenda = false,
@@ -45,8 +47,25 @@ function applyCardAdvanceEffects(
 
   const showSet = new Set(showLocationIds);
   const revealSet = new Set(revealLocationIds);
+  const hideSet = new Set(hideLocationIds);
+  const unrevealSet = new Set(unrevealLocationIds);
 
   const updatedLocations = state.locations.map((location) => {
+    if (hideSet.has(location.id)) {
+      return {
+        ...location,
+        isVisible: false,
+        investigatorsHere: [],
+      };
+    }
+
+    if (unrevealSet.has(location.id)) {
+      return {
+        ...location,
+        revealed: false,
+      };
+    }
+
     if (revealSet.has(location.id)) {
       return {
         ...location,

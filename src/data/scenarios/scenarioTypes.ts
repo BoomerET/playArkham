@@ -8,6 +8,8 @@ import type {
 export interface ScenarioAdvanceEffects {
   showLocationIds?: string[];
   revealLocationIds?: string[];
+  hideLocationIds?: string[];
+  unrevealLocationIds?: string[];
   spawnEnemies?: EnemySpawn[];
   engageOnSpawn?: boolean;
   revealSpawnLocations?: boolean;

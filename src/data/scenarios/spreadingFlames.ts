@@ -117,6 +117,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
+        hideLocationIds: ["friends-room"],
       }
     },
     {
