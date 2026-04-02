@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
-import type { CardCounterType, PlayerCard } from "../../types/game";
+import type { PlayerCard } from "../../types/game";
 
 const playerCardImages = import.meta.glob(
   [
@@ -16,18 +16,6 @@ const playerCardImages = import.meta.glob(
     import: "default",
   },
 ) as Record<string, string>;
-
-const COUNTER_TYPES: CardCounterType[] = [
-  "ammo",
-  "charge",
-  "secret",
-  "supply",
-  "resource",
-  "clue",
-  "doom",
-  "damage",
-  "horror",
-];
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -141,31 +129,6 @@ function getCardBackImageUrl(card: PlayerCard): string | null {
   ]);
 }
 
-function formatCounterLabel(counterType: CardCounterType) {
-  switch (counterType) {
-    case "ammo":
-      return "Ammo";
-    case "charge":
-      return "Charge";
-    case "secret":
-      return "Secret";
-    case "supply":
-      return "Supply";
-    case "resource":
-      return "Resource";
-    case "clue":
-      return "Clue";
-    case "doom":
-      return "Doom";
-    case "damage":
-      return "Damage";
-    case "horror":
-      return "Horror";
-    default:
-      return counterType;
-  }
-}
-
 type PreviewCard = {
   id: string;
   name: string;
@@ -178,12 +141,6 @@ export default function PlayAreaPanel() {
   const playCard = useGameStore((state) => state.playCard);
   const togglePlayAreaCardExhausted = useGameStore(
     (state) => state.togglePlayAreaCardExhausted,
-  );
-  const incrementPlayAreaCardCounter = useGameStore(
-    (state) => state.incrementPlayAreaCardCounter,
-  );
-  const decrementPlayAreaCardCounter = useGameStore(
-    (state) => state.decrementPlayAreaCardCounter,
   );
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
@@ -297,10 +254,6 @@ export default function PlayAreaPanel() {
               .map((icon) => normalizeSkillIcon(icon))
               .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
 
-            const visibleCounters = COUNTER_TYPES.filter(
-              (counterType) => (card.counters?.[counterType] ?? 0) > 0,
-            );
-
             return (
               <div
                 key={card.id}
@@ -377,75 +330,6 @@ export default function PlayAreaPanel() {
                     )}
                   </div>
 
-                  {visibleCounters.length > 0 ? (
-                    <div className="play-area-counter-badges">
-                      {visibleCounters.map((counterType) => (
-                        <span
-                          key={`${card.id}-${counterType}-badge`}
-                          className={`play-area-counter-badge counter-${counterType}`}
-                        >
-                          {formatCounterLabel(counterType)}{" "}
-                          {card.counters?.[counterType] ?? 0}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-
-                  <div className="play-area-counter-controls">
-                    <div className="play-area-counter-controls-inner">
-                      {COUNTER_TYPES.map((counterType) => {
-                        const value = card.counters?.[counterType] ?? 0;
-
-                        return (
-                          <div
-                            key={`${card.id}-${counterType}`}
-                            className="play-area-counter-row"
-                          >
-                            <span
-                              className={`play-area-counter-label counter-${counterType}`}
-                            >
-                              {formatCounterLabel(counterType)}
-                            </span>
-
-                            <div className="play-area-counter-buttons">
-                              <button
-                                type="button"
-                                className="play-area-counter-button"
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  decrementPlayAreaCardCounter(
-                                    card.id,
-                                    counterType,
-                                  );
-                                }}
-                              >
-                                −
-                              </button>
-
-                              <span className="play-area-counter-value">
-                                {value}
-                              </span>
-
-                              <button
-                                type="button"
-                                className="play-area-counter-button"
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  incrementPlayAreaCardCounter(
-                                    card.id,
-                                    counterType,
-                                  );
-                                }}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
                   <div className="play-area-image-footer">
                     <p className="play-area-image-title">{card.name}</p>
                     {card.text ? (
@@ -465,7 +349,7 @@ export default function PlayAreaPanel() {
           aria-hidden="true"
           onMouseLeave={() => setHoveredCardId(null)}
         >
-          <div className="card-preview-frame">
+          <div className="card-preview-frame play-area-preview-frame">
             {previewCard.backImageUrl ? (
               <button
                 type="button"
@@ -483,7 +367,7 @@ export default function PlayAreaPanel() {
             <img
               src={previewImageUrl}
               alt={`${previewCard.name} ${previewSide}`}
-              className="card-preview-image"
+              className="card-preview-image play-area-preview-image"
               draggable={false}
             />
           </div>
