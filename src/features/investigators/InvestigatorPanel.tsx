@@ -59,19 +59,19 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
   return match?.[1] ?? null;
 }
 
-function getInvestigatorImageUrl(imageName?: string): string | null {
-  if (!imageName) {
-    return null;
-  }
-
-  const normalized = imageName.toLowerCase();
-
-  const match = Object.entries(investigatorImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-
-  return match?.[1] ?? null;
-}
+//function getInvestigatorImageUrl(imageName?: string): string | null {
+//  if (!imageName) {
+//    return null;
+//  }
+//
+//  const normalized = imageName.toLowerCase();
+//
+//  const match = Object.entries(investigatorImages).find(([path]) =>
+//    path.toLowerCase().endsWith(`/${normalized}`),
+//  );
+//
+//  return match?.[1] ?? null;
+//}
 
 export default function InvestigatorPanel() {
   const investigator = useGameStore((state) => state.investigator);
