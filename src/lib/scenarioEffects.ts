@@ -1,5 +1,4 @@
 import { buildScenarioEnemies } from "./buildScenarioEnemies";
-import { createLogEntry } from "./gameLog";
 import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
@@ -69,15 +68,11 @@ function applyCardAdvanceEffects(
   const spawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
 
-  const newLogEntries = logEntries.map((entry) =>
-    createLogEntry("scenario", entry),
-  );
-
   return {
     ...state,
     locations: updatedLocations,
     enemies: [...state.enemies, ...spawnedEnemies],
-    log: [...state.log, ...newLogEntries],
+    log: [...state.log, ...logEntries],
     advanceAgendaRequested: advanceAgenda,
     advanceActRequested: advanceAct,
   };
