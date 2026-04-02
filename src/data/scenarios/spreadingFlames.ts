@@ -17,11 +17,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 78 },
       isVisible: true,
-      onAdvance: {
-        showLocationIds: ["dormitories", "miskatonic-quad"],
-        logEntries: ["Act effect: The Hallway is revealed."],
-        advanceAgenda: true,
-      }
     },
     {
       id: "dormitories",
