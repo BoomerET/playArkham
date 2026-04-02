@@ -86,6 +86,7 @@ export interface PlayerCard {
   image?: string;
   exhausted?: boolean;
   counters?: CardCounters;
+  isWeakness?: boolean;
 }
 
 export interface GameLocation {

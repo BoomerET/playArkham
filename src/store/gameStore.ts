@@ -183,8 +183,12 @@ function normalizeCardCounters(
   return normalized;
 }
 
+//function isOpeningHandWeakness(card: PlayerCard): boolean {
+//  return card.type === "treachery" || card.type === "enemy";
+//}
+
 function isOpeningHandWeakness(card: PlayerCard): boolean {
-  return card.type === "treachery" || card.type === "enemy";
+  return card.isWeakness === true;
 }
 
 function createLogEntry(kind: GameLogKind, text: string) {
