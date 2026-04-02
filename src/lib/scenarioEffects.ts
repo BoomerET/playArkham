@@ -1,4 +1,5 @@
 import { buildScenarioEnemies } from "./buildScenarioEnemies";
+import { createLogEntry } from "./gameLog";
 import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
@@ -6,6 +7,7 @@ import type {
 import type {
   Enemy,
   GameLocation,
+  GameLogItem,
   ScenarioCardState,
 } from "../types/game";
 
@@ -14,7 +16,7 @@ export type ScenarioEffectState = {
   act: ScenarioCardState | null;
   locations: GameLocation[];
   enemies: Enemy[];
-  log: unknown[];
+  log: GameLogItem[];
   investigatorId: string;
   currentLocationId: string | null;
   selectedEnemyTargetId: string | null;
@@ -67,11 +69,15 @@ function applyCardAdvanceEffects(
   const spawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
 
+  const newLogEntries = logEntries.map((entry) =>
+    createLogEntry("scenario", entry),
+  );
+
   return {
     ...state,
     locations: updatedLocations,
     enemies: [...state.enemies, ...spawnedEnemies],
-    log: [...state.log, ...logEntries],
+    log: [...state.log, ...newLogEntries],
     advanceAgendaRequested: advanceAgenda,
     advanceActRequested: advanceAct,
   };
