@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
@@ -343,36 +344,39 @@ export default function PlayAreaPanel() {
         </div>
       )}
 
-      {previewCard && previewImageUrl ? (
-        <div
-          className="card-preview-overlay"
-          aria-hidden="true"
-          onMouseLeave={() => setHoveredCardId(null)}
-        >
-          <div className="card-preview-frame play-area-preview-frame">
-            {previewCard.backImageUrl ? (
-              <button
-                type="button"
-                className="card-preview-flip-button"
-                onClick={() =>
-                  setPreviewSide((current) =>
-                    current === "front" ? "back" : "front",
-                  )
-                }
-              >
-                {previewSide === "front" ? "Show Back" : "Show Front"}
-              </button>
-            ) : null}
+      {previewCard &&
+        previewImageUrl &&
+        createPortal(
+          <div
+            className="card-preview-overlay play-area-preview-overlay"
+            aria-hidden="true"
+            onMouseLeave={() => setHoveredCardId(null)}
+          >
+            <div className="card-preview-frame play-area-preview-frame">
+              {previewCard.backImageUrl ? (
+                <button
+                  type="button"
+                  className="card-preview-flip-button"
+                  onClick={() =>
+                    setPreviewSide((current) =>
+                      current === "front" ? "back" : "front",
+                    )
+                  }
+                >
+                  {previewSide === "front" ? "Show Back" : "Show Front"}
+                </button>
+              ) : null}
 
-            <img
-              src={previewImageUrl}
-              alt={`${previewCard.name} ${previewSide}`}
-              className="card-preview-image play-area-preview-image"
-              draggable={false}
-            />
-          </div>
-        </div>
-      ) : null}
+              <img
+                src={previewImageUrl}
+                alt={`${previewCard.name} ${previewSide}`}
+                className="card-preview-image play-area-preview-image"
+                draggable={false}
+              />
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
