@@ -279,6 +279,30 @@ export default function HomeScreen() {
       </section>
 
       <section className="panel">
+        <div className="deck-section">
+          <h2 className="section-title">Deck</h2>
+
+          <input
+            type="text"
+            value={selectedDeckId}
+            onChange={(event) => setSelectedDeckId(event.target.value)}
+            placeholder="Enter ArkhamDB Deck ID (e.g. 5841936)"
+            style={{
+              padding: "10px",
+              fontSize: "16px",
+              width: "300px",
+              marginBottom: "10px",
+            }}
+          />
+
+          {selectedDeckId && (
+            <div style={{ marginBottom: "10px" }}>
+              {deckLookupState === "loading" && "Loading deck..."}
+              {deckLookupState === "error" && deckLookupMessage}
+              {deckLookupState === "ready" && deckLookupMessage}
+            </div>
+          )}
+        </div>
         <div className="scenario-section">
           <h2 className="section-title">Deck</h2>
 
