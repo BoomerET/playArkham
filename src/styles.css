@@ -2863,3 +2863,51 @@ button:hover {
     max-height: min(64vh, 620px);
   }
 }
+
+.home-screen__field {
+  margin-bottom: 1rem;
+}
+
+.home-screen__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.home-screen__input {
+  width: 100%;
+  max-width: 320px;
+  padding: 0.6rem 0.75rem;
+}
+
+.home-screen__help {
+  margin-top: 0.4rem;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+.home-screen__deck-status {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.home-screen__deck-status--loading {
+  opacity: 0.9;
+}
+
+.home-screen__deck-status--ready {
+  opacity: 1;
+}
+
+.home-screen__deck-status--error {
+  opacity: 1;
+}
+
+.home-screen__deck-meta {
+  margin-top: 0.25rem;
+}
+
+.home-screen__deck-investigator-lock {
+  margin-top: 1rem;
+}
