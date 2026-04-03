@@ -55,6 +55,12 @@ import {
   getBlockedSlot,
 } from "../features/playerCards/slots";
 
+import {
+  canPlayInAvailableSlots,
+  getBlockedSlot,
+  getReplacementCandidates,
+} from "../features/playerCards/slots";
+
 type Screen = "home" | "game";
 
 type PendingTestResolution =
@@ -62,6 +68,12 @@ type PendingTestResolution =
   | { kind: "fight"; enemyId: string }
   | { kind: "evade"; enemyId: string }
   | null;
+
+type PendingAssetPlay = {
+  cardId: string;
+  replacedSlot: string;
+  replacementChoices: PlayerCard[];
+} | null;
 
 type GameStore = GameState & {
   screen: Screen;
@@ -71,6 +83,9 @@ type GameStore = GameState & {
   selectedScenarioId: string;
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
+  pendingAssetPlay: PendingAssetPlay;
+  confirmAssetReplacement: (replacedCardId: string) => void;
+  cancelPendingAssetPlay: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
   setSelectedScenario: (scenarioId: string) => void;
   setSelectedEnemyTarget: (enemyId: string | null) => void;
@@ -550,6 +565,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectedEnemyTargetId: null,
   draggedCardId: null,
   pendingTestResolution: null,
+  pendingAssetPlay: null,
 
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
@@ -849,6 +865,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
       scenarioResolutionSubtitle: null,
+      pendingAssetPlay: null,
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -897,6 +914,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
       scenarioResolutionSubtitle: null,
+      pendingAssetPlay: null,
       log: [
         createLogEntry(
           "system",
@@ -1049,13 +1067,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
       return;
     }
 
     if (activeSkillTest) {
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog(
         "system",
         "Cannot play cards normally while a skill test is active.",
@@ -1069,7 +1087,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ? "Cannot play a card outside the Investigation phase."
           : "Cannot play a card. No actions remaining.";
 
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog("system", message);
       return;
     }
@@ -1077,7 +1095,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const card = hand.find((currentCard) => currentCard.id === cardId);
 
     if (!card) {
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog(
         "system",
         "Could not play that card because it was not in hand.",
@@ -1088,7 +1106,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const cost = getCardCost(card);
 
     if (investigator.resources < cost) {
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog(
         "system",
         `Cannot play ${card.name}. Not enough resources.`,
@@ -1104,9 +1122,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
 
       if (!canPlayInSlots) {
+        const replacementChoices = getReplacementCandidates(card, playArea);
         const blockedSlot = getBlockedSlot(card, playArea, investigator);
 
-        set({ draggedCardId: null });
+        if (replacementChoices.length > 0 && blockedSlot) {
+          set({
+            draggedCardId: null,
+            pendingAssetPlay: {
+              cardId: card.id,
+              replacedSlot: blockedSlot,
+              replacementChoices,
+            },
+          });
+
+          get().pushLog(
+            "system",
+            `Choose an in-play ${blockedSlot} asset to discard in order to play ${card.name}.`,
+          );
+          return;
+        }
+
+        set({ draggedCardId: null, pendingAssetPlay: null });
         get().pushLog(
           "system",
           blockedSlot
@@ -1141,7 +1177,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ],
         turn: updatedTurn,
         draggedCardId: null,
+        pendingAssetPlay: null,
       });
+
       get().pushLog(
         "player",
         `Played asset ${card.name} for ${cost} resource(s). 1 action spent.`,
@@ -1165,6 +1203,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         discard: [...discard, card],
         turn: updatedTurn,
         draggedCardId: null,
+        pendingAssetPlay: null,
       });
 
       get().pushLog(
@@ -1177,7 +1216,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (card.type === "skill") {
-      set({ draggedCardId: null });
+      set({ draggedCardId: null, pendingAssetPlay: null });
       get().pushLog(
         "system",
         `Cannot play ${card.name} as a normal action. Commit it during a skill test instead.`,
@@ -1185,11 +1224,115 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    set({ draggedCardId: null });
+    set({ draggedCardId: null, pendingAssetPlay: null });
     get().pushLog(
       "system",
       `Playing ${card.name} is not implemented for card type ${card.type}.`,
     );
+  },
+
+  confirmAssetReplacement: (replacedCardId: string) => {
+    const {
+      hand,
+      discard,
+      playArea,
+      investigator,
+      turn,
+      pendingAssetPlay,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (activeSkillTest) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog(
+        "system",
+        "Cannot resolve asset replacement while a skill test is active.",
+      );
+      return;
+    }
+
+    if (!pendingAssetPlay) {
+      return;
+    }
+
+    const cardToPlay = hand.find(
+      (entry) => entry.id === pendingAssetPlay.cardId,
+    );
+    const cardToReplace = playArea.find((entry) => entry.id === replacedCardId);
+
+    if (!cardToPlay || !cardToReplace) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", "Asset replacement could not be completed.");
+      return;
+    }
+
+    const cost = getCardCost(cardToPlay);
+
+    if (investigator.resources < cost) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog(
+        "system",
+        `Cannot play ${cardToPlay.name}. Not enough resources.`,
+      );
+      return;
+    }
+
+    if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", "Cannot complete asset replacement right now.");
+      return;
+    }
+
+    const updatedPlayArea = playArea
+      .filter((entry) => entry.id !== replacedCardId)
+      .concat({
+        ...cardToPlay,
+        exhausted: false,
+        counters: normalizeCardCounters(cardToPlay.counters),
+      });
+
+    set({
+      investigator: {
+        ...investigator,
+        resources: investigator.resources - cost,
+      },
+      hand: hand.filter((entry) => entry.id !== cardToPlay.id),
+      discard: [...discard, cardToReplace],
+      playArea: updatedPlayArea,
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      pendingAssetPlay: null,
+      draggedCardId: null,
+    });
+
+    get().pushLog(
+      "player",
+      `Discarded ${cardToReplace.name} and played ${cardToPlay.name} for ${cost} resource(s). 1 action spent.`,
+    );
+  },
+
+  cancelPendingAssetPlay: () => {
+    const { pendingAssetPlay } = get();
+
+    if (!pendingAssetPlay) {
+      return;
+    }
+
+    set({
+      pendingAssetPlay: null,
+      draggedCardId: null,
+    });
+
+    get().pushLog("system", "Cancelled asset replacement.");
   },
 
   canPlayCardInSlots: (cardId: string) => {

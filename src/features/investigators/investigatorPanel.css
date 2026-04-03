@@ -429,3 +429,39 @@
 .investigator-panel__slot-value--full {
   color: #c65b5b;
 }
+
+
+.asset-replacement-modal {
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.asset-replacement-modal__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asset-replacement-modal__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.asset-replacement-modal__text {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.asset-replacement-modal__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.asset-replacement-modal__choice,
+.asset-replacement-modal__cancel {
+  width: 100%;
+}

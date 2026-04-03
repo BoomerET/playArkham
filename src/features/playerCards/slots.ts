@@ -3,6 +3,7 @@ import type {
   InvestigatorSlotCounts,
   InvestigatorSlotType,
   PlayerCard,
+  PlayerCardSlot,
 } from "../../types/game";
 
 export const DEFAULT_SLOT_CAPACITY: InvestigatorSlotCounts = {
@@ -131,4 +132,28 @@ export function getBlockedSlot(
   if (used.Body + required.Body > capacity.Body) return "Body";
 
   return null;
+}
+
+export function isSingleSlotAsset(slot: PlayerCardSlot | undefined): boolean {
+  return (
+    slot === "Hand" ||
+    slot === "Arcane" ||
+    slot === "Ally" ||
+    slot === "Accessory" ||
+    slot === "Head" ||
+    slot === "Body"
+  );
+}
+
+export function getReplacementCandidates(
+  card: PlayerCard,
+  playArea: PlayerCard[],
+): PlayerCard[] {
+  if (card.type !== "asset" || !isSingleSlotAsset(card.slot)) {
+    return [];
+  }
+
+  return playArea.filter(
+    (entry) => entry.type === "asset" && entry.slot === card.slot,
+  );
 }

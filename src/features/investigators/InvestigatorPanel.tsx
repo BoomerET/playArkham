@@ -88,6 +88,13 @@ export default function InvestigatorPanel() {
   const setSelectedEnemyTarget = useGameStore(
     (state) => state.setSelectedEnemyTarget,
   );
+  const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
+  const confirmAssetReplacement = useGameStore(
+    (state) => state.confirmAssetReplacement,
+  );
+  const cancelPendingAssetPlay = useGameStore(
+    (state) => state.cancelPendingAssetPlay,
+  );
 
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
@@ -206,6 +213,41 @@ export default function InvestigatorPanel() {
           <SlotRow label="Body" used={usedSlots.Body} max={slotCapacity.Body} />
         </div>
       </section>
+
+      {pendingAssetPlay && (
+        <section className="asset-replacement-modal">
+          <div className="asset-replacement-modal__card">
+            <h3 className="asset-replacement-modal__title">
+              Replace {pendingAssetPlay.replacedSlot} Asset
+            </h3>
+
+            <p className="asset-replacement-modal__text">
+              Choose an in-play asset to discard.
+            </p>
+
+            <div className="asset-replacement-modal__choices">
+              {pendingAssetPlay.replacementChoices.map((card) => (
+                <button
+                  key={card.id}
+                  type="button"
+                  className="asset-replacement-modal__choice"
+                  onClick={() => confirmAssetReplacement(card.id)}
+                >
+                  {card.name}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="asset-replacement-modal__cancel"
+              onClick={cancelPendingAssetPlay}
+            >
+              Cancel
+            </button>
+          </div>
+        </section>
+      )}
 
       <hr />
 
