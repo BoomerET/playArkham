@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import GameLog from "../../components/GameLog";
 import { useGameStore } from "../../store/gameStore";
 import ChaosBagPanel from "../chaosBag/ChaosBagPanel";
+import DeckInspector from "../deckInspector/DeckInspector";
 import EnemyPanel from "../enemies/EnemyPanel";
 import InvestigatorPanel from "../investigators/InvestigatorPanel";
 import LocationRow from "../locations/LocationRow";
@@ -30,6 +32,21 @@ export default function GameTable() {
   const scenarioResolutionText = useGameStore(
     (state) => state.scenarioResolutionText,
   );
+  const toggleDeckInspector = useGameStore(
+    (state) => state.toggleDeckInspector,
+  );
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && (event.key === "d" || event.key === "D")) {
+        event.preventDefault();
+        toggleDeckInspector();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [toggleDeckInspector]);
 
   const selectedScenario =
     availableScenarios.find((scenario) => scenario.id === selectedScenarioId) ??
@@ -177,6 +194,7 @@ export default function GameTable() {
       </div>
 
       <MulliganOverlay />
+      <DeckInspector />
     </main>
   );
 }
