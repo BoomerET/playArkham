@@ -5,6 +5,8 @@ import type {
   ScenarioCardKind,
 } from "../../types/game";
 
+import type { EncounterCard } from "../../types/game";
+
 export interface ScenarioAdvanceEffects {
   showLocationIds?: string[];
   revealLocationIds?: string[];
@@ -49,4 +51,5 @@ export interface ScenarioDefinition {
   chaosBag?: ChaosToken[];
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
+  encounterDeck?: EncounterCard[];
 }

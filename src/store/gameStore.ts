@@ -40,6 +40,7 @@ import type {
   CardCounterType,
   ChaosToken,
   CommittedSkillCard,
+  EncounterCard,
   GameLogKind,
   GameState,
   Investigator,
@@ -576,6 +577,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   hand: [],
   discard: [],
   playArea: [],
+  encounterDeck: [],
+  encounterDiscard: [],
+
   chaosBag: [...startingChaosBag],
   locations: cloneScenarioLocations(
     getSelectedScenario({
@@ -872,6 +876,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
+      encounterDeck: selectedScenario.encounterDeck
+        ? shuffleArray(selectedScenario.encounterDeck)
+        : [],
+      encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
@@ -942,6 +950,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deck: shuffledDeck,
       hand: [],
       discard: [],
+      encounterDeck: selectedScenario.encounterDeck
+        ? shuffleArray(selectedScenario.encounterDeck)
+        : [],
+      encounterDiscard: [],
       playArea: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
@@ -1068,6 +1080,121 @@ export const useGameStore = create<GameStore>((set, get) => ({
         } because the deck ran out of non-weakness cards.`,
       );
     }
+  },
+
+  drawEncounterCard: () => {
+    const { encounterDeck, encounterDiscard } = get();
+
+    if (encounterDeck.length === 0) {
+      if (encounterDiscard.length === 0) {
+        get().pushLog(
+          "system",
+          "Tried to draw an encounter card, but the encounter deck was empty.",
+        );
+        return null;
+      }
+
+      const reshuffledDeck = shuffleArray(encounterDiscard);
+      const [topCard, ...remainingDeck] = reshuffledDeck;
+
+      set({
+        encounterDeck: remainingDeck,
+        encounterDiscard: [],
+      });
+
+      get().pushLog(
+        "scenario",
+        `Encounter discard reshuffled into a new encounter deck. Drew ${topCard.name}.`,
+      );
+
+      return topCard;
+    }
+
+    const [topCard, ...remainingDeck] = encounterDeck;
+
+    set({
+      encounterDeck: remainingDeck,
+    });
+
+    get().pushLog("scenario", `Drew encounter card: ${topCard.name}.`);
+    return topCard;
+  },
+
+  resolveMythosPhase: () => {
+    const { investigator, locations, enemies, encounterDiscard } = get();
+
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!currentLocation) {
+      get().pushLog(
+        "system",
+        "Mythos draw could not resolve because the investigator has no location.",
+      );
+      return;
+    }
+
+    const card = get().drawEncounterCard();
+
+    if (!card) {
+      return;
+    }
+
+    if (card.type === "enemy") {
+      const spawnedEnemy = {
+        id: `${card.id}-${Date.now()}`,
+        name: card.name,
+        fight: card.fight ?? 0,
+        evade: card.evade ?? 0,
+        health: card.health ?? 0,
+        damage: card.damage ?? 0,
+        horror: card.horror ?? 0,
+        locationId: currentLocation.id,
+        engagedInvestigatorId: investigator.id,
+        exhausted: false,
+        damageOnEnemy: 0,
+      };
+
+      set({
+        enemies: [...enemies, spawnedEnemy],
+      });
+
+      get().pushLog(
+        "enemy",
+        `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
+      );
+
+      return;
+    }
+
+    if (card.type === "treachery") {
+      set({
+        encounterDiscard: [...encounterDiscard, card],
+      });
+
+      get().pushLog(
+        "scenario",
+        `${card.name} was drawn and resolved as a treachery.`,
+      );
+
+      // Minimal generic Phase 1 effect:
+      set({
+        investigator: {
+          ...investigator,
+          horror: investigator.horror + 1,
+        },
+      });
+
+      get().pushLog(
+        "combat",
+        `${investigator.name} took 1 horror from ${card.name}.`,
+      );
+
+      return;
+    }
+
+    set({
+      encounterDiscard: [...encounterDiscard, card],
+    });
   },
 
   discardCard: (cardId: string) => {
@@ -1886,6 +2013,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "mythos") {
+      get().resolveMythosPhase();
+
       set({
         turn: {
           ...turn,
@@ -1893,8 +2022,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
           actionsRemaining: 3,
         },
       });
+
       get().pushLog("system", "Phase: Investigation");
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
+      return;
     }
   },
 

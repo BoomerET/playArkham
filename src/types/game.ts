@@ -207,6 +207,8 @@ export interface GameState {
   lastSkillTest: SkillTestResult | null;
   activeSkillTest: ActiveSkillTest | null;
   draggedCardId: string | null;
+  encounterDeck: EncounterCard[];
+  encounterDiscard: EncounterCard[];
 }
 
 export interface EnemyDefinition {
@@ -226,4 +228,17 @@ export interface EnemySpawn {
   engagedInvestigatorId?: string | null;
   exhausted?: boolean;
   damageOnEnemy?: number;
+}
+
+export interface EncounterCard {
+  id: string;
+  code?: string;
+  name: string;
+  type: "enemy" | "treachery";
+  text?: string;
+  damage?: number;
+  horror?: number;
+  fight?: number;
+  evade?: number;
+  health?: number;
 }

@@ -105,7 +105,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
-      }
+      },
     },
     {
       id: "spreading-flames-act-3",
@@ -118,7 +118,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       onAdvance: {
         showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
         hideLocationIds: ["friends-room"],
-      }
+      },
     },
     {
       id: "spreading-flames-act-4",
@@ -127,7 +127,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       title: "Blaze of Glory",
       text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
       threshold: 3,
-      thresholdLabel: "Clues"
+      thresholdLabel: "Clues",
     },
   ],
   agendas: [
@@ -157,6 +157,25 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is ablaze!",
       threshold: 10,
       thresholdLabel: "Doom",
+    },
+  ],
+  encounterDeck: [
+    {
+      id: "ghoul-minion-1",
+      name: "Ghoul Minion",
+      type: "enemy",
+      fight: 2,
+      evade: 2,
+      health: 3,
+      damage: 1,
+      horror: 1,
+      text: "Hunter.",
+    },
+    {
+      id: "frozen-in-fear-1",
+      name: "Frozen in Fear",
+      type: "treachery",
+      text: "Generic treachery effect for now.",
     },
   ],
 };
