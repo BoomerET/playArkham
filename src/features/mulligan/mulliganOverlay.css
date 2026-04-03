@@ -221,7 +221,7 @@
   position: relative;
   max-width: min(90vw, 520px);
   max-height: 90vh;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .mulligan-preview-image {
