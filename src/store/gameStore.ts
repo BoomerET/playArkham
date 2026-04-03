@@ -910,8 +910,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   startGame: async () => {
-    await get().setupGame();
-    set({ screen: "game" });
+    try {
+      await get().setupGame();
+      set({ screen: "game" });
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   returnToHome: () => {
@@ -957,40 +961,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  //setupGame: () => {
   setupGame: async () => {
+    const selectedDeckId = get().selectedDeckId.trim();
+
+    if (!selectedDeckId) {
+      get().pushLog("system", "Cannot start game without an ArkhamDB deck ID.");
+      throw new Error("ArkhamDB deck ID is required.");
+    }
+
     const selected = get().availableInvestigators.find(
       (investigator) => investigator.id === get().selectedInvestigatorId,
     );
 
+    if (!selected) {
+      get().pushLog(
+        "system",
+        "Cannot start game because the selected deck's investigator is not supported.",
+      );
+      throw new Error("Deck investigator is not supported locally.");
+    }
+
     const selectedScenario = getSelectedScenario(get());
+    const chosenInvestigator = createGameInvestigator(selected);
 
-    const chosenInvestigator = selected
-      ? createGameInvestigator(selected)
-      : createGameInvestigator(get().availableInvestigators[0]);
+    let deckCards: PlayerCard[];
 
-    let deckCards: PlayerCard[] = [...playerDeck];
-    const selectedDeckId = get().selectedDeckId.trim();
+    try {
+      deckCards = await loadArkhamDeck(selectedDeckId);
+    } catch (error) {
+      console.error(error);
+      get().pushLog(
+        "system",
+        `Failed to load ArkhamDB deck ${selectedDeckId}.`,
+      );
+      throw error;
+    }
 
-    if (selectedDeckId) {
-      try {
-        const loadedDeck = await loadArkhamDeck(selectedDeckId);
-
-        if (loadedDeck.length > 0) {
-          deckCards = loadedDeck;
-        } else {
-          get().pushLog(
-            "system",
-            `ArkhamDB deck ${selectedDeckId} loaded, but no matching local cards were found. Using default deck.`,
-          );
-        }
-      } catch (error) {
-        console.error(error);
-        get().pushLog(
-          "system",
-          `Failed to load ArkhamDB deck ${selectedDeckId}. Using default deck.`,
-        );
-      }
+    if (deckCards.length === 0) {
+      get().pushLog(
+        "system",
+        `ArkhamDB deck ${selectedDeckId} did not produce any playable local cards.`,
+      );
+      throw new Error("ArkhamDB deck contained no supported local cards.");
     }
 
     const shuffledDeck = shuffle(deckCards);
@@ -1000,11 +1012,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deck: shuffledDeck,
       hand: [],
       discard: [],
+      playArea: [],
       encounterDeck: selectedScenario.encounterDeck
         ? shuffleArray(selectedScenario.encounterDeck)
         : [],
       encounterDiscard: [],
-      playArea: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
@@ -1022,6 +1034,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionSubtitle: null,
       pendingAssetPlay: null,
       showDeckInspector: false,
+      isMulliganActive: true,
+      selectedMulliganCardIds: [],
       log: [
         createLogEntry(
           "system",
@@ -1033,9 +1047,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
         createLogEntry(
           "system",
-          get().selectedDeckId.trim()
-            ? `Deck source: ArkhamDB deck ${get().selectedDeckId.trim()}.`
-            : "Deck source: local default deck.",
+          `Deck source: ArkhamDB deck ${selectedDeckId}.`,
         ),
         createLogEntry("system", "Game setup complete."),
       ],
@@ -1049,8 +1061,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         phase: "setup",
         actionsRemaining: 3,
       },
-      isMulliganActive: true,
-      selectedMulliganCardIds: [],
     });
 
     get().drawStartingHand(5);
