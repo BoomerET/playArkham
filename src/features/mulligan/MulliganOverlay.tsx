@@ -33,16 +33,29 @@ export default function MulliganOverlay() {
               <button
                 key={card.id}
                 type="button"
-                className={`mulligan-overlay__item ${
-                  selected ? "mulligan-overlay__item--selected" : ""
+                className={`mulligan-card ${
+                  selected ? "mulligan-card--selected" : ""
                 }`}
                 onClick={() => toggleMulliganCardSelection(card.id)}
               >
-                <span className="mulligan-overlay__item-name">{card.name}</span>
-                <span className="mulligan-overlay__item-meta">
-                  {card.type}
-                  {card.slot ? ` • ${card.slot}` : ""}
-                </span>
+                {card.image ? (
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="mulligan-card__image"
+                    draggable={false}
+                  />
+                ) : (
+                  <div className="mulligan-card__fallback">{card.name}</div>
+                )}
+
+                <div className="mulligan-card__overlay">
+                  <div className="mulligan-card__name">{card.name}</div>
+                  <div className="mulligan-card__meta">
+                    {card.type}
+                    {card.slot ? ` • ${card.slot}` : ""}
+                  </div>
+                </div>
               </button>
             );
           })}

@@ -92,3 +92,80 @@
 .mulligan-overlay__text {
   color: rgba(243, 239, 228, 0.9);
 }
+
+/* CARD CONTAINER */
+.mulligan-card {
+  position: relative;
+  border: none;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #111;
+  aspect-ratio: 5 / 7;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* HOVER FEEL */
+.mulligan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+/* CARD IMAGE */
+.mulligan-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* FALLBACK */
+.mulligan-card__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #f3efe4;
+  background: #222;
+  font-weight: bold;
+}
+
+/* OVERLAY (BOTTOM FADE) */
+.mulligan-card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.4),
+    transparent
+  );
+  color: #f3efe4;
+}
+
+/* NAME */
+.mulligan-card__name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* META */
+.mulligan-card__meta {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  text-transform: capitalize;
+}
+
+/* SELECTED STATE */
+.mulligan-card--selected {
+  outline: 3px solid #e6d3a3;
+  box-shadow: 0 0 12px rgba(230, 211, 163, 0.6);
+  transform: translateY(-2px);
+}
