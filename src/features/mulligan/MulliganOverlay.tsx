@@ -129,12 +129,6 @@ export default function MulliganOverlay() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [previewCard]);
 
-  useEffect(() => {
-    if (!zoomHeld) {
-      setPreviewSide("front");
-    }
-  }, [zoomHeld]);
-
   if (!isMulliganActive) {
     return null;
   }
