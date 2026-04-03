@@ -72,3 +72,23 @@
 .mulligan-overlay__secondary {
   min-width: 140px;
 }
+
+.mulligan-overlay__card {
+  color: #f3efe4; /* main readable text */
+}
+
+.mulligan-overlay__item {
+  color: #f3efe4;
+}
+
+.mulligan-overlay__item-meta {
+  color: rgba(243, 239, 228, 0.75);
+}
+
+.mulligan-overlay__title {
+  color: #ffffff;
+}
+
+.mulligan-overlay__text {
+  color: rgba(243, 239, 228, 0.9);
+}
