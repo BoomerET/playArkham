@@ -139,10 +139,12 @@ export default function MulliganOverlay() {
     return null;
   }
 
-  const previewImageUrl =
-    previewSide === "back" && previewCard?.backImageUrl
-      ? previewCard.backImageUrl
-      : previewCard?.frontImageUrl ?? null;
+const effectivePreviewSide = zoomHeld ? previewSide : "front";
+
+const previewImageUrl =
+  effectivePreviewSide === "back" && previewCard?.backImageUrl
+    ? previewCard.backImageUrl
+    : previewCard?.frontImageUrl ?? null;
 
   return (
     <>
@@ -252,7 +254,7 @@ export default function MulliganOverlay() {
 
             <img
               src={previewImageUrl}
-              alt={`${previewCard.name} ${previewSide}`}
+              alt={`${previewCard.name} ${effectivePreviewSide}`}
               className="mulligan-preview-image"
               draggable={false}
             />
