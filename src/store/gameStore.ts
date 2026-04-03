@@ -84,7 +84,7 @@ type GameStore = GameState & {
   showDeckInspector: boolean;
   setSelectedDeckId: (deckId: string) => void;
   toggleDeckInspector: () => void;
-  
+
   confirmAssetReplacement: (replacedCardId: string) => void;
   cancelPendingAssetPlay: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
@@ -563,6 +563,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   availableScenarios: scenarios,
   selectedInvestigatorId: investigators[0].id,
   selectedScenarioId: defaultScenarioId,
+  selectedDeckId: "",
   selectedEnemyTargetId: null,
   draggedCardId: null,
   pendingTestResolution: null,
@@ -619,6 +620,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedInvestigator: (investigatorId) => {
     set({ selectedInvestigatorId: investigatorId });
+  },
+
+  setSelectedDeckId: (deckId) => {
+    set({ selectedDeckId: deckId });
   },
 
   setSelectedScenario: (scenarioId) => {
@@ -851,10 +856,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ showDeckInspector: false });
   },
 
-  //startGame: () => {
-  //  get().setupGame();
-  //  set({ screen: "game" });
-  //},
   startGame: async () => {
     await get().setupGame();
     set({ screen: "game" });
@@ -911,15 +912,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
     //const shuffledDeck = shuffle(playerDeck);
     let deckCards: PlayerCard[] = [];
 
-    try {
-      deckCards = await loadArkhamDeck(5841936);
-    } catch (error) {
-      console.error(error);
-      get().pushLog(
-        "system",
-        "Failed to load ArkhamDB deck. Using default deck.",
-      );
-      deckCards = playerDeck;
+    let deckCards: PlayerCard[] = [...playerDeck];
+    const selectedDeckId = get().selectedDeckId.trim();
+
+    if (selectedDeckId) {
+      try {
+        const loadedDeck = await loadArkhamDeck(selectedDeckId);
+
+        if (loadedDeck.length > 0) {
+          deckCards = loadedDeck;
+        } else {
+          get().pushLog(
+            "system",
+            `ArkhamDB deck ${selectedDeckId} loaded, but no matching local cards were found. Using default deck.`,
+          );
+        }
+      } catch (error) {
+        console.error(error);
+        get().pushLog(
+          "system",
+          `Failed to load ArkhamDB deck ${selectedDeckId}. Using default deck.`,
+        );
+      }
     }
 
     const shuffledDeck = shuffle(deckCards);
