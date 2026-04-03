@@ -81,6 +81,7 @@ type GameStore = GameState & {
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
+  showDeckInspector: boolean;
   confirmAssetReplacement: (replacedCardId: string) => void;
   cancelPendingAssetPlay: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
