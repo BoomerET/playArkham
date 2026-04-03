@@ -169,3 +169,73 @@
   box-shadow: 0 0 12px rgba(230, 211, 163, 0.6);
   transform: translateY(-2px);
 }
+
+.mulligan-overlay__zoom-hint {
+  margin: 0 0 14px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-size: 0.9rem;
+  color: rgba(243, 239, 228, 0.85);
+}
+
+.mulligan-overlay__zoom-hint.visible {
+  opacity: 0.9;
+}
+
+.mulligan-overlay__zoom-hint.active {
+  color: #fff;
+}
+
+.mulligan-overlay__zoom-hint kbd {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.8rem;
+}
+
+.mulligan-card__selection-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #f3efe4;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mulligan-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3100;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mulligan-preview-frame {
+  position: relative;
+  max-width: min(90vw, 520px);
+  max-height: 90vh;
+  pointer-events: auto;
+}
+
+.mulligan-preview-image {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.mulligan-preview-flip-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
