@@ -1485,7 +1485,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Madness"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "the-gold-bug-8",
@@ -1500,7 +1501,8 @@ export const playerDeck: PlayerCard[] = [
       "Alchemy",
       "Cursed"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "the-nameless-lurker-9",
@@ -1512,7 +1514,8 @@ export const playerDeck: PlayerCard[] = [
       "Humanoid",
       "Monster"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "overzealous-0",
@@ -1523,7 +1526,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Flaw"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "paranoia-1",
@@ -1534,7 +1538,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Madness"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "pursued-2",
@@ -1545,7 +1550,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Terror"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "syndicate-obligations-3",
@@ -1557,7 +1563,8 @@ export const playerDeck: PlayerCard[] = [
       "Pact",
       "Syndicate"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   },
   {
     "id": "wounded-4",
@@ -1568,6 +1575,7 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Injury"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "isWeakness": true
   }
 ];
