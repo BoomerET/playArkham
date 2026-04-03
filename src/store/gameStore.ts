@@ -146,6 +146,7 @@ type GameStore = GameState & {
   encounterDeck: EncounterCard[];
   encounterDiscard: EncounterCard[];
   drawEncounterCard: () => EncounterCard | null;
+  resolveMythosPhase: () => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
