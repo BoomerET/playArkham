@@ -58,6 +58,7 @@ import {
 } from "../features/playerCards/slots";
 
 import { loadArkhamDeck } from "../lib/loadArkhamDeck";
+import { resolvePlayedEvent } from "../lib/playerCardEffects";
 
 type Screen = "home" | "game";
 
@@ -1435,17 +1436,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (card.type === "event") {
-      let bonusClues = 0;
-
-      if (card.name === "Working a Hunch") {
-        bonusClues = 1;
-      }
+      const resolvedEvent = resolvePlayedEvent(card, updatedInvestigator);
 
       set({
-        investigator: {
-          ...updatedInvestigator,
-          clues: updatedInvestigator.clues + bonusClues,
-        },
+        investigator: resolvedEvent.investigator,
         hand: updatedHand,
         discard: [...discard, card],
         turn: updatedTurn,
@@ -1455,9 +1449,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       get().pushLog(
         "player",
-        bonusClues > 0
-          ? `Played event ${card.name} for ${cost} resource(s). Resolved its basic effect and gained ${bonusClues} clue. 1 action spent.`
-          : `Played event ${card.name} for ${cost} resource(s). Event resolved and was discarded. 1 action spent.`,
+        `${resolvedEvent.logText} Paid ${cost} resource(s). 1 action spent.`,
       );
       return;
     }
