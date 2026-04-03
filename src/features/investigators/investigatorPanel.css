@@ -465,3 +465,12 @@
 .asset-replacement-modal__cancel {
   width: 100%;
 }
+
+.asset-replacement-modal__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.asset-replacement-modal__choice--selected {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+}

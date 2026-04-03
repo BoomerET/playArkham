@@ -78,6 +78,16 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
 }
 
 export default function InvestigatorPanel() {
+  const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
+  const togglePendingAssetReplacementChoice = useGameStore(
+    (state) => state.togglePendingAssetReplacementChoice,
+  );
+  const confirmAssetReplacement = useGameStore(
+    (state) => state.confirmAssetReplacement,
+  );
+  const cancelPendingAssetPlay = useGameStore(
+    (state) => state.cancelPendingAssetPlay,
+  );
   const investigator = useGameStore((state) => state.investigator);
   const playArea = useGameStore((state) => state.playArea);
   const enemies = useGameStore((state) => state.enemies);
@@ -222,29 +232,53 @@ export default function InvestigatorPanel() {
             </h3>
 
             <p className="asset-replacement-modal__text">
-              Choose an in-play asset to discard.
+              {pendingAssetPlay.requiredHandSlotsToFree
+                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${
+                    pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
+                  }.`
+                : "Choose one in-play asset to discard."}
             </p>
 
             <div className="asset-replacement-modal__choices">
-              {pendingAssetPlay.replacementChoices.map((card) => (
-                <button
-                  key={card.id}
-                  type="button"
-                  className="asset-replacement-modal__choice"
-                  onClick={() => confirmAssetReplacement(card.id)}
-                >
-                  {card.name}
-                </button>
-              ))}
+              {pendingAssetPlay.replacementChoices.map((card) => {
+                const selected =
+                  pendingAssetPlay.selectedReplacementIds.includes(card.id);
+
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    className={`asset-replacement-modal__choice ${
+                      selected
+                        ? "asset-replacement-modal__choice--selected"
+                        : ""
+                    }`}
+                    onClick={() => togglePendingAssetReplacementChoice(card.id)}
+                  >
+                    {card.name}
+                    {card.slot ? ` (${card.slot})` : ""}
+                  </button>
+                );
+              })}
             </div>
 
-            <button
-              type="button"
-              className="asset-replacement-modal__cancel"
-              onClick={cancelPendingAssetPlay}
-            >
-              Cancel
-            </button>
+            <div className="asset-replacement-modal__actions">
+              <button
+                type="button"
+                className="asset-replacement-modal__confirm"
+                onClick={confirmAssetReplacement}
+              >
+                Confirm Replacement
+              </button>
+
+              <button
+                type="button"
+                className="asset-replacement-modal__cancel"
+                onClick={cancelPendingAssetPlay}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </section>
       )}

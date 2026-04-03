@@ -53,8 +53,8 @@ import type {
 
 import {
   canPlayInAvailableSlots,
-  getBlockedSlot,
-  getReplacementCandidates,
+  getCardSlotUsage,
+  getReplacementPlan,
 } from "../features/playerCards/slots";
 
 import { loadArkhamDeck } from "../lib/loadArkhamDeck";
@@ -71,6 +71,8 @@ type PendingAssetPlay = {
   cardId: string;
   replacedSlot: string;
   replacementChoices: PlayerCard[];
+  selectedReplacementIds: string[];
+  requiredHandSlotsToFree?: number;
 } | null;
 
 type GameStore = GameState & {
@@ -84,8 +86,11 @@ type GameStore = GameState & {
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
-  confirmAssetReplacement: (replacedCardId: string) => void;
+
+  togglePendingAssetReplacementChoice: (cardId: string) => void;
+  confirmAssetReplacement: () => void;
   cancelPendingAssetPlay: () => void;
+
   toggleDeckInspector: () => void;
   closeDeckInspector: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
@@ -1298,22 +1303,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
 
       if (!canPlayInSlots) {
-        const replacementChoices = getReplacementCandidates(card, playArea);
-        const blockedSlot = getBlockedSlot(card, playArea, investigator);
+        const replacementPlan = getReplacementPlan(
+          card,
+          playArea,
+          investigator,
+        );
 
-        if (replacementChoices.length > 0 && blockedSlot) {
+        if (replacementPlan) {
           set({
             draggedCardId: null,
             pendingAssetPlay: {
               cardId: card.id,
-              replacedSlot: blockedSlot,
-              replacementChoices,
+              replacedSlot: replacementPlan.blockedSlot,
+              replacementChoices: replacementPlan.replacementChoices,
+              selectedReplacementIds: [],
+              requiredHandSlotsToFree: replacementPlan.requiredHandSlotsToFree,
             },
           });
 
           get().pushLog(
             "system",
-            `Choose an in-play ${blockedSlot} asset to discard in order to play ${card.name}.`,
+            replacementPlan.requiredHandSlotsToFree
+              ? `Choose hand asset replacements for ${card.name}. Free ${replacementPlan.requiredHandSlotsToFree} hand slot${
+                  replacementPlan.requiredHandSlotsToFree === 1 ? "" : "s"
+                }.`
+              : `Choose an in-play ${replacementPlan.blockedSlot} asset to discard in order to play ${card.name}.`,
           );
           return;
         }
@@ -1321,9 +1335,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         set({ draggedCardId: null, pendingAssetPlay: null });
         get().pushLog(
           "system",
-          blockedSlot
-            ? `Cannot play ${card.name}. ${blockedSlot} slot is full.`
-            : `Cannot play ${card.name}. No available equipment slots.`,
+          `Cannot play ${card.name}. No available equipment slots.`,
         );
         return;
       }
@@ -1407,7 +1419,38 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
 
-  confirmAssetReplacement: (replacedCardId: string) => {
+  togglePendingAssetReplacementChoice: (cardId: string) => {
+    const { pendingAssetPlay } = get();
+
+    if (!pendingAssetPlay) {
+      return;
+    }
+
+    const exists = pendingAssetPlay.selectedReplacementIds.includes(cardId);
+
+    if (pendingAssetPlay.requiredHandSlotsToFree) {
+      set({
+        pendingAssetPlay: {
+          ...pendingAssetPlay,
+          selectedReplacementIds: exists
+            ? pendingAssetPlay.selectedReplacementIds.filter(
+                (entry) => entry !== cardId,
+              )
+            : [...pendingAssetPlay.selectedReplacementIds, cardId],
+        },
+      });
+      return;
+    }
+
+    set({
+      pendingAssetPlay: {
+        ...pendingAssetPlay,
+        selectedReplacementIds: exists ? [] : [cardId],
+      },
+    });
+  },
+
+  confirmAssetReplacement: () => {
     const {
       hand,
       discard,
@@ -1441,11 +1484,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const cardToPlay = hand.find(
       (entry) => entry.id === pendingAssetPlay.cardId,
     );
-    const cardToReplace = playArea.find((entry) => entry.id === replacedCardId);
 
-    if (!cardToPlay || !cardToReplace) {
+    const selectedReplacementCards = playArea.filter((entry) =>
+      pendingAssetPlay.selectedReplacementIds.includes(entry.id),
+    );
+
+    if (!cardToPlay) {
       set({ pendingAssetPlay: null, draggedCardId: null });
       get().pushLog("system", "Asset replacement could not be completed.");
+      return;
+    }
+
+    if (selectedReplacementCards.length === 0) {
+      get().pushLog(
+        "system",
+        "Choose at least one asset to replace before confirming.",
+      );
+      return;
+    }
+
+    if (pendingAssetPlay.requiredHandSlotsToFree) {
+      const freedHandSlots = selectedReplacementCards.reduce(
+        (sum, card) => sum + getCardSlotUsage(card).Hand,
+        0,
+      );
+
+      if (freedHandSlots < pendingAssetPlay.requiredHandSlotsToFree) {
+        get().pushLog(
+          "system",
+          `Choose replacements that free at least ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${
+            pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
+          }.`,
+        );
+        return;
+      }
+    } else if (selectedReplacementCards.length !== 1) {
+      get().pushLog(
+        "system",
+        "Choose exactly one asset to replace before confirming.",
+      );
       return;
     }
 
@@ -1466,8 +1543,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const selectedReplacementIds = new Set(
+      pendingAssetPlay.selectedReplacementIds,
+    );
+
     const updatedPlayArea = playArea
-      .filter((entry) => entry.id !== replacedCardId)
+      .filter((entry) => !selectedReplacementIds.has(entry.id))
       .concat({
         ...cardToPlay,
         exhausted: false,
@@ -1480,7 +1561,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         resources: investigator.resources - cost,
       },
       hand: hand.filter((entry) => entry.id !== cardToPlay.id),
-      discard: [...discard, cardToReplace],
+      discard: [...discard, ...selectedReplacementCards],
       playArea: updatedPlayArea,
       turn: {
         ...turn,
@@ -1492,7 +1573,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     get().pushLog(
       "player",
-      `Discarded ${cardToReplace.name} and played ${cardToPlay.name} for ${cost} resource(s). 1 action spent.`,
+      `Discarded ${selectedReplacementCards.map((card) => card.name).join(", ")} and played ${cardToPlay.name} for ${cost} resource(s). 1 action spent.`,
     );
   },
 
