@@ -82,6 +82,9 @@ type GameStore = GameState & {
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
+  setSelectedDeckId: (deckId: string) => void;
+  toggleDeckInspector: () => void;
+  
   confirmAssetReplacement: (replacedCardId: string) => void;
   cancelPendingAssetPlay: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
