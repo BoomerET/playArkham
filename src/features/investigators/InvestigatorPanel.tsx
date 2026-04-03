@@ -98,13 +98,13 @@ export default function InvestigatorPanel() {
   const setSelectedEnemyTarget = useGameStore(
     (state) => state.setSelectedEnemyTarget,
   );
-  const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
-  const confirmAssetReplacement = useGameStore(
-    (state) => state.confirmAssetReplacement,
-  );
-  const cancelPendingAssetPlay = useGameStore(
-    (state) => state.cancelPendingAssetPlay,
-  );
+  //const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
+  //const confirmAssetReplacement = useGameStore(
+  //  (state) => state.confirmAssetReplacement,
+  //);
+  //const cancelPendingAssetPlay = useGameStore(
+  //  (state) => state.cancelPendingAssetPlay,
+  //);
 
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
