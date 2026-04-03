@@ -78,17 +78,18 @@ type GameStore = GameState & {
   availableScenarios: ScenarioDefinition[];
   selectedInvestigatorId: string;
   selectedScenarioId: string;
+  selectedDeckId: string;
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
-  setSelectedDeckId: (deckId: string) => void;
-  toggleDeckInspector: () => void;
-
   confirmAssetReplacement: (replacedCardId: string) => void;
   cancelPendingAssetPlay: () => void;
+  toggleDeckInspector: () => void;
+  closeDeckInspector: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
   setSelectedScenario: (scenarioId: string) => void;
+  setSelectedDeckId: (deckId: string) => void;
   setSelectedEnemyTarget: (enemyId: string | null) => void;
   setLocationVisible: (locationId: string, visible?: boolean) => void;
   revealLocation: (locationId: string) => void;
@@ -98,9 +99,9 @@ type GameStore = GameState & {
   advanceAct: () => void;
   pushLog: (kind: GameLogKind, text: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
-  startGame: () => void;
+  startGame: () => Promise<void>;
   returnToHome: () => void;
-  setupGame: () => void;
+  setupGame: () => Promise<void>;
   drawCard: () => void;
   drawStartingHand: (count?: number) => void;
   shuffleDeck: () => void;
@@ -565,6 +566,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectedScenarioId: defaultScenarioId,
   selectedDeckId: "",
   selectedEnemyTargetId: null,
+  showDeckInspector: false,
   draggedCardId: null,
   pendingTestResolution: null,
   pendingAssetPlay: null,
@@ -908,9 +910,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const chosenInvestigator = selected
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
-
-    //const shuffledDeck = shuffle(playerDeck);
-    let deckCards: PlayerCard[] = [];
 
     let deckCards: PlayerCard[] = [...playerDeck];
     const selectedDeckId = get().selectedDeckId.trim();
