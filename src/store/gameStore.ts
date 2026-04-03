@@ -152,6 +152,13 @@ type GameStore = GameState & {
   encounterDiscard: EncounterCard[];
   drawEncounterCard: () => EncounterCard | null;
   resolveMythosPhase: () => void;
+
+  // Mulligans
+  isMulliganActive: boolean;
+  selectedMulliganCardIds: string[];
+  toggleMulliganCardSelection: (cardId: string) => void;
+  confirmMulligan: () => void;
+  skipMulligan: () => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -210,12 +217,39 @@ function normalizeCardCounters(
   return normalized;
 }
 
-//function isOpeningHandWeakness(card: PlayerCard): boolean {
-//  return card.type === "treachery" || card.type === "enemy";
-//}
-
 function isOpeningHandWeakness(card: PlayerCard): boolean {
   return card.isWeakness === true;
+}
+
+function drawNonWeaknessCards(
+  deck: PlayerCard[],
+  count: number,
+): {
+  deck: PlayerCard[];
+  drawnCards: PlayerCard[];
+  skippedWeaknesses: PlayerCard[];
+} {
+  let workingDeck = [...deck];
+  const drawnCards: PlayerCard[] = [];
+  const skippedWeaknesses: PlayerCard[] = [];
+
+  while (drawnCards.length < count && workingDeck.length > 0) {
+    const [topCard, ...remainingDeck] = workingDeck;
+    workingDeck = remainingDeck;
+
+    if (isOpeningHandWeakness(topCard)) {
+      skippedWeaknesses.push(topCard);
+      continue;
+    }
+
+    drawnCards.push(topCard);
+  }
+
+  return {
+    deck: workingDeck,
+    drawnCards,
+    skippedWeaknesses,
+  };
 }
 
 function createLogEntry(kind: GameLogKind, text: string) {
@@ -589,6 +623,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   encounterDeck: [],
   encounterDiscard: [],
 
+  // Mulligans
+  isMulliganActive: false,
+  selectedMulliganCardIds: [],
+
   chaosBag: [...startingChaosBag],
   locations: cloneScenarioLocations(
     getSelectedScenario({
@@ -913,6 +951,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         phase: "setup",
         actionsRemaining: 3,
       },
+      // Mulligans
+      isMulliganActive: false,
+      selectedMulliganCardIds: [],
     });
   },
 
@@ -990,10 +1031,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
           "scenario",
           `Selected scenario: ${selectedScenario.name}`,
         ),
+        createLogEntry(
+          "system",
+          get().selectedDeckId.trim()
+            ? `Deck source: ArkhamDB deck ${get().selectedDeckId.trim()}.`
+            : "Deck source: local default deck.",
+        ),
         createLogEntry("system", "Game setup complete."),
-        createLogEntry("system", "Round 1 begins."),
-        createLogEntry("system", "First round: Mythos phase is skipped."),
-        createLogEntry("system", "Phase: Investigation"),
       ],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -1002,13 +1046,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       draggedCardId: null,
       turn: {
         round: 1,
-        phase: "investigation",
+        phase: "setup",
         actionsRemaining: 3,
       },
+      isMulliganActive: true,
+      selectedMulliganCardIds: [],
     });
 
     get().drawStartingHand(5);
-    get().engageEnemiesAtLocation();
+    get().pushLog(
+      "system",
+      "Opening hand drawn. Choose any number of cards to mulligan.",
+    );
   },
 
   drawCard: () => {
@@ -2243,6 +2292,120 @@ export const useGameStore = create<GameStore>((set, get) => ({
       "skill-test",
       `Started skill test: ${source}. Commit skill cards, then resolve.`,
     );
+  },
+
+  toggleMulliganCardSelection: (cardId) => {
+    const { isMulliganActive, selectedMulliganCardIds } = get();
+
+    if (!isMulliganActive) {
+      return;
+    }
+
+    const alreadySelected = selectedMulliganCardIds.includes(cardId);
+
+    set({
+      selectedMulliganCardIds: alreadySelected
+        ? selectedMulliganCardIds.filter((entry) => entry !== cardId)
+        : [...selectedMulliganCardIds, cardId],
+    });
+  },
+
+  confirmMulligan: () => {
+    const { isMulliganActive, selectedMulliganCardIds, hand, deck, log } =
+      get();
+
+    if (!isMulliganActive) {
+      return;
+    }
+
+    if (selectedMulliganCardIds.length === 0) {
+      get().skipMulligan();
+      return;
+    }
+
+    const cardsToRedraw = hand.filter((card) =>
+      selectedMulliganCardIds.includes(card.id),
+    );
+    const keptCards = hand.filter(
+      (card) => !selectedMulliganCardIds.includes(card.id),
+    );
+
+    let reshuffledDeck = shuffleArray([...deck, ...cardsToRedraw]);
+
+    const {
+      deck: updatedDeck,
+      drawnCards,
+      skippedWeaknesses,
+    } = drawNonWeaknessCards(reshuffledDeck, cardsToRedraw.length);
+
+    reshuffledDeck = updatedDeck;
+
+    if (skippedWeaknesses.length > 0) {
+      reshuffledDeck = shuffleArray([...reshuffledDeck, ...skippedWeaknesses]);
+    }
+
+    set({
+      hand: [...keptCards, ...drawnCards],
+      deck: reshuffledDeck,
+      isMulliganActive: false,
+      selectedMulliganCardIds: [],
+      log: [
+        ...log,
+        createLogEntry(
+          "player",
+          `Mulliganed ${cardsToRedraw.length} card${
+            cardsToRedraw.length === 1 ? "" : "s"
+          }.`,
+        ),
+        ...(skippedWeaknesses.length > 0
+          ? [
+              createLogEntry(
+                "player",
+                `Set aside ${skippedWeaknesses.length} weakness${
+                  skippedWeaknesses.length === 1 ? "" : "es"
+                } during mulligan and shuffled them back into the deck.`,
+              ),
+            ]
+          : []),
+        createLogEntry("system", "Round 1 begins."),
+        createLogEntry("system", "First round: Mythos phase is skipped."),
+        createLogEntry("system", "Phase: Investigation"),
+      ],
+      turn: {
+        round: 1,
+        phase: "investigation",
+        actionsRemaining: 3,
+      },
+    });
+
+    get().engageEnemiesAtLocation();
+  },
+
+  skipMulligan: () => {
+    const { isMulliganActive, log } = get();
+
+    if (!isMulliganActive) {
+      return;
+    }
+
+    set({
+      isMulliganActive: false,
+      selectedMulliganCardIds: [],
+      log: [
+        ...log,
+        createLogEntry("player", "Kept opening hand."),
+        createLogEntry("system", "Round 1 begins."),
+        createLogEntry("system", "First round: Mythos phase is skipped."),
+        createLogEntry("system", "Phase: Investigation"),
+      ],
+      turn: {
+        round: 1,
+        phase: "investigation",
+        actionsRemaining: 3,
+      },
+    });
+
+    get().engageEnemiesAtLocation();
   },
 
   commitSkillCard: (cardId) => {
