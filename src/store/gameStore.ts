@@ -56,6 +56,8 @@ import {
   getReplacementCandidates,
 } from "../features/playerCards/slots";
 
+import { loadArkhamDeck } from "../lib/loadArkhamDeck";
+
 type Screen = "home" | "game";
 
 type PendingTestResolution =
@@ -835,8 +837,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ draggedCardId: cardId });
   },
 
-  startGame: () => {
-    get().setupGame();
+  //startGame: () => {
+  //  get().setupGame();
+  //  set({ screen: "game" });
+  //},
+  startGame: async () => {
+    await get().setupGame();
     set({ screen: "game" });
   },
 
@@ -875,7 +881,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  setupGame: () => {
+  //setupGame: () => {
+  setupGame: async () => {
     const selected = get().availableInvestigators.find(
       (investigator) => investigator.id === get().selectedInvestigatorId,
     );
@@ -886,7 +893,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
 
-    const shuffledDeck = shuffle(playerDeck);
+    //const shuffledDeck = shuffle(playerDeck);
+    let deckCards: PlayerCard[] = [];
+
+    try {
+      deckCards = await loadArkhamDeck(5841936);
+    } catch (error) {
+      console.error(error);
+      get().pushLog(
+        "system",
+        "Failed to load ArkhamDB deck. Using default deck.",
+      );
+      deckCards = playerDeck;
+    }
+
+    const shuffledDeck = shuffle(deckCards);
 
     set({
       investigator: chosenInvestigator,
