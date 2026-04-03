@@ -1,6 +1,28 @@
 import { useGameStore } from "../../store/gameStore";
 import "./mulliganOverlay.css";
 
+const playerCardImages = import.meta.glob(
+  "../../assets/images/players.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function getPlayerCardImageUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(playerCardImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
+}
+
 export default function MulliganOverlay() {
   const isMulliganActive = useGameStore((state) => state.isMulliganActive);
   const hand = useGameStore((state) => state.hand);
@@ -28,6 +50,7 @@ export default function MulliganOverlay() {
         <div className="mulligan-overlay__grid">
           {hand.map((card) => {
             const selected = selectedMulliganCardIds.includes(card.id);
+            const imageUrl = getPlayerCardImageUrl(card.image);
 
             return (
               <button
@@ -38,9 +61,9 @@ export default function MulliganOverlay() {
                 }`}
                 onClick={() => toggleMulliganCardSelection(card.id)}
               >
-                {card.image ? (
+                {imageUrl ? (
                   <img
-                    src={card.image}
+                    src={imageUrl}
                     alt={card.name}
                     className="mulligan-card__image"
                     draggable={false}
