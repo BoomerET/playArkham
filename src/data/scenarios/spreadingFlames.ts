@@ -82,7 +82,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
   enemySpawns: [
     {
       enemyId: "ghoul-priest",
-      locationId: "cellar",
+      locationId: "warren-observatory",
     },
   ],
   acts: [
