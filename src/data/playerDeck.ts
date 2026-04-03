@@ -19,7 +19,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Melee"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12002"
   },
   {
     "id": "in-harms-way-3",
@@ -31,7 +32,8 @@ export const playerDeck: PlayerCard[] = [
       "Flaw"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12003"
   },
   {
     "id": "detectives-intuition-5",
@@ -48,7 +50,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12005"
   },
   {
     "id": "dead-ends-6",
@@ -61,7 +64,8 @@ export const playerDeck: PlayerCard[] = [
       "Blunder"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12006"
   },
   {
     "id": "covert-ops-8",
@@ -79,7 +83,8 @@ export const playerDeck: PlayerCard[] = [
       "Talent",
       "Illicit"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12008"
   },
   {
     "id": "black-chamber-operative-9",
@@ -92,7 +97,8 @@ export const playerDeck: PlayerCard[] = [
       "Coterie"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12009"
   },
   {
     "id": "for-my-next-trick-1",
@@ -110,7 +116,8 @@ export const playerDeck: PlayerCard[] = [
       "Spell",
       "Trick"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12011"
   },
   {
     "id": "the-necronomicon-2",
@@ -125,7 +132,8 @@ export const playerDeck: PlayerCard[] = [
       "Cursed"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12012"
   },
   {
     "id": "isabelles-twin-45s-4",
@@ -145,7 +153,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Firearm"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12014"
   },
   {
     "id": "breaking-point-5",
@@ -157,7 +166,8 @@ export const playerDeck: PlayerCard[] = [
       "Hardship"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12015"
   },
   {
     "id": "bodyguard-6",
@@ -173,7 +183,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12016"
   },
   {
     "id": "endurance-7",
@@ -189,7 +200,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12017"
   },
   {
     "id": "logan-hastings-8",
@@ -206,7 +218,8 @@ export const playerDeck: PlayerCard[] = [
       "Ally",
       "Hunter"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12018"
   },
   {
     "id": "m1911-9",
@@ -224,7 +237,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Firearm"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12019"
   },
   {
     "id": "machete-0",
@@ -242,7 +256,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Melee"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12020"
   },
   {
     "id": "resilience-1",
@@ -257,7 +272,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12021"
   },
   {
     "id": "lesson-learned-2",
@@ -274,7 +290,8 @@ export const playerDeck: PlayerCard[] = [
       "Insight",
       "Spirit"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12022"
   },
   {
     "id": "right-tool-for-the-job-3",
@@ -289,7 +306,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12023"
   },
   {
     "id": "scene-of-the-crime-4",
@@ -306,7 +324,8 @@ export const playerDeck: PlayerCard[] = [
       "Insight",
       "Bold"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12024"
   },
   {
     "id": "vicious-blow-5",
@@ -320,7 +339,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12025"
   },
   {
     "id": "counterattack-6",
@@ -337,7 +357,8 @@ export const playerDeck: PlayerCard[] = [
       "Spirit",
       "Tactic"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12026"
   },
   {
     "id": "bodyguard-7",
@@ -354,7 +375,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12027"
   },
   {
     "id": "sledgehammer-8",
@@ -374,7 +396,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Melee"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12028"
   },
   {
     "id": "winchester-model-12-9",
@@ -393,7 +416,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Firearm"
     ],
-    "faction": "guardian"
+    "faction": "guardian",
+    "code": "12029"
   },
   {
     "id": "dorothy-simmons-0",
@@ -410,7 +434,8 @@ export const playerDeck: PlayerCard[] = [
       "Ally",
       "Miskatonic"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12030"
   },
   {
     "id": "fingerprint-kit-1",
@@ -427,7 +452,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Tool"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12031"
   },
   {
     "id": "laboratory-assistant-2",
@@ -445,7 +471,8 @@ export const playerDeck: PlayerCard[] = [
       "Miskatonic",
       "Science"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12032"
   },
   {
     "id": "local-map-3",
@@ -461,7 +488,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12033"
   },
   {
     "id": "magnifying-glass-4",
@@ -478,7 +506,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Tool"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12034"
   },
   {
     "id": "sharp-rhetoric-5",
@@ -494,7 +523,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12035"
   },
   {
     "id": "gather-intel-6",
@@ -510,7 +540,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12036"
   },
   {
     "id": "through-the-cracks-7",
@@ -526,7 +557,8 @@ export const playerDeck: PlayerCard[] = [
       "Insight",
       "Trick"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12037"
   },
   {
     "id": "working-a-hunch-8",
@@ -542,7 +574,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12038"
   },
   {
     "id": "deduction-9",
@@ -556,7 +589,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12039"
   },
   {
     "id": "mysterious-grimoire-0",
@@ -574,7 +608,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Tome"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12040"
   },
   {
     "id": "through-the-cracks-1",
@@ -591,7 +626,8 @@ export const playerDeck: PlayerCard[] = [
       "Insight",
       "Trick"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12041"
   },
   {
     "id": "studious-2",
@@ -602,7 +638,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12042"
   },
   {
     "id": "unbridled-knowledge-3",
@@ -619,7 +656,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight"
     ],
-    "faction": "seeker"
+    "faction": "seeker",
+    "code": "12043"
   },
   {
     "id": "lucky-cigarette-case-4",
@@ -636,7 +674,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Charm"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12044"
   },
   {
     "id": "m1903-hammerless-5",
@@ -654,7 +693,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Firearm"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12045"
   },
   {
     "id": "olivier-bishop-6",
@@ -672,7 +712,8 @@ export const playerDeck: PlayerCard[] = [
       "Criminal",
       "Socialite"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12046"
   },
   {
     "id": "silver-tongue-7",
@@ -688,7 +729,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12047"
   },
   {
     "id": "sticky-fingers-8",
@@ -703,7 +745,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12048"
   },
   {
     "id": "thieves-kit-9",
@@ -721,7 +764,8 @@ export const playerDeck: PlayerCard[] = [
       "Tool",
       "Illicit"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12049"
   },
   {
     "id": "breaking-and-entering-0",
@@ -737,7 +781,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trick"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12050"
   },
   {
     "id": "paint-the-town-red-1",
@@ -754,7 +799,8 @@ export const playerDeck: PlayerCard[] = [
       "Fortune",
       "Gambit"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12051"
   },
   {
     "id": "prestidigitation-2",
@@ -770,7 +816,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trick"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12052"
   },
   {
     "id": "out-of-sight-3",
@@ -784,7 +831,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12053"
   },
   {
     "id": "sticky-fingers-4",
@@ -800,7 +848,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12054"
   },
   {
     "id": "decisive-strike-5",
@@ -817,7 +866,8 @@ export const playerDeck: PlayerCard[] = [
       "Tactic",
       "Gambit"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12055"
   },
   {
     "id": "another-day-another-dollar-6",
@@ -828,7 +878,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12056"
   },
   {
     "id": "out-of-sight-7",
@@ -845,7 +896,8 @@ export const playerDeck: PlayerCard[] = [
       "Practiced",
       "Expert"
     ],
-    "faction": "rogue"
+    "faction": "rogue",
+    "code": "12057"
   },
   {
     "id": "cloak-of-resonance-8",
@@ -863,7 +915,8 @@ export const playerDeck: PlayerCard[] = [
       "Clothing",
       "Alchemy"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12058"
   },
   {
     "id": "cosmic-flame-9",
@@ -879,7 +932,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12059"
   },
   {
     "id": "jim-culver-0",
@@ -896,7 +950,8 @@ export const playerDeck: PlayerCard[] = [
       "Ally",
       "Performer"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12060"
   },
   {
     "id": "lucky-charm-1",
@@ -914,7 +969,8 @@ export const playerDeck: PlayerCard[] = [
       "Charm",
       "Blessed"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12061"
   },
   {
     "id": "second-sight-2",
@@ -930,7 +986,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12062"
   },
   {
     "id": "spiritual-intuition-3",
@@ -946,7 +1003,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12063"
   },
   {
     "id": "premonition-4",
@@ -962,7 +1020,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Augury"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12064"
   },
   {
     "id": "ward-of-protection-5",
@@ -978,7 +1037,8 @@ export const playerDeck: PlayerCard[] = [
       "Spell",
       "Spirit"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12065"
   },
   {
     "id": "will-of-the-cosmos-6",
@@ -994,7 +1054,8 @@ export const playerDeck: PlayerCard[] = [
       "Insight",
       "Augury"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12066"
   },
   {
     "id": "soul-link-7",
@@ -1011,7 +1072,8 @@ export const playerDeck: PlayerCard[] = [
       "Innate",
       "Spell"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12067"
   },
   {
     "id": "mask-of-silenus-8",
@@ -1030,7 +1092,8 @@ export const playerDeck: PlayerCard[] = [
       "Relic",
       "Cursed"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12068"
   },
   {
     "id": "fearless-9",
@@ -1046,7 +1109,8 @@ export const playerDeck: PlayerCard[] = [
       "Innate",
       "Developed"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12069"
   },
   {
     "id": "augur-of-elokoss-0",
@@ -1064,7 +1128,8 @@ export const playerDeck: PlayerCard[] = [
       "Spell",
       "Augury"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12070"
   },
   {
     "id": "cosmic-flame-1",
@@ -1082,7 +1147,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell"
     ],
-    "faction": "mystic"
+    "faction": "mystic",
+    "code": "12071"
   },
   {
     "id": "aleksey-saburov-2",
@@ -1098,7 +1164,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12072"
   },
   {
     "id": "bandages-3",
@@ -1113,7 +1180,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12073"
   },
   {
     "id": "hunters-instinct-4",
@@ -1129,7 +1197,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12074"
   },
   {
     "id": "jumpsuit-5",
@@ -1146,7 +1215,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Clothing"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12075"
   },
   {
     "id": "levelheaded-6",
@@ -1162,7 +1232,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12076"
   },
   {
     "id": "meat-cleaver-7",
@@ -1180,7 +1251,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Melee"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12077"
   },
   {
     "id": "look-what-i-found-8",
@@ -1196,7 +1268,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12078"
   },
   {
     "id": "shove-off-9",
@@ -1212,7 +1285,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12079"
   },
   {
     "id": "slippery-0",
@@ -1226,7 +1300,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12080"
   },
   {
     "id": "timely-intervention-1",
@@ -1242,7 +1317,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12081"
   },
   {
     "id": "scrape-by-2",
@@ -1257,7 +1333,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12082"
   },
   {
     "id": "old-compass-3",
@@ -1275,7 +1352,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Tool"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12083"
   },
   {
     "id": "on-the-brink-4",
@@ -1291,7 +1369,8 @@ export const playerDeck: PlayerCard[] = [
       "Gambit",
       "Desperate"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12084"
   },
   {
     "id": "meat-cleaver-5",
@@ -1311,7 +1390,8 @@ export const playerDeck: PlayerCard[] = [
       "Weapon",
       "Melee"
     ],
-    "faction": "survivor"
+    "faction": "survivor",
+    "code": "12085"
   },
   {
     "id": "broken-bottle-6",
@@ -1330,7 +1410,8 @@ export const playerDeck: PlayerCard[] = [
       "Melee",
       "Improvised"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12086"
   },
   {
     "id": "fedora-7",
@@ -1348,7 +1429,8 @@ export const playerDeck: PlayerCard[] = [
       "Apparel",
       "Headwear"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12087"
   },
   {
     "id": "hand-crank-flashlight-8",
@@ -1365,7 +1447,8 @@ export const playerDeck: PlayerCard[] = [
       "Item",
       "Tool"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12088"
   },
   {
     "id": "emergency-cache-9",
@@ -1377,7 +1460,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Supply"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12089"
   },
   {
     "id": "guts-0",
@@ -1392,7 +1476,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12090"
   },
   {
     "id": "manual-dexterity-1",
@@ -1407,7 +1492,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12091"
   },
   {
     "id": "overpower-2",
@@ -1422,7 +1508,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12092"
   },
   {
     "id": "perception-3",
@@ -1437,7 +1524,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12093"
   },
   {
     "id": "unexpected-courage-4",
@@ -1452,7 +1540,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12094"
   },
   {
     "id": "charisma-5",
@@ -1463,7 +1552,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12095"
   },
   {
     "id": "relic-hunter-6",
@@ -1474,7 +1564,8 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent"
     ],
-    "faction": "neutral"
+    "faction": "neutral",
+    "code": "12096"
   },
   {
     "id": "amnesia-7",
@@ -1486,7 +1577,8 @@ export const playerDeck: PlayerCard[] = [
       "Madness"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12097"
   },
   {
     "id": "the-gold-bug-8",
@@ -1502,7 +1594,8 @@ export const playerDeck: PlayerCard[] = [
       "Cursed"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12098"
   },
   {
     "id": "the-nameless-lurker-9",
@@ -1515,7 +1608,8 @@ export const playerDeck: PlayerCard[] = [
       "Monster"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12099"
   },
   {
     "id": "overzealous-0",
@@ -1527,7 +1621,8 @@ export const playerDeck: PlayerCard[] = [
       "Flaw"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12100"
   },
   {
     "id": "paranoia-1",
@@ -1539,7 +1634,8 @@ export const playerDeck: PlayerCard[] = [
       "Madness"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12101"
   },
   {
     "id": "pursued-2",
@@ -1551,7 +1647,8 @@ export const playerDeck: PlayerCard[] = [
       "Terror"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12102"
   },
   {
     "id": "syndicate-obligations-3",
@@ -1564,7 +1661,8 @@ export const playerDeck: PlayerCard[] = [
       "Syndicate"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12103"
   },
   {
     "id": "wounded-4",
@@ -1576,6 +1674,7 @@ export const playerDeck: PlayerCard[] = [
       "Injury"
     ],
     "faction": "neutral",
-    "isWeakness": true
+    "isWeakness": true,
+    "code": "12104"
   }
 ];
