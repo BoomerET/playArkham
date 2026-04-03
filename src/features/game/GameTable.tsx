@@ -14,6 +14,8 @@ import AgendaPanel from "./AgendaPanel";
 import SkillTestPanel from "./SkillTestPanel";
 import TurnPanel from "./TurnPanel";
 import "./gameTable.css";
+import { useEffect } from "react";
+import DeckInspector from "../deckInspector/DeckInspector";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -47,6 +49,22 @@ export default function GameTable() {
       ? "The investigators achieved their objective."
       : "The investigators failed to complete their objective.";
 
+  const toggleDeckInspector = useGameStore(
+    (state) => state.toggleDeckInspector,
+  );
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && (event.key === "d" || event.key === "D")) {
+        event.preventDefault();
+        toggleDeckInspector();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [toggleDeckInspector]);
+
   return (
     <main className="game-table-shell">
       <header className="game-table-header">
@@ -56,7 +74,9 @@ export default function GameTable() {
             {selectedScenario?.name ?? "Play Arkham"}
           </h1>
           {selectedScenario?.description ? (
-            <p className="game-table-subtitle">{selectedScenario.description}</p>
+            <p className="game-table-subtitle">
+              {selectedScenario.description}
+            </p>
           ) : null}
         </div>
 
@@ -174,6 +194,7 @@ export default function GameTable() {
           </section>
         </aside>
       </div>
+      <DeckInspector />
     </main>
   );
 }

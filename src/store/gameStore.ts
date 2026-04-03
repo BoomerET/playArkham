@@ -81,7 +81,6 @@ type GameStore = GameState & {
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
-  selectedDeckId: string;
   confirmAssetReplacement: (replacedCardId: string) => void;
   cancelPendingAssetPlay: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
@@ -95,9 +94,9 @@ type GameStore = GameState & {
   advanceAct: () => void;
   pushLog: (kind: GameLogKind, text: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
-  startGame: () => Promise<void>;
+  startGame: () => void;
   returnToHome: () => void;
-  setupGame: () => Promise<void>;
+  setupGame: () => void;
   drawCard: () => void;
   drawStartingHand: (count?: number) => void;
   shuffleDeck: () => void;
@@ -138,7 +137,6 @@ type GameStore = GameState & {
     cardId: string,
     counterType: CardCounterType,
   ) => void;
-  setSelectedDeckId: (deckId: string) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -561,7 +559,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   availableScenarios: scenarios,
   selectedInvestigatorId: investigators[0].id,
   selectedScenarioId: defaultScenarioId,
-  selectedDeckId: "",
   selectedEnemyTargetId: null,
   draggedCardId: null,
   pendingTestResolution: null,
@@ -622,10 +619,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedScenario: (scenarioId) => {
     set({ selectedScenarioId: scenarioId });
-  },
-
-  setSelectedDeckId: (deckId) => {
-    set({ selectedDeckId: deckId });
   },
 
   setSelectedEnemyTarget: (enemyId) => {
@@ -844,6 +837,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ draggedCardId: cardId });
   },
 
+  toggleDeckInspector: () => {
+    set((state) => ({
+      showDeckInspector: !state.showDeckInspector,
+    }));
+  },
+
+  closeDeckInspector: () => {
+    set({ showDeckInspector: false });
+  },
+
   //startGame: () => {
   //  get().setupGame();
   //  set({ screen: "game" });
@@ -874,6 +877,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionTitle: null,
       scenarioResolutionSubtitle: null,
       pendingAssetPlay: null,
+      showDeckInspector: false,
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -900,28 +904,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ? createGameInvestigator(selected)
       : createGameInvestigator(get().availableInvestigators[0]);
 
-    let deckCards: PlayerCard[] = [...playerDeck];
-    const selectedDeckId = get().selectedDeckId.trim();
+    //const shuffledDeck = shuffle(playerDeck);
+    let deckCards: PlayerCard[] = [];
 
-    if (selectedDeckId) {
-      try {
-        const loadedDeck = await loadArkhamDeck(selectedDeckId);
-
-        if (loadedDeck.length > 0) {
-          deckCards = loadedDeck;
-        } else {
-          get().pushLog(
-            "system",
-            `ArkhamDB deck ${selectedDeckId} loaded, but no matching local cards were found. Using default deck.`,
-          );
-        }
-      } catch (error) {
-        console.error(error);
-        get().pushLog(
-          "system",
-          `Failed to load ArkhamDB deck ${selectedDeckId}. Using default deck.`,
-        );
-      }
+    try {
+      deckCards = await loadArkhamDeck(5841936);
+    } catch (error) {
+      console.error(error);
+      get().pushLog(
+        "system",
+        "Failed to load ArkhamDB deck. Using default deck.",
+      );
+      deckCards = playerDeck;
     }
 
     const shuffledDeck = shuffle(deckCards);
@@ -948,6 +942,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionTitle: null,
       scenarioResolutionSubtitle: null,
       pendingAssetPlay: null,
+      showDeckInspector: false,
       log: [
         createLogEntry(
           "system",
@@ -956,12 +951,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         createLogEntry(
           "scenario",
           `Selected scenario: ${selectedScenario.name}`,
-        ),
-        createLogEntry(
-          "system",
-          get().selectedDeckId.trim()
-            ? `Deck source: ArkhamDB deck ${get().selectedDeckId.trim()}.`
-            : "Deck source: local default deck.",
         ),
         createLogEntry("system", "Game setup complete."),
         createLogEntry("system", "Round 1 begins."),
