@@ -6,6 +6,12 @@ import type {
   PlayerCardSlot,
 } from "../../types/game";
 
+export type AssetReplacementPlan = {
+  blockedSlot: InvestigatorSlotType;
+  replacementChoices: PlayerCard[];
+  requiredHandSlotsToFree?: number;
+};
+
 export const DEFAULT_SLOT_CAPACITY: InvestigatorSlotCounts = {
   Hand: 2,
   Arcane: 2,
@@ -145,15 +151,96 @@ export function isSingleSlotAsset(slot: PlayerCardSlot | undefined): boolean {
   );
 }
 
+function isHandAsset(slot: PlayerCardSlot | undefined): boolean {
+  return slot === "Hand" || slot === "Hand x2";
+}
+
 export function getReplacementCandidates(
   card: PlayerCard,
   playArea: PlayerCard[],
 ): PlayerCard[] {
-  if (card.type !== "asset" || !isSingleSlotAsset(card.slot)) {
+  if (card.type !== "asset" || !card.slot) {
+    return [];
+  }
+
+  if (isHandAsset(card.slot)) {
+    return playArea.filter(
+      (entry) => entry.type === "asset" && isHandAsset(entry.slot),
+    );
+  }
+
+  if (!isSingleSlotAsset(card.slot)) {
     return [];
   }
 
   return playArea.filter(
     (entry) => entry.type === "asset" && entry.slot === card.slot,
   );
+}
+
+export function getRequiredHandSlotsToFree(
+  card: PlayerCard,
+  playArea: PlayerCard[],
+  investigator: Investigator,
+): number {
+  if (card.type !== "asset" || !isHandAsset(card.slot)) {
+    return 0;
+  }
+
+  const used = getUsedSlots(playArea);
+  const capacity = getSlotCapacity(investigator);
+  const freeHands = Math.max(0, capacity.Hand - used.Hand);
+  const neededHands = card.slot === "Hand x2" ? 2 : 1;
+
+  return Math.max(0, neededHands - freeHands);
+}
+
+export function getReplacementPlan(
+  card: PlayerCard,
+  playArea: PlayerCard[],
+  investigator: Investigator,
+): AssetReplacementPlan | null {
+  if (card.type !== "asset" || !card.slot) {
+    return null;
+  }
+
+  if (canPlayInAvailableSlots(card, playArea, investigator)) {
+    return null;
+  }
+
+  if (isHandAsset(card.slot)) {
+    const replacementChoices = getReplacementCandidates(card, playArea);
+    const requiredHandSlotsToFree = getRequiredHandSlotsToFree(
+      card,
+      playArea,
+      investigator,
+    );
+
+    if (replacementChoices.length === 0 || requiredHandSlotsToFree <= 0) {
+      return null;
+    }
+
+    return {
+      blockedSlot: "Hand",
+      replacementChoices,
+      requiredHandSlotsToFree,
+    };
+  }
+
+  const blockedSlot = getBlockedSlot(card, playArea, investigator);
+
+  if (!blockedSlot) {
+    return null;
+  }
+
+  const replacementChoices = getReplacementCandidates(card, playArea);
+
+  if (replacementChoices.length === 0) {
+    return null;
+  }
+
+  return {
+    blockedSlot,
+    replacementChoices,
+  };
 }
