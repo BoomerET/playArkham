@@ -53,11 +53,6 @@ import type {
 import {
   canPlayInAvailableSlots,
   getBlockedSlot,
-} from "../features/playerCards/slots";
-
-import {
-  canPlayInAvailableSlots,
-  getBlockedSlot,
   getReplacementCandidates,
 } from "../features/playerCards/slots";
 
