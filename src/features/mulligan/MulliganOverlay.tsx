@@ -2,7 +2,7 @@ import { useGameStore } from "../../store/gameStore";
 import "./mulliganOverlay.css";
 
 const playerCardImages = import.meta.glob(
-  "../../assets/images/players.{jpg,jpeg,png,webp}",
+  "../../assets/images/players/*.{jpg,jpeg,png,webp}",
   {
     eager: true,
     import: "default",
