@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { investigators } from "../data/investigators";
-import { playerDeck } from "../data/playerDeck";
+//import { playerDeck } from "../data/playerDeck";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type {
   ScenarioCardDefinition,
