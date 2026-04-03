@@ -143,6 +143,9 @@ type GameStore = GameState & {
     cardId: string,
     counterType: CardCounterType,
   ) => void;
+  encounterDeck: EncounterCard[];
+  encounterDiscard: EncounterCard[];
+  drawEncounterCard: () => EncounterCard | null;
 };
 
 const startingChaosBag: ChaosToken[] = [
