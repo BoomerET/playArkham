@@ -161,23 +161,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
   ],
   encounterDeck: [
     {
-      id: "ghoul-minion-1",
-      name: "Ghoul Minion",
-      type: "enemy",
-      fight: 2,
-      evade: 2,
-      health: 3,
-      damage: 1,
-      horror: 1,
-      text: "Hunter.",
-    },
-    {
-      id: "frozen-in-fear-1",
-      name: "Frozen in Fear",
-      type: "treachery",
-      text: "Generic treachery effect for now.",
-    },
-    {
       id: "servant-of-flame-1",
       code: "12114",
       name: "Servant of Flame",
