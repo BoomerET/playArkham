@@ -58,7 +58,10 @@ import {
 
 import { loadArkhamDeck } from "../lib/loadArkhamDeck";
 import { resolvePlayedEvent } from "../lib/playerCardEffects";
-import { canActivatePlayAreaCardAbility, getActivatedCardAbilityEffect } from "../lib/playerCardAbilities";
+import {
+  canActivatePlayAreaCardAbility,
+  getActivatedCardAbilityEffect,
+} from "../lib/playerCardAbilities";
 
 type Screen = "home" | "game";
 
@@ -901,21 +904,64 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   triggerPlayAreaCardAbility: (cardId) => {
-    const { playArea, activeSkillTest, scenarioStatus, pendingInvestigateDifficultyModifier, pendingFightCombatModifier, pendingFightDamageBonus } = get();
-    if (isScenarioResolved(scenarioStatus)) { get().pushLog("system", getScenarioResolvedMessage(scenarioStatus)); return; }
-    if (activeSkillTest) { get().pushLog("system", "Cannot activate a play-area ability while a skill test is active."); return; }
+    const {
+      playArea,
+      activeSkillTest,
+      scenarioStatus,
+      pendingInvestigateDifficultyModifier,
+      pendingFightCombatModifier,
+      pendingFightDamageBonus,
+    } = get();
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+    if (activeSkillTest) {
+      get().pushLog(
+        "system",
+        "Cannot activate a play-area ability while a skill test is active.",
+      );
+      return;
+    }
     const card = playArea.find((entry) => entry.id === cardId);
     if (!card) return;
-    if (!canActivatePlayAreaCardAbility(card)) { get().pushLog("system", `Cannot activate ${card.name}. No usable counters remain.`); return; }
+    if (!canActivatePlayAreaCardAbility(card)) {
+      get().pushLog(
+        "system",
+        `Cannot activate ${card.name}. No usable counters remain.`,
+      );
+      return;
+    }
     const effect = getActivatedCardAbilityEffect(card);
     if (!effect) return;
     const currentCounterValue = card.counters?.[effect.counterType] ?? 0;
-    const nextCounterValue = Math.max(0, currentCounterValue - effect.counterCost);
+    const nextCounterValue = Math.max(
+      0,
+      currentCounterValue - effect.counterCost,
+    );
     set({
-      playArea: playArea.map((entry) => entry.id !== cardId ? entry : { ...entry, counters: (() => { const nc = { ...(entry.counters ?? {}), [effect.counterType]: nextCounterValue }; if (nextCounterValue === 0) delete nc[effect.counterType]; return nc; })() }),
-      pendingInvestigateDifficultyModifier: pendingInvestigateDifficultyModifier + (effect.investigateDifficultyModifier ?? 0),
-      pendingFightCombatModifier: pendingFightCombatModifier + (effect.fightCombatModifier ?? 0),
-      pendingFightDamageBonus: pendingFightDamageBonus + (effect.fightDamageBonus ?? 0),
+      playArea: playArea.map((entry) =>
+        entry.id !== cardId
+          ? entry
+          : {
+              ...entry,
+              counters: (() => {
+                const nc = {
+                  ...(entry.counters ?? {}),
+                  [effect.counterType]: nextCounterValue,
+                };
+                if (nextCounterValue === 0) delete nc[effect.counterType];
+                return nc;
+              })(),
+            },
+      ),
+      pendingInvestigateDifficultyModifier:
+        pendingInvestigateDifficultyModifier +
+        (effect.investigateDifficultyModifier ?? 0),
+      pendingFightCombatModifier:
+        pendingFightCombatModifier + (effect.fightCombatModifier ?? 0),
+      pendingFightDamageBonus:
+        pendingFightDamageBonus + (effect.fightDamageBonus ?? 0),
     });
     get().pushLog("player", effect.logText);
   },
@@ -925,52 +971,125 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!pendingAssetPlay) return;
     const exists = pendingAssetPlay.selectedReplacementIds.includes(cardId);
     if (pendingAssetPlay.requiredHandSlotsToFree) {
-      set({ pendingAssetPlay: { ...pendingAssetPlay, selectedReplacementIds: exists ? pendingAssetPlay.selectedReplacementIds.filter((entry) => entry !== cardId) : [...pendingAssetPlay.selectedReplacementIds, cardId] } });
+      set({
+        pendingAssetPlay: {
+          ...pendingAssetPlay,
+          selectedReplacementIds: exists
+            ? pendingAssetPlay.selectedReplacementIds.filter(
+                (entry) => entry !== cardId,
+              )
+            : [...pendingAssetPlay.selectedReplacementIds, cardId],
+        },
+      });
       return;
     }
-    set({ pendingAssetPlay: { ...pendingAssetPlay, selectedReplacementIds: exists ? [] : [cardId] } });
+    set({
+      pendingAssetPlay: {
+        ...pendingAssetPlay,
+        selectedReplacementIds: exists ? [] : [cardId],
+      },
+    });
   },
 
   toggleMulliganCardSelection: (cardId) => {
     const { isMulliganActive, selectedMulliganCardIds } = get();
     if (!isMulliganActive) return;
     const alreadySelected = selectedMulliganCardIds.includes(cardId);
-    set({ selectedMulliganCardIds: alreadySelected ? selectedMulliganCardIds.filter((entry) => entry !== cardId) : [...selectedMulliganCardIds, cardId] });
+    set({
+      selectedMulliganCardIds: alreadySelected
+        ? selectedMulliganCardIds.filter((entry) => entry !== cardId)
+        : [...selectedMulliganCardIds, cardId],
+    });
   },
 
   confirmMulligan: () => {
-    const { isMulliganActive, selectedMulliganCardIds, hand, deck, log } = get();
+    const { isMulliganActive, selectedMulliganCardIds, hand, deck, log } =
+      get();
     if (!isMulliganActive) return;
-    if (selectedMulliganCardIds.length === 0) { get().skipMulligan(); return; }
-    const cardsToRedraw = hand.filter((card) => selectedMulliganCardIds.includes(card.id));
-    const keptCards = hand.filter((card) => !selectedMulliganCardIds.includes(card.id));
+    if (selectedMulliganCardIds.length === 0) {
+      get().skipMulligan();
+      return;
+    }
+    const cardsToRedraw = hand.filter((card) =>
+      selectedMulliganCardIds.includes(card.id),
+    );
+    const keptCards = hand.filter(
+      (card) => !selectedMulliganCardIds.includes(card.id),
+    );
     let reshuffledDeck = shuffleArray([...deck, ...cardsToRedraw]);
-    let drawnCards = [];
+    const drawnCards = hand.filter((card) =>
+      selectedMulliganCardIds.includes(card.id),
+    );
     const skippedWeaknesses = [];
-    while (drawnCards.length < cardsToRedraw.length && reshuffledDeck.length > 0) {
-      const [topCard, ...remainingDeck] = reshuffledDeck; reshuffledDeck = remainingDeck;
-      if (isOpeningHandWeakness(topCard)) { skippedWeaknesses.push(topCard); continue; }
+    while (
+      drawnCards.length < cardsToRedraw.length &&
+      reshuffledDeck.length > 0
+    ) {
+      const [topCard, ...remainingDeck] = reshuffledDeck;
+      reshuffledDeck = remainingDeck;
+      if (isOpeningHandWeakness(topCard)) {
+        skippedWeaknesses.push(topCard);
+        continue;
+      }
       drawnCards.push(topCard);
     }
-    if (skippedWeaknesses.length > 0) reshuffledDeck = shuffleArray([...reshuffledDeck, ...skippedWeaknesses]);
-    set({ hand: [...keptCards, ...drawnCards], deck: reshuffledDeck, isMulliganActive: false, selectedMulliganCardIds: [], log: [...log, createLogEntry("player", `Mulliganed ${cardsToRedraw.length} card${cardsToRedraw.length===1?"":"s"}.`), createLogEntry("system", "Round 1 begins."), createLogEntry("system", "First round: Mythos phase is skipped."), createLogEntry("system", "Phase: Investigation")], turn: { round:1, phase:"investigation", actionsRemaining:3 } });
+    if (skippedWeaknesses.length > 0)
+      reshuffledDeck = shuffleArray([...reshuffledDeck, ...skippedWeaknesses]);
+    set({
+      hand: [...keptCards, ...drawnCards],
+      deck: reshuffledDeck,
+      isMulliganActive: false,
+      selectedMulliganCardIds: [],
+      log: [
+        ...log,
+        createLogEntry(
+          "player",
+          `Mulliganed ${cardsToRedraw.length} card${cardsToRedraw.length === 1 ? "" : "s"}.`,
+        ),
+        createLogEntry("system", "Round 1 begins."),
+        createLogEntry("system", "First round: Mythos phase is skipped."),
+        createLogEntry("system", "Phase: Investigation"),
+      ],
+      turn: { round: 1, phase: "investigation", actionsRemaining: 3 },
+    });
     get().engageEnemiesAtLocation();
   },
 
   skipMulligan: () => {
-    const { isMulliganActive, log } = get(); if (!isMulliganActive) return;
-    set({ isMulliganActive:false, selectedMulliganCardIds:[], log:[...log, createLogEntry("player","Kept opening hand."), createLogEntry("system", "Round 1 begins."), createLogEntry("system", "First round: Mythos phase is skipped."), createLogEntry("system", "Phase: Investigation")], turn:{round:1, phase:"investigation", actionsRemaining:3} });
+    const { isMulliganActive, log } = get();
+    if (!isMulliganActive) return;
+    set({
+      isMulliganActive: false,
+      selectedMulliganCardIds: [],
+      log: [
+        ...log,
+        createLogEntry("player", "Kept opening hand."),
+        createLogEntry("system", "Round 1 begins."),
+        createLogEntry("system", "First round: Mythos phase is skipped."),
+        createLogEntry("system", "Phase: Investigation"),
+      ],
+      turn: { round: 1, phase: "investigation", actionsRemaining: 3 },
+    });
     get().engageEnemiesAtLocation();
   },
 
   drawEncounterCard: () => {
     const { encounterDeck, encounterDiscard } = get();
     if (encounterDeck.length === 0) {
-      if (encounterDiscard.length === 0) { get().pushLog("system", "Tried to draw an encounter card, but the encounter deck was empty."); return null; }
+      if (encounterDiscard.length === 0) {
+        get().pushLog(
+          "system",
+          "Tried to draw an encounter card, but the encounter deck was empty.",
+        );
+        return null;
+      }
       const reshuffledDeck = shuffleArray(encounterDiscard);
       const [topCard, ...remainingDeck] = reshuffledDeck;
       set({ encounterDeck: remainingDeck, encounterDiscard: [] });
-      get().pushLog("scenario", `Encounter discard reshuffled into a new encounter deck. Drew ${topCard.name}.`);
+      get().pushLog(
+        "scenario",
+        `Encounter discard reshuffled into a new encounter deck. Drew ${topCard.name}.`,
+      );
       return topCard;
     }
     const [topCard, ...remainingDeck] = encounterDeck;
@@ -982,18 +1101,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
   resolveMythosPhase: () => {
     const { investigator, locations, enemies, encounterDiscard } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    if (!currentLocation) { get().pushLog("system", "Mythos draw could not resolve because the investigator has no location."); return; }
-    const card = get().drawEncounterCard(); if (!card) return;
+    if (!currentLocation) {
+      get().pushLog(
+        "system",
+        "Mythos draw could not resolve because the investigator has no location.",
+      );
+      return;
+    }
+    const card = get().drawEncounterCard();
+    if (!card) return;
     if (card.type === "enemy") {
-      const spawnedEnemy = { id: `${card.id}-${Date.now()}`, name: card.name, fight: card.fight ?? 0, evade: card.evade ?? 0, health: card.health ?? 0, damage: card.damage ?? 0, horror: card.horror ?? 0, locationId: currentLocation.id, engagedInvestigatorId: investigator.id, exhausted: false, damageOnEnemy: 0 };
+      const spawnedEnemy = {
+        id: `${card.id}-${Date.now()}`,
+        name: card.name,
+        fight: card.fight ?? 0,
+        evade: card.evade ?? 0,
+        health: card.health ?? 0,
+        damage: card.damage ?? 0,
+        horror: card.horror ?? 0,
+        locationId: currentLocation.id,
+        engagedInvestigatorId: investigator.id,
+        exhausted: false,
+        damageOnEnemy: 0,
+      };
       set({ enemies: [...enemies, spawnedEnemy] });
-      get().pushLog("enemy", `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`);
+      get().pushLog(
+        "enemy",
+        `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
+      );
       return;
     }
     if (card.type === "treachery") {
-      set({ encounterDiscard: [...encounterDiscard, card], investigator: { ...investigator, horror: investigator.horror + 1 } });
-      get().pushLog("scenario", `${card.name} was drawn and resolved as a treachery.`);
-      get().pushLog("combat", `${investigator.name} took 1 horror from ${card.name}.`);
+      set({
+        encounterDiscard: [...encounterDiscard, card],
+        investigator: { ...investigator, horror: investigator.horror + 1 },
+      });
+      get().pushLog(
+        "scenario",
+        `${card.name} was drawn and resolved as a treachery.`,
+      );
+      get().pushLog(
+        "combat",
+        `${investigator.name} took 1 horror from ${card.name}.`,
+      );
       return;
     }
     set({ encounterDiscard: [...encounterDiscard, card] });
@@ -1021,9 +1171,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: selectedScenario.encounterDeck ? shuffleArray(selectedScenario.encounterDeck) : [],
+      encounterDeck: selectedScenario.encounterDeck
+        ? shuffleArray(selectedScenario.encounterDeck)
+        : [],
       encounterDiscard: [],
-      chaosBag: selectedScenario.chaosBag ? [...selectedScenario.chaosBag] : [...startingChaosBag],
+      chaosBag: selectedScenario.chaosBag
+        ? [...selectedScenario.chaosBag]
+        : [...startingChaosBag],
       locations: cloneScenarioLocations(selectedScenario.locations),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
@@ -1051,34 +1205,100 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setupGame: async () => {
     const selectedDeckId = get().selectedDeckId.trim();
-    if (!selectedDeckId) { get().pushLog("system", "Cannot start game without an ArkhamDB deck ID."); throw new Error("ArkhamDB deck ID is required."); }
-    const selected = get().availableInvestigators.find((investigator) => investigator.id === get().selectedInvestigatorId);
-    if (!selected) { get().pushLog("system", "Cannot start game because the selected deck's investigator is not supported."); throw new Error("Deck investigator is not supported locally."); }
+    if (!selectedDeckId) {
+      get().pushLog("system", "Cannot start game without an ArkhamDB deck ID.");
+      throw new Error("ArkhamDB deck ID is required.");
+    }
+    const selected = get().availableInvestigators.find(
+      (investigator) => investigator.id === get().selectedInvestigatorId,
+    );
+    if (!selected) {
+      get().pushLog(
+        "system",
+        "Cannot start game because the selected deck's investigator is not supported.",
+      );
+      throw new Error("Deck investigator is not supported locally.");
+    }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
     let deckCards;
-    try { deckCards = await loadArkhamDeck(selectedDeckId); } catch (error) { console.error(error); get().pushLog("system", `Failed to load ArkhamDB deck ${selectedDeckId}.`); throw error; }
-    if (deckCards.length === 0) { get().pushLog("system", `ArkhamDB deck ${selectedDeckId} did not produce any playable local cards.`); throw new Error("ArkhamDB deck contained no supported local cards."); }
+    try {
+      deckCards = await loadArkhamDeck(selectedDeckId);
+    } catch (error) {
+      console.error(error);
+      get().pushLog(
+        "system",
+        `Failed to load ArkhamDB deck ${selectedDeckId}.`,
+      );
+      throw error;
+    }
+    if (deckCards.length === 0) {
+      get().pushLog(
+        "system",
+        `ArkhamDB deck ${selectedDeckId} did not produce any playable local cards.`,
+      );
+      throw new Error("ArkhamDB deck contained no supported local cards.");
+    }
     const shuffledDeck = shuffle(deckCards);
     set({
       investigator: chosenInvestigator,
-      deck: shuffledDeck, hand: [], discard: [], playArea: [],
-      encounterDeck: selectedScenario.encounterDeck ? shuffleArray(selectedScenario.encounterDeck) : [],
+      deck: shuffledDeck,
+      hand: [],
+      discard: [],
+      playArea: [],
+      encounterDeck: selectedScenario.encounterDeck
+        ? shuffleArray(selectedScenario.encounterDeck)
+        : [],
       encounterDiscard: [],
-      chaosBag: selectedScenario.chaosBag ? [...selectedScenario.chaosBag] : [...startingChaosBag],
-      locations: normalizeScenarioLocations(selectedScenario.locations, chosenInvestigator.id, selectedScenario.startingLocationId),
+      chaosBag: selectedScenario.chaosBag
+        ? [...selectedScenario.chaosBag]
+        : [...startingChaosBag],
+      locations: normalizeScenarioLocations(
+        selectedScenario.locations,
+        chosenInvestigator.id,
+        selectedScenario.startingLocationId,
+      ),
       enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
-      scenarioStatus: "inProgress", scenarioResolutionText: null, scenarioResolutionTitle: null, scenarioResolutionSubtitle: null,
-      pendingAssetPlay: null, showDeckInspector: false, isMulliganActive: true, selectedMulliganCardIds: [],
-      pendingInvestigateDifficultyModifier: 0, pendingFightCombatModifier: 0, pendingFightDamageBonus: 0,
-      log: [createLogEntry("system", `Selected investigator: ${chosenInvestigator.name}`), createLogEntry("scenario", `Selected scenario: ${selectedScenario.name}`), createLogEntry("system", `Deck source: ArkhamDB deck ${selectedDeckId}.`), createLogEntry("system", "Game setup complete.")],
-      lastSkillTest: null, activeSkillTest: null, pendingTestResolution: null, selectedEnemyTargetId: null, draggedCardId: null,
+      scenarioStatus: "inProgress",
+      scenarioResolutionText: null,
+      scenarioResolutionTitle: null,
+      scenarioResolutionSubtitle: null,
+      pendingAssetPlay: null,
+      showDeckInspector: false,
+      isMulliganActive: true,
+      selectedMulliganCardIds: [],
+      pendingInvestigateDifficultyModifier: 0,
+      pendingFightCombatModifier: 0,
+      pendingFightDamageBonus: 0,
+      log: [
+        createLogEntry(
+          "system",
+          `Selected investigator: ${chosenInvestigator.name}`,
+        ),
+        createLogEntry(
+          "scenario",
+          `Selected scenario: ${selectedScenario.name}`,
+        ),
+        createLogEntry(
+          "system",
+          `Deck source: ArkhamDB deck ${selectedDeckId}.`,
+        ),
+        createLogEntry("system", "Game setup complete."),
+      ],
+      lastSkillTest: null,
+      activeSkillTest: null,
+      pendingTestResolution: null,
+      selectedEnemyTargetId: null,
+      draggedCardId: null,
       turn: { round: 1, phase: "setup", actionsRemaining: 3 },
     });
     get().drawStartingHand(5);
-    get().pushLog("system", "Opening hand drawn. Choose any number of cards to mulligan.");
+    get().pushLog(
+      "system",
+      "Opening hand drawn. Choose any number of cards to mulligan.",
+    );
   },
 
   drawCard: () => {
@@ -1258,7 +1478,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
 
       if (!canPlayInSlots) {
-        const replacementPlan = getReplacementPlan(card, playArea, investigator);
+        const replacementPlan = getReplacementPlan(
+          card,
+          playArea,
+          investigator,
+        );
 
         if (replacementPlan) {
           set({
@@ -1282,7 +1506,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         }
 
         set({ draggedCardId: null, pendingAssetPlay: null });
-        get().pushLog("system", `Cannot play ${card.name}. No available equipment slots.`);
+        get().pushLog(
+          "system",
+          `Cannot play ${card.name}. No available equipment slots.`,
+        );
         return;
       }
     }
@@ -1333,7 +1560,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         pendingAssetPlay: null,
       });
 
-      get().pushLog("player", `${resolvedEvent.logText} Paid ${cost} resource(s). 1 action spent.`);
+      get().pushLog(
+        "player",
+        `${resolvedEvent.logText} Paid ${cost} resource(s). 1 action spent.`,
+      );
       return;
     }
 
@@ -1354,25 +1584,107 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   confirmAssetReplacement: () => {
-    const { hand, discard, playArea, investigator, turn, pendingAssetPlay, activeSkillTest, scenarioStatus } = get();
-    if (isScenarioResolved(scenarioStatus)) { set({ pendingAssetPlay: null, draggedCardId: null }); get().pushLog("system", getScenarioResolvedMessage(scenarioStatus)); return; }
-    if (activeSkillTest) { set({ pendingAssetPlay: null, draggedCardId: null }); get().pushLog("system", "Cannot resolve asset replacement while a skill test is active."); return; }
+    const {
+      hand,
+      discard,
+      playArea,
+      investigator,
+      turn,
+      pendingAssetPlay,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
+    if (isScenarioResolved(scenarioStatus)) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+    if (activeSkillTest) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog(
+        "system",
+        "Cannot resolve asset replacement while a skill test is active.",
+      );
+      return;
+    }
     if (!pendingAssetPlay) return;
-    const cardToPlay = hand.find((entry) => entry.id === pendingAssetPlay.cardId);
-    const selectedReplacementCards = playArea.filter((entry) => pendingAssetPlay.selectedReplacementIds.includes(entry.id));
-    if (!cardToPlay) { set({ pendingAssetPlay: null, draggedCardId: null }); get().pushLog("system", "Asset replacement could not be completed."); return; }
-    if (selectedReplacementCards.length === 0) { get().pushLog("system", "Choose at least one asset to replace before confirming."); return; }
+    const cardToPlay = hand.find(
+      (entry) => entry.id === pendingAssetPlay.cardId,
+    );
+    const selectedReplacementCards = playArea.filter((entry) =>
+      pendingAssetPlay.selectedReplacementIds.includes(entry.id),
+    );
+    if (!cardToPlay) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", "Asset replacement could not be completed.");
+      return;
+    }
+    if (selectedReplacementCards.length === 0) {
+      get().pushLog(
+        "system",
+        "Choose at least one asset to replace before confirming.",
+      );
+      return;
+    }
     if (pendingAssetPlay.requiredHandSlotsToFree) {
-      const freedHandSlots = selectedReplacementCards.reduce((sum, card) => sum + getCardSlotUsage(card).Hand, 0);
-      if (freedHandSlots < pendingAssetPlay.requiredHandSlotsToFree) { get().pushLog("system", `Choose replacements that free at least ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"}.`); return; }
-    } else if (selectedReplacementCards.length !== 1) { get().pushLog("system", "Choose exactly one asset to replace before confirming."); return; }
+      const freedHandSlots = selectedReplacementCards.reduce(
+        (sum, card) => sum + getCardSlotUsage(card).Hand,
+        0,
+      );
+      if (freedHandSlots < pendingAssetPlay.requiredHandSlotsToFree) {
+        get().pushLog(
+          "system",
+          `Choose replacements that free at least ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"}.`,
+        );
+        return;
+      }
+    } else if (selectedReplacementCards.length !== 1) {
+      get().pushLog(
+        "system",
+        "Choose exactly one asset to replace before confirming.",
+      );
+      return;
+    }
     const cost = getCardCost(cardToPlay);
-    if (investigator.resources < cost) { set({ pendingAssetPlay: null, draggedCardId: null }); get().pushLog("system", `Cannot play ${cardToPlay.name}. Not enough resources.`); return; }
-    if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) { set({ pendingAssetPlay: null, draggedCardId: null }); get().pushLog("system", "Cannot complete asset replacement right now."); return; }
-    const selectedReplacementIds = new Set(pendingAssetPlay.selectedReplacementIds);
-    const updatedPlayArea = playArea.filter((entry) => !selectedReplacementIds.has(entry.id)).concat({ ...cardToPlay, exhausted: false, counters: normalizeCardCounters(cardToPlay.counters) });
-    set({ investigator: { ...investigator, resources: investigator.resources - cost }, hand: hand.filter((entry) => entry.id !== cardToPlay.id), discard: [...discard, ...selectedReplacementCards], playArea: updatedPlayArea, turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 }, pendingAssetPlay: null, draggedCardId: null });
-    get().pushLog("player", `Discarded ${selectedReplacementCards.map((card) => card.name).join(", ")} and played ${cardToPlay.name} for ${cost} resource(s). 1 action spent.`);
+    if (investigator.resources < cost) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog(
+        "system",
+        `Cannot play ${cardToPlay.name}. Not enough resources.`,
+      );
+      return;
+    }
+    if (!canSpendInvestigationAction(turn.phase, turn.actionsRemaining)) {
+      set({ pendingAssetPlay: null, draggedCardId: null });
+      get().pushLog("system", "Cannot complete asset replacement right now.");
+      return;
+    }
+    const selectedReplacementIds = new Set(
+      pendingAssetPlay.selectedReplacementIds,
+    );
+    const updatedPlayArea = playArea
+      .filter((entry) => !selectedReplacementIds.has(entry.id))
+      .concat({
+        ...cardToPlay,
+        exhausted: false,
+        counters: normalizeCardCounters(cardToPlay.counters),
+      });
+    set({
+      investigator: {
+        ...investigator,
+        resources: investigator.resources - cost,
+      },
+      hand: hand.filter((entry) => entry.id !== cardToPlay.id),
+      discard: [...discard, ...selectedReplacementCards],
+      playArea: updatedPlayArea,
+      turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
+      pendingAssetPlay: null,
+      draggedCardId: null,
+    });
+    get().pushLog(
+      "player",
+      `Discarded ${selectedReplacementCards.map((card) => card.name).join(", ")} and played ${cardToPlay.name} for ${cost} resource(s). 1 action spent.`,
+    );
   },
 
   cancelPendingAssetPlay: () => {
@@ -2534,32 +2846,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
-    if (!currentLocation) {
-      get().pushLog(
-        "system",
-        "Cannot investigate because the investigator is not at a location.",
-      );
-      return;
-    }
+if (!currentLocation) {
+  get().pushLog(
+    "system",
+    "Cannot investigate because the investigator is not at a location.",
+  );
+  return;
+}
 
-    const modifiedDifficulty = Math.max(
-      0,
-      currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
-    );
+const modifiedDifficulty = Math.max(
+  0,
+  currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
+);
 
-    get().beginSkillTest(
-      "intellect",
-      modifiedDifficulty,
-      `Investigate at ${currentLocation.name}`,
-    );
+get().beginSkillTest(
+  "intellect",
+  modifiedDifficulty,
+  `Investigate at ${currentLocation.name}`,
+);
 
-    set({
-      pendingTestResolution: {
-        kind: "investigate",
-        locationId: currentLocation.id,
-      },
-    });
+set({
+  pendingTestResolution: {
+    kind: "investigate",
+    locationId: currentLocation.id,
   },
+});
 
   fightAction: () => {
     const {
