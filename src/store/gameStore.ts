@@ -2107,7 +2107,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea,
       discard,
       pendingTestResolution,
-      pendingInvestigateDifficultyModifier,
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       locations,
