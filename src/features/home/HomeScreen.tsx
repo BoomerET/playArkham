@@ -188,9 +188,7 @@ export default function HomeScreen() {
         }
 
         setDeckLookupState("error");
-        setDeckLookupMessage(
-          `Could not load ArkhamDB deck ${trimmedDeckId}.`,
-        );
+        setDeckLookupMessage(`Could not load ArkhamDB deck ${trimmedDeckId}.`);
       }
     };
 
@@ -201,9 +199,12 @@ export default function HomeScreen() {
     };
   }, [availableInvestigators, setSelectedInvestigator, trimmedDeckId]);
 
-  const selectedInvestigator = availableInvestigators.find(
-    (item) => item.id === selectedInvestigatorId,
-  );
+  const selectedInvestigator =
+    deckLookupState === "ready"
+      ? availableInvestigators.find(
+          (item) => item.id === selectedInvestigatorId,
+        )
+      : null;
 
   const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
     if (!zoomHeld || !hoveredId) {
@@ -259,7 +260,7 @@ export default function HomeScreen() {
   const previewImageUrl =
     previewSide === "back" && previewInvestigator?.backImageUrl
       ? previewInvestigator.backImageUrl
-      : previewInvestigator?.frontImageUrl ?? null;
+      : (previewInvestigator?.frontImageUrl ?? null);
 
   const canStartGame =
     trimmedDeckId.length > 0 &&
@@ -380,9 +381,7 @@ export default function HomeScreen() {
               </button>
             </div>
           ) : (
-            <p>
-              Investigator will be determined from the ArkhamDB deck.
-            </p>
+            <p>Investigator will be determined from the ArkhamDB deck.</p>
           )}
         </div>
 
