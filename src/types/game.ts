@@ -233,7 +233,7 @@ export interface EnemySpawn {
 
 export interface EncounterCard {
   id: string;
-  code?: string;
+  code: string;
   name: string;
   type: "enemy" | "treachery";
   text?: string;
@@ -242,4 +242,6 @@ export interface EncounterCard {
   fight?: number;
   evade?: number;
   health?: number;
+  set?: string;
+  traits?: string[];
 }
