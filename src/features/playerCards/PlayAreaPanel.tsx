@@ -4,6 +4,7 @@ import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
+import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
 
 const playerCardImages = import.meta.glob(
   [
@@ -145,6 +146,9 @@ export default function PlayAreaPanel() {
   );
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
+  const triggerPlayAreaCardAbility = useGameStore(
+    (state) => state.triggerPlayAreaCardAbility,
+  );
 
   const [isDragOver, setIsDragOver] = useState(false);
   const zoomHeld = useModifierKey("Shift");
@@ -200,7 +204,7 @@ export default function PlayAreaPanel() {
   const previewImageUrl =
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
-      : previewCard?.frontImageUrl ?? null;
+      : (previewCard?.frontImageUrl ?? null);
 
   return (
     <section
@@ -216,7 +220,8 @@ export default function PlayAreaPanel() {
       onDrop={(event) => {
         event.preventDefault();
 
-        const cardId = event.dataTransfer.getData("text/plain") || draggedCardId;
+        const cardId =
+          event.dataTransfer.getData("text/plain") || draggedCardId;
         setIsDragOver(false);
         setDraggedCardId(null);
 
@@ -229,7 +234,8 @@ export default function PlayAreaPanel() {
         <div>
           <p className="hand-panel-kicker">In Play</p>
           <h2 className="hand-panel-title">
-            Play Area <span className="hand-panel-count">({playArea.length})</span>
+            Play Area{" "}
+            <span className="hand-panel-count">({playArea.length})</span>
           </h2>
           <p className="panel-subtitle">
             Drag cards here from your hand to play them. Double-click a card to
@@ -253,7 +259,9 @@ export default function PlayAreaPanel() {
             const imageUrl = getCardImageUrl(card);
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
-              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
+              .filter(
+                (icon): icon is NonNullable<typeof icon> => icon !== null,
+              );
 
             return (
               <div
@@ -293,7 +301,9 @@ export default function PlayAreaPanel() {
                   <div className="play-area-image-topbar">
                     <span
                       className={`play-area-cost-chip ${
-                        card.cost === undefined ? "play-area-cost-chip-empty" : ""
+                        card.cost === undefined
+                          ? "play-area-cost-chip-empty"
+                          : ""
                       }`}
                     >
                       {card.cost ?? "—"}
@@ -305,7 +315,10 @@ export default function PlayAreaPanel() {
                   </div>
 
                   {cardIcons.length > 0 ? (
-                    <div className="play-area-image-icons" aria-label="Card icons">
+                    <div
+                      className="play-area-image-icons"
+                      aria-label="Card icons"
+                    >
                       {cardIcons.map((icon, index) => (
                         <span
                           key={`${card.id}-${icon}-${index}`}
@@ -335,6 +348,22 @@ export default function PlayAreaPanel() {
                     <p className="play-area-image-title">{card.name}</p>
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
+                    ) : null}
+
+                    {card.type === "asset" &&
+                    canActivatePlayAreaCardAbility(card) ? (
+                      <div className="play-area-image-actions button-row">
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            triggerPlayAreaCardAbility(card.id);
+                          }}
+                        >
+                          Use Ability
+                        </button>
+                      </div>
                     ) : null}
                   </div>
                 </div>
