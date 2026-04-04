@@ -79,6 +79,11 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
+type PendingEncounterResolution =
+  | { kind: "graspingHands"; cardName: string }
+  | { kind: "rottingRemains"; cardName: string }
+  | null;
+
 type GameStore = GameState & {
   screen: Screen;
   availableInvestigators: Investigator[];
@@ -170,6 +175,7 @@ type GameStore = GameState & {
   pendingFightDamageBonus: number;
   triggerPlayAreaCardAbility: (cardId: string) => void;
   clearPendingCardAbilityBonuses: () => void;
+  pendingEncounterResolution: PendingEncounterResolution;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -598,7 +604,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   draggedCardId: null,
   pendingTestResolution: null,
   pendingAssetPlay: null,
-
+  pendingEncounterResolution: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -1115,8 +1121,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resolveMythosPhase: () => {
-    const { investigator, locations, enemies, encounterDiscard } = get();
+    const { investigator, locations, enemies, encounterDiscard, agenda } =
+      get();
+
     const currentLocation = findCurrentLocation(locations, investigator.id);
+
     if (!currentLocation) {
       get().pushLog(
         "system",
@@ -1124,8 +1133,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       return;
     }
+
     const card = get().drawEncounterCard();
-    if (!card) return;
+
+    if (!card) {
+      return;
+    }
+
     if (card.type === "enemy") {
       const spawnedEnemy = {
         id: `${card.id}-${Date.now()}`,
@@ -1140,29 +1154,84 @@ export const useGameStore = create<GameStore>((set, get) => ({
         exhausted: false,
         damageOnEnemy: 0,
       };
-      set({ enemies: [...enemies, spawnedEnemy] });
+
+      set({
+        enemies: [...enemies, spawnedEnemy],
+      });
+
       get().pushLog(
         "enemy",
         `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
       );
       return;
     }
-    if (card.type === "treachery") {
+
+    const immediate = resolveEncounterCardImmediate({
+      card,
+      investigator,
+      currentLocationId: currentLocation.id,
+    });
+
+    if (immediate.kind === "doomOnAgenda") {
       set({
+        agenda: agenda
+          ? {
+              ...agenda,
+              progress: agenda.progress + immediate.amount,
+            }
+          : null,
         encounterDiscard: [...encounterDiscard, card],
-        investigator: { ...investigator, horror: investigator.horror + 1 },
       });
-      get().pushLog(
-        "scenario",
-        `${card.name} was drawn and resolved as a treachery.`,
-      );
-      get().pushLog(
-        "combat",
-        `${investigator.name} took 1 horror from ${card.name}.`,
-      );
+
+      get().pushLog("scenario", immediate.logText);
       return;
     }
-    set({ encounterDiscard: [...encounterDiscard, card] });
+
+    if (immediate.kind === "spawnAcolyte") {
+      set({
+        enemies: [...enemies, immediate.enemy],
+        encounterDiscard: [...encounterDiscard, card],
+        agenda: agenda
+          ? {
+              ...agenda,
+              progress: agenda.progress + immediate.doomOnAgenda,
+            }
+          : null,
+      });
+
+      get().pushLog("enemy", immediate.logText);
+      return;
+    }
+
+    if (immediate.kind === "skillTest") {
+      set({
+        encounterDiscard: [...encounterDiscard, card],
+        pendingEncounterResolution: immediate.pending,
+      });
+
+      get().pushLog("scenario", immediate.logText);
+      get().beginSkillTest(immediate.skill, immediate.difficulty, card.name);
+      return;
+    }
+
+    if (immediate.kind === "genericTreachery") {
+      set({
+        encounterDiscard: [...encounterDiscard, card],
+        investigator: {
+          ...investigator,
+          horror: investigator.horror + immediate.horror,
+        },
+      });
+
+      get().pushLog("scenario", immediate.logText);
+      return;
+    }
+
+    set({
+      encounterDiscard: [...encounterDiscard, card],
+    });
+
+    get().pushLog("scenario", immediate.logText);
   },
 
   //startGame: () => {
@@ -1217,6 +1286,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
       lastEncounterCard: null,
+      pendingEncounterResolution: null,
     });
   },
 
@@ -1289,6 +1359,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
+      pendingEncounterResolution: null,
       log: [
         createLogEntry(
           "system",
@@ -2459,6 +2530,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [...hand, ...returnedCards],
       activeSkillTest: null,
       pendingTestResolution: null,
+      pendingEncounterResolution: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
@@ -2478,6 +2550,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea,
       discard,
       pendingTestResolution,
+      pendingEncounterResolution,
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       locations,
@@ -2760,6 +2833,52 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    if (pendingEncounterResolution?.kind === "graspingHands") {
+      if (!success) {
+        updatedInvestigator = {
+          ...updatedInvestigator,
+          damage: updatedInvestigator.damage + 1,
+        };
+
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: failed the test and took 1 damage.`,
+          ),
+        );
+      } else {
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: passed the test.`,
+          ),
+        );
+      }
+    }
+
+    if (pendingEncounterResolution?.kind === "rottingRemains") {
+      if (!success) {
+        updatedInvestigator = {
+          ...updatedInvestigator,
+          horror: updatedInvestigator.horror + 2,
+        };
+
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: failed the test and took 2 horror.`,
+          ),
+        );
+      } else {
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: passed the test.`,
+          ),
+        );
+      }
+    }
+
     let updatedDeck = get().deck;
     let updatedHand = get().hand;
 
@@ -2808,6 +2927,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastSkillTest: result,
       activeSkillTest: null,
       pendingTestResolution: null,
+      pendingEncounterResolution: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
