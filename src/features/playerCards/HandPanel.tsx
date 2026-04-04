@@ -202,7 +202,7 @@ export default function HandPanel() {
   const previewImageUrl =
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
-      : previewCard?.frontImageUrl ?? null;
+      : (previewCard?.frontImageUrl ?? null);
 
   return (
     <section className="game-panel hand-panel">
@@ -254,7 +254,9 @@ export default function HandPanel() {
 
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
-              .filter((icon): icon is NonNullable<typeof icon> => icon !== null);
+              .filter(
+                (icon): icon is NonNullable<typeof icon> => icon !== null,
+              );
 
             return (
               <div
@@ -263,6 +265,25 @@ export default function HandPanel() {
                   isDragging ? "dragging-card" : ""
                 } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
                 draggable={draggable}
+                onClick={(event) => {
+                  if (activeSkillTest) {
+                    return;
+                  }
+
+                  if (event.shiftKey) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    discardCard(card.id);
+                  }
+                }}
+                onContextMenu={(event) => {
+                  if (activeSkillTest) {
+                    return;
+                  }
+
+                  event.preventDefault();
+                  discardCard(card.id);
+                }}
                 onDragStart={(event) => {
                   if (!draggable) {
                     return;
@@ -314,7 +335,10 @@ export default function HandPanel() {
                 </div>
 
                 {cardIcons.length > 0 && (
-                  <div className="hand-card-image-icons" aria-label="Card icons">
+                  <div
+                    className="hand-card-image-icons"
+                    aria-label="Card icons"
+                  >
                     {cardIcons.map((icon, index) => (
                       <span
                         key={`${card.id}-${icon}-${index}`}

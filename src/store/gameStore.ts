@@ -160,6 +160,9 @@ type GameStore = GameState & {
   toggleMulliganCardSelection: (cardId: string) => void;
   confirmMulligan: () => void;
   skipMulligan: () => void;
+
+  // Card discard
+  discardCardFromHand: (cardId: string) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -682,6 +685,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedScenario: (scenarioId) => {
     set({ selectedScenarioId: scenarioId });
+  },
+
+  discardCardFromHand: (cardId: string) => {
+    const { hand, discard, activeSkillTest } = get();
+
+    if (activeSkillTest) {
+      get().pushLog(
+        "system",
+        "Cannot discard cards while a skill test is active.",
+      );
+      return;
+    }
+
+    const card = hand.find((entry) => entry.id === cardId);
+
+    if (!card) {
+      return;
+    }
+
+    set({
+      hand: hand.filter((entry) => entry.id !== cardId),
+      discard: [...discard, card],
+    });
+
+    get().pushLog("player", `Discarded ${card.name} from hand.`);
   },
 
   setSelectedEnemyTarget: (enemyId) => {
