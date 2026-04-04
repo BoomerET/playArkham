@@ -17,6 +17,7 @@ import AgendaPanel from "./AgendaPanel";
 import SkillTestPanel from "./SkillTestPanel";
 import TurnPanel from "./TurnPanel";
 import "./gameTable.css";
+import EncounterPanel from "../encounter/EncounterPanel";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -74,7 +75,9 @@ export default function GameTable() {
             {selectedScenario?.name ?? "Play Arkham"}
           </h1>
           {selectedScenario?.description ? (
-            <p className="game-table-subtitle">{selectedScenario.description}</p>
+            <p className="game-table-subtitle">
+              {selectedScenario.description}
+            </p>
           ) : null}
         </div>
 
@@ -179,6 +182,10 @@ export default function GameTable() {
         </section>
 
         <aside className="game-table-sidebar game-table-sidebar-right">
+          <section className="table-panel">
+            <EncounterPanel />
+          </section>
+          
           <section className="table-panel">
             <ChaosBagPanel />
           </section>

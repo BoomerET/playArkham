@@ -606,6 +606,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   playArea: [],
   encounterDeck: [],
   encounterDiscard: [],
+  lastEncounterCard: null,
   isMulliganActive: false,
   selectedMulliganCardIds: [],
   pendingInvestigateDifficultyModifier: 0,
@@ -1075,6 +1076,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   drawEncounterCard: () => {
     const { encounterDeck, encounterDiscard } = get();
+
     if (encounterDeck.length === 0) {
       if (encounterDiscard.length === 0) {
         get().pushLog(
@@ -1083,17 +1085,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
         );
         return null;
       }
+
       const reshuffledDeck = shuffleArray(encounterDiscard);
       const [topCard, ...remainingDeck] = reshuffledDeck;
-      set({ encounterDeck: remainingDeck, encounterDiscard: [] });
+
+      set({
+        encounterDeck: remainingDeck,
+        encounterDiscard: [],
+        lastEncounterCard: topCard,
+      });
+
       get().pushLog(
         "scenario",
         `Encounter discard reshuffled into a new encounter deck. Drew ${topCard.name}.`,
       );
+
       return topCard;
     }
+
     const [topCard, ...remainingDeck] = encounterDeck;
-    set({ encounterDeck: remainingDeck });
+
+    set({
+      encounterDeck: remainingDeck,
+      lastEncounterCard: topCard,
+    });
+
     get().pushLog("scenario", `Drew encounter card: ${topCard.name}.`);
     return topCard;
   },
@@ -1200,6 +1216,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
+      lastEncounterCard: null,
     });
   },
 
@@ -1292,6 +1309,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingTestResolution: null,
       selectedEnemyTargetId: null,
       draggedCardId: null,
+      lastEncounterCard: null,
       turn: { round: 1, phase: "setup", actionsRemaining: 3 },
     });
     get().drawStartingHand(5);
