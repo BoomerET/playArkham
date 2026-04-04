@@ -2506,11 +2506,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
     );
 
-    get().beginSkillTest(
-      "intellect",
-      modifiedDifficulty,
-      `Investigate at ${currentLocation.name}`,
+    const { pendingInvestigateDifficultyModifier } = get();
+
+    const modifiedDifficulty = Math.max(
+      0,
+      currentLocation.shroud - pendingInvestigateDifficultyModifier,
     );
+
+    get().beginSkillTest("intellect", modifiedDifficulty, "Investigate");
 
     set({
       pendingTestResolution: {
