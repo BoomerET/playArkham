@@ -2846,31 +2846,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
-if (!currentLocation) {
-  get().pushLog(
-    "system",
-    "Cannot investigate because the investigator is not at a location.",
-  );
-  return;
-}
+    if (!currentLocation) {
+      get().pushLog(
+        "system",
+        "Cannot investigate because the investigator is not at a location.",
+      );
+      return;
+    }
 
-const modifiedDifficulty = Math.max(
-  0,
-  currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
-);
+    const modifiedDifficulty = Math.max(
+      0,
+      currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
+    );
 
-get().beginSkillTest(
-  "intellect",
-  modifiedDifficulty,
-  `Investigate at ${currentLocation.name}`,
-);
+    get().beginSkillTest(
+      "intellect",
+      modifiedDifficulty,
+      `Investigate at ${currentLocation.name}`,
+    );
 
-set({
-  pendingTestResolution: {
-    kind: "investigate",
-    locationId: currentLocation.id,
+    set({
+      pendingTestResolution: {
+        kind: "investigate",
+        locationId: currentLocation.id,
+      },
+    });
   },
-});
 
   fightAction: () => {
     const {
