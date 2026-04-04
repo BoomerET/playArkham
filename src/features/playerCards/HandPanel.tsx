@@ -1,22 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
-import SkillIcon from "../../components/SkillIcon";
-import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
-import type { PlayerCard } from "../../types/game";
 
-const playerCardImages = import.meta.glob(
-  [
-    "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/playerCards/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/playercards/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/cards/*.{jpg,jpeg,png,webp}",
-  ],
+const investigatorImages = import.meta.glob(
+  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
   {
     eager: true,
     import: "default",
   },
 ) as Record<string, string>;
+
+function getInvestigatorImageUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
+}
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -52,144 +57,194 @@ function useModifierKey(key: "Alt" | "Shift") {
   return active;
 }
 
-function slugifyName(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/['".,!?]/g, "")
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+type ArkhamDeckSummary = {
+  investigator_code?: string;
+  investigator_name?: string;
+  name?: string;
+};
 
-function getExplicitImageName(card: PlayerCard): string | undefined {
-  const maybeCard = card as PlayerCard & {
-    image?: string;
-    imageFront?: string;
-    portrait?: string;
-  };
-
-  return maybeCard.image ?? maybeCard.imageFront ?? maybeCard.portrait;
-}
-
-function getExplicitBackImageName(card: PlayerCard): string | undefined {
-  const maybeCard = card as PlayerCard & {
-    imageBack?: string;
-    backImage?: string;
-    portraitBack?: string;
-  };
-
-  return maybeCard.imageBack ?? maybeCard.backImage ?? maybeCard.portraitBack;
-}
-
-function findImageUrlByName(imageName?: string): string | null {
-  if (!imageName) {
-    return null;
-  }
-
-  const normalized = imageName.toLowerCase();
-
-  const match = Object.entries(playerCardImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-
-  return match?.[1] ?? null;
-}
-
-function findImageUrlByBaseNames(baseNames: string[]): string | null {
-  const normalizedBases = baseNames.map((name) => name.toLowerCase());
-
-  const match = Object.entries(playerCardImages).find(([path]) => {
-    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
-    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-    return normalizedBases.includes(baseName);
-  });
-
-  return match?.[1] ?? null;
-}
-
-function getCardImageUrl(card: PlayerCard): string | null {
-  const explicit = findImageUrlByName(getExplicitImageName(card));
-  if (explicit) {
-    return explicit;
-  }
-
-  return findImageUrlByBaseNames([card.id, slugifyName(card.name)]);
-}
-
-function getCardBackImageUrl(card: PlayerCard): string | null {
-  const explicit = findImageUrlByName(getExplicitBackImageName(card));
-  if (explicit) {
-    return explicit;
-  }
-
-  return findImageUrlByBaseNames([
-    `${card.id}-back`,
-    `${slugifyName(card.name)}-back`,
-    `${card.id}_back`,
-    `${slugifyName(card.name)}_back`,
-  ]);
-}
-
-type PreviewCard = {
+type PreviewInvestigator = {
   id: string;
   name: string;
   frontImageUrl: string;
   backImageUrl: string | null;
 };
 
-export default function HandPanel() {
-  const hand = useGameStore((state) => state.hand);
-  const discardCard = useGameStore((state) => state.discardCard);
-  const playCard = useGameStore((state) => state.playCard);
-  const shuffleDeck = useGameStore((state) => state.shuffleDeck);
-  const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
-  const draggedCardId = useGameStore((state) => state.draggedCardId);
-  const activeSkillTest = useGameStore((state) => state.activeSkillTest);
-  const deckCount = useGameStore((state) => state.deck.length);
+export default function HomeScreen() {
+  const availableInvestigators = useGameStore(
+    (state) => state.availableInvestigators,
+  );
+  const selectedInvestigatorId = useGameStore(
+    (state) => state.selectedInvestigatorId,
+  );
+  const setSelectedInvestigator = useGameStore(
+    (state) => state.setSelectedInvestigator,
+  );
+
+  const availableScenarios = useGameStore((state) => state.availableScenarios);
+  const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
+  const setSelectedScenario = useGameStore(
+    (state) => state.setSelectedScenario,
+  );
+
+  const selectedDeckId = useGameStore((state) => state.selectedDeckId);
+  const setSelectedDeckId = useGameStore((state) => state.setSelectedDeckId);
+  const startGame = useGameStore((state) => state.startGame);
+
+  const [deckLookupState, setDeckLookupState] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >("idle");
+  const [deckLookupMessage, setDeckLookupMessage] = useState(
+    "Enter an ArkhamDB deck ID to begin.",
+  );
+  const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
+  const [detectedInvestigatorName, setDetectedInvestigatorName] = useState<
+    string | null
+  >(null);
 
   const zoomHeld = useModifierKey("Shift");
-  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
-  const title = activeSkillTest ? "Hand — Commit Skill Cards" : "Hand";
+  const trimmedDeckId = selectedDeckId.trim();
 
-  const previewCard = useMemo<PreviewCard | null>(() => {
-    if (!zoomHeld || !hoveredCardId) {
+  useEffect(() => {
+    if (!trimmedDeckId) {
+      setDeckLookupState("idle");
+      setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
+      setDetectedDeckName(null);
+      setDetectedInvestigatorName(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadDeckSummary = async () => {
+      setDeckLookupState("loading");
+      setDeckLookupMessage("Looking up ArkhamDB deck...");
+      setDetectedDeckName(null);
+      setDetectedInvestigatorName(null);
+
+      try {
+        const response = await fetch(
+          `https://arkhamdb.com/api/public/deck/${trimmedDeckId}.json`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`Could not load ArkhamDB deck ${trimmedDeckId}.`);
+        }
+
+        const data = (await response.json()) as ArkhamDeckSummary;
+
+        if (cancelled) {
+          return;
+        }
+
+        const investigatorName = data.investigator_name?.trim() ?? "";
+        const investigatorCode = data.investigator_code?.trim() ?? "";
+        const deckName = data.name?.trim() ?? null;
+
+        setDetectedDeckName(deckName);
+        setDetectedInvestigatorName(investigatorName || null);
+
+        const matchingInvestigator = availableInvestigators.find((item) => {
+          const itemWithOptionalCode = item as typeof item & {
+            code?: string;
+          };
+
+          const codeMatches =
+            Boolean(investigatorCode) &&
+            typeof itemWithOptionalCode.code === "string" &&
+            itemWithOptionalCode.code === investigatorCode;
+
+          const nameMatches =
+            Boolean(investigatorName) && item.name === investigatorName;
+
+          return codeMatches || nameMatches;
+        });
+
+        if (!matchingInvestigator) {
+          setDeckLookupState("error");
+          setDeckLookupMessage(
+            investigatorName
+              ? `Deck investigator "${investigatorName}" is not supported by this app yet.`
+              : "This deck's investigator could not be identified.",
+          );
+          return;
+        }
+
+        setSelectedInvestigator(matchingInvestigator.id);
+        setDeckLookupState("ready");
+        setDeckLookupMessage(
+          deckName
+            ? `Using deck "${deckName}" with investigator ${matchingInvestigator.name}.`
+            : `Using ArkhamDB deck with investigator ${matchingInvestigator.name}.`,
+        );
+      } catch (error) {
+        console.error(error);
+
+        if (cancelled) {
+          return;
+        }
+
+        setDeckLookupState("error");
+        setDeckLookupMessage(`Could not load ArkhamDB deck ${trimmedDeckId}.`);
+      }
+    };
+
+    void loadDeckSummary();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [availableInvestigators, setSelectedInvestigator, trimmedDeckId]);
+
+  const selectedInvestigator = availableInvestigators.find(
+    (item) => item.id === selectedInvestigatorId,
+  );
+
+  const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
+    if (!zoomHeld || !hoveredId) {
       return null;
     }
 
-    const card = hand.find((entry) => entry.id === hoveredCardId);
-    if (!card) {
+    const investigator = availableInvestigators.find(
+      (item) => item.id === hoveredId,
+    );
+
+    if (!investigator) {
       return null;
     }
 
-    const frontImageUrl = getCardImageUrl(card);
+    const frontImageUrl = getInvestigatorImageUrl(investigator.portrait);
+    const backImageUrl = getInvestigatorImageUrl(investigator.portraitBack);
+
     if (!frontImageUrl) {
       return null;
     }
 
     return {
-      id: card.id,
-      name: card.name,
+      id: investigator.id,
+      name: investigator.name,
       frontImageUrl,
-      backImageUrl: getCardBackImageUrl(card),
+      backImageUrl,
     };
-  }, [hand, hoveredCardId, zoomHeld]);
+  }, [availableInvestigators, hoveredId, zoomHeld]);
 
   useEffect(() => {
-    if (!previewCard) {
+    if (!previewInvestigator) {
       return;
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setHoveredCardId(null);
+        setHoveredId(null);
         return;
       }
 
       if (
         (event.key === "f" || event.key === "F") &&
-        previewCard.backImageUrl
+        previewInvestigator.backImageUrl
       ) {
         setPreviewSide((current) => (current === "front" ? "back" : "front"));
       }
@@ -197,251 +252,205 @@ export default function HandPanel() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [previewCard]);
+  }, [previewInvestigator]);
 
   const previewImageUrl =
-    previewSide === "back" && previewCard?.backImageUrl
-      ? previewCard.backImageUrl
-      : (previewCard?.frontImageUrl ?? null);
+    previewSide === "back" && previewInvestigator?.backImageUrl
+      ? previewInvestigator.backImageUrl
+      : (previewInvestigator?.frontImageUrl ?? null);
+
+  const canStartGame =
+    trimmedDeckId.length > 0 &&
+    deckLookupState === "ready" &&
+    Boolean(selectedInvestigator);
+
+  const selectedInvestigatorImageUrl = selectedInvestigator
+    ? getInvestigatorImageUrl(selectedInvestigator.portrait)
+    : null;
 
   return (
-    <section className="game-panel hand-panel">
-      <div className="hand-panel-header">
-        <div>
-          <p className="hand-panel-kicker">Player Cards</p>
-          <h2 className="hand-panel-title">
-            {title} <span className="hand-panel-count">({hand.length})</span>
-          </h2>
-          <p className="panel-subtitle hand-panel-subtitle">
-            {activeSkillTest ? (
-              "Only skill cards can be dragged and committed during an active skill test."
-            ) : (
-              <>
-                Play cards normally • <kbd>Shift</kbd>+Click or Right-click to
-                discard • Hold <kbd>Shift</kbd> to zoom
-              </>
-            )}
-          </p>
+    <main className="app-shell">
+      <section className="hero-panel">
+        <p className="eyebrow">Arkham Horror: The Card Game</p>
+        <h1 className="hero-title">Play Arkham</h1>
+        <p className="hero-subtitle">
+          Enter an ArkhamDB deck ID, choose a scenario, and enter the mythos.
+        </p>
+      </section>
+
+      <section className="panel">
+        <div className="scenario-section">
+          <h2 className="section-title">Deck</h2>
+
+          <div className="home-screen__field">
+            <label htmlFor="arkhamdb-deck-id" className="home-screen__label">
+              ArkhamDB Deck ID
+            </label>
+
+            <input
+              id="arkhamdb-deck-id"
+              type="text"
+              className="home-screen__input"
+              value={selectedDeckId}
+              onChange={(event) => setSelectedDeckId(event.target.value)}
+              placeholder="Required, e.g. 5841936"
+              autoComplete="off"
+              inputMode="numeric"
+            />
+
+            <p className="home-screen__help">
+              This app requires an ArkhamDB deck. Investigator selection is
+              automatically derived from the selected deck.
+            </p>
+
+            <div
+              className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
+            >
+              <div>{deckLookupMessage}</div>
+
+              {detectedDeckName && (
+                <div className="home-screen__deck-meta">
+                  Deck: <strong>{detectedDeckName}</strong>
+                </div>
+              )}
+
+              {detectedInvestigatorName && (
+                <div className="home-screen__deck-meta">
+                  Investigator: <strong>{detectedInvestigatorName}</strong>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="home-screen__deck-investigator-lock">
+          <h2 className="section-title">Investigator</h2>
+
           <div
-            className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
+            className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${
               zoomHeld ? "active" : ""
             }`}
           >
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
-        </div>
 
-        {!activeSkillTest && (
-          <div className="hand-panel-actions">
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={shuffleDeck}
-            >
-              Shuffle Deck ({deckCount})
-            </button>
-          </div>
-        )}
-      </div>
-
-      {hand.length === 0 ? (
-        <div className="hand-panel-empty">
-          <p className="panel-subtitle">No cards in hand.</p>
-        </div>
-      ) : (
-        <div className="hand-card-grid-image">
-          {hand.map((card) => {
-            const imageUrl = getCardImageUrl(card);
-            const isDragging = draggedCardId === card.id;
-            const draggable = activeSkillTest
-              ? card.type === "skill"
-              : card.type !== "skill";
-
-            const cardIcons = (card.icons ?? [])
-              .map((icon) => normalizeSkillIcon(icon))
-              .filter(
-                (icon): icon is NonNullable<typeof icon> => icon !== null,
-              );
-
-            return (
-              <div
-                key={card.id}
-                className={`hand-card-image-shell ${
-                  isDragging ? "dragging-card" : ""
-                } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
-                draggable={draggable}
-                onClick={(event) => {
-                  if (activeSkillTest) {
-                    return;
-                  }
-
-                  if (event.shiftKey) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    discardCard(card.id);
-                  }
-                }}
-                onContextMenu={(event) => {
-                  if (activeSkillTest) {
-                    return;
-                  }
-
-                  event.preventDefault();
-                  discardCard(card.id);
-                }}
-                onDragStart={(event) => {
-                  if (!draggable) {
-                    return;
-                  }
-
-                  event.dataTransfer.setData("text/plain", card.id);
-                  event.dataTransfer.effectAllowed = "move";
-                  setDraggedCardId(card.id);
-                }}
-                onDragEnd={() => {
-                  setDraggedCardId(null);
-                }}
+          {selectedInvestigator ? (
+            <div className="investigator-grid">
+              <button
+                type="button"
+                className="investigator-card selected"
+                aria-label={`Detected investigator ${selectedInvestigator.name}`}
                 onMouseEnter={() => {
-                  setHoveredCardId(card.id);
+                  setHoveredId(selectedInvestigator.id);
                   setPreviewSide("front");
                 }}
                 onMouseLeave={() =>
-                  setHoveredCardId((current) =>
-                    current === card.id ? null : current,
+                  setHoveredId((current) =>
+                    current === selectedInvestigator.id ? null : current,
                   )
                 }
               >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt={card.name}
-                    className="hand-card-image"
-                    draggable={false}
-                  />
+                {selectedInvestigatorImageUrl ? (
+                  <>
+                    <img
+                      src={selectedInvestigatorImageUrl}
+                      alt={selectedInvestigator.name}
+                      className="investigator-card-image"
+                      draggable={false}
+                    />
+                    <div className="investigator-card-overlay">
+                      <div className="investigator-name">
+                        {selectedInvestigator.name}
+                      </div>
+                      <div className="investigator-stats">
+                        <span>Will {selectedInvestigator.willpower}</span>
+                        <span>Int {selectedInvestigator.intellect}</span>
+                        <span>Com {selectedInvestigator.combat}</span>
+                        <span>Agi {selectedInvestigator.agility}</span>
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  <div className="card-image-fallback">
-                    <strong>{card.name}</strong>
-                    <span>{card.type}</span>
+                  <div className="investigator-fallback">
+                    {selectedInvestigator.name}
                   </div>
                 )}
+              </button>
+            </div>
+          ) : (
+            <p>Investigator will be determined from the ArkhamDB deck.</p>
+          )}
+        </div>
 
-                <div className="hand-card-image-topbar">
-                  <span
-                    className={`hand-card-cost-chip ${
-                      card.cost === undefined ? "hand-card-cost-chip-empty" : ""
-                    }`}
-                  >
-                    {card.cost ?? "—"}
-                  </span>
+        <div className="scenario-section">
+          <h2 className="section-title">Select Scenario</h2>
 
-                  <span className="hand-card-cost-chip hand-card-image-type">
-                    {card.type}
-                  </span>
-                </div>
+          <div className="scenario-grid">
+            {availableScenarios.map((scenario) => {
+              const selected = scenario.id === selectedScenarioId;
 
-                {cardIcons.length > 0 && (
-                  <div
-                    className="hand-card-image-icons"
-                    aria-label="Card icons"
-                  >
-                    {cardIcons.map((icon, index) => (
-                      <span
-                        key={`${card.id}-${icon}-${index}`}
-                        className={`skill-icon-badge skill-${icon}`}
-                        title={icon}
-                        aria-label={icon}
-                      >
-                        <SkillIcon
-                          skill={icon}
-                          className="skill-icon-svg"
-                          viewBox="0 0 24 24"
-                        />
-                      </span>
-                    ))}
+              return (
+                <button
+                  key={scenario.id}
+                  type="button"
+                  className={`scenario-card ${selected ? "selected" : ""}`}
+                  onClick={() => setSelectedScenario(scenario.id)}
+                  aria-pressed={selected}
+                >
+                  <div className="scenario-card-body">
+                    <span className="scenario-name">{scenario.name}</span>
+                    <p className="scenario-description">
+                      {scenario.description}
+                    </p>
                   </div>
-                )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-                <div className="hand-card-image-overlay">
-                  <div className="hand-card-image-overlay-inner">
-                    <h3 className="hand-card-image-title">{card.name}</h3>
+        <div className="home-actions">
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => void startGame()}
+            disabled={!canStartGame}
+          >
+            {deckLookupState === "loading" ? "Loading Deck..." : "Start Game"}
+          </button>
+        </div>
+      </section>
 
-                    {card.text ? (
-                      <div className="hand-card-image-text-preview">
-                        {card.text}
-                      </div>
-                    ) : null}
+      {previewInvestigator && previewImageUrl && (
+        <div
+          className="investigator-preview-overlay"
+          aria-hidden="true"
+          onMouseLeave={() => setHoveredId(null)}
+        >
+          <div className="investigator-preview-frame">
+            {previewInvestigator.backImageUrl && (
+              <button
+                type="button"
+                className="investigator-preview-flip-button"
+                onClick={() =>
+                  setPreviewSide((current) =>
+                    current === "front" ? "back" : "front",
+                  )
+                }
+              >
+                {previewSide === "front" ? "Show Back" : "Show Front"}
+              </button>
+            )}
 
-                    {!activeSkillTest ? (
-                      <div className="hand-card-image-actions button-row">
-                        <button
-                          type="button"
-                          className="secondary-button"
-                          onClick={() => playCard(card.id)}
-                        >
-                          Play
-                        </button>
-                        <button
-                          type="button"
-                          className="secondary-button"
-                          onClick={() => discardCard(card.id)}
-                        >
-                          Discard
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="hand-card-image-commit-status">
-                        {card.type === "skill" ? (
-                          <span className="token-chip gold">
-                            Draggable to commit
-                          </span>
-                        ) : (
-                          <span className="token-chip danger">
-                            Not committable
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+            <img
+              src={previewImageUrl}
+              alt={`${previewInvestigator.name} ${previewSide}`}
+              className="investigator-preview-image"
+              draggable={false}
+            />
+          </div>
         </div>
       )}
-
-      {previewCard &&
-        previewImageUrl &&
-        createPortal(
-          <div
-            className="card-preview-overlay hand-preview-overlay"
-            aria-hidden="true"
-            onMouseLeave={() => setHoveredCardId(null)}
-          >
-            <div className="card-preview-frame hand-preview-frame">
-              {previewCard.backImageUrl ? (
-                <button
-                  type="button"
-                  className="card-preview-flip-button"
-                  onClick={() =>
-                    setPreviewSide((current) =>
-                      current === "front" ? "back" : "front",
-                    )
-                  }
-                >
-                  {previewSide === "front" ? "Show Back" : "Show Front"}
-                </button>
-              ) : null}
-
-              <img
-                src={previewImageUrl}
-                alt={`${previewCard.name} ${previewSide}`}
-                className="card-preview-image hand-preview-image"
-                draggable={false}
-              />
-            </div>
-          </div>,
-          document.body,
-        )}
-    </section>
+    </main>
   );
 }
