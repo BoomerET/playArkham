@@ -206,7 +206,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       health: 2,
       evade: 2,
       set: "ashen-pilgrims",
-      traits?: [
+      traits: [
         "Humanoid",
         "Cultist"
       ],
