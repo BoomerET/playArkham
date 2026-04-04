@@ -212,11 +212,15 @@ export default function HandPanel() {
           <h2 className="hand-panel-title">
             {title} <span className="hand-panel-count">({hand.length})</span>
           </h2>
-          <p className="panel-subtitle hand-panel-subtitle">
-            {activeSkillTest
-              ? "Only skill cards can be dragged and committed during an active skill test."
-              : "Play or discard cards from your hand."}
-          </p>
+	  <p className="panel-subtitle hand-panel-subtitle">
+  {activeSkillTest
+    ? "Only skill cards can be dragged and committed during an active skill test."
+    : (
+      <>
+        Play cards normally • <kbd>Shift</kbd>+Click or Right-click to discard • Hold <kbd>Shift</kbd> to zoom
+      </>
+    )}
+</p>
           <div
             className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
               zoomHeld ? "active" : ""
