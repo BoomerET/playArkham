@@ -182,7 +182,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       code: "12114",
       name: "Servant of Flame",
       type: "enemy",
-      text?: "Hunter. Prey (lowest speed). Retaliate.",
+      text: "Hunter. Prey (lowest speed). Retaliate.",
       damage: 2,
       horror: 2,
       fight: 4,
