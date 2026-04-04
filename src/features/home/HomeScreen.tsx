@@ -1,10 +1,73 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
+
+const investigatorImages = import.meta.glob(
+  "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function getInvestigatorImageUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
+}
+
+function useModifierKey(key: "Alt" | "Shift") {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(true);
+      }
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(false);
+      }
+    };
+
+    const onWindowBlur = () => {
+      setActive(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onWindowBlur);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [key]);
+
+  return active;
+}
 
 type ArkhamDeckSummary = {
   investigator_code?: string;
   investigator_name?: string;
   name?: string;
+};
+
+type PreviewInvestigator = {
+  id: string;
+  name: string;
+  frontImageUrl: string;
+  backImageUrl: string | null;
 };
 
 export default function HomeScreen() {
@@ -38,6 +101,10 @@ export default function HomeScreen() {
   const [detectedInvestigatorName, setDetectedInvestigatorName] = useState<
     string | null
   >(null);
+
+  const zoomHeld = useModifierKey("Shift");
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const trimmedDeckId = selectedDeckId.trim();
 
@@ -138,10 +205,70 @@ export default function HomeScreen() {
     (item) => item.id === selectedInvestigatorId,
   );
 
+  const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
+    if (!zoomHeld || !hoveredId) {
+      return null;
+    }
+
+    const investigator = availableInvestigators.find(
+      (item) => item.id === hoveredId,
+    );
+
+    if (!investigator) {
+      return null;
+    }
+
+    const frontImageUrl = getInvestigatorImageUrl(investigator.portrait);
+    const backImageUrl = getInvestigatorImageUrl(investigator.portraitBack);
+
+    if (!frontImageUrl) {
+      return null;
+    }
+
+    return {
+      id: investigator.id,
+      name: investigator.name,
+      frontImageUrl,
+      backImageUrl,
+    };
+  }, [availableInvestigators, hoveredId, zoomHeld]);
+
+  useEffect(() => {
+    if (!previewInvestigator) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setHoveredId(null);
+        return;
+      }
+
+      if (
+        (event.key === "f" || event.key === "F") &&
+        previewInvestigator.backImageUrl
+      ) {
+        setPreviewSide((current) => (current === "front" ? "back" : "front"));
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [previewInvestigator]);
+
+  const previewImageUrl =
+    previewSide === "back" && previewInvestigator?.backImageUrl
+      ? previewInvestigator.backImageUrl
+      : previewInvestigator?.frontImageUrl ?? null;
+
   const canStartGame =
     trimmedDeckId.length > 0 &&
     deckLookupState === "ready" &&
     Boolean(selectedInvestigator);
+
+  const selectedInvestigatorImageUrl = selectedInvestigator
+    ? getInvestigatorImageUrl(selectedInvestigator.portrait)
+    : null;
 
   return (
     <main className="app-shell">
@@ -200,11 +327,63 @@ export default function HomeScreen() {
 
         <div className="home-screen__deck-investigator-lock">
           <h2 className="section-title">Investigator</h2>
-          <p>
-            {selectedInvestigator
-              ? `Detected investigator: ${selectedInvestigator.name}.`
-              : "Investigator will be determined from the ArkhamDB deck."}
-          </p>
+
+          <div
+            className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${
+              zoomHeld ? "active" : ""
+            }`}
+          >
+            Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
+          </div>
+
+          {selectedInvestigator ? (
+            <div className="investigator-grid">
+              <button
+                type="button"
+                className="investigator-card selected"
+                aria-label={`Detected investigator ${selectedInvestigator.name}`}
+                onMouseEnter={() => {
+                  setHoveredId(selectedInvestigator.id);
+                  setPreviewSide("front");
+                }}
+                onMouseLeave={() =>
+                  setHoveredId((current) =>
+                    current === selectedInvestigator.id ? null : current,
+                  )
+                }
+              >
+                {selectedInvestigatorImageUrl ? (
+                  <>
+                    <img
+                      src={selectedInvestigatorImageUrl}
+                      alt={selectedInvestigator.name}
+                      className="investigator-card-image"
+                      draggable={false}
+                    />
+                    <div className="investigator-card-overlay">
+                      <div className="investigator-name">
+                        {selectedInvestigator.name}
+                      </div>
+                      <div className="investigator-stats">
+                        <span>Will {selectedInvestigator.willpower}</span>
+                        <span>Int {selectedInvestigator.intellect}</span>
+                        <span>Com {selectedInvestigator.combat}</span>
+                        <span>Agi {selectedInvestigator.agility}</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="investigator-fallback">
+                    {selectedInvestigator.name}
+                  </div>
+                )}
+              </button>
+            </div>
+          ) : (
+            <p>
+              Investigator will be determined from the ArkhamDB deck.
+            </p>
+          )}
         </div>
 
         <div className="scenario-section">
@@ -245,6 +424,37 @@ export default function HomeScreen() {
           </button>
         </div>
       </section>
+
+      {previewInvestigator && previewImageUrl && (
+        <div
+          className="investigator-preview-overlay"
+          aria-hidden="true"
+          onMouseLeave={() => setHoveredId(null)}
+        >
+          <div className="investigator-preview-frame">
+            {previewInvestigator.backImageUrl && (
+              <button
+                type="button"
+                className="investigator-preview-flip-button"
+                onClick={() =>
+                  setPreviewSide((current) =>
+                    current === "front" ? "back" : "front",
+                  )
+                }
+              >
+                {previewSide === "front" ? "Show Back" : "Show Front"}
+              </button>
+            )}
+
+            <img
+              src={previewImageUrl}
+              alt={`${previewInvestigator.name} ${previewSide}`}
+              className="investigator-preview-image"
+              draggable={false}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
