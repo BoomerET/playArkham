@@ -60,23 +60,20 @@ export default function EncounterInspector() {
 
                 <div className="deck-inspector-body">
                     <div>
-                        <h3>Deck ({encounterDeck.length})</h3>
+                        <h3>Deck Order (Top → Bottom)</h3>
                         <ul>
                             {encounterDeck.map((card, index) => (
                                 <li key={card.id}>
-                                    {index === 0 && <strong>[TOP]</strong>}{" "}
-                                    {card.name} • {card.type}
+                                    {index === 0 && <strong>[TOP]</strong>} {card.name}
                                 </li>
                             ))}
                         </ul>
-                    </div>
 
-                    <div>
-                        <h3>Discard ({encounterDiscard.length})</h3>
+                        <h3>Deck Summary</h3>
                         <ul>
-                            {groupedDiscard.map((c) => (
+                            {groupedDeck.map((c) => (
                                 <li key={c.name}>
-                                    {c.name} ({c.count}) • {c.type}
+                                    {c.name} ({c.count})
                                 </li>
                             ))}
                         </ul>
