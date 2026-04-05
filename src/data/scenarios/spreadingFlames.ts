@@ -188,6 +188,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Humanoid",
         "Cultist"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "hellhound-1",
@@ -208,6 +209,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Creature",
         "Monster"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "hellhound-2",
@@ -228,6 +230,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Creature",
         "Monster"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "bystander-1",
@@ -248,6 +251,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Humanoid",
         "Civilian"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "bystander-2",
@@ -268,6 +272,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Humanoid",
         "Civilian"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "bystander-3",
@@ -288,6 +293,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Humanoid",
         "Civilian"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "cosmic-evils-1",
@@ -302,6 +308,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Omen",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "cosmic-evils-2",
@@ -316,6 +323,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Omen",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "cosmic-evils-3",
@@ -330,6 +338,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Omen",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "unspeakable-truths-1",
@@ -345,6 +354,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Terror",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "unspeakable-truths-2",
@@ -360,6 +370,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Terror",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "forbidden-secrets-1",
@@ -373,6 +384,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Pact",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "forbidden-secrets-2",
@@ -386,6 +398,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Pact",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "extraplanar-visions-1",
@@ -399,6 +412,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Power",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "extraplanar-visions-2",
@@ -412,6 +426,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Power",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "wild-compulsion-1",
@@ -426,6 +441,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Madness",
         "Bane"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "wild-compulsion-2",
@@ -440,6 +456,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Madness",
         "Bane"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "fire-1",
@@ -528,6 +545,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "noxious-smoke-2",
@@ -541,6 +559,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "mutated-1",
@@ -554,6 +573,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Mutation",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "mutated-2",
@@ -567,6 +587,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Mutation",
       ],
+      inEncounterDeck: true,
     },
     {
       id: "mutated-experiment-1",
@@ -588,6 +609,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Creature",
         "Mutated"
       ],
+      inEncounterDeck: true,
     },
     {
       id: "mutated-experiment-2",
@@ -609,6 +631,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Creature",
         "Mutated"
       ],
+      inEncounterDeck: true,
     },
   ],
 };

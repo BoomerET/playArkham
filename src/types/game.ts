@@ -245,4 +245,5 @@ export interface EncounterCard {
   health?: number;
   set?: string;
   traits?: string[];
+  inEncounterDeck?: boolean;
 }

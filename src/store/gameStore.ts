@@ -1236,10 +1236,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("scenario", immediate.logText);
   },
 
-  //startGame: () => {
-  //  get().setupGame();
-  //  set({ screen: "game" });
-  //},
   startGame: async () => {
     try {
       await get().setupGame();
@@ -1310,6 +1306,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
+    const encounterDeck = shuffleArray(
+      (scenario.encounterDeck ?? []).filter(
+        (card) => card.inEncounterDeck === true,
+      ),
+    );
     let deckCards;
     try {
       deckCards = await loadArkhamDeck(selectedDeckId);
@@ -1335,9 +1336,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: selectedScenario.encounterDeck
-        ? shuffleArray(selectedScenario.encounterDeck)
-        : [],
+      //encounterDeck: selectedScenario.encounterDeck
+      //  ? shuffleArray(selectedScenario.encounterDeck)
+      //  : [],
+      encounterDeck,
       encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
