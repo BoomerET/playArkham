@@ -9,9 +9,6 @@ import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
 const playerCardImages = import.meta.glob(
   [
     "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/playerCards/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/playercards/*.{jpg,jpeg,png,webp}",
-    "../../assets/images/cards/*.{jpg,jpeg,png,webp}",
   ],
   {
     eager: true,
@@ -242,9 +239,8 @@ export default function PlayAreaPanel() {
             exhaust or ready it.
           </p>
           <div
-            className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
-              zoomHeld ? "active" : ""
-            }`}
+            className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${zoomHeld ? "active" : ""
+              }`}
           >
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
@@ -266,9 +262,8 @@ export default function PlayAreaPanel() {
             return (
               <div
                 key={card.id}
-                className={`play-area-image-card ${
-                  card.exhausted ? "play-area-card-exhausted" : ""
-                }`}
+                className={`play-area-image-card ${card.exhausted ? "play-area-card-exhausted" : ""
+                  }`}
                 onMouseEnter={() => {
                   setHoveredCardId(card.id);
                   setPreviewSide("front");
@@ -300,11 +295,10 @@ export default function PlayAreaPanel() {
 
                   <div className="play-area-image-topbar">
                     <span
-                      className={`play-area-cost-chip ${
-                        card.cost === undefined
+                      className={`play-area-cost-chip ${card.cost === undefined
                           ? "play-area-cost-chip-empty"
                           : ""
-                      }`}
+                        }`}
                     >
                       {card.cost ?? "—"}
                     </span>
@@ -351,7 +345,7 @@ export default function PlayAreaPanel() {
                     ) : null}
 
                     {card.type === "asset" &&
-                    canActivatePlayAreaCardAbility(card) ? (
+                      canActivatePlayAreaCardAbility(card) ? (
                       <div className="play-area-image-actions button-row">
                         <button
                           type="button"

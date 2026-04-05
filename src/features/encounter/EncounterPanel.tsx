@@ -2,6 +2,14 @@ import { useMemo } from "react";
 import { useGameStore } from "../../store/gameStore";
 import type { EncounterCard } from "../../types/game";
 
+const encounterImages = import.meta.glob(
+  "../../assets/images/encounters/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
 type GroupedEncounterCard = {
   name: string;
   count: number;
