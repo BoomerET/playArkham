@@ -18,6 +18,7 @@ import SkillTestPanel from "./SkillTestPanel";
 import TurnPanel from "./TurnPanel";
 import "./gameTable.css";
 import EncounterPanel from "../encounter/EncounterPanel";
+import EncounterInspector from "../encounter/EncounterInspector";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -36,6 +37,12 @@ export default function GameTable() {
   const toggleDeckInspector = useGameStore(
     (state) => state.toggleDeckInspector,
   );
+  const showEncounterInspector = useGameStore(
+    (s) => s.showEncounterInspector,
+  );
+  const toggleEncounterInspector = useGameStore(
+    (s) => s.toggleEncounterInspector,
+  );
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -48,6 +55,18 @@ export default function GameTable() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [toggleDeckInspector]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.shiftKey && (e.key === "e" || e.key === "E")) {
+        e.preventDefault();
+        toggleEncounterInspector();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [toggleEncounterInspector]);
 
   const selectedScenario =
     availableScenarios.find((scenario) => scenario.id === selectedScenarioId) ??
@@ -185,7 +204,7 @@ export default function GameTable() {
           <section className="table-panel">
             <EncounterPanel />
           </section>
-          
+
           <section className="table-panel">
             <ChaosBagPanel />
           </section>
@@ -202,6 +221,7 @@ export default function GameTable() {
 
       <MulliganOverlay />
       <DeckInspector />
+      <EncounterInspector />
     </main>
   );
 }
