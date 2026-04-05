@@ -77,6 +77,13 @@ export default function EncounterInspector() {
                                 </li>
                             ))}
                         </ul>
+                        <ul>
+                            {groupedDiscard.map((c) => (
+                                <li key={c.name}>
+                                    {c.name} ({c.count}) • {c.type}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
