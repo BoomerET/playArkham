@@ -171,6 +171,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Humanoid",
         "Elite"
       ],
+      inEncounterDeck: false,
     },
     {
       id: "cantor-of-flame-1",
@@ -472,6 +473,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: false,
     },
     {
       id: "fire-2",
@@ -487,6 +489,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: false,
     },
     {
       id: "fire-3",
@@ -502,6 +505,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: false,
     },
     {
       id: "fire-4",
@@ -517,6 +521,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: false,
     },
     {
       id: "fire-5",
@@ -532,6 +537,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Hazard",
       ],
+      inEncounterDeck: false,
     },
     {
       id: "noxious-smoke-1",
@@ -596,8 +602,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       type: "enemy",
       ability: ["Retaliate"],
       text: [
-        "Forced - AWhen this enemy is defeated: Each investigator at it's location takes 1 horror."
-
+        "Forced - AWhen this enemy is defeated: Each investigator at it's location takes 1 horror.",
       ],
       damage: 1,
       horror: 1,
@@ -618,8 +623,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       type: "enemy",
       ability: ["Retaliate"],
       text: [
-        "Forced - AWhen this enemy is defeated: Each investigator at it's location takes 1 horror."
-
+        "Forced - AWhen this enemy is defeated: Each investigator at it's location takes 1 horror.",
       ],
       damage: 1,
       horror: 1,
@@ -633,5 +637,21 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       inEncounterDeck: true,
     },
+    {
+      id: "dr-henry-armitage-1",
+      code: "12115",
+      name: "Dr. Henry Armitage",
+      type: "ally",
+      text: [
+        "You get +1 WIL and +1 INT",
+        "The first action you perform each round does not provoke attacks of opportunity."
+      ],
+      set: "spreading-flames",
+      traits: [
+        "Ally", 
+        "Miskatonic"
+      ],
+      inEncounterDeck: false,
+    }
   ],
 };

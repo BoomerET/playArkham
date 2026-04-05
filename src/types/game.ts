@@ -235,7 +235,7 @@ export interface EncounterCard {
   id: string;
   code: string;
   name: string;
-  type: "enemy" | "treachery";
+  type: "enemy" | "treachery" | "ally";
   ability?: string[]
   text?: string[];
   damage?: number;
