@@ -97,6 +97,8 @@ type GameStore = GameState & {
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
+  showEncounterInspector: boolean;
+toggleEncounterInspector: () => void;
 
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
@@ -243,10 +245,6 @@ function normalizeCardCounters(
 
   return normalized;
 }
-
-//function isOpeningHandWeakness(card: PlayerCard): boolean {
-//  return card.type === "treachery" || card.type === "enemy";
-//}
 
 function isOpeningHandWeakness(card: PlayerCard): boolean {
   return card.isWeakness === true;
@@ -611,6 +609,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectedDeckId: "",
   selectedEnemyTargetId: null,
   showDeckInspector: false,
+  showEncounterInspector: false,
   draggedCardId: null,
   pendingTestResolution: null,
   pendingAssetPlay: null,
@@ -683,6 +682,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleDeckInspector: () => {
     set((state) => ({ showDeckInspector: !state.showDeckInspector }));
   },
+
+  toggleEncounterInspector: () => {
+  set((state) => ({
+    showEncounterInspector: !state.showEncounterInspector,
+  }));
+},
 
   closeDeckInspector: () => {
     set({ showDeckInspector: false });
@@ -1277,6 +1282,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionSubtitle: null,
       pendingAssetPlay: null,
       showDeckInspector: false,
+      showEncounterInspector: false,
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
