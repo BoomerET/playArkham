@@ -37,9 +37,9 @@ export default function GameTable() {
   const toggleDeckInspector = useGameStore(
     (state) => state.toggleDeckInspector,
   );
-  const showEncounterInspector = useGameStore(
-    (s) => s.showEncounterInspector,
-  );
+  //const showEncounterInspector = useGameStore(
+  //  (s) => s.showEncounterInspector,
+  //);
   const toggleEncounterInspector = useGameStore(
     (s) => s.toggleEncounterInspector,
   );
