@@ -215,6 +215,14 @@ function shuffleArray<T>(items: T[]): T[] {
   return result;
 }
 
+function buildInitialEncounterDeck(
+  cards: EncounterCard[] | undefined,
+): EncounterCard[] {
+  return shuffleArray(
+    (cards ?? []).filter((card) => card.inEncounterDeck === true),
+  );
+}
+
 function normalizeCardCounters(
   counters: Partial<Record<CardCounterType, number>> | undefined,
 ) {
@@ -1254,9 +1262,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: selectedScenario.encounterDeck
-        ? shuffleArray(selectedScenario.encounterDeck)
-        : [],
+      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterDeck),
       encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
@@ -1306,11 +1312,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
-    const encounterDeck = shuffleArray(
-      (scenario.encounterDeck ?? []).filter(
-        (card) => card.inEncounterDeck === true,
-      ),
-    );
     let deckCards;
     try {
       deckCards = await loadArkhamDeck(selectedDeckId);
@@ -1336,10 +1337,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      //encounterDeck: selectedScenario.encounterDeck
-      //  ? shuffleArray(selectedScenario.encounterDeck)
-      //  : [],
-      encounterDeck,
+      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterDeck),
       encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
