@@ -63,6 +63,8 @@ import {
   getActivatedCardAbilityEffect,
 } from "../lib/playerCardAbilities";
 
+import { resolveEncounterCardImmediate } from "../lib/encounterEffects";
+
 type Screen = "home" | "game";
 
 type PendingTestResolution =
