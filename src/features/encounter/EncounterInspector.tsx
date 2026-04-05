@@ -62,9 +62,10 @@ export default function EncounterInspector() {
                     <div>
                         <h3>Deck ({encounterDeck.length})</h3>
                         <ul>
-                            {groupedDeck.map((c) => (
-                                <li key={c.name}>
-                                    {c.name} ({c.count}) • {c.type}
+                            {encounterDeck.map((card, index) => (
+                                <li key={card.id}>
+                                    {index === 0 && <strong>[TOP]</strong>}{" "}
+                                    {card.name} • {card.type}
                                 </li>
                             ))}
                         </ul>
