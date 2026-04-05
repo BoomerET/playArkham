@@ -39,6 +39,49 @@ function groupEncounterCards(cards: EncounterCard[]): GroupedEncounterCard[] {
   );
 }
 
+function slugifyName(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/['".,!?]/g, "")
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function findEncounterImageUrlByBaseNames(baseNames: string[]): string | null {
+  const normalizedBases = baseNames
+    .map((name) => name.trim().toLowerCase())
+    .filter(Boolean);
+
+  const match = Object.entries(encounterImages).find(([path]) => {
+    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
+    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+    return normalizedBases.includes(baseName);
+  });
+
+  return match?.[1] ?? null;
+}
+
+function getEncounterCardImageUrl(card: EncounterCard): string | null {
+  return findEncounterImageUrlByBaseNames([
+    card.code ?? "",
+    card.id,
+    slugifyName(card.name),
+  ]);
+}
+
+function renderEncounterText(text?: string | string[]) {
+  if (!text) {
+    return null;
+  }
+
+  if (Array.isArray(text)) {
+    return text.join(" ");
+  }
+
+  return text;
+}
+
 export default function EncounterPanel() {
   const encounterDeck = useGameStore((state) => state.encounterDeck);
   const encounterDiscard = useGameStore((state) => state.encounterDiscard);
@@ -48,6 +91,10 @@ export default function EncounterPanel() {
     () => groupEncounterCards(encounterDiscard),
     [encounterDiscard],
   );
+
+  const lastEncounterImageUrl = lastEncounterCard
+    ? getEncounterCardImageUrl(lastEncounterCard)
+    : null;
 
   return (
     <section className="encounter-panel">
@@ -76,15 +123,29 @@ export default function EncounterPanel() {
         <h3 className="encounter-panel__section-title">Last Drawn</h3>
         {lastEncounterCard ? (
           <div className="encounter-panel__last-card">
+            {lastEncounterImageUrl ? (
+              <img
+                src={lastEncounterImageUrl}
+                alt={lastEncounterCard.name}
+                className="encounter-panel__last-image"
+                draggable={false}
+              />
+            ) : null}
+
             <div className="encounter-panel__last-name">
               {lastEncounterCard.name}
             </div>
             <div className="encounter-panel__last-type">
               {lastEncounterCard.type}
             </div>
+            {lastEncounterCard.code ? (
+              <div className="encounter-panel__last-type">
+                Code: {lastEncounterCard.code}
+              </div>
+            ) : null}
             {lastEncounterCard.text ? (
               <div className="encounter-panel__last-text">
-                {lastEncounterCard.text}
+                {renderEncounterText(lastEncounterCard.text)}
               </div>
             ) : null}
           </div>
