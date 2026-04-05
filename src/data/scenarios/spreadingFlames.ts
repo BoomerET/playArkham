@@ -79,12 +79,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       isVisible: false,
     },
   ],
-  enemySpawns: [
-    {
-      enemyId: "ghoul-priest",
-      locationId: "warren-observatory",
-    },
-  ],
+  //enemySpawns: [
+  //  {
+  //    enemyId: "ghoul-priest",
+  //    locationId: "warren-observatory",
+  //  },
+  //],
   acts: [
     {
       id: "spreading-flames-act-1",
