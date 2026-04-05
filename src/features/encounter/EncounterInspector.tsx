@@ -35,18 +35,17 @@ export default function EncounterInspector() {
     const encounterDeck = useGameStore((s) => s.encounterDeck);
     const encounterDiscard = useGameStore((s) => s.encounterDiscard);
     const toggle = useGameStore((s) => s.toggleEncounterInspector);
-
-    // 👇 ADD THIS HERE
     const show = useGameStore((s) => s.showEncounterInspector);
 
-    if (!show) return null;
-
-    // existing logic (useMemo, etc.)
     const groupedDeck = useMemo(() => groupCards(encounterDeck), [encounterDeck]);
     const groupedDiscard = useMemo(
         () => groupCards(encounterDiscard),
         [encounterDiscard],
     );
+
+    if (!show) {
+        return null;
+    }
 
     return (
         <div className="deck-inspector-overlay" onClick={toggle}>
