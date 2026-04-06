@@ -113,9 +113,6 @@ export default function EncounterInspector() {
     const shuffleEncounterDeck = useGameStore((s) => s.shuffleEncounterDeck);
     const zoomHeld = useModifierKey("Shift");
     const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
-    const encounterDeck = useGameStore((s) => s.encounterDeck);
-    const encounterDiscard = useGameStore((s) => s.encounterDiscard);
-
 
     const groupedDeck = useMemo(() => groupCards(encounterDeck), [encounterDeck]);
     const groupedDiscard = useMemo(
