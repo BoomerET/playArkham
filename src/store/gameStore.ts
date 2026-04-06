@@ -179,6 +179,7 @@ type GameStore = GameState & {
   shuffleEncounterDeck: () => void;
   discardThreatAreaCard: (cardId: string) => void;
   discardLocationAttachment: (attachmentId: string) => void;
+
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -652,6 +653,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   playArea: [],
   encounterDeck: [],
   encounterDiscard: [],
+  locationAttachments: [],
   threatArea: [],
   lastEncounterCard: null,
   isMulliganActive: false,
@@ -858,10 +860,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...encounterDiscard,
         {
           id: attachment.cardId,
-          code: attachment.code,
+          code: attachment.code ?? attachment.cardId,
           name: attachment.name,
           type: "treachery",
-          text: attachment.text,
+          text: Array.isArray(attachment.text)
+            ? attachment.text
+            : attachment.text
+              ? [attachment.text]
+              : undefined,
           traits: attachment.traits,
         },
       ],
