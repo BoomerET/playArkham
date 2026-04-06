@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useGameStore } from "../../store/gameStore";
 import type { EncounterCard } from "../../types/game";
 
@@ -15,6 +16,46 @@ type GroupedEncounterCard = {
   count: number;
   type: EncounterCard["type"];
 };
+
+type PreviewEncounterCard = {
+  id: string;
+  name: string;
+  imageUrl: string;
+};
+
+function useModifierKey(key: "Alt" | "Shift") {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(true);
+      }
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key === key) {
+        setActive(false);
+      }
+    };
+
+    const onWindowBlur = () => {
+      setActive(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onWindowBlur);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onWindowBlur);
+    };
+  }, [key]);
+
+  return active;
+}
 
 function groupEncounterCards(cards: EncounterCard[]): GroupedEncounterCard[] {
   const grouped = new Map<string, GroupedEncounterCard>();
@@ -75,39 +116,55 @@ function renderEncounterText(text?: string | string[]) {
     return null;
   }
 
-  if (Array.isArray(text)) {
-    return text.join(" ");
-  }
-
-  return text;
+  return Array.isArray(text) ? text.join(" ") : text;
 }
 
 export default function EncounterPanel() {
   const encounterDeck = useGameStore((state) => state.encounterDeck);
   const encounterDiscard = useGameStore((state) => state.encounterDiscard);
-  const lastEncounterCard = useGameStore((state) => state.lastEncounterCard);
   const threatArea = useGameStore((state) => state.threatArea);
+  const locationAttachments = useGameStore(
+    (state) => state.locationAttachments,
+  );
+  const lastEncounterCard = useGameStore((state) => state.lastEncounterCard);
+  const discardThreatAreaCard = useGameStore(
+    (state) => state.discardThreatAreaCard,
+  );
+  const discardLocationAttachment = useGameStore(
+    (state) => state.discardLocationAttachment,
+  );
+  const locations = useGameStore((state) => state.locations);
+  const turn = useGameStore((state) => state.turn);
+
+  const zoomHeld = useModifierKey("Shift");
+  const [isHoveringLastCard, setIsHoveringLastCard] = useState(false);
+
   const groupedDiscard = useMemo(
     () => groupEncounterCards(encounterDiscard),
     [encounterDiscard],
   );
 
-  const locationAttachments = useGameStore((state) => state.locationAttachments);
-  const discardLocationAttachment = useGameStore(
-    (state) => state.discardLocationAttachment,
-  );
-  const locations = useGameStore((state) => state.locations);
-  //const turn = useGameStore((state) => state.turn);
-
-
   const lastEncounterImageUrl = lastEncounterCard
     ? getEncounterCardImageUrl(lastEncounterCard)
     : null;
 
-  const discardThreatAreaCard = useGameStore(
-    (state) => state.discardThreatAreaCard,
-  );
-  const turn = useGameStore((state) => state.turn);
+  const previewCard = useMemo<PreviewEncounterCard | null>(() => {
+    if (!zoomHeld || !isHoveringLastCard || !lastEncounterCard) {
+      return null;
+    }
+
+    const imageUrl = getEncounterCardImageUrl(lastEncounterCard);
+
+    if (!imageUrl) {
+      return null;
+    }
+
+    return {
+      id: lastEncounterCard.id,
+      name: lastEncounterCard.name,
+      imageUrl,
+    };
+  }, [zoomHeld, isHoveringLastCard, lastEncounterCard]);
 
   return (
     <section className="encounter-panel">
@@ -134,8 +191,19 @@ export default function EncounterPanel() {
 
       <div className="encounter-panel__section">
         <h3 className="encounter-panel__section-title">Last Drawn</h3>
+
+        <div
+          className={`card-zoom-hint ${isHoveringLastCard ? "visible" : ""} ${zoomHeld ? "active" : ""}`}
+        >
+          Hold <kbd>Shift</kbd> to zoom
+        </div>
+
         {lastEncounterCard ? (
-          <div className="encounter-panel__last-card">
+          <div
+            className="encounter-panel__last-card"
+            onMouseEnter={() => setIsHoveringLastCard(true)}
+            onMouseLeave={() => setIsHoveringLastCard(false)}
+          >
             {lastEncounterImageUrl ? (
               <img
                 src={lastEncounterImageUrl}
@@ -163,101 +231,110 @@ export default function EncounterPanel() {
             ) : null}
           </div>
         ) : (
-          <div className="encounter-panel__empty">No encounter card drawn yet.</div>
+          <div className="encounter-panel__empty">
+            No encounter card drawn yet.
+          </div>
         )}
       </div>
 
       <div className="encounter-panel__section">
-        <div className="encounter-panel__section">
-          <h3 className="encounter-panel__section-title">Threat Area</h3>
+        <h3 className="encounter-panel__section-title">Threat Area</h3>
 
-          {threatArea.length === 0 ? (
-            <div className="encounter-panel__empty">Threat area is empty.</div>
-          ) : (
-            <ul className="encounter-panel__discard-list">
-              {threatArea.map((card) => {
-                const canDiscardUnspeakableTruths =
-                  card.name === "Unspeakable Truths" &&
-                  turn.phase === "investigation" &&
-                  turn.actionsRemaining >= 2;
+        {threatArea.length === 0 ? (
+          <div className="encounter-panel__empty">Threat area is empty.</div>
+        ) : (
+          <ul className="encounter-panel__discard-list">
+            {threatArea.map((card) => {
+              const canDiscardUnspeakableTruths =
+                card.name === "Unspeakable Truths" &&
+                turn.phase === "investigation" &&
+                turn.actionsRemaining >= 2;
 
-                return (
-                  <li
-                    key={card.id}
-                    className="encounter-panel__discard-item"
-                  >
-                    <div>
-                      <span className="encounter-panel__discard-name">
-                        {card.name}
-                      </span>
-                      <span className="encounter-panel__discard-meta">
-                        {card.type}
-                      </span>
-                    </div>
+              return (
+                <li
+                  key={card.id}
+                  className="encounter-panel__discard-item"
+                >
+                  <div>
+                    <span className="encounter-panel__discard-name">
+                      {card.name}
+                    </span>
+                    <span className="encounter-panel__discard-meta">
+                      {card.type}
+                    </span>
+                  </div>
 
-                    {card.name === "Unspeakable Truths" ? (
-                      <button
-                        type="button"
-                        className="secondary-button"
-                        disabled={!canDiscardUnspeakableTruths}
-                        onClick={() => discardThreatAreaCard(card.id)}
-                      >
-                        Discard (2 actions)
-                      </button>
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-        <div className="encounter-panel__section">
-          <h3 className="encounter-panel__section-title">Location Attachments</h3>
+                  {card.name === "Unspeakable Truths" ? (
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      disabled={!canDiscardUnspeakableTruths}
+                      onClick={() => discardThreatAreaCard(card.id)}
+                    >
+                      Discard (2 actions)
+                    </button>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
 
-          {locationAttachments.length === 0 ? (
-            <div className="encounter-panel__empty">
-              No location attachments in play.
-            </div>
-          ) : (
-            <ul className="encounter-panel__discard-list">
-              {locationAttachments.map((attachment) => {
-                const attachedLocation = locations.find(
-                  (location) => location.id === attachment.attachedLocationId,
-                );
+      <div className="encounter-panel__section">
+        <h3 className="encounter-panel__section-title">
+          Location Attachments
+        </h3>
 
-                return (
-                  <li
-                    key={attachment.id}
-                    className="encounter-panel__discard-item"
-                  >
-                    <div>
-                      <span className="encounter-panel__discard-name">
-                        {attachment.name}
-                      </span>
-                      <span className="encounter-panel__discard-meta">
-                        Attached to {attachedLocation?.name ?? attachment.attachedLocationId}
-                      </span>
-                    </div>
+        {locationAttachments.length === 0 ? (
+          <div className="encounter-panel__empty">
+            No location attachments in play.
+          </div>
+        ) : (
+          <ul className="encounter-panel__discard-list">
+            {locationAttachments.map((attachment) => {
+              const attachedLocation = locations.find(
+                (location) => location.id === attachment.attachedLocationId,
+              );
 
-                    {attachment.name === "Fire!" ? (
-                      <button
-                        type="button"
-                        className="secondary-button"
-                        disabled={
-                          turn.phase !== "investigation" ||
-                          turn.actionsRemaining < 1
-                        }
-                        onClick={() => discardLocationAttachment(attachment.id)}
-                      >
-                        Clear (1 action)
-                      </button>
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
+              return (
+                <li
+                  key={attachment.id}
+                  className="encounter-panel__discard-item"
+                >
+                  <div>
+                    <span className="encounter-panel__discard-name">
+                      {attachment.name}
+                    </span>
+                    <span className="encounter-panel__discard-meta">
+                      Attached to{" "}
+                      {attachedLocation?.name ?? attachment.attachedLocationId}
+                    </span>
+                  </div>
+
+                  {attachment.name === "Fire!" ? (
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      disabled={
+                        turn.phase !== "investigation" ||
+                        turn.actionsRemaining < 1
+                      }
+                      onClick={() =>
+                        discardLocationAttachment(attachment.id)
+                      }
+                    >
+                      Clear (1 action)
+                    </button>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+
+      <div className="encounter-panel__section">
         <h3 className="encounter-panel__section-title">Discard</h3>
 
         {groupedDiscard.length === 0 ? (
@@ -282,6 +359,25 @@ export default function EncounterPanel() {
           </ul>
         )}
       </div>
+
+      {previewCard &&
+        createPortal(
+          <div
+            className="card-preview-overlay encounter-preview-overlay"
+            aria-hidden="true"
+            onMouseLeave={() => setIsHoveringLastCard(false)}
+          >
+            <div className="card-preview-frame encounter-preview-frame">
+              <img
+                src={previewCard.imageUrl}
+                alt={previewCard.name}
+                className="card-preview-image encounter-preview-image"
+                draggable={false}
+              />
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
