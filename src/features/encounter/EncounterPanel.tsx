@@ -10,6 +10,13 @@ const encounterImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const locationAttachments = useGameStore((state) => state.locationAttachments);
+const discardLocationAttachment = useGameStore(
+  (state) => state.discardLocationAttachment,
+);
+const locations = useGameStore((state) => state.locations);
+const turn = useGameStore((state) => state.turn);
+
 type GroupedEncounterCard = {
   name: string;
   count: number;
@@ -195,6 +202,53 @@ export default function EncounterPanel() {
                         onClick={() => discardThreatAreaCard(card.id)}
                       >
                         Discard (2 actions)
+                      </button>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+        <div className="encounter-panel__section">
+          <h3 className="encounter-panel__section-title">Location Attachments</h3>
+
+          {locationAttachments.length === 0 ? (
+            <div className="encounter-panel__empty">
+              No location attachments in play.
+            </div>
+          ) : (
+            <ul className="encounter-panel__discard-list">
+              {locationAttachments.map((attachment) => {
+                const attachedLocation = locations.find(
+                  (location) => location.id === attachment.attachedLocationId,
+                );
+
+                return (
+                  <li
+                    key={attachment.id}
+                    className="encounter-panel__discard-item"
+                  >
+                    <div>
+                      <span className="encounter-panel__discard-name">
+                        {attachment.name}
+                      </span>
+                      <span className="encounter-panel__discard-meta">
+                        Attached to {attachedLocation?.name ?? attachment.attachedLocationId}
+                      </span>
+                    </div>
+
+                    {attachment.name === "Fire!" ? (
+                      <button
+                        type="button"
+                        className="secondary-button"
+                        disabled={
+                          turn.phase !== "investigation" ||
+                          turn.actionsRemaining < 1
+                        }
+                        onClick={() => discardLocationAttachment(attachment.id)}
+                      >
+                        Clear (1 action)
                       </button>
                     ) : null}
                   </li>

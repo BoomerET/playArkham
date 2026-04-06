@@ -106,6 +106,7 @@ type GameStore = GameState & {
   pendingFightCombatModifier: number;
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
+  locationAttachments: [],
   toggleEncounterInspector: () => void;
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
@@ -177,6 +178,7 @@ type GameStore = GameState & {
   clearPendingCardAbilityBonuses: () => void;
   shuffleEncounterDeck: () => void;
   discardThreatAreaCard: (cardId: string) => void;
+  discardLocationAttachment: (attachmentId: string) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -258,6 +260,18 @@ function createLogEntry(kind: GameLogKind, text: string) {
     text,
     createdAt: Date.now(),
   } as const;
+}
+
+function hasLocationAttachment(
+  attachments: { attachedLocationId: string; name: string }[],
+  locationId: string,
+  name: string,
+): boolean {
+  return attachments.some(
+    (attachment) =>
+      attachment.attachedLocationId === locationId &&
+      attachment.name === name,
+  );
 }
 
 type AdvanceStoreSlice = Pick<
@@ -779,6 +793,87 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog(
       "scenario",
       `Spent 2 actions to discard ${card.name} from your threat area.`,
+    );
+  },
+
+  discardLocationAttachment: (attachmentId) => {
+    const {
+      locationAttachments,
+      encounterDiscard,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (activeSkillTest) {
+      get().pushLog(
+        "system",
+        "Cannot discard a location attachment while a skill test is active.",
+      );
+      return;
+    }
+
+    const attachment = locationAttachments.find(
+      (entry) => entry.id === attachmentId,
+    );
+
+    if (!attachment) {
+      return;
+    }
+
+    if (turn.phase !== "investigation") {
+      get().pushLog(
+        "system",
+        `Cannot clear ${attachment.name} outside the Investigation phase.`,
+      );
+      return;
+    }
+
+    if (turn.actionsRemaining < 1) {
+      get().pushLog(
+        "system",
+        `Cannot clear ${attachment.name}. No actions remaining.`,
+      );
+      return;
+    }
+
+    if (attachment.name !== "Fire!") {
+      get().pushLog(
+        "system",
+        `Discarding ${attachment.name} is not implemented.`,
+      );
+      return;
+    }
+
+    set({
+      locationAttachments: locationAttachments.filter(
+        (entry) => entry.id !== attachmentId,
+      ),
+      encounterDiscard: [
+        ...encounterDiscard,
+        {
+          id: attachment.cardId,
+          code: attachment.code,
+          name: attachment.name,
+          type: "treachery",
+          text: attachment.text,
+          traits: attachment.traits,
+        },
+      ],
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+    });
+
+    get().pushLog(
+      "scenario",
+      `Cleared ${attachment.name} with 1 action.`,
     );
   },
 
@@ -1349,6 +1444,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (card.name === "Fire!") {
+      const { locationAttachments } = get();
+
+      const alreadyAttached = hasLocationAttachment(
+        locationAttachments,
+        currentLocation.id,
+        "Fire!",
+      );
+
+      if (alreadyAttached) {
+        set({
+          encounterDiscard: [...encounterDiscard, card],
+        });
+
+        get().pushLog(
+          "scenario",
+          `Fire! was drawn, but ${currentLocation.name} already has Fire! attached. It was discarded.`,
+        );
+        return;
+      }
+
+      set({
+        locationAttachments: [
+          ...locationAttachments,
+          {
+            id: `${card.id}-attachment-${Date.now()}`,
+            cardId: card.id,
+            code: card.code,
+            name: card.name,
+            text: card.text,
+            traits: card.traits,
+            attachedLocationId: currentLocation.id,
+          },
+        ],
+      });
+
+      get().pushLog(
+        "scenario",
+        `Fire! attached to ${currentLocation.name}.`,
+      );
+      return;
+    }
+
     if (immediate.kind === "genericTreachery") {
       set({
         encounterDiscard: [...encounterDiscard, card],
@@ -1418,6 +1556,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightDamageBonus: 0,
       lastEncounterCard: null,
       pendingEncounterResolution: null,
+      locationAttachments: [],
     });
   },
 
@@ -1485,6 +1624,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       showDeckInspector: false,
       isMulliganActive: true,
       threatArea: [],
+      locationAttachments: [],
       selectedMulliganCardIds: [],
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
@@ -2371,12 +2511,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "investigation") {
+      const { locationAttachments, investigator, locations } = get();
+      const currentLocation = findCurrentLocation(locations, investigator.id);
+
+      let updatedInvestigator = investigator;
+      const fireAttachments = locationAttachments.filter(
+        (attachment) => attachment.name === "Fire!",
+      );
+
+      for (const attachment of fireAttachments) {
+        if (currentLocation && attachment.attachedLocationId === currentLocation.id) {
+          updatedInvestigator = {
+            ...updatedInvestigator,
+            damage: updatedInvestigator.damage + 1,
+          };
+
+          get().pushLog(
+            "scenario",
+            `Fire! at ${currentLocation.name} dealt 1 direct damage at the end of the Investigation phase.`,
+          );
+        }
+      }
+
       set({
+        investigator: updatedInvestigator,
         turn: {
           ...turn,
           phase: "enemy",
         },
       });
+
       get().pushLog("system", "Phase: Enemy");
       get().enemyPhaseAttack();
       return;

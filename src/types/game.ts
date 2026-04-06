@@ -70,13 +70,13 @@ export interface PlayerCard {
   id: string;
   name: string;
   type:
-    | "asset"
-    | "event"
-    | "skill"
-    | "treachery"
-    | "enemy"
-    | "location"
-    | "investigator";
+  | "asset"
+  | "event"
+  | "skill"
+  | "treachery"
+  | "enemy"
+  | "location"
+  | "investigator";
   cost?: number;
   icons?: string[];
   text?: string;
@@ -187,6 +187,16 @@ export interface GameLogEntry {
 
 export type GameLogItem = string | GameLogEntry;
 
+export interface LocationAttachment {
+  id: string;
+  cardId: string;
+  code?: string;
+  name: string;
+  text?: string | string[];
+  traits?: string[];
+  attachedLocationId: string;
+}
+
 export interface GameState {
   investigator: Investigator;
   deck: PlayerCard[];
@@ -211,6 +221,7 @@ export interface GameState {
   encounterDiscard: EncounterCard[];
   threatArea: EncounterCard[];
   lastEncounterCard: EncounterCard | null;
+  locationAttachments: LocationAttachment[];
 }
 
 export interface EnemyDefinition {
