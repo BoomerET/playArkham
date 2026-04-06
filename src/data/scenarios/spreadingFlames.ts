@@ -590,7 +590,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
     {
       id: "mutated-1",
       code: "12131",
-      name: "Mutated",
+      name: "Mutated!",
       type: "treachery",
       text: [
         "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.", 
@@ -604,7 +604,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
     {
       id: "mutated-2",
       code: "12131",
-      name: "Mutated",
+      name: "Mutated!",
       type: "treachery",
       text: [
         "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.", 
