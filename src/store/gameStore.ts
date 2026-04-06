@@ -2830,15 +2830,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
             `Investigation succeeded at ${location.name}. Discovered ${totalCluesDiscovered} clue${totalCluesDiscovered === 1 ? "" : "s"} and spent 1 action.`,
           ),
         );
-
-        if (horrorFromThreatArea > 0) {
-          resolutionLog.push(
-            createLogEntry(
-              "scenario",
-              "Unspeakable Truths triggered after discovering clues. Took 1 horror.",
-            ),
-          );
-        }
       }
     }
 
