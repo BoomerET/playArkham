@@ -203,4 +203,20 @@ export default function EncounterInspector() {
             </div>
         </div>
     );
+    {
+        previewCard &&
+        createPortal(
+            <div className="card-preview-overlay encounter-preview-overlay" aria-hidden="true">
+                <div className="card-preview-frame encounter-preview-frame">
+                    <img
+                        src={previewCard.imageUrl}
+                        alt={previewCard.name}
+                        className="card-preview-image encounter-preview-image"
+                        draggable={false}
+                    />
+                </div>
+            </div>,
+            document.body,
+        )
+    }
 }
