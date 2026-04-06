@@ -20,7 +20,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic"
       ],
-      text: "Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity."
+      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity."
     },
     {
       id: "dormitories",
@@ -32,6 +32,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 78 },
       isVisible: false,
+      traits: [
+        "Miskatonic"
+      ],
+      text: "Action: Heal 1 damage and 1 horror. (Limit once per game)"
+
     },
     {
       id: "miskatonic-quad",
@@ -48,6 +53,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 50 },
       isVisible: false,
+      traits: [
+        "Miskatonic",
+        "Central"
+      ],
+      text: "Reaction: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)"
+
     },
     {
       id: "science-hall",
@@ -59,6 +70,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 50 },
       isVisible: false,
+      traits: [
+        "Miskatonic"
+      ],
+      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand."
+
     },
     {
       id: "orne-library",
@@ -70,6 +86,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
       isVisible: false,
+      traits: [
+        "Miskatonic"
+      ],
+      text: "Double action: Draw 3 cards (Limit once per game.)"
+
     },
     {
       id: "warren-observatory",
@@ -81,6 +102,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 22 },
       isVisible: false,
+      traits: [
+        "Miskatonic"
+      ],
+      text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)"
+
     },
   ],
   enemySpawns: [],
