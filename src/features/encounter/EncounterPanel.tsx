@@ -10,11 +10,6 @@ const encounterImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const discardThreatAreaCard = useGameStore(
-  (state) => state.discardThreatAreaCard,
-);
-const turn = useGameStore((state) => state.turn);
-
 type GroupedEncounterCard = {
   name: string;
   count: number;
@@ -100,6 +95,11 @@ export default function EncounterPanel() {
   const lastEncounterImageUrl = lastEncounterCard
     ? getEncounterCardImageUrl(lastEncounterCard)
     : null;
+
+  const discardThreatAreaCard = useGameStore(
+    (state) => state.discardThreatAreaCard,
+  );
+  const turn = useGameStore((state) => state.turn);
 
   return (
     <section className="encounter-panel">
