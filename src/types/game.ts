@@ -103,6 +103,10 @@ export interface GameLocation {
     x: number;
     y: number;
   };
+  text?: string;
+  traits?: string[];
+  victoryPoints?: number;
+  subname?: string;
 }
 
 export interface Enemy {
