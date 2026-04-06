@@ -166,12 +166,10 @@ export default function EncounterInspector() {
           </div>
         </div>
         <div
-  className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
-    zoomHeld ? "active"
-  }`}
->
-  Hold <kbd>Shift</kbd> to zoom
-</div>
+          className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${zoomHeld ? "active" : ""}`}
+        >
+          Hold <kbd>Shift</kbd> to zoom
+        </div>
         <div className="deck-inspector-body">
           <div>
             <h3>Deck Order (Top → Bottom)</h3>
