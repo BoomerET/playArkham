@@ -2818,6 +2818,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ? 1
             : 0;
 
+        const horrorFromThreatArea =
+          totalCluesDiscovered > 0 &&
+            threatAreaHasCard(get().threatArea, "Unspeakable Truths")
+            ? 1
+            : 0;
+
         updatedInvestigator = {
           ...investigator,
           clues: investigator.clues + totalCluesDiscovered,
@@ -2831,11 +2837,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ),
         );
 
-        if (bonusCluesOnSuccess > 0) {
+        if (horrorFromThreatArea > 0) {
           resolutionLog.push(
             createLogEntry(
-              "skill-test",
-              `Deduction added +${bonusCluesOnSuccess} clue on success.`,
+              "scenario",
+              "Unspeakable Truths triggered after discovering clues. Took 1 horror.",
             ),
           );
         }
