@@ -10,6 +10,11 @@ const encounterImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const discardThreatAreaCard = useGameStore(
+  (state) => state.discardThreatAreaCard,
+);
+const turn = useGameStore((state) => state.turn);
+
 type GroupedEncounterCard = {
   name: string;
   count: number;
@@ -162,19 +167,39 @@ export default function EncounterPanel() {
             <div className="encounter-panel__empty">Threat area is empty.</div>
           ) : (
             <ul className="encounter-panel__discard-list">
-              {threatArea.map((card) => (
-                <li
-                  key={card.id}
-                  className="encounter-panel__discard-item"
-                >
-                  <span className="encounter-panel__discard-name">
-                    {card.name}
-                  </span>
-                  <span className="encounter-panel__discard-meta">
-                    {card.type}
-                  </span>
-                </li>
-              ))}
+              {threatArea.map((card) => {
+                const canDiscardUnspeakableTruths =
+                  card.name === "Unspeakable Truths" &&
+                  turn.phase === "investigation" &&
+                  turn.actionsRemaining >= 2;
+
+                return (
+                  <li
+                    key={card.id}
+                    className="encounter-panel__discard-item"
+                  >
+                    <div>
+                      <span className="encounter-panel__discard-name">
+                        {card.name}
+                      </span>
+                      <span className="encounter-panel__discard-meta">
+                        {card.type}
+                      </span>
+                    </div>
+
+                    {card.name === "Unspeakable Truths" ? (
+                      <button
+                        type="button"
+                        className="secondary-button"
+                        disabled={!canDiscardUnspeakableTruths}
+                        onClick={() => discardThreatAreaCard(card.id)}
+                      >
+                        Discard (2 actions)
+                      </button>
+                    ) : null}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

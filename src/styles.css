@@ -2924,3 +2924,13 @@ button:hover {
   border-radius: 10px;
   margin-bottom: 10px;
 }
+
+.encounter-panel__discard-item {
+  align-items: center;
+}
+
+.encounter-panel__discard-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

@@ -98,12 +98,18 @@ type GameStore = GameState & {
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
   showEncounterInspector: boolean;
+  encounterDeck: EncounterCard[];
+  encounterDiscard: EncounterCard[];
+  isMulliganActive: boolean;
+  selectedMulliganCardIds: string[];
+  pendingInvestigateDifficultyModifier: number;
+  pendingFightCombatModifier: number;
+  pendingFightDamageBonus: number;
+  pendingEncounterResolution: PendingEncounterResolution;
   toggleEncounterInspector: () => void;
-
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
   cancelPendingAssetPlay: () => void;
-
   toggleDeckInspector: () => void;
   closeDeckInspector: () => void;
   setSelectedInvestigator: (investigatorId: string) => void;
@@ -161,28 +167,16 @@ type GameStore = GameState & {
     cardId: string,
     counterType: CardCounterType,
   ) => void;
-  encounterDeck: EncounterCard[];
-  encounterDiscard: EncounterCard[];
   drawEncounterCard: () => EncounterCard | null;
   resolveMythosPhase: () => void;
-
-  isMulliganActive: boolean;
-  selectedMulliganCardIds: string[];
   toggleMulliganCardSelection: (cardId: string) => void;
   confirmMulligan: () => void;
   skipMulligan: () => void;
-
   discardCardFromHand: (cardId: string) => void;
-
-  pendingInvestigateDifficultyModifier: number;
-  pendingFightCombatModifier: number;
-  pendingFightDamageBonus: number;
   triggerPlayAreaCardAbility: (cardId: string) => void;
   clearPendingCardAbilityBonuses: () => void;
-  pendingEncounterResolution: PendingEncounterResolution;
-
-  // Zoom encounter card
   shuffleEncounterDeck: () => void;
+  discardThreatAreaCard: (cardId: string) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -719,6 +713,73 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   discardCardFromHand: (cardId) => {
     get().discardCard(cardId);
+  },
+
+  discardThreatAreaCard: (cardId) => {
+    const {
+      threatArea,
+      encounterDiscard,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (activeSkillTest) {
+      get().pushLog(
+        "system",
+        "Cannot discard a threat area card while a skill test is active.",
+      );
+      return;
+    }
+
+    const card = threatArea.find((entry) => entry.id === cardId);
+
+    if (!card) {
+      return;
+    }
+
+    if (turn.phase !== "investigation") {
+      get().pushLog(
+        "system",
+        `Cannot discard ${card.name} outside the Investigation phase.`,
+      );
+      return;
+    }
+
+    if (turn.actionsRemaining < 2) {
+      get().pushLog(
+        "system",
+        `Cannot discard ${card.name}. You need 2 actions.`,
+      );
+      return;
+    }
+
+    if (card.name !== "Unspeakable Truths") {
+      get().pushLog(
+        "system",
+        `Discarding ${card.name} from the threat area is not implemented.`,
+      );
+      return;
+    }
+
+    set({
+      threatArea: threatArea.filter((entry) => entry.id !== cardId),
+      encounterDiscard: [...encounterDiscard, card],
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 2,
+      },
+    });
+
+    get().pushLog(
+      "scenario",
+      `Spent 2 actions to discard ${card.name} from your threat area.`,
+    );
   },
 
   setSelectedScenario: (scenarioId) => {
