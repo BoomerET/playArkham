@@ -192,6 +192,25 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       inEncounterDeck: true,
     },
+    
+    {
+      id: "cantor-of-flame-2",
+      code: "12121",
+      name: "Cantor of Flame",
+      type: "enemy",
+      ability: ["Retaliate"],
+      damage: 1,
+      horror: 0,
+      fight: 2,
+      health: 2,
+      evade: 2,
+      set: "ashen-pilgrims",
+      traits: [
+        "Humanoid",
+        "Cultist"
+      ],
+      inEncounterDeck: true,
+    },
     {
       id: "hellhound-1",
       code: "12122",
