@@ -48,6 +48,7 @@ import type {
   ScenarioStatus,
   SkillTestResult,
   SkillType,
+  LocationAttachment,
 } from "../types/game";
 
 import {
@@ -106,7 +107,7 @@ type GameStore = GameState & {
   pendingFightCombatModifier: number;
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
-  locationAttachments: [],
+  locationAttachments: LocationAttachment[];
   toggleEncounterInspector: () => void;
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
