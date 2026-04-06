@@ -2818,12 +2818,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ? 1
             : 0;
 
-        const horrorFromThreatArea =
-          totalCluesDiscovered > 0 &&
-            threatAreaHasCard(get().threatArea, "Unspeakable Truths")
-            ? 1
-            : 0;
-
         updatedInvestigator = {
           ...investigator,
           clues: investigator.clues + totalCluesDiscovered,
