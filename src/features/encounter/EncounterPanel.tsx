@@ -10,13 +10,6 @@ const encounterImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const locationAttachments = useGameStore((state) => state.locationAttachments);
-const discardLocationAttachment = useGameStore(
-  (state) => state.discardLocationAttachment,
-);
-const locations = useGameStore((state) => state.locations);
-const turn = useGameStore((state) => state.turn);
-
 type GroupedEncounterCard = {
   name: string;
   count: number;
@@ -98,6 +91,14 @@ export default function EncounterPanel() {
     () => groupEncounterCards(encounterDiscard),
     [encounterDiscard],
   );
+
+  const locationAttachments = useGameStore((state) => state.locationAttachments);
+  const discardLocationAttachment = useGameStore(
+    (state) => state.discardLocationAttachment,
+  );
+  const locations = useGameStore((state) => state.locations);
+  //const turn = useGameStore((state) => state.turn);
+
 
   const lastEncounterImageUrl = lastEncounterCard
     ? getEncounterCardImageUrl(lastEncounterCard)
