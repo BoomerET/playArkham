@@ -106,7 +106,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "southside",
       ],
       investigatorsHere: [],
-      mapPosition: { x: 22, y: 50 },
+      mapPosition: { x: 22, y: 78 },
       isVisible: true,
     },
     {
