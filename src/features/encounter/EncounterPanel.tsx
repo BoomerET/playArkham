@@ -86,7 +86,7 @@ export default function EncounterPanel() {
   const encounterDeck = useGameStore((state) => state.encounterDeck);
   const encounterDiscard = useGameStore((state) => state.encounterDiscard);
   const lastEncounterCard = useGameStore((state) => state.lastEncounterCard);
-
+  const threatArea = useGameStore((state) => state.threatArea);
   const groupedDiscard = useMemo(
     () => groupEncounterCards(encounterDiscard),
     [encounterDiscard],
@@ -155,6 +155,29 @@ export default function EncounterPanel() {
       </div>
 
       <div className="encounter-panel__section">
+        <div className="encounter-panel__section">
+          <h3 className="encounter-panel__section-title">Threat Area</h3>
+
+          {threatArea.length === 0 ? (
+            <div className="encounter-panel__empty">Threat area is empty.</div>
+          ) : (
+            <ul className="encounter-panel__discard-list">
+              {threatArea.map((card) => (
+                <li
+                  key={card.id}
+                  className="encounter-panel__discard-item"
+                >
+                  <span className="encounter-panel__discard-name">
+                    {card.name}
+                  </span>
+                  <span className="encounter-panel__discard-meta">
+                    {card.type}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <h3 className="encounter-panel__section-title">Discard</h3>
 
         {groupedDiscard.length === 0 ? (

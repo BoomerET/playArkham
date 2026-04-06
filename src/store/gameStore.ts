@@ -228,6 +228,10 @@ function buildInitialEncounterDeck(
   );
 }
 
+function threatAreaHasCard(threatArea: EncounterCard[], cardName: string): boolean {
+  return threatArea.some((card) => card.name === cardName);
+}
+
 function normalizeCardCounters(
   counters: Partial<Record<CardCounterType, number>> | undefined,
 ) {
@@ -640,6 +644,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   playArea: [],
   encounterDeck: [],
   encounterDiscard: [],
+  threatArea: [],
   lastEncounterCard: null,
   isMulliganActive: false,
   selectedMulliganCardIds: [],
@@ -1252,6 +1257,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (card.name === "Unspeakable Truths") {
+      const { threatArea } = get();
+
+      const alreadyInThreatArea = threatAreaHasCard(
+        threatArea,
+        "Unspeakable Truths",
+      );
+
+      if (alreadyInThreatArea) {
+        set({
+          encounterDiscard: [...encounterDiscard, card],
+        });
+
+        get().pushLog(
+          "scenario",
+          "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
+        );
+        return;
+      }
+
+      set({
+        threatArea: [...threatArea, card],
+      });
+
+      get().pushLog(
+        "scenario",
+        "Unspeakable Truths entered your threat area.",
+      );
+      return;
+    }
+
     if (immediate.kind === "genericTreachery") {
       set({
         encounterDiscard: [...encounterDiscard, card],
@@ -1306,6 +1342,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingAssetPlay: null,
       showDeckInspector: false,
       showEncounterInspector: false,
+      threatArea: [],
       log: [],
       lastSkillTest: null,
       activeSkillTest: null,
@@ -1386,6 +1423,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingAssetPlay: null,
       showDeckInspector: false,
       isMulliganActive: true,
+      threatArea: [],
       selectedMulliganCardIds: [],
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
@@ -1974,16 +2012,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   gainClue: (amount = 1) => {
-    const { investigator } = get();
+    const { investigator, threatArea } = get();
+
+    const horrorFromThreatArea =
+      amount > 0 && threatAreaHasCard(threatArea, "Unspeakable Truths") ? 1 : 0;
 
     set({
       investigator: {
         ...investigator,
         clues: investigator.clues + amount,
+        horror: investigator.horror + horrorFromThreatArea,
       },
     });
 
     get().pushLog("player", `Gained ${amount} clue(s).`);
+
+    if (horrorFromThreatArea > 0) {
+      get().pushLog(
+        "scenario",
+        "Unspeakable Truths triggered after discovering clues. Took 1 horror.",
+      );
+    }
   },
 
   takeDamage: (amount = 1) => {
@@ -2763,9 +2812,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
             : entry,
         );
 
+        const horrorFromThreatArea =
+          totalCluesDiscovered > 0 &&
+            threatAreaHasCard(get().threatArea, "Unspeakable Truths")
+            ? 1
+            : 0;
+
         updatedInvestigator = {
           ...investigator,
           clues: investigator.clues + totalCluesDiscovered,
+          horror: investigator.horror + horrorFromThreatArea,
         };
 
         resolutionLog.push(
@@ -2837,6 +2893,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ),
           );
         }
+      }
+      if (horrorFromThreatArea > 0) {
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            "Unspeakable Truths triggered after discovering clues. Took 1 horror.",
+          ),
+        );
       }
     }
 

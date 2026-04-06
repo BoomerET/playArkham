@@ -209,6 +209,7 @@ export interface GameState {
   draggedCardId: string | null;
   encounterDeck: EncounterCard[];
   encounterDiscard: EncounterCard[];
+  threatArea: EncounterCard[];
   lastEncounterCard: EncounterCard | null;
 }
 
