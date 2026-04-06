@@ -201,9 +201,7 @@ export default function EncounterInspector() {
                     </div>
                 </div>
             </div>
-        </div>
-    );
-    {
+            {
         previewCard &&
         createPortal(
             <div className="card-preview-overlay encounter-preview-overlay" aria-hidden="true">
@@ -219,4 +217,6 @@ export default function EncounterInspector() {
             document.body,
         )
     }
+        </div>
+    );
 }
