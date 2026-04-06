@@ -189,6 +189,7 @@ export default function EncounterInspector() {
                                 </li>
                             ))}
                         </ul>
+                        <h3>Discard Pile</h3>
                         <ul>
                             {groupedDiscard.map((c) => (
                                 <li key={c.name}>
