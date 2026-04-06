@@ -180,6 +180,9 @@ type GameStore = GameState & {
   triggerPlayAreaCardAbility: (cardId: string) => void;
   clearPendingCardAbilityBonuses: () => void;
   pendingEncounterResolution: PendingEncounterResolution;
+
+  // Zoom encounter card
+  shuffleEncounterDeck: () => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -1448,6 +1451,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     get().pushLog("player", "Shuffled the player deck.");
+  },
+
+  shuffleEncounterDeck: () => {
+    const { encounterDeck } = get();
+
+    if (encounterDeck.length <= 1) {
+      return;
+    }
+
+    set({
+      encounterDeck: shuffleArray(encounterDeck),
+    });
+
+    get().pushLog("scenario", "Shuffled the encounter deck.");
   },
 
   drawStartingHand: (count = 5) => {
