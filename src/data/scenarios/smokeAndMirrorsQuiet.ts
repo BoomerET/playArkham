@@ -21,6 +21,12 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      subname: "Quiet Campus",
+      text: "Action: Play a Tome or Spell asset from your discard pile, reducing it's cost by 2. (Limit once per game.)",
+      victoryPoints: 1,
     },
     {
       id: "northside",
@@ -35,6 +41,10 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
     },
     {
       id: "downtown",
@@ -44,15 +54,21 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       revealed: false,
       connections: [
         "northside",
-        "east-town",
+        "easttown",
       ],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "Arkham Sanatorium",
+      text: "Reaction: After you discover 1 or more clues at this location: Heal 1 horror from an investigator or Ally asset at this location.",
+      victoryPoints: 1,
     },
     {
-      id: "east-town",
-      name: "East Town",
+      id: "easttown",
+      name: "Easttown",
       shroud: 2,
       clues: 1,
       revealed: false,
@@ -64,6 +80,10 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      text: "Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",
     },
     {
       id: "merchant-district",
@@ -73,13 +93,18 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       revealed: false,
       connections: [
         "miskatonic-university",
-        "east-town",
+        "easttown",
         "waterfront-district",
         "southside"
       ],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 50 },
       isVisible: true,
+      traits: [
+        "Arkham",
+        "Central",
+      ],
+      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
     },
     {
       id: "waterfront-district",
@@ -89,16 +114,21 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       revealed: false,
       connections: [
         "merchant-district",
-        "east-town",
+        "easttown",
       ],
       investigatorsHere: [],
       mapPosition: { x: 78, y: 50 },
       isVisible: true,
+      text: "As an additional cost to investigate Waterfront District, you must spend 1 action.",
+      traits: [
+        "Arkham"
+      ],
+      victoryPoints: 1,
     },
     {
       id: "uptown",
       name: "Uptown",
-      shroud: 2,
+      shroud: 3,
       clues: 2,
       revealed: false,
       connections: [
@@ -108,6 +138,11 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "Ye Olde Magick Shoppe",
+      text: "Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
     },
     {
       id: "southside",
@@ -123,6 +158,10 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      text: "Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
     },
     {
       id: "french-hill",
@@ -136,6 +175,11 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      victoryPoints: 1,
+      text: "Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",
     },
   ],
   enemySpawns: [],

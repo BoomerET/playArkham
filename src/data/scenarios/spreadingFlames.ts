@@ -57,8 +57,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
         "Central"
       ],
-      text: "Reaction: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)"
-
+      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
     },
     {
       id: "science-hall",
@@ -73,8 +72,8 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic"
       ],
-      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand."
-
+      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
+      victoryPoints: 1,
     },
     {
       id: "orne-library",
@@ -89,8 +88,8 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic"
       ],
-      text: "Double action: Draw 3 cards (Limit once per game.)"
-
+      text: "Action x2: Draw 3 cards (Limit once per game.)",
+      victoryPoints: 1,
     },
     {
       id: "warren-observatory",
@@ -105,8 +104,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic"
       ],
-      text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)"
-
+      text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)",
     },
   ],
   enemySpawns: [],

@@ -21,6 +21,12 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 50 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ], 
+      subname: "In Flames",
+      text: "Forced - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",
+      victoryPoints: 1,
     },
     {
       id: "northside",
@@ -35,6 +41,11 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
+
     },
     {
       id: "downtown",
@@ -44,15 +55,21 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: [
         "northside",
-        "east-town",
+        "easttown",
       ],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname:"First Bank of Arkham",
+      text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
+      victoryPoints: 1,
     },
     {
-      id: "east-town",
-      name: "East Town",
+      id: "easttown",
+      name: "Easttown",
       shroud: 2,
       clues: 1,
       revealed: false,
@@ -64,6 +81,10 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 10 },
       isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      text: "Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",
     },
     {
       id: "merchant-district",
@@ -73,13 +94,18 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: [
         "miskatonic-university",
-        "east-town",
+        "easttown",
         "waterfront-district",
         "southside"
       ],
       investigatorsHere: [],
       mapPosition: { x: 50, y: 50 },
       isVisible: true,
+      traits: [
+        "Arkham",
+        "Central",
+      ],
+      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
     },
     {
       id: "waterfront-district",
@@ -94,6 +120,11 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 50 },
       isVisible: true,
+      text: "As an additional cost to investigate Waterfront District, you must spend 1 action.",
+      traits: [
+        "Arkham"
+      ],
+      victoryPoints: 1,
     },
     {
       id: "uptown",
@@ -108,6 +139,11 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 22, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "St. Mary's Hospital",
+      text: "Action: Heal up to 2 damage among investigators and/or Ally assets at this location. (Limit once per game.)",
     },
     {
       id: "southside",
@@ -123,6 +159,10 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 50, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      text: "Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
     },
     {
       id: "french-hill",
@@ -136,6 +176,11 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 78 },
       isVisible: true,
+      traits: [
+        "Arkham"
+      ],
+      victoryPoints: 1,
+      text: "Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",
     },
   ],
   enemySpawns: [],
