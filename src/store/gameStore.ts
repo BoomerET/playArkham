@@ -401,11 +401,12 @@ function advanceAgendaState(
       act: state.act,
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: [
         ...state.log,
         createLogEntry(
           "scenario",
-          `Agenda ${currentAgenda.sequence} has no further side to advance to.`,
+          `Agenda ${currentAgenda.sequence} has no further side to advance to.`
         ),
       ],
       selectedEnemyTargetId: state.selectedEnemyTargetId,
@@ -490,6 +491,7 @@ function advanceActState(
       act: null,
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: state.log,
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
@@ -511,6 +513,7 @@ function advanceActState(
       },
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: [
         ...state.log,
         createLogEntry(
@@ -537,6 +540,7 @@ function advanceActState(
       },
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: [
         ...state.log,
         createLogEntry(
