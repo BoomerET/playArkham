@@ -141,7 +141,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
   enemySpawns: [],
   acts: [
     {
-      id: "spreading-flames-act-1",
+      id: "smoke-and-mirrors-flames-act-1",
       kind: "act",
       sequence: "1a",
       title: "Where There's Smoke",
@@ -150,7 +150,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
     },
     {
-      id: "spreading-flames-act-2",
+      id: "ssmoke-and-mirrors-flames-act-2",
       kind: "act",
       sequence: "2a",
       title: "Escape the Dorms",
@@ -162,7 +162,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-3",
+      id: "smoke-and-mirrors-flames-act-3",
       kind: "act",
       sequence: "3a",
       title: "Searching for Dr. Armitage",
@@ -176,7 +176,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-4",
+      id: "smoke-and-mirrors-flames-act-4",
       kind: "act",
       sequence: "4a",
       title: "Blaze of Glory",
@@ -187,7 +187,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
   ],
   agendas: [
     {
-      id: "spreading-flames-agenda-1",
+      id: "smoke-and-mirrors-flames-agenda-1",
       kind: "agenda",
       sequence: "1a",
       title: "Past Curfew",
@@ -196,7 +196,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-2",
+      id: "smoke-and-mirrors-flames-agenda-2",
       kind: "agenda",
       sequence: "2a",
       title: "Lit Up",
@@ -205,7 +205,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-3",
+      id: "smoke-and-mirrors-flames-agenda-3",
       kind: "agenda",
       sequence: "3a",
       title: "Wild Flames",
