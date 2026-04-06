@@ -16,6 +16,7 @@ export type ScenarioEffectState = {
   act: ScenarioCardState | null;
   locations: GameLocation[];
   enemies: Enemy[];
+  playArea: PlayerCard[];
   log: GameLogItem[];
   investigatorId: string;
   currentLocationId: string | null;
@@ -55,6 +56,7 @@ function convertEncounterStoryCardToPlayerCard(
 }
 
 function applyCardAdvanceEffects(
+  scenario: ScenarioDefinition,
   card: ScenarioCardDefinition | undefined,
   state: ScenarioEffectState,
 ): ScenarioEffectResult {
@@ -71,8 +73,10 @@ function applyCardAdvanceEffects(
     logEntries = [],
     advanceAgenda = false,
     advanceAct = false,
-  grantEncounterCardToInvestigator,
+    grantEncounterCardToInvestigator,
   } = card.onAdvance;
+
+  const effectLogEntries = [...logEntries];
 
   const showSet = new Set(showLocationIds);
   const revealSet = new Set(revealLocationIds);
@@ -116,7 +120,7 @@ function applyCardAdvanceEffects(
   const spawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
 
-    const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
+  const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
 
   if (grantEncounterCardToInvestigator) {
     const grantedCard = convertEncounterStoryCardToPlayerCard(
@@ -126,27 +130,17 @@ function applyCardAdvanceEffects(
 
     if (grantedCard) {
       grantedPlayerCards.push(grantedCard);
+      effectLogEntries.push(
+        `${grantedCard.name} enters play under your control.`,
+      );
     }
   }
 
-    const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
-
-  if (grantEncounterCardToInvestigator) {
-    const grantedCard = convertEncounterStoryCardToPlayerCard(
-      scenario,
-      grantEncounterCardToInvestigator,
-    );
-
-    if (grantedCard) {
-      grantedPlayerCards.push(grantedCard);
-    }
-  }
-
-    return {
+  return {
     ...state,
     locations: updatedLocations,
     enemies: [...state.enemies, ...spawnedEnemies],
-    log: [...state.log, ...logEntries],
+    log: [...state.log, ...effectLogEntries],
     grantedPlayerCards,
     advanceAgendaRequested: advanceAgenda,
     advanceActRequested: advanceAct,
@@ -159,7 +153,7 @@ export function applyScenarioActAdvanceEffects(
   state: ScenarioEffectState,
 ): ScenarioEffectResult {
   const act = scenario.acts?.find((entry) => entry.id === actId);
-  return applyCardAdvanceEffects(act, state);
+  return applyCardAdvanceEffects(scenario, act, state);
 }
 
 export function applyScenarioAgendaAdvanceEffects(
@@ -168,5 +162,5 @@ export function applyScenarioAgendaAdvanceEffects(
   state: ScenarioEffectState,
 ): ScenarioEffectResult {
   const agenda = scenario.agendas?.find((entry) => entry.id === agendaId);
-  return applyCardAdvanceEffects(agenda, state);
+  return applyCardAdvanceEffects(scenario, agenda, state);
 }

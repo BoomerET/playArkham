@@ -98,7 +98,7 @@ type GameStore = GameState & {
   pendingAssetPlay: PendingAssetPlay;
   showDeckInspector: boolean;
   showEncounterInspector: boolean;
-toggleEncounterInspector: () => void;
+  toggleEncounterInspector: () => void;
 
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
@@ -350,6 +350,7 @@ function advanceAgendaState(
       act: state.act,
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: state.log,
       selectedEnemyTargetId: state.selectedEnemyTargetId,
       scenarioStatus: state.scenarioStatus,
@@ -460,6 +461,7 @@ function advanceAgendaState(
         act: result.act,
         locations: result.locations,
         enemies: result.enemies,
+        playArea: state.playArea,
         log: result.log,
         selectedEnemyTargetId: result.selectedEnemyTargetId,
         scenarioStatus: result.scenarioStatus,
@@ -693,10 +695,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   toggleEncounterInspector: () => {
-  set((state) => ({
-    showEncounterInspector: !state.showEncounterInspector,
-  }));
-},
+    set((state) => ({
+      showEncounterInspector: !state.showEncounterInspector,
+    }));
+  },
 
   closeDeckInspector: () => {
     set({ showDeckInspector: false });
@@ -979,16 +981,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
         entry.id !== cardId
           ? entry
           : {
-              ...entry,
-              counters: (() => {
-                const nc = {
-                  ...(entry.counters ?? {}),
-                  [effect.counterType]: nextCounterValue,
-                };
-                if (nextCounterValue === 0) delete nc[effect.counterType];
-                return nc;
-              })(),
-            },
+            ...entry,
+            counters: (() => {
+              const nc = {
+                ...(entry.counters ?? {}),
+                [effect.counterType]: nextCounterValue,
+              };
+              if (nextCounterValue === 0) delete nc[effect.counterType];
+              return nc;
+            })(),
+          },
       ),
       pendingInvestigateDifficultyModifier:
         pendingInvestigateDifficultyModifier +
@@ -1011,8 +1013,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...pendingAssetPlay,
           selectedReplacementIds: exists
             ? pendingAssetPlay.selectedReplacementIds.filter(
-                (entry) => entry !== cardId,
-              )
+              (entry) => entry !== cardId,
+            )
             : [...pendingAssetPlay.selectedReplacementIds, cardId],
         },
       });
@@ -1204,9 +1206,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         agenda: agenda
           ? {
-              ...agenda,
-              progress: agenda.progress + immediate.amount,
-            }
+            ...agenda,
+            progress: agenda.progress + immediate.amount,
+          }
           : null,
         encounterDiscard: [...encounterDiscard, card],
       });
@@ -1221,9 +1223,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         encounterDiscard: [...encounterDiscard, card],
         agenda: agenda
           ? {
-              ...agenda,
-              progress: agenda.progress + immediate.doomOnAgenda,
-            }
+            ...agenda,
+            progress: agenda.progress + immediate.doomOnAgenda,
+          }
           : null,
       });
 
@@ -1470,8 +1472,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deck = shuffleArray([...deck, ...skippedWeaknesses]);
       get().pushLog(
         "player",
-        `Shuffled ${skippedWeaknesses.length} weakness${
-          skippedWeaknesses.length === 1 ? "" : "es"
+        `Shuffled ${skippedWeaknesses.length} weakness${skippedWeaknesses.length === 1 ? "" : "es"
         } back into the player deck.`,
       );
     }
@@ -1484,8 +1485,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (cardsDrawn < count) {
       get().pushLog(
         "system",
-        `Opening hand drew ${cardsDrawn} card${
-          cardsDrawn === 1 ? "" : "s"
+        `Opening hand drew ${cardsDrawn} card${cardsDrawn === 1 ? "" : "s"
         } because the deck ran out of non-weakness cards.`,
       );
     }
@@ -1862,12 +1862,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea: playArea.map((entry) =>
         entry.id === cardId
           ? {
-              ...entry,
-              counters: {
-                ...entry.counters,
-                [counterType]: nextValue,
-              },
-            }
+            ...entry,
+            counters: {
+              ...entry.counters,
+              [counterType]: nextValue,
+            },
+          }
           : entry,
       ),
       log: [...log, `${card.name}: ${counterType} increased to ${nextValue}.`],
@@ -2270,11 +2270,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const currentLocation = findCurrentLocation(locations, investigator.id);
       const preferredTargetId = currentLocation
         ? getPreferredEnemyTargetId(
-            enemies,
-            currentLocation.id,
-            investigator.id,
-            selectedEnemyTargetId,
-          )
+          enemies,
+          currentLocation.id,
+          investigator.id,
+          selectedEnemyTargetId,
+        )
         : null;
 
       const upkeepLog = [
@@ -2285,13 +2285,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
         drawnCardName
           ? createLogEntry(
-              "player",
-              `Drew card during upkeep: ${drawnCardName}`,
-            )
+            "player",
+            `Drew card during upkeep: ${drawnCardName}`,
+          )
           : createLogEntry(
-              "system",
-              "Tried to draw a card during upkeep, but the deck was empty.",
-            ),
+            "system",
+            "Tried to draw a card during upkeep, but the deck was empty.",
+          ),
         createLogEntry("system", `Round ${nextRound} begins.`),
         createLogEntry("system", "Phase: Mythos"),
       ];
@@ -2616,10 +2616,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       token === "autoFail"
         ? -999
         : baseValue +
-          assetModifier +
-          activatedAbilityModifier +
-          committedModifier +
-          tokenModifier;
+        assetModifier +
+        activatedAbilityModifier +
+        committedModifier +
+        tokenModifier;
 
     const success =
       token !== "autoFail" && finalValue >= activeSkillTest.difficulty;
@@ -2644,23 +2644,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const committedText =
       activeSkillTest.committedCards.length > 0
         ? ` Committed cards: ${activeSkillTest.committedCards
-            .map((entry) => `${entry.card.name} (+${entry.matchingIcons})`)
-            .join(", ")}.`
+          .map((entry) => `${entry.card.name} (+${entry.matchingIcons})`)
+          .join(", ")}.`
         : "";
 
     const modifierText =
       modifierDetails.length > 0
         ? ` Asset modifiers: ${modifierDetails
-            .map((modifier) => `${modifier.source} +${modifier.amount}`)
-            .join(", ")}.`
+          .map((modifier) => `${modifier.source} +${modifier.amount}`)
+          .join(", ")}.`
         : "";
 
     const comparisonText =
       token === "autoFail"
         ? `${activeSkillTest.source}: AUTO-FAIL token drawn. Base ${baseValue}, asset bonus ${assetModifier}, committed bonus ${committedModifier}.${modifierText}${committedText} Test failed.`
-        : `${activeSkillTest.source}: ${activeSkillTest.skill} ${baseValue} + asset bonus ${assetModifier} + committed bonus ${committedModifier} + token ${tokenModifier} vs ${activeSkillTest.difficulty}, final ${finalValue} => ${
-            success ? "success" : "failure"
-          }.${modifierText}${committedText}`;
+        : `${activeSkillTest.source}: ${activeSkillTest.skill} ${baseValue} + asset bonus ${assetModifier} + committed bonus ${committedModifier} + token ${tokenModifier} vs ${activeSkillTest.difficulty}, final ${finalValue} => ${success ? "success" : "failure"
+        }.${modifierText}${committedText}`;
 
     let updatedLocations = locations;
     let updatedEnemies = enemies;
@@ -2931,11 +2930,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
     const preferredTargetId = currentLocation
       ? getPreferredEnemyTargetId(
-          updatedEnemies,
-          currentLocation.id,
-          investigator.id,
-          selectedEnemyTargetId,
-        )
+        updatedEnemies,
+        currentLocation.id,
+        investigator.id,
+        selectedEnemyTargetId,
+      )
       : null;
 
     set({
