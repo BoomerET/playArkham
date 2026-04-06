@@ -266,6 +266,7 @@ type AdvanceStoreSlice = Pick<
   | "locations"
   | "enemies"
   | "log"
+  | "playArea"
   | "selectedEnemyTargetId"
   | "scenarioStatus"
   | "scenarioResolutionText"
@@ -436,6 +437,10 @@ function advanceAgendaState(
     act: effectResult.act,
     locations: effectResult.locations,
     enemies: effectResult.enemies,
+    playArea: [
+      ...state.playArea,
+      ...(effectResult.grantedPlayerCards ?? []),
+    ],
     log: effectResult.log,
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
     scenarioStatus: state.scenarioStatus,
@@ -567,6 +572,10 @@ function advanceActState(
     act: effectResult.act,
     locations: effectResult.locations,
     enemies: effectResult.enemies,
+    playArea: [
+      ...state.playArea,
+      ...(effectResult.grantedPlayerCards ?? []),
+    ],
     log: effectResult.log,
     selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
     scenarioStatus: state.scenarioStatus,
@@ -848,6 +857,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log,
       locations,
       enemies,
+      playArea,
       investigator,
       selectedEnemyTargetId,
     } = get();
@@ -860,6 +870,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       {
         agenda,
         act,
+        playArea,
         locations,
         enemies,
         log,
@@ -883,6 +894,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act,
       log,
       locations,
+      playArea,
       enemies,
       investigator,
       selectedEnemyTargetId,
@@ -897,6 +909,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         agenda,
         act,
         locations,
+        playArea,
         enemies,
         log,
         investigatorId: investigator.id,

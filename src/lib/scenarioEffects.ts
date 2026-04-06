@@ -7,6 +7,7 @@ import type {
   Enemy,
   GameLocation,
   GameLogItem,
+  PlayerCard,
   ScenarioCardState,
 } from "../types/game";
 
@@ -19,12 +20,39 @@ export type ScenarioEffectState = {
   investigatorId: string;
   currentLocationId: string | null;
   selectedEnemyTargetId: string | null;
+  grantedPlayerCards?: PlayerCard[];
 };
 
 type ScenarioEffectResult = ScenarioEffectState & {
   advanceAgendaRequested?: boolean;
   advanceActRequested?: boolean;
 };
+
+function convertEncounterStoryCardToPlayerCard(
+  scenario: ScenarioDefinition,
+  encounterCardId: string,
+): PlayerCard | null {
+  const encounterCard = scenario.encounterDeck?.find(
+    (card) => card.id === encounterCardId,
+  );
+
+  if (!encounterCard) {
+    return null;
+  }
+
+  return {
+    id: encounterCard.id,
+    name: encounterCard.name,
+    type: "asset",
+    faction: "neutral",
+    text: Array.isArray(encounterCard.text)
+      ? encounterCard.text.join(" ")
+      : encounterCard.text,
+    traits: encounterCard.traits,
+    image: encounterCard.code ? `${encounterCard.code}.png` : undefined,
+    exhausted: false,
+  };
+}
 
 function applyCardAdvanceEffects(
   card: ScenarioCardDefinition | undefined,
@@ -43,6 +71,7 @@ function applyCardAdvanceEffects(
     logEntries = [],
     advanceAgenda = false,
     advanceAct = false,
+  grantEncounterCardToInvestigator,
   } = card.onAdvance;
 
   const showSet = new Set(showLocationIds);
@@ -87,11 +116,38 @@ function applyCardAdvanceEffects(
   const spawnedEnemies =
     spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
 
-  return {
+    const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
+
+  if (grantEncounterCardToInvestigator) {
+    const grantedCard = convertEncounterStoryCardToPlayerCard(
+      scenario,
+      grantEncounterCardToInvestigator,
+    );
+
+    if (grantedCard) {
+      grantedPlayerCards.push(grantedCard);
+    }
+  }
+
+    const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
+
+  if (grantEncounterCardToInvestigator) {
+    const grantedCard = convertEncounterStoryCardToPlayerCard(
+      scenario,
+      grantEncounterCardToInvestigator,
+    );
+
+    if (grantedCard) {
+      grantedPlayerCards.push(grantedCard);
+    }
+  }
+
+    return {
     ...state,
     locations: updatedLocations,
     enemies: [...state.enemies, ...spawnedEnemies],
     log: [...state.log, ...logEntries],
+    grantedPlayerCards,
     advanceAgendaRequested: advanceAgenda,
     advanceActRequested: advanceAct,
   };

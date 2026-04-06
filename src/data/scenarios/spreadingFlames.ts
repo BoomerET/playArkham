@@ -113,6 +113,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       onAdvance: {
         showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
         hideLocationIds: ["friends-room"],
+        grantEncounterCardToInvestigator: "dr-henry-armitage-1",
       },
     },
     {
