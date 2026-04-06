@@ -168,8 +168,6 @@ export default function EncounterInspector() {
                             </button>
                         </div>
                     </div>
-                    <h2>Encounter Deck</h2>
-                    <button onClick={toggle}>Close</button>
                 </div>
 
                 <div className="deck-inspector-body">
@@ -201,22 +199,6 @@ export default function EncounterInspector() {
                     </div>
                 </div>
             </div>
-            {
-        previewCard &&
-        createPortal(
-            <div className="card-preview-overlay encounter-preview-overlay" aria-hidden="true">
-                <div className="card-preview-frame encounter-preview-frame">
-                    <img
-                        src={previewCard.imageUrl}
-                        alt={previewCard.name}
-                        className="card-preview-image encounter-preview-image"
-                        draggable={false}
-                    />
-                </div>
-            </div>,
-            document.body,
-        )
-    }
         </div>
     );
 }
