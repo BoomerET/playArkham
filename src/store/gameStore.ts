@@ -374,6 +374,7 @@ function advanceAgendaState(
       act: state.act,
       locations: state.locations,
       enemies: state.enemies,
+      playArea: state.playArea,
       log: [
         ...state.log,
         createLogEntry(
