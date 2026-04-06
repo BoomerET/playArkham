@@ -175,8 +175,17 @@ export default function EncounterInspector() {
             <h3>Deck Order (Top → Bottom)</h3>
             <ul>
               {encounterDeck.map((card, index) => (
-                <li key={card.id}>
-                  {index === 0 && <strong>[TOP]</strong>} {card.name}
+                <li
+                  key={card.id}
+                  onMouseEnter={() => setHoveredCardId(card.id)}
+                  onMouseLeave={() =>
+                    setHoveredCardId((current) =>
+                      current === card.id ? null : current,
+                    )
+                  }
+                >
+                  {index === 0 && <strong>[TOP]</strong>} {card.name} •{" "}
+                  {card.type}
                 </li>
               ))}
             </ul>
