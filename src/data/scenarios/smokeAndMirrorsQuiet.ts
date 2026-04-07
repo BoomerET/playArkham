@@ -213,6 +213,8 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
     },
   ],
   enemySpawns: [],
+  campaignKey: "smoke-and-mirrors",
+  campaignOutcome: "quiet",
   acts: [
     {
       id: "smoke-and-mirrors-quiet-act-1",

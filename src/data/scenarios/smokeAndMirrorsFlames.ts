@@ -212,6 +212,8 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
     },
   ],
   enemySpawns: [],
+  campaignKey: "smoke-and-mirrors",
+  campaignOutcome: "flames",
   acts: [
     {
       id: "smoke-and-mirrors-flames-act-1",
@@ -280,7 +282,6 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       inEncounterDeck: true,
     },
-
     {
       id: "cantor-of-flame-2",
       code: "12121",

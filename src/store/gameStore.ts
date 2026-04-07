@@ -66,7 +66,23 @@ import {
 
 import { resolveEncounterCardImmediate } from "../lib/encounterEffects";
 
+import { resolveScenarioForCampaign } from "../lib/campaignSetup";
+
 type Screen = "home" | "game";
+
+type CampaignState = {
+  previousScenarioOutcome: string | null;
+  randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
+};
+
+type CampaignStoreActions = {
+  setPreviousScenarioOutcome: (outcome: string | null) => void;
+  setCampaignRandomizedSelection: (
+    campaignKey: string,
+    slotId: string,
+    optionId: string,
+  ) => void;
+};
 
 type PendingTestResolution =
   | { kind: "investigate"; locationId: string }
@@ -87,7 +103,7 @@ type PendingEncounterResolution =
   | { kind: "rottingRemains"; cardName: string }
   | null;
 
-type GameStore = GameState & {
+type GameStore = GameState & CampaignStoreActions & {
   screen: Screen;
   availableInvestigators: Investigator[];
   availableScenarios: ScenarioDefinition[];
@@ -108,6 +124,7 @@ type GameStore = GameState & {
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
   locationAttachments: LocationAttachment[];
+  campaignState: CampaignState;
   toggleEncounterInspector: () => void;
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
@@ -199,12 +216,16 @@ const startingChaosBag: ChaosToken[] = [
 function getSelectedScenario(state: {
   availableScenarios: ScenarioDefinition[];
   selectedScenarioId: string;
+  campaignState: {
+    previousScenarioOutcome: string | null;
+    randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
+  };
 }): ScenarioDefinition {
-  return (
-    state.availableScenarios.find(
-      (scenario) => scenario.id === state.selectedScenarioId,
-    ) ?? state.availableScenarios[0]
-  );
+  return resolveScenarioForCampaign({
+    selectedScenarioId: state.selectedScenarioId,
+    availableScenarios: state.availableScenarios,
+    campaignState: state.campaignState,
+  });
 }
 
 function shuffleArray<T>(items: T[]): T[] {
@@ -669,6 +690,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenarioId: defaultScenarioId,
     }).locations,
   ),
+  campaignState: {
+    previousScenarioOutcome: null,
+    randomizedSelectionsByCampaignKey: {},
+  },
   enemies: buildScenarioEnemies(
     getSelectedScenario({
       availableScenarios: scenarios,
@@ -712,6 +737,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedDeckId: (deckId) => {
     set({ selectedDeckId: deckId });
+  },
+
+  setPreviousScenarioOutcome: (outcome) => {
+    set((state) => ({
+      campaignState: {
+        ...state.campaignState,
+        previousScenarioOutcome: outcome,
+      },
+    }));
+  },
+
+  setCampaignRandomizedSelection: (campaignKey, slotId, optionId) => {
+    set((state) => ({
+      campaignState: {
+        ...state.campaignState,
+        randomizedSelectionsByCampaignKey: {
+          ...state.campaignState.randomizedSelectionsByCampaignKey,
+          [campaignKey]: {
+            ...(state.campaignState.randomizedSelectionsByCampaignKey[campaignKey] ?? {}),
+            [slotId]: optionId,
+          },
+        },
+      },
+    }));
   },
 
   toggleDeckInspector: () => {

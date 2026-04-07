@@ -55,6 +55,19 @@ export interface ScenarioDefinition {
   encounterDeck?: EncounterCard[];
   setupNotes?: ScenarioSetupNotes;
   randomizedSelections?: ScenarioRandomizedSelection[];
+  campaignKey?: string;
+  campaignOutcome?: string;
+}
+
+export interface ScenarioSetupNotes {
+  previousScenarioOutcome?: string;
+  notes?: string[];
+}
+
+export interface ScenarioRandomizedSelection {
+  slotId: string;
+  chosenOptionId: string;
+  optionIds: string[];
 }
 
 export interface ScenarioSetupNotes {
