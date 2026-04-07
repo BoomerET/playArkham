@@ -3,6 +3,8 @@ import type {
     ScenarioRandomizedSelection,
 } from "../data/scenarios/scenarioTypes";
 
+import { buildScenarioWithSelections } from "./buildScenarioWithSelections";
+
 export type CampaignState = {
     previousScenarioOutcome: string | null;
     randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
@@ -54,8 +56,11 @@ function applyRandomizedSelections(
                 storedSelections[selection.slotId] ?? selection.chosenOptionId,
         }));
 
-    return {
-        ...scenario,
-        randomizedSelections: resolvedSelections,
-    };
+    return buildScenarioWithSelections(
+        {
+            ...scenario,
+            randomizedSelections: resolvedSelections,
+        },
+        campaignState,
+    );
 }

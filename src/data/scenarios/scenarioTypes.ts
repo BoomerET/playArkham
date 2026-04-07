@@ -57,6 +57,18 @@ export interface ScenarioDefinition {
   randomizedSelections?: ScenarioRandomizedSelection[];
   campaignKey?: string;
   campaignOutcome?: string;
+  randomizedLocationOptions?: ScenarioRandomizedLocationGroup[];
+}
+
+export interface ScenarioRandomizedLocationOption {
+  optionId: string;
+  location: GameLocation;
+}
+
+export interface ScenarioRandomizedLocationGroup {
+  slotId: string;
+  placeholderLocationId: string;
+  options: ScenarioRandomizedLocationOption[];
 }
 
 export interface ScenarioSetupNotes {

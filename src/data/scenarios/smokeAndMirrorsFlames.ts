@@ -25,6 +25,82 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       optionIds: ["downtown-a", "downtown-b"],
     },
   ],
+
+  randomizedLocationOptions: [
+    {
+      slotId: "uptown",
+      placeholderLocationId: "uptown",
+      options: [
+        {
+          optionId: "uptown-a",
+          location: {
+            id: "uptown",
+            code: "12140",
+            name: "Uptown",
+            shroud: 2,
+            clues: 2,
+            revealed: false,
+            connections: ["miskatonic-university", "southside"],
+            investigatorsHere: [],
+            mapPosition: { x: 22, y: 78 },
+            isVisible: true,
+          },
+        },
+        {
+          optionId: "uptown-b",
+          location: {
+            id: "uptown",
+            code: "12141",
+            name: "Uptown",
+            shroud: 3,
+            clues: 1,
+            revealed: false,
+            connections: ["miskatonic-university", "southside"],
+            investigatorsHere: [],
+            mapPosition: { x: 22, y: 78 },
+            isVisible: true,
+          },
+        },
+      ],
+    },
+    {
+      slotId: "downtown",
+      placeholderLocationId: "downtown",
+      options: [
+        {
+          optionId: "downtown-a",
+          location: {
+            id: "downtown",
+            code: "12142",
+            name: "Downtown",
+            shroud: 4,
+            clues: 2,
+            revealed: false,
+            connections: ["northside", "east-town"],
+            investigatorsHere: [],
+            mapPosition: { x: 50, y: 10 },
+            isVisible: true,
+          },
+        },
+        {
+          optionId: "downtown-b",
+          location: {
+            id: "downtown",
+            code: "12143",
+            name: "Downtown",
+            shroud: 2,
+            clues: 3,
+            revealed: false,
+            connections: ["northside", "east-town"],
+            investigatorsHere: [],
+            mapPosition: { x: 50, y: 10 },
+            isVisible: true,
+          },
+        },
+      ],
+    },
+  ],
+
   startingLocationId: "miskatonic-university",
   locations: [
     {
