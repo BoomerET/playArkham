@@ -16,7 +16,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: true,
       connections: ["dormitories"],
       investigatorsHere: [],
-      mapPosition: { x: 10, y: 78 },
+      mapPosition: { x: 22, y: 84 },
       isVisible: true,
       traits: [
         "Miskatonic"
@@ -31,7 +31,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["friends-room", "miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y: 78 },
+      mapPosition: { x: 50, y: 84 },
       isVisible: false,
       traits: [
         "Miskatonic"
@@ -103,7 +103,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: false,
       connections: ["miskatonic-quad"],
       investigatorsHere: [],
-      mapPosition: { x: 50, y: 22 },
+      mapPosition: { x: 50, y: 16 },
       isVisible: false,
       traits: [
         "Miskatonic"

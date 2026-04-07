@@ -3,8 +3,7 @@
 .location-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 240px;
+  justify-content: flex-start;
   transition:
     transform 140ms ease,
     border-color 140ms ease,
@@ -429,3 +428,53 @@
 .location-card-mini-label {
   display: none;
 }
+
+.location-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* was space-between */
+  min-height: 0;               /* was 240px */
+  padding: 0;                  /* in case entity-card adds nothing useful */
+}
+
+.location-card-compact {
+  padding: 0;                  /* was 12px */
+  gap: 0;                      /* was 10px */
+}
+
+.location-card-tight {
+  min-height: 0;               /* was 140px */
+}
+
+.location-card-media {
+  position: relative;
+  margin-bottom: 0;            /* was 8px */
+}
+
+.location-card-image-shell {
+  width: 100%;
+  margin-bottom: 0;            /* remove extra bottom gap */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.location-card-image-shell {
+  width: 100%;
+  aspect-ratio: 720 / 1008;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+

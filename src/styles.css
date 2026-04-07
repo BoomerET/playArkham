@@ -1192,7 +1192,7 @@ button:hover {
 
 .location-card-compact .location-card-stats .token-chip,
 .location-card-compact .location-card-status-row .token-chip {
-  padding: 4px 8px;
+  padding: 2px 2px;
   font-size: 0.76rem;
 }
 
