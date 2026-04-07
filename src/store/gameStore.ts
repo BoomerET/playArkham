@@ -66,14 +66,17 @@ import {
 
 import { resolveEncounterCardImmediate } from "../lib/encounterEffects";
 
-import { resolveScenarioForCampaign } from "../lib/campaignSetup";
+import {
+  resolveScenarioForCampaign,
+  type CampaignState,
+} from "../lib/campaignSetup";
 
 type Screen = "home" | "game";
 
-type CampaignState = {
-  previousScenarioOutcome: string | null;
-  randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
-};
+//type CampaignState = {
+//  previousScenarioOutcome: string | null;
+//  randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
+//};
 
 type CampaignStoreActions = {
   setPreviousScenarioOutcome: (outcome: string | null) => void;
@@ -125,6 +128,12 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingEncounterResolution: PendingEncounterResolution;
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
+  setPreviousScenarioOutcome: (outcome: string | null) => void;
+  setCampaignRandomizedSelection: (
+    campaignKey: string,
+    slotId: string,
+    optionId: string,
+  ) => void;
   toggleEncounterInspector: () => void;
   togglePendingAssetReplacementChoice: (cardId: string) => void;
   confirmAssetReplacement: () => void;
@@ -216,10 +225,7 @@ const startingChaosBag: ChaosToken[] = [
 function getSelectedScenario(state: {
   availableScenarios: ScenarioDefinition[];
   selectedScenarioId: string;
-  campaignState: {
-    previousScenarioOutcome: string | null;
-    randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
-  };
+  campaignState: CampaignState;
 }): ScenarioDefinition {
   return resolveScenarioForCampaign({
     selectedScenarioId: state.selectedScenarioId,
@@ -755,7 +761,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         randomizedSelectionsByCampaignKey: {
           ...state.campaignState.randomizedSelectionsByCampaignKey,
           [campaignKey]: {
-            ...(state.campaignState.randomizedSelectionsByCampaignKey[campaignKey] ?? {}),
+            ...(state.campaignState.randomizedSelectionsByCampaignKey[
+              campaignKey
+            ] ?? {}),
             [slotId]: optionId,
           },
         },

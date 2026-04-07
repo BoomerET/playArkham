@@ -14,6 +14,9 @@ const campaignState = useGameStore((state) => state.campaignState);
 const setPreviousScenarioOutcome = useGameStore(
   (state) => state.setPreviousScenarioOutcome,
 );
+const setCampaignRandomizedSelection = useGameStore(
+  (state) => state.setCampaignRandomizedSelection,
+);
 
 function getInvestigatorImageUrl(imageName?: string): string | null {
   if (!imageName) {
@@ -91,6 +94,10 @@ export default function HomeScreen() {
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const setSelectedScenario = useGameStore(
     (state) => state.setSelectedScenario,
+  );
+
+  const selectedScenario = availableScenarios.find(
+    (scenario) => scenario.id === selectedScenarioId,
   );
 
   const selectedDeckId = useGameStore((state) => state.selectedDeckId);
@@ -431,6 +438,68 @@ export default function HomeScreen() {
             {deckLookupState === "loading" ? "Loading Deck..." : "Start Game"}
           </button>
         </div>
+        <div className="home-screen__field">
+          <label className="home-screen__label" htmlFor="campaign-outcome">
+            Previous Scenario Outcome
+          </label>
+          <select
+            id="campaign-outcome"
+            className="home-screen__input"
+            value={campaignState.previousScenarioOutcome ?? ""}
+            onChange={(event) =>
+              setPreviousScenarioOutcome(event.target.value || null)
+            }
+          >
+            <option value="">None</option>
+            <option value="quiet">Quiet</option>
+            <option value="flames">Flames</option>
+          </select>
+        </div>
+        {selectedScenario?.campaignKey && selectedScenario.randomizedSelections?.length ? (
+          <div className="home-screen__field-group">
+            <h3 className="section-title">Randomized Selections</h3>
+
+            {selectedScenario.randomizedSelections.map((selection) => {
+              const storedValue =
+                campaignState.randomizedSelectionsByCampaignKey[
+                selectedScenario.campaignKey!
+                ]?.[selection.slotId] ?? selection.chosenOptionId;
+
+              return (
+                <div
+                  key={`${selectedScenario.id}-${selection.slotId}`}
+                  className="home-screen__field"
+                >
+                  <label
+                    className="home-screen__label"
+                    htmlFor={`randomized-${selection.slotId}`}
+                  >
+                    {selection.slotId}
+                  </label>
+
+                  <select
+                    id={`randomized-${selection.slotId}`}
+                    className="home-screen__input"
+                    value={storedValue}
+                    onChange={(event) =>
+                      setCampaignRandomizedSelection(
+                        selectedScenario.campaignKey!,
+                        selection.slotId,
+                        event.target.value,
+                      )
+                    }
+                  >
+                    {selection.optionIds.map((optionId) => (
+                      <option key={optionId} value={optionId}>
+                        {optionId}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
         {selectedScenario ? (
           <ScenarioDebugPanel scenario={selectedScenario} />
         ) : null}

@@ -3,7 +3,7 @@ import type {
     ScenarioRandomizedSelection,
 } from "../data/scenarios/scenarioTypes";
 
-type CampaignState = {
+export type CampaignState = {
     previousScenarioOutcome: string | null;
     randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
 };
