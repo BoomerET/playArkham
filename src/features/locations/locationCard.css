@@ -371,3 +371,61 @@
   width: 100%;
   height: auto;
 }
+
+.location-card {
+  position: relative;
+}
+
+.location-card-media {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.location-card-image-shell {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-card-image-shell-fallback {
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.location-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.location-card-status-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.location-card-header {
+  padding-right: 44px;
+}
+
+.location-card-side-rail {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  z-index: 2;
+}
+
+.location-card-presence,
+.location-card-presence-block,
+.location-card-mini-label {
+  display: none;
+}

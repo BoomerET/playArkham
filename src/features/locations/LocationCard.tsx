@@ -248,108 +248,98 @@ export default function LocationCard({ location }: Props) {
 
         {location.revealed ? (
           <>
-            {imageUrl ? (
-              <div className="location-card-image-shell">
-                <img
-                  src={imageUrl}
-                  alt={location.name}
-                  className="location-card-image"
-                  draggable={false}
-                />
-              </div>
-            ) : null}
+            <div className="location-card-media">
+              {imageUrl ? (
+                <div className="location-card-image-shell">
+                  <img
+                    src={imageUrl}
+                    alt={location.name}
+                    className="location-card-image"
+                    draggable={false}
+                  />
+                </div>
+              ) : (
+                <div className="location-card-image-shell location-card-image-shell-fallback" />
+              )}
 
-            {/*  <div className="location-card-header">
+              <div className="location-card-status-overlay token-row">
+                {isCurrentLocation && (
+                  <span className="token-chip success">Current</span>
+                )}
+                {isLegalMove && <span className="token-chip">Move</span>}
+                {isIllegalMove && (
+                  <span className="token-chip danger">Blocked</span>
+                )}
+              </div>
+            </div>
+
+            <div className="location-card-header">
               <p className="entity-title location-card-title">{location.name}</p>
 
               <div className="location-card-stats">
                 <span className="token-chip gold">S {location.shroud}</span>
                 <span className="token-chip gold">C {location.clues}</span>
               </div>
-            </div> */} 
-
-            <div className="location-card-status-row token-row">
-              {isCurrentLocation && (
-                <span className="token-chip success">Current</span>
-              )}
-              {isLegalMove && <span className="token-chip">Move</span>}
-              {isIllegalMove && (
-                <span className="token-chip danger">Blocked</span>
-              )}
             </div>
 
             {(hasInvestigators || hasEnemies) && (
-              <div className="location-card-presence">
-                {hasInvestigators && (
-                  <div className="location-card-presence-block">
-                    <p className="location-card-mini-label">Investigators</p>
-                    <div className="location-investigator-token-row">
-                      {location.investigatorsHere.map((id) => {
-                        const data = getInvestigatorData(id);
-                        const fullName = data?.name ?? formatName(id);
-                        const factionClass = data
-                          ? getFactionClassName(data.faction)
-                          : "faction-neutral";
+              <div className="location-card-side-rail">
+                {hasInvestigators &&
+                  location.investigatorsHere.map((id) => {
+                    const data = getInvestigatorData(id);
+                    const fullName = data?.name ?? formatName(id);
+                    const factionClass = data
+                      ? getFactionClassName(data.faction)
+                      : "faction-neutral";
 
-                        return (
-                          <div
-                            key={id}
-                            className={`location-investigator-token ${factionClass}`}
-                            title={fullName}
-                            aria-label={fullName}
-                          >
-                            <span className="location-investigator-token-initials">
-                              {getInvestigatorInitials(fullName)}
-                            </span>
+                    return (
+                      <div
+                        key={id}
+                        className={`location-investigator-token ${factionClass}`}
+                        title={fullName}
+                        aria-label={fullName}
+                      >
+                        <span className="location-investigator-token-initials">
+                          {getInvestigatorInitials(fullName)}
+                        </span>
 
-                            {id === investigator.id && (
-                              <span
-                                className="location-investigator-token-active-ring"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {hasEnemies && (
-                  <div className="location-card-presence-block">
-                    <p className="location-card-mini-label">Enemies</p>
-                    <div className="location-enemy-token-row">
-                      {enemiesHere.map((enemy) => (
-                        <div
-                          key={enemy.id}
-                          className={`location-enemy-token ${enemy.exhausted
-                            ? "location-enemy-token-exhausted"
-                            : ""
-                            }`}
-                          title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${enemy.exhausted ? " • exhausted" : ""
-                            }`}
-                          aria-label={enemy.name}
-                        >
+                        {id === investigator.id && (
                           <span
-                            className="location-enemy-token-skull"
+                            className="location-investigator-token-active-ring"
                             aria-hidden="true"
-                          >
-                            ☠
-                          </span>
-                          <span className="location-enemy-token-label">
-                            {getEnemyTokenLabel(enemy.name)}
-                          </span>
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
 
-                          {enemy.damageOnEnemy > 0 && (
-                            <span className="location-enemy-token-damage">
-                              {enemy.damageOnEnemy}
-                            </span>
-                          )}
-                        </div>
-                      ))}
+                {hasEnemies &&
+                  enemiesHere.map((enemy) => (
+                    <div
+                      key={enemy.id}
+                      className={`location-enemy-token ${enemy.exhausted ? "location-enemy-token-exhausted" : ""
+                        }`}
+                      title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${enemy.exhausted ? " • exhausted" : ""
+                        }`}
+                      aria-label={enemy.name}
+                    >
+                      <span
+                        className="location-enemy-token-skull"
+                        aria-hidden="true"
+                      >
+                        ☠
+                      </span>
+                      <span className="location-enemy-token-label">
+                        {getEnemyTokenLabel(enemy.name)}
+                      </span>
+
+                      {enemy.damageOnEnemy > 0 && (
+                        <span className="location-enemy-token-damage">
+                          {enemy.damageOnEnemy}
+                        </span>
+                      )}
                     </div>
-                  </div>
-                )}
+                  ))}
               </div>
             )}
           </>
