@@ -121,6 +121,23 @@ export default function HomeScreen() {
     (state) => state.setCampaignRandomizedSelection,
   );
 
+  const visibleScenarios = useMemo(() => {
+    const seenCampaignKeys = new Set<string>();
+
+    return availableScenarios.filter((scenario) => {
+      if (!scenario.campaignKey) {
+        return true;
+      }
+
+      if (seenCampaignKeys.has(scenario.campaignKey)) {
+        return false;
+      }
+
+      seenCampaignKeys.add(scenario.campaignKey);
+      return true;
+    });
+  }, [availableScenarios]);
+
   useEffect(() => {
     if (!trimmedDeckId) {
       setDeckLookupState("idle");
@@ -405,7 +422,7 @@ export default function HomeScreen() {
           <h2 className="section-title">Select Scenario</h2>
 
           <div className="scenario-grid">
-            {availableScenarios.map((scenario) => {
+            {visibleScenarios.map((scenario) => {
               const selected = scenario.id === selectedScenarioId;
 
               return (
