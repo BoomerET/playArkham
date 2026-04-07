@@ -73,6 +73,11 @@ import {
 
 type Screen = "home" | "game";
 
+const defaultCampaignState: CampaignState = {
+  previousScenarioOutcome: null,
+  randomizedSelectionsByCampaignKey: {},
+};
+
 //type CampaignState = {
 //  previousScenarioOutcome: string | null;
 //  randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
@@ -226,7 +231,6 @@ function getSelectedScenario(state: {
   availableScenarios: ScenarioDefinition[];
   selectedScenarioId: string;
   campaignState: CampaignState;
-  scenarioStatus: ScenarioStatus;
 }): ScenarioDefinition {
   return resolveScenarioForCampaign({
     selectedScenarioId: state.selectedScenarioId,
@@ -695,28 +699,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
     getSelectedScenario({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
+      campaignState: defaultCampaignState,
     }).locations,
   ),
-  campaignState: {
-    previousScenarioOutcome: null,
-    randomizedSelectionsByCampaignKey: {},
-  },
+  campaignState: defaultCampaignState,
   enemies: buildScenarioEnemies(
     getSelectedScenario({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
+      campaignState: defaultCampaignState,
     }).enemySpawns,
   ),
   agenda: getInitialAgendaState(
     getSelectedScenario({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
+      campaignState: defaultCampaignState,
     }),
   ),
   act: getInitialActState(
     getSelectedScenario({
       availableScenarios: scenarios,
       selectedScenarioId: defaultScenarioId,
+      campaignState: defaultCampaignState,
     }),
   ),
   scenarioStatus: "inProgress",
