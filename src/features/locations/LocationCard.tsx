@@ -3,7 +3,7 @@ import {
   useMemo,
   useRef,
   useState,
-  type KeyboardEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { createPortal } from "react-dom";
 import { getFactionClassName } from "../../lib/ui";
@@ -206,7 +206,7 @@ export default function LocationCard({ location }: Props) {
     }
   }
 
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if ((event.key === "Enter" || event.key === " ") && isLegalMove) {
       event.preventDefault();
       moveInvestigator(location.id);
@@ -323,8 +323,8 @@ export default function LocationCard({ location }: Props) {
                         <div
                           key={enemy.id}
                           className={`location-enemy-token ${enemy.exhausted
-                              ? "location-enemy-token-exhausted"
-                              : ""
+                            ? "location-enemy-token-exhausted"
+                            : ""
                             }`}
                           title={`${enemy.name} • ${enemy.damageOnEnemy}/${enemy.health} damage${enemy.exhausted ? " • exhausted" : ""
                             }`}
