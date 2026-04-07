@@ -93,6 +93,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       text: "Action x2: Draw 3 cards (Limit once per game.)",
       victoryPoints: 1,
+      code: 12119,
     },
     {
       id: "warren-observatory",
