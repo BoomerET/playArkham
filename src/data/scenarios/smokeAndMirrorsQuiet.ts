@@ -61,7 +61,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "miskatonic-university"
       ],
       investigatorsHere: [],
-      mapPosition: { x: 22, y: 10 },
+      mapPosition: { x: 22, y: 16 },
       isVisible: true,
       traits: [
         "Arkham"
@@ -80,7 +80,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "easttown",
       ],
       investigatorsHere: [],
-      mapPosition: { x: 50, y: 10 },
+      mapPosition: { x: 50, y: 16 },
       isVisible: true,
       traits: [
         "Arkham",
@@ -102,7 +102,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "merchant-district",
       ],
       investigatorsHere: [],
-      mapPosition: { x: 78, y: 10 },
+      mapPosition: { x: 78, y: 16 },
       isVisible: true,
       traits: [
         "Arkham"
@@ -163,7 +163,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "southside",
       ],
       investigatorsHere: [],
-      mapPosition: { x: 22, y: 78 },
+      mapPosition: { x: 22, y: 84 },
       isVisible: true,
       traits: [
         "Arkham",
@@ -184,7 +184,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "french-hill"
       ],
       investigatorsHere: [],
-      mapPosition: { x: 50, y: 78 },
+      mapPosition: { x: 50, y: 84 },
       isVisible: true,
       traits: [
         "Arkham"
@@ -202,7 +202,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "southside",
       ],
       investigatorsHere: [],
-      mapPosition: { x: 78, y: 78 },
+      mapPosition: { x: 78, y: 84 },
       isVisible: true,
       traits: [
         "Arkham"
