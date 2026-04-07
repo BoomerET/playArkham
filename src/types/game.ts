@@ -107,6 +107,7 @@ export interface GameLocation {
   traits?: string[];
   victoryPoints?: number;
   subname?: string;
+  code: number | string;
 }
 
 export interface Enemy {

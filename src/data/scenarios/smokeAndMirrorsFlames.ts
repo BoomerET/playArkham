@@ -47,6 +47,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       subname: "In Flames",
       text: "Forced - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",
       victoryPoints: 1,
+      code: 12155,
     },
     {
       id: "northside",
@@ -65,7 +66,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham"
       ],
       text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
-
+      code: 12149,
     },
     {
       id: "downtown",
@@ -86,6 +87,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       subname: "First Bank of Arkham",
       text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
       victoryPoints: 1,
+      code: 12145,
     },
     {
       id: "easttown",
@@ -105,6 +107,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham",
       ],
       text: "Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",
+      code: 12150,
     },
     {
       id: "merchant-district",
@@ -126,6 +129,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Central",
       ],
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
+      code: 12150,
     },
     {
       id: "waterfront-district",
@@ -145,6 +149,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham"
       ],
       victoryPoints: 1,
+      code: 12152,
     },
     {
       id: "uptown",
@@ -164,6 +169,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       subname: "St. Mary's Hospital",
       text: "Action: Heal up to 2 damage among investigators and/or Ally assets at this location. (Limit once per game.)",
+      code: 12147,
     },
     {
       id: "southside",
@@ -183,6 +189,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham"
       ],
       text: "Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
+      code: 12153,
     },
     {
       id: "french-hill",
@@ -201,6 +208,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       victoryPoints: 1,
       text: "Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",
+      code: 12154,
     },
   ],
   enemySpawns: [],

@@ -48,6 +48,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       subname: "Quiet Campus",
       text: "Action: Play a Tome or Spell asset from your discard pile, reducing it's cost by 2. (Limit once per game.)",
       victoryPoints: 1,
+      code: 12156,
     },
     {
       id: "northside",
@@ -66,6 +67,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "Arkham"
       ],
       text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
+      code: 12149,
     },
     {
       id: "downtown",
@@ -86,6 +88,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       subname: "Arkham Sanatorium",
       text: "Reaction: After you discover 1 or more clues at this location: Heal 1 horror from an investigator or Ally asset at this location.",
       victoryPoints: 1,
+      code: 12146,
     },
     {
       id: "easttown",
@@ -105,6 +108,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "Arkham"
       ],
       text: "Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",
+      code: 12150,
     },
     {
       id: "merchant-district",
@@ -126,6 +130,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "Central",
       ],
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
+      code: 12151,
     },
     {
       id: "waterfront-district",
@@ -145,6 +150,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "Arkham"
       ],
       victoryPoints: 1,
+      code: 12152,
     },
     {
       id: "uptown",
@@ -164,6 +170,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       ],
       subname: "Ye Olde Magick Shoppe",
       text: "Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
+      code: 12148,
     },
     {
       id: "southside",
@@ -183,6 +190,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
         "Arkham"
       ],
       text: "Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
+      code: 12153,
     },
     {
       id: "french-hill",
@@ -201,6 +209,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       ],
       victoryPoints: 1,
       text: "Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",
+      code: 12154,
     },
   ],
   enemySpawns: [],
