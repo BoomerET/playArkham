@@ -11,7 +11,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       id: "friends-room",
       name: "Your Friend's Room",
       shroud: 2,
-      code: 12113,
+      code: "12113",
       clues: 2,
       revealed: true,
       connections: ["dormitories"],
@@ -37,7 +37,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic"
       ],
       text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
-      code: 12117,
+      code: "12117",
     },
     {
       id: "miskatonic-quad",
@@ -59,7 +59,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Central"
       ],
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
-      code: 12116,
+      code: "12116",
     },
     {
       id: "science-hall",
@@ -76,7 +76,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
       victoryPoints: 1,
-      code: 12118,
+      code: "12118",
     },
     {
       id: "orne-library",
@@ -93,7 +93,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       text: "Action x2: Draw 3 cards (Limit once per game.)",
       victoryPoints: 1,
-      code: 12119,
+      code: "12119",
     },
     {
       id: "warren-observatory",
@@ -109,7 +109,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic"
       ],
       text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)",
-      code: 12120,
+      code: "12120",
     },
   ],
   enemySpawns: [],
