@@ -78,10 +78,15 @@ const defaultCampaignState: CampaignState = {
   randomizedSelectionsByCampaignKey: {},
 };
 
-//type CampaignState = {
-//  previousScenarioOutcome: string | null;
-//  randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
-//};
+const persistedCampaignSetup = loadPersistedCampaignSetup();
+
+const initialCampaignState: CampaignState =
+  persistedCampaignSetup?.campaignState ?? defaultCampaignState;
+
+const initialSelectedScenarioId =
+  persistedCampaignSetup?.selectedScenarioId ?? defaultScenarioId;
+
+const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 type CampaignStoreActions = {
   setPreviousScenarioOutcome: (outcome: string | null) => void;
@@ -374,6 +379,69 @@ function applyAdvanceOutcome(
     scenarioResolutionSubtitle,
     log,
   };
+}
+
+const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";
+
+type PersistedCampaignSetup = {
+  selectedDeckId: string;
+  selectedScenarioId: string;
+  campaignState: CampaignState;
+};
+
+function loadPersistedCampaignSetup(): PersistedCampaignSetup | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(CAMPAIGN_SETUP_STORAGE_KEY);
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw) as Partial<PersistedCampaignSetup>;
+
+    return {
+      selectedDeckId:
+        typeof parsed.selectedDeckId === "string" ? parsed.selectedDeckId : "",
+      selectedScenarioId:
+        typeof parsed.selectedScenarioId === "string"
+          ? parsed.selectedScenarioId
+          : defaultScenarioId,
+      campaignState: {
+        previousScenarioOutcome:
+          typeof parsed.campaignState?.previousScenarioOutcome === "string"
+            ? parsed.campaignState.previousScenarioOutcome
+            : null,
+        randomizedSelectionsByCampaignKey:
+          parsed.campaignState?.randomizedSelectionsByCampaignKey &&
+            typeof parsed.campaignState.randomizedSelectionsByCampaignKey ===
+            "object"
+            ? parsed.campaignState.randomizedSelectionsByCampaignKey
+            : {},
+      },
+    };
+  } catch (error) {
+    console.warn("Failed to load persisted campaign setup.", error);
+    return null;
+  }
+}
+
+function savePersistedCampaignSetup(setup: PersistedCampaignSetup): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(
+      CAMPAIGN_SETUP_STORAGE_KEY,
+      JSON.stringify(setup),
+    );
+  } catch (error) {
+    console.warn("Failed to save persisted campaign setup.", error);
+  }
 }
 
 function isScenarioResolved(status: ScenarioStatus): boolean {
@@ -670,8 +738,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   availableInvestigators: investigators,
   availableScenarios: scenarios,
   selectedInvestigatorId: investigators[0].id,
-  selectedScenarioId: defaultScenarioId,
-  selectedDeckId: "",
+  selectedScenarioId: initialSelectedScenarioId,
+  selectedDeckId: initialSelectedDeckId,
   selectedEnemyTargetId: null,
   showDeckInspector: false,
   showEncounterInspector: false,
@@ -698,31 +766,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
   locations: cloneScenarioLocations(
     getSelectedScenario({
       availableScenarios: scenarios,
-      selectedScenarioId: defaultScenarioId,
-      campaignState: defaultCampaignState,
+      selectedScenarioId: initialSelectedScenarioId,
+      campaignState: initialCampaignState,
     }).locations,
   ),
-  campaignState: defaultCampaignState,
+  campaignState: initialCampaignState,
   enemies: buildScenarioEnemies(
     getSelectedScenario({
       availableScenarios: scenarios,
-      selectedScenarioId: defaultScenarioId,
-      campaignState: defaultCampaignState,
+      selectedScenarioId: initialSelectedScenarioId,
+      campaignState: initialCampaignState,
     }).enemySpawns,
   ),
   agenda: getInitialAgendaState(
     getSelectedScenario({
       availableScenarios: scenarios,
-      selectedScenarioId: defaultScenarioId,
-      campaignState: defaultCampaignState,
-    }),
+      selectedScenarioId: initialSelectedScenarioId,
+      campaignState: initialCampaignState,
+    })
   ),
   act: getInitialActState(
     getSelectedScenario({
       availableScenarios: scenarios,
-      selectedScenarioId: defaultScenarioId,
-      campaignState: defaultCampaignState,
-    }),
+      selectedScenarioId: initialSelectedScenarioId,
+      campaignState: initialCampaignState,
+    })
   ),
   scenarioStatus: "inProgress",
   scenarioResolutionText: null,
@@ -749,6 +817,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedDeckId: (deckId) => {
     set({ selectedDeckId: deckId });
+
+    const state = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: deckId,
+      selectedScenarioId: state.selectedScenarioId,
+      campaignState: state.campaignState,
+    });
   },
 
   setPreviousScenarioOutcome: (outcome) => {
@@ -758,6 +833,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         previousScenarioOutcome: outcome,
       },
     }));
+
+    const state = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: state.selectedDeckId,
+      selectedScenarioId: state.selectedScenarioId,
+      campaignState: state.campaignState,
+    });
   },
 
   setCampaignRandomizedSelection: (campaignKey, slotId, optionId) => {
@@ -775,6 +857,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
       },
     }));
+
+    const state = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: state.selectedDeckId,
+      selectedScenarioId: state.selectedScenarioId,
+      campaignState: state.campaignState,
+    });
   },
 
   toggleDeckInspector: () => {
@@ -949,6 +1038,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setSelectedScenario: (scenarioId) => {
     set({ selectedScenarioId: scenarioId });
+
+    const state = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: state.selectedDeckId,
+      selectedScenarioId: scenarioId,
+      campaignState: state.campaignState,
+    });
   },
 
   setSelectedEnemyTarget: (enemyId) => {
