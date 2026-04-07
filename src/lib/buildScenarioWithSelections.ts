@@ -1,7 +1,6 @@
 import type { GameLocation } from "../types/game";
 import type {
     ScenarioDefinition,
-    ScenarioRandomizedLocationGroup,
 } from "../data/scenarios/scenarioTypes";
 import type { CampaignState } from "./campaignSetup";
 
