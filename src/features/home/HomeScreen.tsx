@@ -284,9 +284,9 @@ export default function HomeScreen() {
     ? getInvestigatorImageUrl(selectedInvestigator.portrait)
     : null;
 
-  const selectedScenario = availableScenarios.find(
-    (scenario) => scenario.id === selectedScenarioId,
-  );
+  //const selectedScenario = availableScenarios.find(
+  //  (scenario) => scenario.id === selectedScenarioId,
+  //);
 
   return (
     <main className="app-shell">
