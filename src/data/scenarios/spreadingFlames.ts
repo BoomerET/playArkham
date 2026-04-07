@@ -93,7 +93,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       ],
       text: "Action x2: Draw 3 cards (Limit once per game.)",
       victoryPoints: 1,
-      code: "12119",
+      code: "12120",
     },
     {
       id: "warren-observatory",
@@ -109,7 +109,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic"
       ],
       text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)",
-      code: "12120",
+      code: "12119",
     },
   ],
   enemySpawns: [],
