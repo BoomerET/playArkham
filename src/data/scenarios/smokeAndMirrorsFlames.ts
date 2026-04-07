@@ -4,7 +4,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
   id: "smoke-and-mirrors-flames",
   name: "Smoke and Mirrors",
   description:
-    "You follow Dr. Armitage back to his parartment. A veil of black smoke obscures the moon and stars as a warm breeze carries ash and embers through the familiar city streets.",
+    "You follow Dr. Armitage back to his apartment. A veil of black smoke obscures the moon and stars as a warm breeze carries ash and embers through the familiar city streets.",
   setupNotes: {
     previousScenarioOutcome: "in-flames",
     notes: [
