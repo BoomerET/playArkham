@@ -129,7 +129,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Central",
       ],
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
-      code: "12150",
+      code: "12151",
     },
     {
       id: "waterfront-district",
