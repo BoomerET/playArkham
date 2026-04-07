@@ -358,3 +358,16 @@
   letter-spacing: 0.02em;
   user-select: none;
 }
+
+.location-card-image-shell {
+  width: 100%;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.location-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
