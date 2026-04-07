@@ -53,4 +53,17 @@ export interface ScenarioDefinition {
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
   encounterDeck?: EncounterCard[];
+  setupNotes?: ScenarioSetupNotes;
+  randomizedSelections?: ScenarioRandomizedSelection[];
+}
+
+export interface ScenarioSetupNotes {
+  previousScenarioOutcome?: string;
+  notes?: string[];
+}
+
+export interface ScenarioRandomizedSelection {
+  slotId: string;
+  chosenOptionId: string;
+  optionIds: string[];
 }

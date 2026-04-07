@@ -2934,3 +2934,52 @@ button:hover {
   flex-direction: column;
   gap: 2px;
 }
+
+.scenario-debug-panel {
+  margin-top: 16px;
+}
+
+.scenario-debug-panel__header {
+  margin-bottom: 12px;
+}
+
+.scenario-debug-panel__section + .scenario-debug-panel__section {
+  margin-top: 14px;
+}
+
+.scenario-debug-panel__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.scenario-debug-panel__label {
+  opacity: 0.8;
+}
+
+.scenario-debug-panel__value {
+  font-weight: 600;
+  text-align: right;
+}
+
+.scenario-debug-panel__subheading {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.scenario-debug-panel__list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.scenario-debug-panel__meta {
+  opacity: 0.75;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.scenario-debug-panel__empty {
+  opacity: 0.75;
+  margin: 0;
+}

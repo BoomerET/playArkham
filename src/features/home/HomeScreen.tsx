@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
+import ScenarioDebugPanel from "./ScenarioDebugPanel";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
@@ -202,8 +203,8 @@ export default function HomeScreen() {
   const selectedInvestigator =
     deckLookupState === "ready"
       ? availableInvestigators.find(
-          (item) => item.id === selectedInvestigatorId,
-        )
+        (item) => item.id === selectedInvestigatorId,
+      )
       : null;
 
   const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
@@ -271,6 +272,10 @@ export default function HomeScreen() {
     ? getInvestigatorImageUrl(selectedInvestigator.portrait)
     : null;
 
+  const selectedScenario = availableScenarios.find(
+    (scenario) => scenario.id === selectedScenarioId,
+  );
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -330,9 +335,8 @@ export default function HomeScreen() {
           <h2 className="section-title">Investigator</h2>
 
           <div
-            className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${
-              zoomHeld ? "active" : ""
-            }`}
+            className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${zoomHeld ? "active" : ""
+              }`}
           >
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
@@ -422,6 +426,9 @@ export default function HomeScreen() {
             {deckLookupState === "loading" ? "Loading Deck..." : "Start Game"}
           </button>
         </div>
+        {selectedScenario ? (
+          <ScenarioDebugPanel scenario={selectedScenario} />
+        ) : null}
       </section>
 
       {previewInvestigator && previewImageUrl && (

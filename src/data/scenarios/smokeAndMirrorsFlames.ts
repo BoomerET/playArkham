@@ -5,6 +5,26 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
   name: "Smoke and Mirrors (In Flames)",
   description:
     "You follow Dr. Armitage back to his parartment. A veil of black smoke obscures the moon and stars as a warm breeze carries ash and embers through the familiar city streets.",
+  setupNotes: {
+    previousScenarioOutcome: "in-flames",
+    notes: [
+      "Use this version if the previous scenario ended with the flames outcome.",
+      "Uptown and Downtown were chosen manually for now.",
+    ],
+  },
+
+  randomizedSelections: [
+    {
+      slotId: "uptown",
+      chosenOptionId: "uptown-b",
+      optionIds: ["uptown-a", "uptown-b"],
+    },
+    {
+      slotId: "downtown",
+      chosenOptionId: "downtown-a",
+      optionIds: ["downtown-a", "downtown-b"],
+    },
+  ],
   startingLocationId: "miskatonic-university",
   locations: [
     {
@@ -14,8 +34,8 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       clues: 1,
       revealed: true,
       connections: [
-        "uptown", 
-        "northside", 
+        "uptown",
+        "northside",
         "merchant-district"
       ],
       investigatorsHere: [],
@@ -23,7 +43,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       isVisible: true,
       traits: [
         "Arkham"
-      ], 
+      ],
       subname: "In Flames",
       text: "Forced - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",
       victoryPoints: 1,
@@ -35,7 +55,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       clues: 2,
       revealed: false,
       connections: [
-        "downtown", 
+        "downtown",
         "miskatonic-university"
       ],
       investigatorsHere: [],
@@ -63,7 +83,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       traits: [
         "Arkham",
       ],
-      subname:"First Bank of Arkham",
+      subname: "First Bank of Arkham",
       text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
       victoryPoints: 1,
     },
@@ -252,7 +272,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       inEncounterDeck: true,
     },
-    
+
     {
       id: "cantor-of-flame-2",
       code: "12121",
@@ -427,8 +447,8 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Unspeakable Truths",
       type: "treachery",
       text: [
-        "Revelation - Put Unspeakable Truths into play in your threat area. Limit 1 per investigator.", 
-        "Forced - After you discover 1 or more clues: Take 1 Horror", 
+        "Revelation - Put Unspeakable Truths into play in your threat area. Limit 1 per investigator.",
+        "Forced - After you discover 1 or more clues: Take 1 Horror",
         "Spend 2 actions to Discard"
       ],
       set: "eldritch-lore",
@@ -443,8 +463,8 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Unspeakable Truths",
       type: "treachery",
       text: [
-        "Revelation - Put Unspeakable Truths into play in your threat area. Limit 1 per investigator.", 
-        "Forced - After you discover 1 or more clues: Take 1 Horror", 
+        "Revelation - Put Unspeakable Truths into play in your threat area. Limit 1 per investigator.",
+        "Forced - After you discover 1 or more clues: Take 1 Horror",
         "Spend 2 actions to Discard"
       ],
       set: "eldritch-lore",
@@ -545,7 +565,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Fire!",
       type: "treachery",
       text: [
-        "Revelation - Attach Fire! to the nearest location without Fire! attached.", 
+        "Revelation - Attach Fire! to the nearest location without Fire! attached.",
         "Forced - When the investigation phase ends: Each non-Elite card with health at this location takes 1 direct damage",
         "Action: Test SPD (3). If you succeed, discard Fire!",
       ],
@@ -561,7 +581,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Fire!",
       type: "treachery",
       text: [
-        "Revelation - Attach Fire! to the nearest location without Fire! attached.", 
+        "Revelation - Attach Fire! to the nearest location without Fire! attached.",
         "Forced - When the investigation phase ends: Each non-Elite card with health at this location takes 1 direct damage",
         "Action: Test SPD (3). If you succeed, discard Fire!",
       ],
@@ -577,7 +597,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Fire!",
       type: "treachery",
       text: [
-        "Revelation - Attach Fire! to the nearest location without Fire! attached.", 
+        "Revelation - Attach Fire! to the nearest location without Fire! attached.",
         "Forced - When the investigation phase ends: Each non-Elite card with health at this location takes 1 direct damage",
         "Action: Test SPD (3). If you succeed, discard Fire!",
       ],
@@ -593,7 +613,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Fire!",
       type: "treachery",
       text: [
-        "Revelation - Attach Fire! to the nearest location without Fire! attached.", 
+        "Revelation - Attach Fire! to the nearest location without Fire! attached.",
         "Forced - When the investigation phase ends: Each non-Elite card with health at this location takes 1 direct damage",
         "Action: Test SPD (3). If you succeed, discard Fire!",
       ],
@@ -609,7 +629,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Fire!",
       type: "treachery",
       text: [
-        "Revelation - Attach Fire! to the nearest location without Fire! attached.", 
+        "Revelation - Attach Fire! to the nearest location without Fire! attached.",
         "Forced - When the investigation phase ends: Each non-Elite card with health at this location takes 1 direct damage",
         "Action: Test SPD (3). If you succeed, discard Fire!",
       ],
@@ -625,7 +645,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Noxious Smoke",
       type: "treachery",
       text: [
-        "Revelation - Test WIL or SPD (3). Take 1 damage for each point you fail by.", 
+        "Revelation - Test WIL or SPD (3). Take 1 damage for each point you fail by.",
       ],
       set: "fire",
       traits: [
@@ -639,7 +659,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Noxious Smoke",
       type: "treachery",
       text: [
-        "Revelation - Test WIL or SPD (3). Take 1 damage for each point you fail by.", 
+        "Revelation - Test WIL or SPD (3). Take 1 damage for each point you fail by.",
       ],
       set: "fire",
       traits: [
@@ -653,7 +673,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Mutated!",
       type: "treachery",
       text: [
-        "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.", 
+        "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.",
       ],
       set: "mad-science",
       traits: [
@@ -667,7 +687,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       name: "Mutated!",
       type: "treachery",
       text: [
-        "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.", 
+        "Revelation - Test WIL (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.",
       ],
       set: "mad-science",
       traits: [
@@ -728,7 +748,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       set: "spreading-flames",
       traits: [
-        "Ally", 
+        "Ally",
         "Miskatonic"
       ],
       inEncounterDeck: false,
