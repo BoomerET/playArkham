@@ -226,6 +226,7 @@ function getSelectedScenario(state: {
   availableScenarios: ScenarioDefinition[];
   selectedScenarioId: string;
   campaignState: CampaignState;
+  scenarioStatus: ScenarioStatus;
 }): ScenarioDefinition {
   return resolveScenarioForCampaign({
     selectedScenarioId: state.selectedScenarioId,
