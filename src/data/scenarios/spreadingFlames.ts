@@ -16,7 +16,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       revealed: true,
       connections: ["dormitories"],
       investigatorsHere: [],
-      mapPosition: { x: 22, y: 78 },
+      mapPosition: { x: 10, y: 78 },
       isVisible: true,
       traits: [
         "Miskatonic"
