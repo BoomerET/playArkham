@@ -10,14 +10,6 @@ const investigatorImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const campaignState = useGameStore((state) => state.campaignState);
-const setPreviousScenarioOutcome = useGameStore(
-  (state) => state.setPreviousScenarioOutcome,
-);
-const setCampaignRandomizedSelection = useGameStore(
-  (state) => state.setCampaignRandomizedSelection,
-);
-
 function getInvestigatorImageUrl(imageName?: string): string | null {
   if (!imageName) {
     return null;
@@ -120,6 +112,14 @@ export default function HomeScreen() {
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const trimmedDeckId = selectedDeckId.trim();
+
+  const campaignState = useGameStore((state) => state.campaignState);
+  const setPreviousScenarioOutcome = useGameStore(
+    (state) => state.setPreviousScenarioOutcome,
+  );
+  const setCampaignRandomizedSelection = useGameStore(
+    (state) => state.setCampaignRandomizedSelection,
+  );
 
   useEffect(() => {
     if (!trimmedDeckId) {
