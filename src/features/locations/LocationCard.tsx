@@ -346,13 +346,25 @@ export default function LocationCard({ location }: Props) {
             )}
           </>
         ) : (
-          <div className="location-card-hidden-face">
-            <p className="location-card-hidden-label">Unrevealed</p>
-            <div className="location-card-hidden-art" aria-hidden="true">
-              <span className="location-card-hidden-glyph">?</span>
-            </div>
-            <p className="location-card-hidden-name">{location.name}</p>
-          </div>
+	<div className="location-card-hidden-face">
+  <div className="location-card-status-row token-row">
+    {isCurrentLocation && (
+      <span className="token-chip success">Current</span>
+    )}
+    {isLegalMove && <span className="token-chip">Move</span>}
+    {isIllegalMove && (
+      <span className="token-chip danger">Blocked</span>
+    )}
+  </div>
+
+  <p className="location-card-hidden-label">Unrevealed</p>
+
+  <div className="location-card-hidden-art" aria-hidden="true">
+    <span className="location-card-hidden-glyph">?</span>
+  </div>
+
+  <p className="location-card-hidden-name">{location.name}</p>
+</div>
         )}
       </div>
 
