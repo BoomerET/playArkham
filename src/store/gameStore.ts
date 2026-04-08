@@ -313,6 +313,38 @@ function hasLocationAttachment(
   );
 }
 
+function getScenarioSequenceNumber(sequence: string): string {
+  return sequence.slice(0, -1);
+}
+
+function getScenarioSequenceSide(sequence: string): string {
+  return sequence.slice(-1).toLowerCase();
+}
+
+function getNextScenarioCardDefinition(
+  cards: ScenarioCardDefinition[],
+  currentCard: ScenarioCardState,
+): ScenarioCardDefinition | undefined {
+  const currentNumber = getScenarioSequenceNumber(currentCard.sequence);
+  const currentSide = getScenarioSequenceSide(currentCard.sequence);
+
+  if (currentSide === "a") {
+    return cards.find(
+      (entry) =>
+        getScenarioSequenceNumber(entry.sequence) === currentNumber &&
+        getScenarioSequenceSide(entry.sequence) === "b",
+    );
+  }
+
+  const nextNumber = String(Number(currentNumber) + 1);
+
+  return cards.find(
+    (entry) =>
+      getScenarioSequenceNumber(entry.sequence) === nextNumber &&
+      getScenarioSequenceSide(entry.sequence) === "a",
+  );
+}
+
 type AdvanceStoreSlice = Pick<
   GameStore,
   | "agenda"
@@ -512,7 +544,7 @@ function advanceAgendaState(
     };
   }
 
-  const nextDefinition = agendas[currentIndex + 1];
+  const nextDefinition = getNextScenarioCardDefinition(agendas, currentAgenda);
 
   if (!nextDefinition) {
     return {
