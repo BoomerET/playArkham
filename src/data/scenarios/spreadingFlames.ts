@@ -133,6 +133,9 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       threshold: 0,
       thresholdLabel: "Done",
       code: "12109",
+      onAdvance: {
+        showLocationIds: ["dormitories", "miskatonic-quad"],
+      },
     },
     {
       id: "spreading-flames-act-2a",
@@ -142,9 +145,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "A burning apparition stands between you and the exit. You must escape the dormitories.",
       threshold: 2,
       thresholdLabel: "Clues",
-      onAdvance: {
-        showLocationIds: ["dormitories", "miskatonic-quad"],
-      },
       code: "12110",
     },
     {
@@ -156,6 +156,11 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       threshold: 0,
       thresholdLabel: "Done",
       code: "12110",
+      onAdvance: {
+        showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
+        hideLocationIds: ["friends-room"],
+        grantEncounterCardToInvestigator: "dr-henry-armitage-1",
+      },
     },
     {
       id: "spreading-flames-act-3a",
@@ -165,11 +170,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "Your friend had mentioned visiting the head librarian, Dr. Henry Armitage. With more and more strange figures arriving, you must scour the campus for his whereabouts.",
       threshold: 3,
       thresholdLabel: "Clues",
-      onAdvance: {
-        showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
-        hideLocationIds: ["friends-room"],
-        grantEncounterCardToInvestigator: "dr-henry-armitage-1",
-      },
       code: "12111",
     },
 
@@ -191,12 +191,6 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
       threshold: 3,
       thresholdLabel: "Clues",
-      onAdvance: {
-        winScenario: true,
-        setPreviousScenarioOutcome: "quiet",
-        resolutionTitle: "Resolution 1",
-        resolutionText: "The campus remains eerily quiet...",
-      },
       code: "12112",
     },
     {
@@ -208,6 +202,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       threshold: 0,
       thresholdLabel: "Done",
       code: "12112",
+      onAdvance: {
+        winScenario: true,
+        setPreviousScenarioOutcome: "quiet",
+        resolutionTitle: "Resolution 1",
+        resolutionText: "The campus remains eerily quiet...",
+      },
     },
   ],
   agendas: [
@@ -219,7 +219,17 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
       threshold: 3,
       thresholdLabel: "Doom",
-      code: "12109",
+      code: "12106",
+    },
+    {
+      id: "spreading-flames-agenda-1b",
+      kind: "agenda",
+      sequence: "1b",
+      title: "Smoke on the Wind",
+      text: "In player order, each investigator test WIL (3).",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12106",
     },
     {
       id: "spreading-flames-agenda-2a",
@@ -229,7 +239,17 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The sky glows a faint orange as the flames spread.",
       threshold: 5,
       thresholdLabel: "Doom",
-      code: "12110",
+      code: "12107",
+    },
+    {
+      id: "spreading-flames-agenda-2b",
+      kind: "agenda",
+      sequence: "2b",
+      title: "Uncontrollable Fire",
+      text: "If they are still set aside, place 4 set-aside copies of Fire! in the encounter discard pile.",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12107",
     },
     {
       id: "spreading-flames-agenda-3a",
@@ -239,13 +259,23 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is ablaze!",
       threshold: 10,
       thresholdLabel: "Doom",
+      code: "12108",
+    },
+    {
+      id: "spreading-flames-agenda-3b",
+      kind: "agenda",
+      sequence: "3b",
+      title: "Up in Flames",
+      text: "Each surviving investigator who has not resigned is defeated and suffers 1 physical trauma.",
+      threshold: 0,
+      thresholdLabel: "Done",
       onAdvance: {
         winScenario: true,
         setPreviousScenarioOutcome: "flames",
         resolutionTitle: "Resolution 2",
         resolutionText: "The city burns...",
       },
-      code: "12111",
+      code: "12108",
     },
   ],
   encounterDeck: [
