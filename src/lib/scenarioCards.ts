@@ -16,6 +16,7 @@ export function buildScenarioCardState(
     progress: definition.startingProgress ?? 0,
     threshold: definition.threshold,
     thresholdLabel: definition.thresholdLabel,
+    code: definition.code,
   };
 }
 
