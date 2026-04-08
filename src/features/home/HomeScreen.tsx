@@ -459,25 +459,23 @@ export default function HomeScreen() {
             {deckLookupState === "loading" ? "Loading Deck..." : "Start Game"}
           </button>
         </div>
-        <div className="home-screen__field">
-          <label className="home-screen__label" htmlFor="campaign-outcome">
-            Previous Scenario Outcome
-          </label>
-          <select
-            id="campaign-outcome"
-            className="home-screen__input"
-            value={campaignState.previousScenarioOutcome ?? ""}
-            onChange={(event) =>
-              setPreviousScenarioOutcome(event.target.value || null)
-            }
-          >
-            <option value="">None</option>
-            <option value="quiet">Quiet</option>
-            <option value="flames">Flames</option>
-          </select>
-        </div>
         {selectedScenario?.campaignKey && selectedScenario.randomizedSelections?.length ? (
           <div className="home-screen__field-group">
+            <label className="home-screen__label" htmlFor="campaign-outcome">
+              Previous Scenario Outcome
+            </label>
+            <select
+              id="campaign-outcome"
+              className="home-screen__input"
+              value={campaignState.previousScenarioOutcome ?? ""}
+              onChange={(event) =>
+                setPreviousScenarioOutcome(event.target.value || null)
+              }
+            >
+              <option value="">None</option>
+              <option value="quiet">Quiet</option>
+              <option value="flames">Flames</option>
+            </select>
             <div className="home-screen__field-group-header">
               <h3 className="section-title">Randomized Selections</h3>
 
