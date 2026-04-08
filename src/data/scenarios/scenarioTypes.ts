@@ -33,6 +33,7 @@ export interface ScenarioAdvanceEffects {
 
 export interface ScenarioCardDefinition {
   id: string;
+  code?: string;
   kind: ScenarioCardKind;
   sequence: string;
   title: string;

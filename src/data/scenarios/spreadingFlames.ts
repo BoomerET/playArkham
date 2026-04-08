@@ -122,6 +122,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "You are searching the dormitories for any sign of your friend.",
       threshold: 2,
       thresholdLabel: "Clues",
+      code: "12109",
     },
     {
       id: "spreading-flames-act-2",
@@ -134,6 +135,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
       },
+      code: "12109",
     },
     {
       id: "spreading-flames-act-3",
@@ -148,6 +150,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         hideLocationIds: ["friends-room"],
         grantEncounterCardToInvestigator: "dr-henry-armitage-1",
       },
+      code: "12109",
     },
     {
       id: "spreading-flames-act-4",
@@ -162,7 +165,8 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         setPreviousScenarioOutcome: "quiet",
         resolutionTitle: "Resolution 1",
         resolutionText: "The campus remains eerily quiet...",
-      }
+      },
+      code: "12109",
     },
   ],
   agendas: [
@@ -174,6 +178,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
       threshold: 3,
       thresholdLabel: "Doom",
+      code: "12109",
     },
     {
       id: "spreading-flames-agenda-2",
@@ -183,6 +188,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The sky glows a faint orange as the flames spread.",
       threshold: 5,
       thresholdLabel: "Doom",
+      code: "12109",
     },
     {
       id: "spreading-flames-agenda-3",
@@ -197,7 +203,8 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         setPreviousScenarioOutcome: "flames",
         resolutionTitle: "Resolution 2",
         resolutionText: "The city burns...",
-      }
+      },
+      code: "12109",
     },
   ],
   encounterDeck: [

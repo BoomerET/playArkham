@@ -1,6 +1,14 @@
 import { useMemo } from "react";
 import { useGameStore } from "../../store/gameStore";
+import "./scenarioCard.css";
 import type { ScenarioCardState } from "../../types/game";
+const scenarioCardImages = import.meta.glob(
+    "../../assets/images/act_agenda/*.{png,jpg,jpeg,webp}",
+    {
+        eager: true,
+        import: "default",
+    },
+) as Record<string, string>;
 
 type Props = {
     kind: "agenda" | "act";
@@ -9,6 +17,21 @@ type Props = {
 
 function getProgressLabel(card: ScenarioCardState) {
     return `${card.thresholdLabel} ${card.progress} / ${card.threshold}`;
+}
+
+function getScenarioCardImage(card: ScenarioCardState | null): string | null {
+    if (!card?.code) {
+        return null;
+    }
+
+    const side = card.sequence.endsWith("b") ? "back" : "front";
+    const fileName = `${card.code}_${side}`;
+
+    const match = Object.entries(scenarioCardImages).find(([path]) =>
+        path.includes(fileName),
+    );
+
+    return match?.[1] ?? null;
 }
 
 export default function ScenarioCardPanel({ kind, card }: Props) {
@@ -22,6 +45,8 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
 
         return card.progress >= card.threshold;
     }, [card]);
+
+    const imageUrl = useMemo(() => getScenarioCardImage(card), [card]);
 
     if (!card) {
         return (
@@ -43,36 +68,36 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                 <span className="scenario-card-panel__sequence">{card.sequence}</span>
             </div>
 
-            <h3 className="scenario-card-panel__title">{card.title}</h3>
+            {imageUrl ? (
+                <img
+                    src={imageUrl}
+                    alt={card.title}
+                    className="scenario-card-panel__image"
+                />
+            ) : (
+                <>
+                    <h3 className="scenario-card-panel__title">{card.title}</h3>
 
-            <div className="scenario-card-panel__text">
-                {card.text}
-            </div>
+                    <div className="scenario-card-panel__text">
+                        {card.text}
+                    </div>
+                </>
+            )}
 
             <div className="scenario-card-panel__footer">
                 <span className="scenario-card-panel__progress">
-                    {getProgressLabel(card)}
+                    {card.thresholdLabel} {card.progress} / {card.threshold}
                 </span>
 
-                {kind === "agenda" && canAdvance ? (
+                {canAdvance && (
                     <button
                         type="button"
                         className="secondary-button"
-                        onClick={advanceAgenda}
+                        onClick={kind === "agenda" ? advanceAgenda : advanceAct}
                     >
                         Advance
                     </button>
-                ) : null}
-
-                {kind === "act" && canAdvance ? (
-                    <button
-                        type="button"
-                        className="secondary-button"
-                        onClick={advanceAct}
-                    >
-                        Advance
-                    </button>
-                ) : null}
+                )}
             </div>
         </section>
     );
