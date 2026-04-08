@@ -162,7 +162,7 @@ export default function LocationCard({ location }: Props) {
   const imageUrl = getLocationImageUrl(location);
   console.log("location", location.id, location.name, location.code, imageUrl);
   const previewLocation = useMemo<PreviewLocation | null>(() => {
-    if (!zoomHeld || !isHovering || !imageUrl) {
+    if (!location.revealed || !zoomHeld || !isHovering || !imageUrl) {
       return null;
     }
 
@@ -171,7 +171,7 @@ export default function LocationCard({ location }: Props) {
       name: location.name,
       imageUrl,
     };
-  }, [zoomHeld, isHovering, imageUrl, location.id, location.name]);
+  }, [location.revealed, zoomHeld, isHovering, imageUrl, location.id, location.name]);
 
   const isCurrentLocation = location.investigatorsHere.includes(
     investigator.id,
@@ -346,25 +346,25 @@ export default function LocationCard({ location }: Props) {
             )}
           </>
         ) : (
-	<div className="location-card-hidden-face">
-  <div className="location-card-status-row token-row">
-    {isCurrentLocation && (
-      <span className="token-chip success">Current</span>
-    )}
-    {isLegalMove && <span className="token-chip">Move</span>}
-    {isIllegalMove && (
-      <span className="token-chip danger">Blocked</span>
-    )}
-  </div>
+          <div className="location-card-hidden-face">
+            <div className="location-card-status-row token-row">
+              {isCurrentLocation && (
+                <span className="token-chip success">Current</span>
+              )}
+              {isLegalMove && <span className="token-chip">Move</span>}
+              {isIllegalMove && (
+                <span className="token-chip danger">Blocked</span>
+              )}
+            </div>
 
-  <p className="location-card-hidden-label">Unrevealed</p>
+            <p className="location-card-hidden-label">Unrevealed</p>
 
-  <div className="location-card-hidden-art" aria-hidden="true">
-    <span className="location-card-hidden-glyph">?</span>
-  </div>
+            <div className="location-card-hidden-art" aria-hidden="true">
+              <span className="location-card-hidden-glyph">?</span>
+            </div>
 
-  <p className="location-card-hidden-name">{location.name}</p>
-</div>
+            <p className="location-card-hidden-name">{location.name}</p>
+          </div>
         )}
       </div>
 
