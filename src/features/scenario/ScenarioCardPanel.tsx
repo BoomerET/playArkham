@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import "./scenarioCard.css";
 import type { ScenarioCardState } from "../../types/game";
+
 const scenarioCardImages = import.meta.glob(
     "../../assets/images/act_agenda/*.{png,jpg,jpeg,webp}",
     {
@@ -15,16 +16,21 @@ type Props = {
     card: ScenarioCardState | null;
 };
 
-//function getProgressLabel(card: ScenarioCardState) {
-//    return `${card.thresholdLabel} ${card.progress} / ${card.threshold}`;
-//}
+function getProgressLabel(card: ScenarioCardState) {
+    return `${card.thresholdLabel} ${card.progress} / ${card.threshold}`;
+}
 
-function getScenarioCardImage(card: ScenarioCardState | null): string | null {
+function getScenarioCardImage(
+    card: ScenarioCardState | null,
+    flipped = false,
+): string | null {
     if (!card?.code) {
         return null;
     }
 
-    const side = card.sequence.endsWith("b") ? "back" : "front";
+    const isBackFromSequence = card.sequence.endsWith("b");
+    const showBack = flipped ? !isBackFromSequence : isBackFromSequence;
+    const side = showBack ? "back" : "front";
     const fileName = `${card.code}_${side}`;
 
     const match = Object.entries(scenarioCardImages).find(([path]) =>
@@ -37,6 +43,11 @@ function getScenarioCardImage(card: ScenarioCardState | null): string | null {
 export default function ScenarioCardPanel({ kind, card }: Props) {
     const advanceAgenda = useGameStore((state) => state.advanceAgenda);
     const advanceAct = useGameStore((state) => state.advanceAct);
+    const [previewFlipped, setPreviewFlipped] = useState(false);
+
+    useEffect(() => {
+        setPreviewFlipped(false);
+    }, [card?.id, card?.sequence]);
 
     const canAdvance = useMemo(() => {
         if (!card) {
@@ -46,7 +57,10 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
         return card.progress >= card.threshold;
     }, [card]);
 
-    const imageUrl = useMemo(() => getScenarioCardImage(card), [card]);
+    const imageUrl = useMemo(
+        () => getScenarioCardImage(card, previewFlipped),
+        [card, previewFlipped],
+    );
 
     if (!card) {
         return (
@@ -71,33 +85,44 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
             {imageUrl ? (
                 <img
                     src={imageUrl}
-                    alt={card.title}
+                    alt={`${card.title}${previewFlipped ? " (flipped preview)" : ""}`}
                     className="scenario-card-panel__image"
+                    draggable={false}
                 />
             ) : (
                 <>
                     <h3 className="scenario-card-panel__title">{card.title}</h3>
 
-                    <div className="scenario-card-panel__text">
-                        {card.text}
-                    </div>
+                    <div className="scenario-card-panel__text">{card.text}</div>
                 </>
             )}
 
             <div className="scenario-card-panel__footer">
                 <span className="scenario-card-panel__progress">
-                    {card.thresholdLabel} {card.progress} / {card.threshold}
+                    {getProgressLabel(card)}
                 </span>
 
-                {canAdvance && (
-                    <button
-                        type="button"
-                        className="secondary-button"
-                        onClick={kind === "agenda" ? advanceAgenda : advanceAct}
-                    >
-                        Advance
-                    </button>
-                )}
+                <div className="button-row">
+                    {card.code ? (
+                        <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() => setPreviewFlipped((current) => !current)}
+                        >
+                            {previewFlipped ? "Show Current Side" : "Flip"}
+                        </button>
+                    ) : null}
+
+                    {canAdvance ? (
+                        <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={kind === "agenda" ? advanceAgenda : advanceAct}
+                        >
+                            Advance
+                        </button>
+                    ) : null}
+                </div>
             </div>
         </section>
     );
