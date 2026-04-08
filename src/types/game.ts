@@ -173,7 +173,6 @@ export interface ScenarioCardState {
   progress: number;
   threshold: number;
   thresholdLabel: string;
-  code: string;
 }
 
 export type GameLogKind =
