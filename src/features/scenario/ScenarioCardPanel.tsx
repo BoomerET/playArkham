@@ -15,9 +15,9 @@ type Props = {
     card: ScenarioCardState | null;
 };
 
-function getProgressLabel(card: ScenarioCardState) {
-    return `${card.thresholdLabel} ${card.progress} / ${card.threshold}`;
-}
+//function getProgressLabel(card: ScenarioCardState) {
+//    return `${card.thresholdLabel} ${card.progress} / ${card.threshold}`;
+//}
 
 function getScenarioCardImage(card: ScenarioCardState | null): string | null {
     if (!card?.code) {
