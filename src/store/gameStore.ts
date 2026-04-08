@@ -326,6 +326,7 @@ type AdvanceStoreSlice = Pick<
   | "scenarioResolutionText"
   | "scenarioResolutionTitle"
   | "scenarioResolutionSubtitle"
+  | "campaignState"
 >;
 
 type AdvanceState = ScenarioEffectState & {
