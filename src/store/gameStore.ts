@@ -477,6 +477,7 @@ function advanceAgendaState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
@@ -555,6 +556,14 @@ function advanceAgendaState(
     },
   );
 
+  const updatedCampaignState =
+    effectResult.campaignOutcomeToSet != null
+      ? {
+        ...state.campaignState,
+        previousScenarioOutcome: effectResult.campaignOutcomeToSet,
+      }
+      : state.campaignState;
+
   let result: AdvanceStoreSlice = {
     agenda: effectResult.agenda,
     act: effectResult.act,
@@ -591,6 +600,8 @@ function advanceAgendaState(
         scenarioResolutionText: result.scenarioResolutionText,
         scenarioResolutionTitle: result.scenarioResolutionTitle,
         scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
+        campaignState: result.campaignState,
+        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
       },
       false,
     );
@@ -619,6 +630,7 @@ function advanceActState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
@@ -738,6 +750,8 @@ function advanceActState(
         scenarioResolutionText: result.scenarioResolutionText,
         scenarioResolutionTitle: result.scenarioResolutionTitle,
         scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
+        campaignState: result.campaignState,
+        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
       },
       false,
     );
@@ -1281,6 +1295,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionText: get().scenarioResolutionText,
         scenarioResolutionTitle: get().scenarioResolutionTitle,
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
+        campaignState: result.campaignState,
+        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
       },
       true,
     );
@@ -1319,6 +1335,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionText: get().scenarioResolutionText,
         scenarioResolutionTitle: get().scenarioResolutionTitle,
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
+        campaignState: result.campaignState,
+        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
       },
       true,
     );
