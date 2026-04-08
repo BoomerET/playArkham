@@ -135,7 +135,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
       },
-      code: "12109",
+      code: "12110",
     },
     {
       id: "spreading-flames-act-3",
@@ -150,7 +150,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         hideLocationIds: ["friends-room"],
         grantEncounterCardToInvestigator: "dr-henry-armitage-1",
       },
-      code: "12109",
+      code: "12111",
     },
     {
       id: "spreading-flames-act-4",
@@ -166,7 +166,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
         resolutionTitle: "Resolution 1",
         resolutionText: "The campus remains eerily quiet...",
       },
-      code: "12109",
+      code: "12112",
     },
   ],
   agendas: [
