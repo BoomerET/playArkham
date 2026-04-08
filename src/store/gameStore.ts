@@ -117,6 +117,19 @@ type PendingEncounterResolution =
   | { kind: "rottingRemains"; cardName: string }
   | null;
 
+type ChoiceEffect =
+  | { kind: "doomOnAgenda"; amount: number }
+  | { kind: "surge" };
+
+type PendingChoice = {
+  sourceCard: EncounterCard;
+  options: {
+    id: string;
+    label: string;
+    effect: ChoiceEffect;
+  }[];
+} | null;
+
 type GameStore = GameState & CampaignStoreActions & {
   screen: Screen;
   availableInvestigators: Investigator[];
@@ -139,6 +152,7 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingEncounterResolution: PendingEncounterResolution;
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
+  pendingChoice: PendingChoice;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -208,6 +222,7 @@ type GameStore = GameState & CampaignStoreActions & {
   ) => void;
   drawEncounterCard: () => EncounterCard | null;
   resolveMythosPhase: () => void;
+  resolvePendingChoice: (optionId: string) => void;
   toggleMulliganCardSelection: (cardId: string) => void;
   confirmMulligan: () => void;
   skipMulligan: () => void;
@@ -810,6 +825,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   draggedCardId: null,
   pendingTestResolution: null,
   pendingAssetPlay: null,
+  pendingChoice: null,
   pendingEncounterResolution: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
@@ -1616,8 +1632,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resolveMythosPhase: () => {
-    const { investigator, locations, enemies, encounterDiscard, agenda } =
-      get();
+    const {
+      investigator,
+      locations,
+      enemies,
+      encounterDiscard,
+      agenda,
+      pendingChoice,
+    } = get();
+
+    if (pendingChoice) {
+      get().pushLog(
+        "system",
+        "Cannot resolve a new mythos card while a choice is still pending.",
+      );
+      return;
+    }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
@@ -1666,6 +1696,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       currentLocationId: currentLocation.id,
     });
+
+    if (immediate.kind === "choice") {
+      set({
+        pendingChoice: {
+          sourceCard: card,
+          options: immediate.pending.options,
+        },
+      });
+
+      get().pushLog(
+        "scenario",
+        `${card.name}: choose one.`,
+      );
+      return;
+    }
 
     if (immediate.kind === "doomOnAgenda") {
       set({
@@ -1803,6 +1848,68 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("scenario", immediate.logText);
   },
 
+  resolvePendingChoice: (optionId) => {
+    const { pendingChoice, agenda, encounterDiscard } = get();
+
+    if (!pendingChoice) {
+      get().pushLog("system", "No encounter choice is currently pending.");
+      return;
+    }
+
+    const selectedOption = pendingChoice.options.find(
+      (option) => option.id === optionId,
+    );
+
+    if (!selectedOption) {
+      get().pushLog(
+        "system",
+        `Unknown encounter choice option: ${optionId}.`,
+      );
+      return;
+    }
+
+    const sourceCard = pendingChoice.sourceCard;
+
+    if (selectedOption.effect.kind === "doomOnAgenda") {
+      set({
+        agenda: agenda
+          ? {
+            ...agenda,
+            progress: agenda.progress + selectedOption.effect.amount,
+          }
+          : null,
+        encounterDiscard: [...encounterDiscard, sourceCard],
+        pendingChoice: null,
+      });
+
+      get().pushLog(
+        "scenario",
+        `${sourceCard.name}: placed ${selectedOption.effect.amount} doom on the current agenda.`,
+      );
+      return;
+    }
+
+    if (selectedOption.effect.kind === "surge") {
+      set({
+        encounterDiscard: [...encounterDiscard, sourceCard],
+        pendingChoice: null,
+      });
+
+      get().pushLog(
+        "scenario",
+        `${sourceCard.name} gained surge.`,
+      );
+
+      get().resolveMythosPhase();
+      return;
+    }
+
+    get().pushLog(
+      "system",
+      `${sourceCard.name} choice could not be resolved.`,
+    );
+  },
+
   startGame: async () => {
     try {
       await get().setupGame();
@@ -1837,6 +1944,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingAssetPlay: null,
       showDeckInspector: false,
       showEncounterInspector: false,
+      pendingChoice: null,
       threatArea: [],
       log: [],
       lastSkillTest: null,
@@ -1918,6 +2026,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionSubtitle: null,
       pendingAssetPlay: null,
       showDeckInspector: false,
+      pendingChoice: null,
       isMulliganActive: true,
       threatArea: [],
       locationAttachments: [],

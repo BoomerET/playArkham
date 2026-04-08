@@ -1,35 +1,52 @@
 import type { EncounterCard, Enemy, Investigator, SkillType } from "../types/game";
 
+type EncounterChoiceEffect =
+  | { kind: "doomOnAgenda"; amount: number }
+  | { kind: "surge" };
+
+type EncounterChoiceOption = {
+  id: string;
+  label: string;
+  effect: EncounterChoiceEffect;
+};
+
 export type EncounterImmediateResolution =
   | {
-      kind: "none";
-      logText: string;
-    }
+    kind: "none";
+    logText: string;
+  }
   | {
-      kind: "doomOnAgenda";
-      amount: number;
-      logText: string;
-    }
-  | {
-      kind: "spawnAcolyte";
-      enemy: Enemy;
-      doomOnAgenda: number;
-      logText: string;
-    }
-  | {
-      kind: "skillTest";
-      skill: SkillType;
-      difficulty: number;
-      pending:
-        | { kind: "graspingHands"; cardName: string }
-        | { kind: "rottingRemains"; cardName: string };
-      logText: string;
-    }
-  | {
-      kind: "genericTreachery";
-      horror: number;
-      logText: string;
+    kind: "choice";
+    pending: {
+      options: EncounterChoiceOption[];
     };
+    logText: string;
+  }
+  | {
+    kind: "doomOnAgenda";
+    amount: number;
+    logText: string;
+  }
+  | {
+    kind: "spawnAcolyte";
+    enemy: Enemy;
+    doomOnAgenda: number;
+    logText: string;
+  }
+  | {
+    kind: "skillTest";
+    skill: SkillType;
+    difficulty: number;
+    pending:
+    | { kind: "graspingHands"; cardName: string }
+    | { kind: "rottingRemains"; cardName: string };
+    logText: string;
+  }
+  | {
+    kind: "genericTreachery";
+    horror: number;
+    logText: string;
+  };
 
 export function resolveEncounterCardImmediate(args: {
   card: EncounterCard;
@@ -39,6 +56,27 @@ export function resolveEncounterCardImmediate(args: {
   const { card, investigator, currentLocationId } = args;
 
   switch (card.name) {
+    case "Cosmic Evils":
+      return {
+        kind: "choice",
+        pending: {
+          options: [
+            {
+              id: "doom",
+              label: "Place 1 doom on the current agenda",
+              effect: { kind: "doomOnAgenda", amount: 1 },
+            },
+            {
+              id: "surge",
+              label: "Cosmic Evils gains surge",
+              effect: { kind: "surge" },
+            },
+          ],
+        },
+        logText:
+          "Cosmic Evils: choose one - place 1 doom on the current agenda, or Cosmic Evils gains surge.",
+      };
+
     case "Ancient Evils":
       return {
         kind: "doomOnAgenda",
