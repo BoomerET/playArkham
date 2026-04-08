@@ -19,6 +19,7 @@ import TurnPanel from "./TurnPanel";
 import "./gameTable.css";
 import EncounterPanel from "../encounter/EncounterPanel";
 import EncounterInspector from "../encounter/EncounterInspector";
+import ScenarioCardPanel from "../scenario/ScenarioCardPanel";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -37,12 +38,11 @@ export default function GameTable() {
   const toggleDeckInspector = useGameStore(
     (state) => state.toggleDeckInspector,
   );
-  //const showEncounterInspector = useGameStore(
-  //  (s) => s.showEncounterInspector,
-  //);
   const toggleEncounterInspector = useGameStore(
     (s) => s.toggleEncounterInspector,
   );
+  const agenda = useGameStore((state) => state.agenda);
+  const act = useGameStore((state) => state.act);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -164,12 +164,21 @@ export default function GameTable() {
           <div className="game-table-board">
             <div className="game-table-board-inner">
               <div className="game-table-scenario-rail">
+                {/*
                 <section className="table-panel game-table-scenario-panel">
                   <AgendaPanel />
                 </section>
 
                 <section className="table-panel game-table-scenario-panel">
                   <ActPanel />
+                </section>
+                */}
+                <section className="table-panel game-table-scenario-panel">
+                  <ScenarioCardPanel kind="agenda" card={agenda} />
+                </section>
+
+                <section className="table-panel game-table-scenario-panel">
+                  <ScenarioCardPanel kind="act" card={act} />
                 </section>
               </div>
 
