@@ -28,6 +28,7 @@ export interface ScenarioAdvanceEffects {
   resolutionTitle?: string;
   resolutionSubtitle?: string;
   grantEncounterCardToInvestigator?: string;
+  setPreviousScenarioOutcome?: string;
 }
 
 export interface ScenarioCardDefinition {

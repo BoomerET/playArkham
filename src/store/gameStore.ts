@@ -333,6 +333,8 @@ type AdvanceState = ScenarioEffectState & {
   scenarioResolutionText: string | null;
   scenarioResolutionTitle: string | null;
   scenarioResolutionSubtitle: string | null;
+  campaignState: CampaignState;
+  campaignOutcomeToSet?: string | null;
 };
 
 function applyAdvanceOutcome(
@@ -567,6 +569,7 @@ function advanceAgendaState(
     scenarioResolutionText: state.scenarioResolutionText,
     scenarioResolutionTitle: state.scenarioResolutionTitle,
     scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+    campaignState: updatedCampaignState,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);
@@ -691,6 +694,14 @@ function advanceActState(
     },
   );
 
+  const updatedCampaignState =
+    effectResult.campaignOutcomeToSet != null
+      ? {
+        ...state.campaignState,
+        previousScenarioOutcome: effectResult.campaignOutcomeToSet,
+      }
+      : state.campaignState;
+
   let result: AdvanceStoreSlice = {
     agenda: effectResult.agenda,
     act: effectResult.act,
@@ -706,6 +717,7 @@ function advanceActState(
     scenarioResolutionText: state.scenarioResolutionText,
     scenarioResolutionTitle: state.scenarioResolutionTitle,
     scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+    campaignState: updatedCampaignState,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);

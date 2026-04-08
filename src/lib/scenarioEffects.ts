@@ -22,6 +22,7 @@ export type ScenarioEffectState = {
   currentLocationId: string | null;
   selectedEnemyTargetId: string | null;
   grantedPlayerCards?: PlayerCard[];
+  campaignOutcomeToSet?: string | null;
 };
 
 type ScenarioEffectResult = ScenarioEffectState & {
@@ -74,6 +75,7 @@ function applyCardAdvanceEffects(
     advanceAgenda = false,
     advanceAct = false,
     grantEncounterCardToInvestigator,
+    setPreviousScenarioOutcome,
   } = card.onAdvance;
 
   const effectLogEntries = [...logEntries];
@@ -144,6 +146,8 @@ function applyCardAdvanceEffects(
     grantedPlayerCards,
     advanceAgendaRequested: advanceAgenda,
     advanceActRequested: advanceAct,
+    campaignOutcomeToSet:
+      setPreviousScenarioOutcome ?? state.campaignOutcomeToSet ?? null,
   };
 }
 
