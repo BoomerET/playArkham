@@ -239,12 +239,6 @@ export default function LocationCard({ location }: Props) {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {/*<div
-          className={`card-zoom-hint ${isHovering ? "visible" : ""} ${zoomHeld ? "active" : ""
-            }`}
-        >
-          Hold <kbd>Shift</kbd> to zoom
-        </div> */}
 
         {location.revealed ? (
           <>
