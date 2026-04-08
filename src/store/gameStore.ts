@@ -508,6 +508,7 @@ function advanceAgendaState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
@@ -535,6 +536,7 @@ function advanceAgendaState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
@@ -659,6 +661,7 @@ function advanceActState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
@@ -686,6 +689,7 @@ function advanceActState(
       scenarioResolutionText: state.scenarioResolutionText,
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+      campaignState: state.campaignState,
     };
   }
 
