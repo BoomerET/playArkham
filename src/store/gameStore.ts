@@ -1299,8 +1299,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionText: get().scenarioResolutionText,
         scenarioResolutionTitle: get().scenarioResolutionTitle,
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
-        campaignState: result.campaignState,
-        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+        campaignState: get().campaignState,
+        campaignOutcomeToSet: null,
       },
       true,
     );
@@ -1339,8 +1339,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionText: get().scenarioResolutionText,
         scenarioResolutionTitle: get().scenarioResolutionTitle,
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
-        campaignState: result.campaignState,
-        campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+        campaignState: get().campaignState,
+        campaignOutcomeToSet: null,
       },
       true,
     );
