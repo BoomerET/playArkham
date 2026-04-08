@@ -138,6 +138,10 @@ export default function HomeScreen() {
     });
   }, [availableScenarios]);
 
+  const randomizeCampaignSelectionsForScenario = useGameStore(
+    (state) => state.randomizeCampaignSelectionsForScenario,
+  );
+
   useEffect(() => {
     if (!trimmedDeckId) {
       setDeckLookupState("idle");
@@ -474,7 +478,19 @@ export default function HomeScreen() {
         </div>
         {selectedScenario?.campaignKey && selectedScenario.randomizedSelections?.length ? (
           <div className="home-screen__field-group">
-            <h3 className="section-title">Randomized Selections</h3>
+            <div className="home-screen__field-group-header">
+              <h3 className="section-title">Randomized Selections</h3>
+
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() =>
+                  randomizeCampaignSelectionsForScenario(selectedScenario.id)
+                }
+              >
+                Randomize Locations
+              </button>
+            </div>
 
             {selectedScenario.randomizedSelections.map((selection) => {
               const storedValue =

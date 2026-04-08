@@ -2983,3 +2983,11 @@ button:hover {
   opacity: 0.75;
   margin: 0;
 }
+
+.home-screen__field-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}

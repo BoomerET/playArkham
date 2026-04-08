@@ -216,7 +216,7 @@ type GameStore = GameState & CampaignStoreActions & {
   shuffleEncounterDeck: () => void;
   discardThreatAreaCard: (cardId: string) => void;
   discardLocationAttachment: (attachmentId: string) => void;
-
+  randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -840,6 +840,56 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenarioId: state.selectedScenarioId,
       campaignState: state.campaignState,
     });
+  },
+
+  randomizeCampaignSelectionsForScenario: (scenarioId) => {
+    const state = get();
+
+    const scenario = state.availableScenarios.find(
+      (entry) => entry.id === scenarioId,
+    );
+
+    if (!scenario?.randomizedSelections?.length) {
+      return;
+    }
+
+    const campaignKey = scenario.campaignKey ?? scenario.id;
+    const nextSelections = {
+      ...(state.campaignState.randomizedSelectionsByCampaignKey[campaignKey] ??
+        {}),
+    };
+
+    for (const selection of scenario.randomizedSelections) {
+      if (selection.optionIds.length === 0) {
+        continue;
+      }
+
+      const randomIndex = Math.floor(Math.random() * selection.optionIds.length);
+      nextSelections[selection.slotId] = selection.optionIds[randomIndex];
+    }
+
+    set({
+      campaignState: {
+        ...state.campaignState,
+        randomizedSelectionsByCampaignKey: {
+          ...state.campaignState.randomizedSelectionsByCampaignKey,
+          [campaignKey]: nextSelections,
+        },
+      },
+    });
+
+    const updatedState = get();
+
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
+
+    updatedState.pushLog(
+      "system",
+      `Randomized setup selections for ${scenario.name}.`,
+    );
   },
 
   setCampaignRandomizedSelection: (campaignKey, slotId, optionId) => {
