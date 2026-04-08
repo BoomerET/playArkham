@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import "./scenarioCard.css";
 import type { ScenarioCardState } from "../../types/game";
@@ -43,11 +43,10 @@ function getScenarioCardImage(
 export default function ScenarioCardPanel({ kind, card }: Props) {
     const advanceAgenda = useGameStore((state) => state.advanceAgenda);
     const advanceAct = useGameStore((state) => state.advanceAct);
-    const [previewFlipped, setPreviewFlipped] = useState(false);
+    const [flippedCardKey, setFlippedCardKey] = useState<string | null>(null);
 
-    useEffect(() => {
-        setPreviewFlipped(false);
-    }, [card?.id, card?.sequence]);
+    const cardKey = card ? `${card.id}-${card.sequence}` : null;
+    const previewFlipped = cardKey !== null && flippedCardKey === cardKey;
 
     const canAdvance = useMemo(() => {
         if (!card) {
@@ -107,7 +106,11 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                         <button
                             type="button"
                             className="secondary-button"
-                            onClick={() => setPreviewFlipped((current) => !current)}
+                            onClick={() =>
+                                setFlippedCardKey((current) =>
+                                    current === cardKey ? null : cardKey,
+                                )
+                            }
                         >
                             {previewFlipped ? "Show Current Side" : "Flip"}
                         </button>
