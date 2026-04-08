@@ -43,12 +43,13 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
+  LocationAttachment,
   Phase,
   PlayerCard,
+  ScenarioCardState,
   ScenarioStatus,
   SkillTestResult,
   SkillType,
-  LocationAttachment,
 } from "../types/game";
 
 import {
