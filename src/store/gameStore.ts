@@ -1306,6 +1306,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
 
     set(result);
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
   },
 
   advanceAct: () => {
@@ -1346,6 +1352,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
 
     set(result);
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
   },
 
   setDraggedCardId: (cardId) => {

@@ -157,6 +157,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
       threshold: 3,
       thresholdLabel: "Clues",
+      onAdvance: {
+        winScenario: true,
+        setPreviousScenarioOutcome: "quiet",
+        resolutionTitle: "Resolution 1",
+        resolutionText: "The campus remains eerily quiet...",
+      }
     },
   ],
   agendas: [
@@ -186,6 +192,12 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is ablaze!",
       threshold: 10,
       thresholdLabel: "Doom",
+      onAdvance: {
+        winScenario: true,
+        setPreviousScenarioOutcome: "flames",
+        resolutionTitle: "Resolution 2",
+        resolutionText: "The city burns...",
+      }
     },
   ],
   encounterDeck: [
