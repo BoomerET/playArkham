@@ -219,7 +219,7 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
       threshold: 3,
       thresholdLabel: "Doom",
-      code: "12112",
+      code: "12106",
     },
     {
       id: "spreading-flames-agenda-1b",
