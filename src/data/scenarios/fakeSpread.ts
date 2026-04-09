@@ -1,7 +1,5 @@
 import type { ScenarioDefinition } from "./scenarioTypes";
 
-import { encounterCards } from "../encounterCards";
-
 export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   id: "fake-spreading-flames",
   name: "Fake Spreading Flames",
