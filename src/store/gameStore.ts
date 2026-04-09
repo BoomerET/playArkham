@@ -3336,9 +3336,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const success =
       token !== "autoFail" && finalValue >= activeSkillTest.difficulty;
 
-    const failureAmount = success
-      ? 0
-      : Math.max(0, activeSkillTest.difficulty - finalValue);
+    const failureAmount =
+      success
+        ? 0
+        : token === "autoFail"
+          ? activeSkillTest.difficulty
+          : Math.max(0, activeSkillTest.difficulty - finalValue);
 
     const result: SkillTestResult = {
       skill: activeSkillTest.skill,
