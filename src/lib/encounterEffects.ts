@@ -74,8 +74,8 @@ export function resolveEncounterCardImmediate(args: {
 }): EncounterImmediateResolution {
   const { card, investigator, currentLocationId } = args;
 
-  switch (card.name) {
-    case "Cosmic Evils":
+  switch (card.code) {
+    case "12124":
       return {
         kind: "choice",
         pending: {
@@ -96,47 +96,8 @@ export function resolveEncounterCardImmediate(args: {
           "Cosmic Evils: choose one - place 1 doom on the current agenda, or Cosmic Evils gains surge.",
       };
 
-    case "Ancient Evils":
-      return {
-        kind: "doomOnAgenda",
-        amount: 1,
-        logText: "Ancient Evils: place 1 doom on the current agenda.",
-      };
 
-    case "Frozen in Fear":
-      return {
-        kind: "genericTreachery",
-        horror: 1,
-        logText: "Frozen in Fear: for now, resolve as 1 horror.",
-      };
-
-    case "Grasping Hands":
-      return {
-        kind: "skillTest",
-        skill: "agility",
-        difficulty: 3,
-        pending: {
-          cardName: card.name,
-          onPass: { kind: "none" },
-          onFail: { kind: "damage", amount: 1 },
-        },
-        logText: "Grasping Hands: test Agility (3).",
-      };
-
-    case "Rotting Remains":
-      return {
-        kind: "skillTest",
-        skill: "willpower",
-        difficulty: 3,
-        pending: {
-          cardName: card.name,
-          onPass: { kind: "none" },
-          onFail: { kind: "horror", amount: 2 },
-        },
-        logText: "Rotting Remains: test Willpower (3).",
-      };
-
-    case "Acolyte":
+    /*  case "12129":
       return {
         kind: "spawnAcolyte",
         doomOnAgenda: 1,
@@ -156,8 +117,9 @@ export function resolveEncounterCardImmediate(args: {
         logText:
           "Acolyte: spawn engaged with the investigator and place 1 doom on the agenda.",
       };
+      */
 
-    case "Unspeakable Truths":
+    case "12125":
       return {
         kind: "attachToThreatArea",
         uniqueByName: true,
@@ -166,7 +128,7 @@ export function resolveEncounterCardImmediate(args: {
           "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
       };
 
-    case "Fire!":
+    case "12129":
       return {
         kind: "attachToLocation",
         uniqueByNameAtLocation: true,
