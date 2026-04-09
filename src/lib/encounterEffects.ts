@@ -43,6 +43,18 @@ export type EncounterImmediateResolution =
     logText: string;
   }
   | {
+    kind: "attachToThreatArea";
+    uniqueByName: boolean;
+    logText: string;
+    duplicateLogText?: string;
+  }
+  | {
+    kind: "attachToLocation";
+    uniqueByNameAtLocation: boolean;
+    logText: string;
+    duplicateLogText?: string;
+  }
+  | {
     kind: "genericTreachery";
     horror: number;
     logText: string;
@@ -134,6 +146,24 @@ export function resolveEncounterCardImmediate(args: {
         },
         logText:
           "Acolyte: spawn engaged with the investigator and place 1 doom on the agenda.",
+      };
+
+    case "Unspeakable Truths":
+      return {
+        kind: "attachToThreatArea",
+        uniqueByName: true,
+        logText: "Unspeakable Truths entered your threat area.",
+        duplicateLogText:
+          "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
+      };
+
+    case "Fire!":
+      return {
+        kind: "attachToLocation",
+        uniqueByNameAtLocation: true,
+        logText: "Fire! attached to your location.",
+        duplicateLogText:
+          "Fire! was drawn, but your location already has Fire! attached. It was discarded.",
       };
 
     default:

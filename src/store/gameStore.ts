@@ -1754,13 +1754,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (card.name === "Unspeakable Truths") {
+    if (immediate.kind === "attachToThreatArea") {
       const { threatArea } = get();
 
-      const alreadyInThreatArea = threatAreaHasCard(
-        threatArea,
-        "Unspeakable Truths",
-      );
+      const alreadyInThreatArea =
+        immediate.uniqueByName &&
+        threatAreaHasCard(threatArea, card.name);
 
       if (alreadyInThreatArea) {
         set({
@@ -1769,7 +1768,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
         get().pushLog(
           "scenario",
-          "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
+          immediate.duplicateLogText ??
+          `${card.name} was discarded because a copy is already in the threat area.`,
         );
         return;
       }
@@ -1778,21 +1778,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
         threatArea: [...threatArea, card],
       });
 
-      get().pushLog(
-        "scenario",
-        "Unspeakable Truths entered your threat area.",
-      );
+      get().pushLog("scenario", immediate.logText);
       return;
     }
 
-    if (card.name === "Fire!") {
+    if (immediate.kind === "attachToLocation") {
       const { locationAttachments } = get();
 
-      const alreadyAttached = hasLocationAttachment(
-        locationAttachments,
-        currentLocation.id,
-        "Fire!",
-      );
+      const alreadyAttached =
+        immediate.uniqueByNameAtLocation &&
+        hasLocationAttachment(locationAttachments, currentLocation.id, card.name);
 
       if (alreadyAttached) {
         set({
@@ -1801,7 +1796,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
         get().pushLog(
           "scenario",
-          `Fire! was drawn, but ${currentLocation.name} already has Fire! attached. It was discarded.`,
+          immediate.duplicateLogText ??
+          `${card.name} was discarded because it is already attached to this location.`,
         );
         return;
       }
@@ -1823,7 +1819,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       get().pushLog(
         "scenario",
-        `Fire! attached to ${currentLocation.name}.`,
+        card.name === "Fire!"
+          ? `Fire! attached to ${currentLocation.name}.`
+          : immediate.logText,
       );
       return;
     }
