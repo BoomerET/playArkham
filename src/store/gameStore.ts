@@ -72,6 +72,8 @@ import {
   type CampaignState,
 } from "../lib/campaignSetup";
 
+import { buildEncounterDeckFromCodes } from "../lib/buildEncounterDeck";
+
 type Screen = "home" | "game";
 
 const defaultCampaignState: CampaignState = {
@@ -278,11 +280,9 @@ function shuffleArray<T>(items: T[]): T[] {
 }
 
 function buildInitialEncounterDeck(
-  cards: EncounterCard[] | undefined,
+  encounterCardCodes: string[] | undefined,
 ): EncounterCard[] {
-  return shuffleArray(
-    (cards ?? []).filter((card) => card.inEncounterDeck === true),
-  );
+  return shuffleArray(buildEncounterDeckFromCodes(encounterCardCodes ?? []));
 }
 
 function threatAreaHasCard(threatArea: EncounterCard[], cardName: string): boolean {
@@ -1932,7 +1932,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterDeck),
+      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterCardCodes),
       encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
@@ -2011,7 +2011,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterDeck),
+      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterCardCodes),
       encounterDiscard: [],
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
