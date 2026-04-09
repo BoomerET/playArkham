@@ -127,6 +127,41 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
   startingLocationId: "miskatonic-university",
   locations: [
     {
+      id: "downtown",
+      code: "12146",
+      name: "Downtown",
+      shroud: 4,
+      clues: 2,
+      revealed: false,
+      connections: ["northside", "east-town"],
+      investigatorsHere: [],
+      mapPosition: { x: 50, y: 16 },
+      isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "First Bank of Arkham",
+      text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
+      victoryPoints: 1,
+    },
+    {
+      id: "uptown",
+      code: "12147",
+      name: "Uptown",
+      shroud: 2,
+      clues: 2,
+      revealed: false,
+      connections: ["miskatonic-university", "southside"],
+      investigatorsHere: [],
+      mapPosition: { x: 22, y: 84 },
+      isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "St. Mary's Hospital",
+      text: "Action: Heal up to 2 damage among investigators and/or Ally assets at this location. (Limit once per game.)",
+    },
+    {
       id: "miskatonic-university",
       name: "Miskatonic University (Quiet campus)",
       shroud: 2,
@@ -166,9 +201,6 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       ],
       text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
       code: "12149",
-    },
-    {
-      id: "downtown",
     },
     {
       id: "easttown",
@@ -231,9 +263,6 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
       ],
       victoryPoints: 1,
       code: "12152",
-    },
-    {
-      id: "uptown",
     },
     {
       id: "southside",
