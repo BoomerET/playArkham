@@ -78,6 +78,21 @@ export function resolveEncounterCardImmediate(args: {
   const { card } = args;
 
   switch (card.code) {
+
+    case ENCOUNTER_CARD_CODES.NOXIOUS_SMOKE:
+      return {
+        kind: "skillTest",
+        skill: "willpower",
+        difficulty: 3,
+        pending: {
+          cardName: card.name,
+          onPass: { kind: "none" },
+          onFail: { kind: "horrorByFailure" },
+        },
+        logText: "Noxious Smoke: test Willpower (3).",
+      };
+
+
     case ENCOUNTER_CARD_CODES.COSMIC_EVILS:
       return {
         kind: "choice",
@@ -110,19 +125,6 @@ export function resolveEncounterCardImmediate(args: {
           onFail: { kind: "damage", amount: 1 },
         },
         logText: "Grasping Hands: test Agility (3).",
-      };
-
-    case ENCOUNTER_CARD_CODES.NOXIOUS_SMOKE:
-      return {
-        kind: "skillTest",
-        skill: "willpower",
-        difficulty: 3,
-        pending: {
-          cardName: card.name,
-          onPass: { kind: "none" },
-          onFail: { kind: "horror", amount: 2 },
-        },
-        logText: "Rotting Remains: test Willpower (3).",
       };
 
     case ENCOUNTER_CARD_CODES.UNSPEAKABLE_TRUTHS:
