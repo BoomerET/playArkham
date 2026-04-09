@@ -11,6 +11,13 @@ type EncounterChoiceOption = {
   effect: EncounterChoiceEffect;
 };
 
+export type EncounterSkillTestOutcome =
+  | { kind: "none" }
+  | { kind: "damage"; amount: number }
+  | { kind: "horror"; amount: number }
+  | { kind: "damageByFailure" }
+  | { kind: "horrorByFailure" };
+
 export type EncounterImmediateResolution =
   | {
     kind: "none";
@@ -63,11 +70,6 @@ export type EncounterImmediateResolution =
     logText: string;
   };
 
-type EncounterSkillTestOutcome =
-  | { kind: "none" }
-  | { kind: "damage"; amount: number }
-  | { kind: "horror"; amount: number };
-
 export function resolveEncounterCardImmediate(args: {
   card: EncounterCard;
   investigator: Investigator;
@@ -97,28 +99,31 @@ export function resolveEncounterCardImmediate(args: {
           "Cosmic Evils: choose one - place 1 doom on the current agenda, or Cosmic Evils gains surge.",
       };
 
-
-    /*  case "12129":
+    case ENCOUNTER_CARD_CODES.GRASPING_HANDS:
       return {
-        kind: "spawnAcolyte",
-        doomOnAgenda: 1,
-        enemy: {
-          id: `acolyte-${Date.now()}`,
-          name: "Acolyte",
-          fight: card.fight ?? 3,
-          evade: card.evade ?? 2,
-          health: card.health ?? 3,
-          damage: card.damage ?? 1,
-          horror: card.horror ?? 1,
-          locationId: currentLocationId,
-          engagedInvestigatorId: investigator.id,
-          exhausted: false,
-          damageOnEnemy: 0,
+        kind: "skillTest",
+        skill: "agility",
+        difficulty: 3,
+        pending: {
+          cardName: card.name,
+          onPass: { kind: "none" },
+          onFail: { kind: "damage", amount: 1 },
         },
-        logText:
-          "Acolyte: spawn engaged with the investigator and place 1 doom on the agenda.",
+        logText: "Grasping Hands: test Agility (3).",
       };
-      */
+
+    case ENCOUNTER_CARD_CODES.ROTTING_REMAINS:
+      return {
+        kind: "skillTest",
+        skill: "willpower",
+        difficulty: 3,
+        pending: {
+          cardName: card.name,
+          onPass: { kind: "none" },
+          onFail: { kind: "horror", amount: 2 },
+        },
+        logText: "Rotting Remains: test Willpower (3).",
+      };
 
     case ENCOUNTER_CARD_CODES.UNSPEAKABLE_TRUTHS:
       return {

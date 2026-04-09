@@ -119,6 +119,13 @@ type EncounterSkillTestOutcome =
   | { kind: "damage"; amount: number }
   | { kind: "horror"; amount: number };
 
+type EncounterSkillTestOutcome =
+  | { kind: "none" }
+  | { kind: "damage"; amount: number }
+  | { kind: "horror"; amount: number }
+  | { kind: "damageByFailure" }
+  | { kind: "horrorByFailure" };
+
 type PendingEncounterResolution = {
   cardName: string;
   onPass?: EncounterSkillTestOutcome;
@@ -3329,6 +3336,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const success =
       token !== "autoFail" && finalValue >= activeSkillTest.difficulty;
 
+    const failureAmount = success
+      ? 0
+      : Math.max(0, activeSkillTest.difficulty - finalValue);
+
     const result: SkillTestResult = {
       skill: activeSkillTest.skill,
       baseValue,
@@ -3566,6 +3577,47 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    //if (pendingEncounterResolution) {
+    //  const outcome = success
+    //    ? pendingEncounterResolution.onPass
+    //    : pendingEncounterResolution.onFail;
+    //
+    //  if (outcome?.kind === "damage") {
+    //    updatedInvestigator = {
+    //      ...updatedInvestigator,
+    //      damage: updatedInvestigator.damage + outcome.amount,
+    //    };
+    //
+    //    resolutionLog.push(
+    //      createLogEntry(
+    //        "scenario",
+    //        `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} damage.`,
+    //      ),
+    //    );
+    //  } else if (outcome?.kind === "horror") {
+    //    updatedInvestigator = {
+    //      ...updatedInvestigator,
+    //      horror: updatedInvestigator.horror + outcome.amount,
+    //    };
+    //
+    //    resolutionLog.push(
+    //      createLogEntry(
+    //        "scenario",
+    //        `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} horror.`,
+    //      ),
+    //    );
+    //  } else {
+    //    resolutionLog.push(
+    //      createLogEntry(
+    //        "scenario",
+    //        success
+    //          ? `${pendingEncounterResolution.cardName}: passed the test.`
+    //          : `${pendingEncounterResolution.cardName}: failed the test.`,
+    //      ),
+    //    );
+    //  }
+    //}
+
     if (pendingEncounterResolution) {
       const outcome = success
         ? pendingEncounterResolution.onPass
@@ -3593,6 +3645,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
           createLogEntry(
             "scenario",
             `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} horror.`,
+          ),
+        );
+      } else if (outcome?.kind === "damageByFailure") {
+        updatedInvestigator = {
+          ...updatedInvestigator,
+          damage: updatedInvestigator.damage + failureAmount,
+        };
+
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: failed by ${failureAmount} and took ${failureAmount} damage.`,
+          ),
+        );
+      } else if (outcome?.kind === "horrorByFailure") {
+        updatedInvestigator = {
+          ...updatedInvestigator,
+          horror: updatedInvestigator.horror + failureAmount,
+        };
+
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: failed by ${failureAmount} and took ${failureAmount} horror.`,
           ),
         );
       } else {
