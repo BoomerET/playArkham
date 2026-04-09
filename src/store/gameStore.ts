@@ -3580,51 +3580,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    //if (pendingEncounterResolution) {
-    //  const outcome = success
-    //    ? pendingEncounterResolution.onPass
-    //    : pendingEncounterResolution.onFail;
-    //
-    //  if (outcome?.kind === "damage") {
-    //    updatedInvestigator = {
-    //      ...updatedInvestigator,
-    //      damage: updatedInvestigator.damage + outcome.amount,
-    //    };
-    //
-    //    resolutionLog.push(
-    //      createLogEntry(
-    //        "scenario",
-    //        `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} damage.`,
-    //      ),
-    //    );
-    //  } else if (outcome?.kind === "horror") {
-    //    updatedInvestigator = {
-    //      ...updatedInvestigator,
-    //      horror: updatedInvestigator.horror + outcome.amount,
-    //    };
-    //
-    //    resolutionLog.push(
-    //      createLogEntry(
-    //        "scenario",
-    //        `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} horror.`,
-    //      ),
-    //    );
-    //  } else {
-    //    resolutionLog.push(
-    //      createLogEntry(
-    //        "scenario",
-    //        success
-    //          ? `${pendingEncounterResolution.cardName}: passed the test.`
-    //          : `${pendingEncounterResolution.cardName}: failed the test.`,
-    //      ),
-    //    );
-    //  }
-    //}
-
     if (pendingEncounterResolution) {
       const outcome = success
         ? pendingEncounterResolution.onPass
         : pendingEncounterResolution.onFail;
+
+      const failureText =
+        token === "autoFail"
+          ? "auto-failed"
+          : `failed by ${failureAmount}`;
 
       if (outcome?.kind === "damage") {
         updatedInvestigator = {
@@ -3659,7 +3623,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         resolutionLog.push(
           createLogEntry(
             "scenario",
-            `${pendingEncounterResolution.cardName}: failed by ${failureAmount} and took ${failureAmount} damage.`,
+            `${pendingEncounterResolution.cardName}: ${failureText} and took ${failureAmount} damage.`,
           ),
         );
       } else if (outcome?.kind === "horrorByFailure") {
@@ -3671,7 +3635,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         resolutionLog.push(
           createLogEntry(
             "scenario",
-            `${pendingEncounterResolution.cardName}: failed by ${failureAmount} and took ${failureAmount} horror.`,
+            `${pendingEncounterResolution.cardName}: ${failureText} and took ${failureAmount} horror.`,
           ),
         );
       } else {
