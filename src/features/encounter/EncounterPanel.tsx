@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useGameStore } from "../../store/gameStore";
 import type { EncounterCard } from "../../types/game";
+import EncounterChoicePrompt from "./EncounterChoicePrompt";
 
 const encounterImages = import.meta.glob(
   "../../assets/images/encounters/*.{jpg,jpeg,png,webp}",
@@ -188,7 +189,7 @@ export default function EncounterPanel() {
           </span>
         </div>
       </div>
-
+      <EncounterChoicePrompt />
       <div className="encounter-panel__section">
         <h3 className="encounter-panel__section-title">Last Drawn</h3>
 

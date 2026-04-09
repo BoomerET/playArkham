@@ -1,0 +1,48 @@
+.encounter-choice-prompt {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 70%);
+  z-index: 1000;
+}
+
+.encounter-choice-prompt__panel {
+  width: min(90vw, 420px);
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #1f1a17;
+  border: 1px solid #6d5a46;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
+}
+
+.encounter-choice-prompt__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.encounter-choice-prompt__text {
+  margin: 0 0 1rem;
+}
+
+.encounter-choice-prompt__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.encounter-choice-prompt__button {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #8a745c;
+  border-radius: 8px;
+  background: #2c241f;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.encounter-choice-prompt__button:hover {
+  background: #3a2f28;
+}
