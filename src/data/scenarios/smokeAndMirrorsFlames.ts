@@ -127,6 +127,41 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
   startingLocationId: "miskatonic-university",
   locations: [
     {
+      id: "downtown",
+      code: "12146",
+      name: "Downtown",
+      shroud: 4,
+      clues: 2,
+      revealed: false,
+      connections: ["northside", "east-town"],
+      investigatorsHere: [],
+      mapPosition: { x: 50, y: 16 },
+      isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "First Bank of Arkham",
+      text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
+      victoryPoints: 1,
+    },
+    {
+      id: "uptown",
+      code: "12148",
+      name: "Uptown",
+      shroud: 3,
+      clues: 1,
+      revealed: false,
+      connections: ["miskatonic-university", "southside"],
+      investigatorsHere: [],
+      mapPosition: { x: 22, y: 84 },
+      isVisible: true,
+      traits: [
+        "Arkham",
+      ],
+      subname: "Ye Olde Magick Shoppe",
+      text: "Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
+    },
+    {
       id: "miskatonic-university",
       name: "Miskatonic University (Quiet campus)",
       shroud: 4,
@@ -166,9 +201,6 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
       code: "12149",
-    },
-    {
-      id: "downtown",
     },
     {
       id: "easttown",
@@ -231,9 +263,6 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       ],
       victoryPoints: 1,
       code: "12152",
-    },
-    {
-      id: "uptown",
     },
     {
       id: "southside",
