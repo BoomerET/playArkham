@@ -112,10 +112,16 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
-type PendingEncounterResolution =
-  | { kind: "graspingHands"; cardName: string }
-  | { kind: "rottingRemains"; cardName: string }
-  | null;
+type EncounterSkillTestOutcome =
+  | { kind: "none" }
+  | { kind: "damage"; amount: number }
+  | { kind: "horror"; amount: number };
+
+type PendingEncounterResolution = {
+  cardName: string;
+  onPass?: EncounterSkillTestOutcome;
+  onFail?: EncounterSkillTestOutcome;
+} | null;
 
 type ChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
@@ -3560,47 +3566,42 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    if (pendingEncounterResolution?.kind === "graspingHands") {
-      if (!success) {
+    if (pendingEncounterResolution) {
+      const outcome = success
+        ? pendingEncounterResolution.onPass
+        : pendingEncounterResolution.onFail;
+
+      if (outcome?.kind === "damage") {
         updatedInvestigator = {
           ...updatedInvestigator,
-          damage: updatedInvestigator.damage + 1,
+          damage: updatedInvestigator.damage + outcome.amount,
         };
 
         resolutionLog.push(
           createLogEntry(
             "scenario",
-            `${pendingEncounterResolution.cardName}: failed the test and took 1 damage.`,
+            `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} damage.`,
+          ),
+        );
+      } else if (outcome?.kind === "horror") {
+        updatedInvestigator = {
+          ...updatedInvestigator,
+          horror: updatedInvestigator.horror + outcome.amount,
+        };
+
+        resolutionLog.push(
+          createLogEntry(
+            "scenario",
+            `${pendingEncounterResolution.cardName}: failed the test and took ${outcome.amount} horror.`,
           ),
         );
       } else {
         resolutionLog.push(
           createLogEntry(
             "scenario",
-            `${pendingEncounterResolution.cardName}: passed the test.`,
-          ),
-        );
-      }
-    }
-
-    if (pendingEncounterResolution?.kind === "rottingRemains") {
-      if (!success) {
-        updatedInvestigator = {
-          ...updatedInvestigator,
-          horror: updatedInvestigator.horror + 2,
-        };
-
-        resolutionLog.push(
-          createLogEntry(
-            "scenario",
-            `${pendingEncounterResolution.cardName}: failed the test and took 2 horror.`,
-          ),
-        );
-      } else {
-        resolutionLog.push(
-          createLogEntry(
-            "scenario",
-            `${pendingEncounterResolution.cardName}: passed the test.`,
+            success
+              ? `${pendingEncounterResolution.cardName}: passed the test.`
+              : `${pendingEncounterResolution.cardName}: failed the test.`,
           ),
         );
       }

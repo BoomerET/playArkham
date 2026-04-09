@@ -37,9 +37,11 @@ export type EncounterImmediateResolution =
     kind: "skillTest";
     skill: SkillType;
     difficulty: number;
-    pending:
-    | { kind: "graspingHands"; cardName: string }
-    | { kind: "rottingRemains"; cardName: string };
+    pending: {
+      cardName: string;
+      onPass?: EncounterSkillTestOutcome;
+      onFail?: EncounterSkillTestOutcome;
+    };
     logText: string;
   }
   | {
@@ -59,6 +61,11 @@ export type EncounterImmediateResolution =
     horror: number;
     logText: string;
   };
+
+type EncounterSkillTestOutcome =
+  | { kind: "none" }
+  | { kind: "damage"; amount: number }
+  | { kind: "horror"; amount: number };
 
 export function resolveEncounterCardImmediate(args: {
   card: EncounterCard;
@@ -109,8 +116,9 @@ export function resolveEncounterCardImmediate(args: {
         skill: "agility",
         difficulty: 3,
         pending: {
-          kind: "graspingHands",
           cardName: card.name,
+          onPass: { kind: "none" },
+          onFail: { kind: "damage", amount: 1 },
         },
         logText: "Grasping Hands: test Agility (3).",
       };
@@ -121,8 +129,9 @@ export function resolveEncounterCardImmediate(args: {
         skill: "willpower",
         difficulty: 3,
         pending: {
-          kind: "rottingRemains",
           cardName: card.name,
+          onPass: { kind: "none" },
+          onFail: { kind: "horror", amount: 2 },
         },
         logText: "Rotting Remains: test Willpower (3).",
       };
