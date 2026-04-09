@@ -54,12 +54,13 @@ export interface ScenarioDefinition {
   chaosBag?: ChaosToken[];
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
-  encounterDeck?: EncounterCard[];
   setupNotes?: ScenarioSetupNotes;
   randomizedSelections?: ScenarioRandomizedSelection[];
   campaignKey?: string;
   campaignOutcome?: string;
   randomizedLocationOptions?: ScenarioRandomizedLocationGroup[];
+  encounterCardCodes?: string[];
+  encounterDeck?: EncounterCard[];
 }
 
 export interface ScenarioRandomizedLocationOption {
