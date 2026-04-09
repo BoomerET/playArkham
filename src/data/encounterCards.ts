@@ -555,7 +555,7 @@ export const encounterCards: EncounterCard[] = [
             "Retaliate",
         ],
         text: [
-            "Forced - After Rogue Gangster engages you: Lose 1 resource. If you cannot, this enemy attacks you.", ",
+            "Forced - After Rogue Gangster engages you: Lose 1 resource. If you cannot, this enemy attacks you.",
         ],
         inEncounterDeck: true,
     },
