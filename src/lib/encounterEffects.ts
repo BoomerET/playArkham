@@ -1,5 +1,5 @@
 import type { EncounterCard, Enemy, Investigator, SkillType } from "../types/game";
-import { ENCOUNTER_CARD_CODES } from "../../types/game";
+import { ENCOUNTER_CARD_CODES } from "../types/game";
 
 type EncounterChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
