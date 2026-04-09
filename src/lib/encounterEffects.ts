@@ -73,7 +73,7 @@ export function resolveEncounterCardImmediate(args: {
   investigator: Investigator;
   currentLocationId: string;
 }): EncounterImmediateResolution {
-  const { card, investigator: _investigator, currentLocationId: _currentLocationId } = args;
+  const { card } = args;
 
   switch (card.code) {
     case ENCOUNTER_CARD_CODES.COSMIC_EVILS:
