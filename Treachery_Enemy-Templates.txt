@@ -1,0 +1,29 @@
+Treachery Template
+
+
+Enemy Template
+
+{
+    code: "12XXX",
+    name: "EnemyName",
+    type: "enemy",
+    damage: 0,
+    horror: 0,
+    fight: 0,
+    health: 0,
+    evade: 0,
+    set: "whipporwills",
+    traits: [
+        "Trait1",
+        "Trait2",
+    ],
+    ability: [
+        "Ability1",
+        "Ability2",
+    ],
+    text: [
+        "Actions: ",
+    ],
+    inEncounterDeck: true,
+    victoryPoints: 1,
+},

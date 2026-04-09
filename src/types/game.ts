@@ -253,7 +253,8 @@ export interface EncounterCard {
   id: string;
   code: string;
   name: string;
-  type: "enemy" | "treachery" | "ally";
+  subname?: string;
+  type: "enemy" | "treachery" | "ally" | "weakness";
   ability?: string[]
   text?: string[];
   damage?: number;
@@ -264,6 +265,7 @@ export interface EncounterCard {
   set?: string;
   traits?: string[];
   inEncounterDeck?: boolean;
+  victoryPoints?: number;
 }
 
 export const ENCOUNTER_CARD_CODES = {
@@ -281,4 +283,23 @@ export const ENCOUNTER_CARD_CODES = {
   MUTATED: "12131",
   MUTATED_EXPERIMENT: "12132",
   DR_HENRY_ARMITAGE: "12133",
+  SERVANT_OF_FLAME_2: "12138",
+  MARK_OF_ELOKOSS: "12137",
+  DAVID_RENFIELD: "12139",
+  CORNELIA_AKELY: "12140",
+  NAOMI_O_BANNION: "12141",
+  SGT_EARL_MONROE: "12142",
+  ABIBAIL_FOREMAN: "12143",
+  MARGARET_LUI: "12144",
+  ARCANE_LOCK: "12157",
+  DOWNPOUR: "12158",
+  FLASH_FLOOD: "12159",
+  RISING_SUSPICIONS: "12160",
+  RED_HERRING: "12161",
+  BAT_HORROR: "12162",
+  AERIAL_PURSUIT: "12163",
+  ROGUE_GANGSTER: "12164",
+  CROSSFIRE: "12165",
+  WHIPPOORWILL: "12166",
+  EAGER_FOR_DEATH: "12167",
 } as const;
