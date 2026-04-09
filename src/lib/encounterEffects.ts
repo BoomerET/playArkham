@@ -1,4 +1,5 @@
 import type { EncounterCard, Enemy, Investigator, SkillType } from "../types/game";
+import { ENCOUNTER_CARD_CODES } from "../../types/game";
 
 type EncounterChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
@@ -72,10 +73,10 @@ export function resolveEncounterCardImmediate(args: {
   investigator: Investigator;
   currentLocationId: string;
 }): EncounterImmediateResolution {
-  const { card, investigator, currentLocationId } = args;
+  const { card, investigator: _investigator, currentLocationId: _currentLocationId } = args;
 
   switch (card.code) {
-    case "12124":
+    case ENCOUNTER_CARD_CODES.COSMIC_EVILS:
       return {
         kind: "choice",
         pending: {
@@ -119,7 +120,7 @@ export function resolveEncounterCardImmediate(args: {
       };
       */
 
-    case "12125":
+    case ENCOUNTER_CARD_CODES.UNSPEAKABLE_TRUTHS:
       return {
         kind: "attachToThreatArea",
         uniqueByName: true,
@@ -128,7 +129,7 @@ export function resolveEncounterCardImmediate(args: {
           "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
       };
 
-    case "12129":
+    case ENCOUNTER_CARD_CODES.FIRE:
       return {
         kind: "attachToLocation",
         uniqueByNameAtLocation: true,
