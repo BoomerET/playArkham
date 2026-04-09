@@ -114,10 +114,10 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
-type EncounterSkillTestOutcome =
-  | { kind: "none" }
-  | { kind: "damage"; amount: number }
-  | { kind: "horror"; amount: number };
+//type EncounterSkillTestOutcome =
+//  | { kind: "none" }
+//  | { kind: "damage"; amount: number }
+//  | { kind: "horror"; amount: number };
 
 type EncounterSkillTestOutcome =
   | { kind: "none" }

@@ -99,7 +99,7 @@ export function resolveEncounterCardImmediate(args: {
           "Cosmic Evils: choose one - place 1 doom on the current agenda, or Cosmic Evils gains surge.",
       };
 
-    case ENCOUNTER_CARD_CODES.GRASPING_HANDS:
+    case ENCOUNTER_CARD_CODES.CANTOR_OF_FLAME:
       return {
         kind: "skillTest",
         skill: "agility",
@@ -112,7 +112,7 @@ export function resolveEncounterCardImmediate(args: {
         logText: "Grasping Hands: test Agility (3).",
       };
 
-    case ENCOUNTER_CARD_CODES.ROTTING_REMAINS:
+    case ENCOUNTER_CARD_CODES.NOXIOUS_SMOKE:
       return {
         kind: "skillTest",
         skill: "willpower",
