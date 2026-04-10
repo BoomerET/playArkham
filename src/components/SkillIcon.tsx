@@ -33,8 +33,15 @@ export default function SkillIcon({
       return <FistIcon {...sharedProps} />;
     case "agility":
       return <FootIcon {...sharedProps} />;
+    case "wild":
+      return (
+        <svg viewBox="0 0 24 24" {...sharedProps}>
+          <text x="12" y="16" textAnchor="middle" fontSize="18">
+            ?
+          </text>
+        </svg>
+      );
     default:
       return null;
   }
 }
-

@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import SkillIcon from "../../components/SkillIcon";
-import { normalizeSkillIcon, type SkillIconType } from "../../components/skillIconUtils";
+import {
+  normalizeSkillIcon,
+  type SkillIconType,
+} from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
 
@@ -27,6 +30,10 @@ const skillMeta: Record<
     label: "Agility",
     className: "skill-agility",
   },
+  wild: {
+    label: "Wild",
+    className: "skill-wild",
+  },
 };
 
 function formatSkillList(icons: string[] | undefined) {
@@ -43,16 +50,19 @@ export default function ActiveSkillTestPanel() {
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
   const hand = useGameStore((state) => state.hand);
   const commitSkillCard = useGameStore((state) => state.commitSkillCard);
-  const resolveActiveSkillTest = useGameStore((state) => state.resolveActiveSkillTest);
-  const cancelActiveSkillTest = useGameStore((state) => state.cancelActiveSkillTest);
+  const resolveActiveSkillTest = useGameStore(
+    (state) => state.resolveActiveSkillTest,
+  );
+  const cancelActiveSkillTest = useGameStore(
+    (state) => state.cancelActiveSkillTest,
+  );
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
   const draggedCardId = useGameStore((state) => state.draggedCardId);
 
   const [isDragOver, setIsDragOver] = useState(false);
 
-  //const committableCards = useMemo(() => hand, [hand]);
-
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
+
   const committableCards = useMemo(() => {
     if (!activeSkill) {
       return hand;
@@ -60,9 +70,12 @@ export default function ActiveSkillTestPanel() {
 
     return hand.filter((card) => {
       const cardIcons = formatSkillList(card.icons);
-      return cardIcons.includes(activeSkill);
+      return (
+        cardIcons.includes(activeSkill) || cardIcons.includes("wild")
+      );
     });
   }, [hand, activeSkill]);
+
   const committedBonus = useMemo(() => {
     if (!activeSkillTest) {
       return 0;
@@ -78,7 +91,9 @@ export default function ActiveSkillTestPanel() {
     return null;
   }
 
-  const skillLabel = activeSkill ? skillMeta[activeSkill].label : activeSkillTest.skill;
+  const skillLabel = activeSkill
+    ? skillMeta[activeSkill].label
+    : activeSkillTest.skill;
 
   return (
     <section
@@ -94,7 +109,8 @@ export default function ActiveSkillTestPanel() {
       }}
       onDrop={(event) => {
         event.preventDefault();
-        const cardId = event.dataTransfer.getData("text/plain") || draggedCardId;
+        const cardId =
+          event.dataTransfer.getData("text/plain") || draggedCardId;
         setIsDragOver(false);
         setDraggedCardId(null);
 
@@ -107,9 +123,7 @@ export default function ActiveSkillTestPanel() {
         <div>
           <p className="active-skill-test-kicker">Active Skill Test</p>
           <h2 className="active-skill-test-title">{activeSkillTest.source}</h2>
-          <p className="panel-subtitle">
-            Commit cards, then resolve the test.
-          </p>
+          <p className="panel-subtitle">Commit cards, then resolve the test.</p>
         </div>
 
         <div className="active-skill-test-summary">
@@ -136,7 +150,9 @@ export default function ActiveSkillTestPanel() {
 
           <div className="skill-value-card">
             <span className="skill-value-label">Difficulty</span>
-            <strong className="skill-value-number">{activeSkillTest.difficulty}</strong>
+            <strong className="skill-value-number">
+              {activeSkillTest.difficulty}
+            </strong>
           </div>
 
           <div className="skill-value-card">
@@ -175,7 +191,11 @@ export default function ActiveSkillTestPanel() {
                   >
                     <div className="card-topline">
                       <p className="entity-title">{entry.card.name}</p>
-                      <span className={`card-type-badge ${getCardTypeClassName(entry.card)}`}>
+                      <span
+                        className={`card-type-badge ${getCardTypeClassName(
+                          entry.card,
+                        )}`}
+                      >
                         {entry.card.type}
                       </span>
                     </div>
@@ -206,7 +226,9 @@ export default function ActiveSkillTestPanel() {
                       <strong>+{entry.matchingIcons}</strong>
                     </div>
 
-                    {entry.card.text && <p className="entity-text">{entry.card.text}</p>}
+                    {entry.card.text && (
+                      <p className="entity-text">{entry.card.text}</p>
+                    )}
                   </div>
                 );
               })}
@@ -230,7 +252,8 @@ export default function ActiveSkillTestPanel() {
                     key={card.id}
                     className={`entity-card player-card active-skill-hand-card ${getCardTypeClassName(
                       card,
-                    )} ${draggedCardId === card.id ? "dragging-card" : ""}`}
+                    )} ${draggedCardId === card.id ? "dragging-card" : ""
+                      }`}
                     draggable
                     onDragStart={(event) => {
                       event.dataTransfer.setData("text/plain", card.id);
@@ -243,7 +266,11 @@ export default function ActiveSkillTestPanel() {
                   >
                     <div className="card-topline">
                       <p className="entity-title">{card.name}</p>
-                      <span className={`card-type-badge ${getCardTypeClassName(card)}`}>
+                      <span
+                        className={`card-type-badge ${getCardTypeClassName(
+                          card,
+                        )}`}
+                      >
                         {card.type}
                       </span>
                     </div>
@@ -274,7 +301,12 @@ export default function ActiveSkillTestPanel() {
                         <span>Matches {skillLabel}</span>
                         <strong>
                           +
-                          {cardIcons.filter((icon) => icon === activeSkill).length}
+                          {
+                            cardIcons.filter(
+                              (icon) =>
+                                icon === activeSkill || icon === "wild",
+                            ).length
+                          }
                         </strong>
                       </div>
                     )}
@@ -282,7 +314,9 @@ export default function ActiveSkillTestPanel() {
                     {card.text && <p className="entity-text">{card.text}</p>}
 
                     <div className="card-actions">
-                      <button onClick={() => commitSkillCard(card.id)}>Commit</button>
+                      <button onClick={() => commitSkillCard(card.id)}>
+                        Commit
+                      </button>
                     </div>
                   </div>
                 );

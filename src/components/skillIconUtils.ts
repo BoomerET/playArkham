@@ -2,19 +2,36 @@ export type SkillIconType =
   | "willpower"
   | "intellect"
   | "combat"
-  | "agility";
+  | "agility"
+  | "wild";
 
 export function normalizeSkillIcon(value: string): SkillIconType | null {
   const normalized = value.trim().toLowerCase();
 
-  if (
-    normalized === "willpower" ||
-    normalized === "intellect" ||
-    normalized === "combat" ||
-    normalized === "agility"
-  ) {
-    return normalized;
-  }
+  switch (normalized) {
+    case "willpower":
+    case "will":
+    case "brain":
+      return "willpower";
 
-  return null;
+    case "intellect":
+    case "book":
+      return "intellect";
+
+    case "combat":
+    case "fist":
+      return "combat";
+
+    case "agility":
+    case "foot":
+      return "agility";
+
+    case "wild":
+    case "?":
+    case "question":
+      return "wild";
+
+    default:
+      return null;
+  }
 }
