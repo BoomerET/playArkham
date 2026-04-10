@@ -759,3 +759,15 @@
   margin: 0;
   opacity: 0.7;
 }
+
+.enemy-card-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+}
+
+.enemy-card {
+  flex: 0 0 240px;
+}
