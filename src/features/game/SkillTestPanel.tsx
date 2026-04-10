@@ -36,13 +36,21 @@ export default function SkillTestPanel() {
             </p>
             <p className="entity-meta">Difficulty: {lastSkillTest.difficulty}</p>
             <p className="entity-meta">Token: {String(lastSkillTest.token)}</p>
-            {/* <p className="entity-meta">Token Modifier: {lastSkillTest.tokenModifier}</p> */}
+
             <p>
-              Token Modifier:{" "}
+              Token:{" "}
               {lastSkillTest.token === "autoFail"
                 ? "Auto-fail"
+                : lastSkillTest.token}
+            </p>
+
+            <p>
+              Modifier:{" "}
+              {lastSkillTest.token === "autoFail"
+                ? "—"
                 : lastSkillTest.tokenModifier}
             </p>
+
             <p className="entity-meta">
               Final Value:{" "}
               {lastSkillTest.token === "autoFail"
