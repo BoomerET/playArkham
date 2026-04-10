@@ -5,16 +5,17 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
+import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
 
-const playerCardImages = import.meta.glob(
-  [
-    "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-  ],
-  {
-    eager: true,
-    import: "default",
-  },
-) as Record<string, string>;
+//const playerCardImages = import.meta.glob(
+//  [
+//    "../../assets/images/players/*.{jpg,jpeg,png,webp}",
+//  ],
+//  {
+//    eager: true,
+//    import: "default",
+//  },
+//) as Record<string, string>;
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -86,7 +87,7 @@ function findImageUrlByName(imageName?: string): string | null {
 
   const normalized = imageName.toLowerCase();
 
-  const match = Object.entries(playerCardImages).find(([path]) =>
+  const match = Object.entries(getPlayerCardImageUrl).find(([path]) =>
     path.toLowerCase().endsWith(`/${normalized}`),
   );
 
@@ -96,7 +97,7 @@ function findImageUrlByName(imageName?: string): string | null {
 function findImageUrlByBaseNames(baseNames: string[]): string | null {
   const normalizedBases = baseNames.map((name) => name.toLowerCase());
 
-  const match = Object.entries(playerCardImages).find(([path]) => {
+  const match = Object.entries(getPlayerCardImageUrl).find(([path]) => {
     const fileName = path.split("/").pop()?.toLowerCase() ?? "";
     const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
     return normalizedBases.includes(baseName);
@@ -296,8 +297,8 @@ export default function PlayAreaPanel() {
                   <div className="play-area-image-topbar">
                     <span
                       className={`play-area-cost-chip ${card.cost === undefined
-                          ? "play-area-cost-chip-empty"
-                          : ""
+                        ? "play-area-cost-chip-empty"
+                        : ""
                         }`}
                     >
                       {card.cost ?? "—"}
