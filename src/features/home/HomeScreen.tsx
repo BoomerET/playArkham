@@ -174,34 +174,29 @@ export default function HomeScreen() {
           return;
         }
 
-        const investigatorName = data.investigator_name?.trim() ?? "";
         const investigatorCode = data.investigator_code?.trim() ?? "";
         const deckName = data.name?.trim() ?? null;
 
         setDetectedDeckName(deckName);
-        setDetectedInvestigatorName(investigatorName || null);
+        setDetectedInvestigatorName(investigatorCode || null);
 
         const matchingInvestigator = availableInvestigators.find((item) => {
           const itemWithOptionalCode = item as typeof item & {
             code?: string;
           };
 
-          const codeMatches =
+          return (
             Boolean(investigatorCode) &&
             typeof itemWithOptionalCode.code === "string" &&
-            itemWithOptionalCode.code === investigatorCode;
-
-          const nameMatches =
-            Boolean(investigatorName) && item.name === investigatorName;
-
-          return codeMatches || nameMatches;
+            itemWithOptionalCode.code === investigatorCode
+          );
         });
 
         if (!matchingInvestigator) {
           setDeckLookupState("error");
           setDeckLookupMessage(
-            investigatorName
-              ? `Deck investigator "${investigatorName}" is not supported by this app yet.`
+            investigatorCode
+              ? `Deck investigator code "${investigatorCode}" is not supported by this app yet.`
               : "This deck's investigator could not be identified.",
           );
           return;

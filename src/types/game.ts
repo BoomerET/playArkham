@@ -61,6 +61,7 @@ export interface Investigator {
   combat: number;
   agility: number;
   slotCapacity?: InvestigatorSlotCounts;
+  code?: string;
 }
 
 export type CardCounterType =

@@ -1,7 +1,5 @@
 import type { Investigator } from "../types/game";
 
-//const base = import.meta.env.BASE_URL;
-
 export const investigators: Investigator[] = [
   {
     "id": "daniela-reyes",
@@ -19,7 +17,8 @@ export const investigators: Investigator[] = [
     "willpower": 3,
     "intellect": 2,
     "combat": 5,
-    "agility": 2
+    "agility": 2,
+    "code": "12001",
   },
   {
     "id": "joe-diamond",
@@ -37,7 +36,8 @@ export const investigators: Investigator[] = [
     "willpower": 2,
     "intellect": 4,
     "combat": 4,
-    "agility": 2
+    "agility": 2,
+    "code": "12004",
   },
   {
     "id": "trish-scarborough",
@@ -55,7 +55,8 @@ export const investigators: Investigator[] = [
     "willpower": 2,
     "intellect": 4,
     "combat": 2,
-    "agility": 4
+    "agility": 4,
+    "code": "12007",
   },
   {
     "id": "dexter-drake",
@@ -73,7 +74,8 @@ export const investigators: Investigator[] = [
     "willpower": 5,
     "intellect": 2,
     "combat": 2,
-    "agility": 3
+    "agility": 3,
+    "code": "12010",
   },
   {
     "id": "isabelle-barnes",
@@ -91,6 +93,7 @@ export const investigators: Investigator[] = [
     "willpower": 4,
     "intellect": 2,
     "combat": 3,
-    "agility": 3
+    "agility": 3,
+    "code": "12013",
   }
 ];
