@@ -10,18 +10,48 @@ const investigatorImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-function getInvestigatorImageUrl(imageName?: string): string | null {
-  if (!imageName) {
+function findInvestigatorImageByBaseName(baseName?: string): string | null {
+  if (!baseName) {
     return null;
   }
 
-  const normalized = imageName.toLowerCase();
+  const normalized = baseName.toLowerCase();
 
-  const match = Object.entries(investigatorImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
+  const match = Object.entries(investigatorImages).find(([path]) => {
+    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
+    const withoutExtension = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+    return withoutExtension === normalized;
+  });
 
   return match?.[1] ?? null;
+}
+
+function getInvestigatorFrontImageUrl(
+  investigator: typeof availableInvestigators[number],
+): string | null {
+  const investigatorWithCode = investigator as typeof investigator & {
+    code?: string;
+  };
+
+  return (
+    findInvestigatorImageByBaseName(investigatorWithCode.code) ||
+    findInvestigatorImageByBaseName(investigator.portrait)
+  );
+}
+
+function getInvestigatorBackImageUrl(
+  investigator: typeof availableInvestigators[number],
+): string | null {
+  const investigatorWithCode = investigator as typeof investigator & {
+    code?: string;
+  };
+
+  return (
+    findInvestigatorImageByBaseName(
+      investigatorWithCode.code ? `${investigatorWithCode.code}-back` : undefined,
+    ) ||
+    findInvestigatorImageByBaseName(investigator.portraitBack)
+  );
 }
 
 function useModifierKey(key: "Alt" | "Shift") {
@@ -244,8 +274,8 @@ export default function HomeScreen() {
       return null;
     }
 
-    const frontImageUrl = getInvestigatorImageUrl(investigator.portrait);
-    const backImageUrl = getInvestigatorImageUrl(investigator.portraitBack);
+    const frontImageUrl = getInvestigatorFrontImageUrl(investigator);
+    const backImageUrl = getInvestigatorBackImageUrl(investigator);
 
     if (!frontImageUrl) {
       return null;
@@ -293,12 +323,8 @@ export default function HomeScreen() {
     Boolean(selectedInvestigator);
 
   const selectedInvestigatorImageUrl = selectedInvestigator
-    ? getInvestigatorImageUrl(selectedInvestigator.portrait)
+    ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
-
-  //const selectedScenario = availableScenarios.find(
-  //  (scenario) => scenario.id === selectedScenarioId,
-  //);
 
   return (
     <main className="app-shell">
