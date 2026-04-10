@@ -26,7 +26,6 @@ export default function EnemyPanel() {
     <section className="game-panel enemy-panel">
       <div className="enemy-panel-header">
         <div>
-          <p className="enemy-panel-kicker">Threat Area</p>
           <h2 className="enemy-panel-title">
             Enemies <span className="enemy-panel-count">({enemies.length})</span>
           </h2>
@@ -48,9 +47,8 @@ export default function EnemyPanel() {
             return (
               <div
                 key={enemy.id}
-                className={`entity-card enemy-card ${
-                  engaged ? "enemy-engaged" : ""
-                } ${enemy.exhausted ? "enemy-exhausted" : ""}`}
+                className={`entity-card enemy-card ${engaged ? "enemy-engaged" : ""
+                  } ${enemy.exhausted ? "enemy-exhausted" : ""}`}
               >
                 <div className="enemy-card-header">
                   <p className="entity-title enemy-card-title">
