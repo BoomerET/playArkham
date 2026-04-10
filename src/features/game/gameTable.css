@@ -161,6 +161,10 @@
 
 .game-table-enemies {
   min-height: 160px;
+  max-height: 260px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-table-log-panel {
