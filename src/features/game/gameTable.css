@@ -72,7 +72,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  order: 1;
 }
 
 .game-table-board {
@@ -282,6 +281,10 @@
 
   .game-table-sidebar {
     order: 2;
+  }
+
+  .game-table-center {
+    order: 1;
   }
 
   .game-table-board {
