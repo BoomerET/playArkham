@@ -89,7 +89,7 @@ function findImageUrlByName(imageName?: string): string | null {
 
   const normalized = imageName.toLowerCase();
 
-  const match = Object.entries(playerCardImages).find(([path]) =>
+  const match = Object.entries(getPlayerCardImageUrl).find(([path]) =>
     path.toLowerCase().endsWith(`/${normalized}`),
   );
 
@@ -99,7 +99,7 @@ function findImageUrlByName(imageName?: string): string | null {
 function findImageUrlByBaseNames(baseNames: string[]): string | null {
   const normalizedBases = baseNames.map((name) => name.toLowerCase());
 
-  const match = Object.entries(playerCardImages).find(([path]) => {
+  const match = Object.entries(getPlayerCardImageUrl).find(([path]) => {
     const fileName = path.split("/").pop()?.toLowerCase() ?? "";
     const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
     return normalizedBases.includes(baseName);
