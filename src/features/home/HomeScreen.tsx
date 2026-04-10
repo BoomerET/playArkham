@@ -104,6 +104,7 @@ export default function HomeScreen() {
   );
   const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
   const [setDetectedInvestigatorCode] = useState<string | null>(null);
+  //const [setDetectedInvestigatorCode] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
