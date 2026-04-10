@@ -54,11 +54,13 @@ export default function ActiveSkillTestPanel() {
 
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
   const committableCards = useMemo(() => {
-    if (!activeSkill) return hand;
+    if (!activeSkill) {
+      return hand;
+    }
 
     return hand.filter((card) => {
-      const icons = formatSkillList(card.icons);
-      return icons.includes(activeSkill);
+      const cardIcons = formatSkillList(card.icons);
+      return cardIcons.includes(activeSkill);
     });
   }, [hand, activeSkill]);
   const committedBonus = useMemo(() => {
@@ -155,7 +157,7 @@ export default function ActiveSkillTestPanel() {
             <div className="empty-drop-message active-skill-empty-state">
               <div className="active-skill-empty-icon">+</div>
               <div>
-                <strong>Drag skill cards here</strong>
+                <strong>Drag cards here</strong>
                 <p>Or use the Commit button on a card below.</p>
               </div>
             </div>
