@@ -727,7 +727,7 @@ button:hover {
   border-radius: 14px;
 }
 
-/* ---------- Enemy Cards ---------- */
+/* ---------- Enemy Cards ---------- 
 
 .enemy-card-grid {
   display: grid;
@@ -740,6 +740,19 @@ button:hover {
   flex-direction: column;
   gap: 12px;
   border-color: rgba(255, 123, 123, 0.25);
+}
+*/
+
+.enemy-card-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+}
+
+.enemy-card {
+  flex: 0 0 240px;
 }
 
 .enemy-card-header {

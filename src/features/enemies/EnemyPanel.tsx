@@ -29,9 +29,6 @@ export default function EnemyPanel() {
           <h2 className="enemy-panel-title">
             Enemies <span className="enemy-panel-count">({enemies.length})</span>
           </h2>
-          <p className="panel-subtitle">
-            Enemies in play across all locations.
-          </p>
         </div>
       </div>
 
