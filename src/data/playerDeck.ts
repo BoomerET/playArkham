@@ -507,7 +507,14 @@ export const playerDeck: PlayerCard[] = [
       "Tool"
     ],
     "faction": "seeker",
-    "code": "12034"
+    "code": "12034",
+    "passiveSkillModifiers": [
+      {
+        "skill": "intellect",
+        "amount": 1,
+        "appliesTo": "investigate"
+      }
+    ]
   },
   {
     "id": "sharp-rhetoric-5",

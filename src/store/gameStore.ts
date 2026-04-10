@@ -3171,7 +3171,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     get().pushLog(
       "skill-test",
-      `Started skill test: ${source}. Commit skill cards, then resolve.`,
+      `Started skill test: ${source}. Commit cards, then resolve.`,
     );
   },
 
@@ -3308,10 +3308,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       activeSkillTest.skill,
     );
-    const modifierDetails = getSkillModifiersFromPlayArea(
-      playArea,
-      activeSkillTest.skill,
-    );
+    const modifierDetails = getSkillModifiersFromPlayArea(playArea, {
+      skill: activeSkillTest.skill,
+      testKind: pendingTestResolution?.kind ?? "none",
+    });
     const assetModifier = modifierDetails.reduce(
       (sum, modifier) => sum + modifier.amount,
       0,

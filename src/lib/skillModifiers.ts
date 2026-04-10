@@ -1,47 +1,72 @@
-import type { PlayerCard, SkillModifierDetail, SkillType } from "../types/game";
+import type { PlayerCard, SkillType } from "../types/game";
+
+export type SkillTestKind = "investigate" | "fight" | "evade" | "none";
+
+export type PassiveSkillModifier = {
+  skill: SkillType;
+  amount: number;
+  appliesTo?: SkillTestKind | "any";
+};
+
+export type SkillModifierContext = {
+  skill: SkillType;
+  testKind: SkillTestKind;
+};
+
+export type SkillModifierDetail = {
+  source: string;
+  amount: number;
+};
+
+function getPassiveSkillModifiers(
+  card: PlayerCard,
+): PassiveSkillModifier[] {
+  return Array.isArray(card.passiveSkillModifiers)
+    ? card.passiveSkillModifiers
+    : [];
+}
+
+function modifierApplies(
+  modifier: PassiveSkillModifier,
+  context: SkillModifierContext,
+): boolean {
+  if (modifier.skill !== context.skill) {
+    return false;
+  }
+
+  const appliesTo = modifier.appliesTo ?? "any";
+
+  if (appliesTo === "any") {
+    return true;
+  }
+
+  return appliesTo === context.testKind;
+}
 
 export function getSkillModifiersFromPlayArea(
   playArea: PlayerCard[],
-  skill: SkillType,
+  context: SkillModifierContext,
 ): SkillModifierDetail[] {
-  const modifiers: SkillModifierDetail[] = [];
+  const details: SkillModifierDetail[] = [];
 
   for (const card of playArea) {
-    if (card.type !== "asset") {
-      continue;
-    }
-
     if (card.exhausted) {
       continue;
     }
 
-    if (card.name === "Magnifying Glass" && skill === "intellect") {
-      modifiers.push({
-        source: card.name,
-        skill,
-        amount: 1,
-      });
-      continue;
-    }
+    const modifiers = getPassiveSkillModifiers(card);
 
-    if (card.name === "Beat Cop" && skill === "combat") {
-      modifiers.push({
-        source: card.name,
-        skill,
-        amount: 1,
-      });
-      continue;
-    }
+    for (const modifier of modifiers) {
+      if (!modifierApplies(modifier, context)) {
+        continue;
+      }
 
-    if (card.name === "Holy Rosary" && skill === "willpower") {
-      modifiers.push({
+      details.push({
         source: card.name,
-        skill,
-        amount: 1,
+        amount: modifier.amount,
       });
-      continue;
     }
   }
 
-  return modifiers;
+  return details;
 }

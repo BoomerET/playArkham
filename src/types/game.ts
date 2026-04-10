@@ -1,3 +1,11 @@
+export type PassiveSkillModifiers = {
+  skill: SkillType;
+  amount: number;
+  appliesTo?: "any" | "investigate" | "fight" | "evade";
+  whileCommitted?: boolean;
+};
+
+
 export type ChaosToken =
   | "skull"
   | "cultist"
@@ -88,6 +96,7 @@ export interface PlayerCard {
   counters?: CardCounters;
   isWeakness?: boolean;
   code?: string;
+  passiveSkillModifiers?: PassiveSkillModifiers;
 }
 
 export interface GameLocation {
