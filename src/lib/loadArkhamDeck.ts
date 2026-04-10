@@ -5,10 +5,19 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
+function generateId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  // fallback
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
 function cloneCard(card: PlayerCard): PlayerCard {
   return {
     ...card,
-    instanceId: `${card.code}-${crypto.randomUUID()}`,
+    instanceId: `${card.code}-${generateId()}`,
   };
 }
 
