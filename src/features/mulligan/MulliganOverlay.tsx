@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import "./mulliganOverlay.css";
+import {
+  getPlayerCardImageUrl,
+  getPlayerCardBackImageUrl,
+} from "../../lib/playerCardImages";
 
 const playerCardImages = import.meta.glob(
   "../../assets/images/players/*.{jpg,jpeg,png,webp}",
@@ -150,9 +154,8 @@ export default function MulliganOverlay() {
           </p>
 
           <div
-            className={`mulligan-overlay__zoom-hint ${
-              hoveredCardId ? "visible" : ""
-            } ${zoomHeld ? "active" : ""}`}
+            className={`mulligan-overlay__zoom-hint ${hoveredCardId ? "visible" : ""
+              } ${zoomHeld ? "active" : ""}`}
           >
             Hold <kbd>Shift</kbd> to zoom
             {previewCard?.backImageUrl ? (
@@ -172,9 +175,8 @@ export default function MulliganOverlay() {
                 <button
                   key={card.instanceId}
                   type="button"
-                  className={`mulligan-card ${
-                    selected ? "mulligan-card--selected" : ""
-                  }`}
+                  className={`mulligan-card ${selected ? "mulligan-card--selected" : ""
+                    }`}
                   onClick={() => toggleMulliganCardSelection(card.instanceId)}
                   onMouseEnter={() => {
                     setHoveredCardId(card.instanceId);
