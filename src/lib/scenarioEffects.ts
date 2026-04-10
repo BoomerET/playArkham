@@ -43,7 +43,7 @@ function convertEncounterStoryCardToPlayerCard(
   }
 
   return {
-    id: encounterCard.id,
+    instanceId: encounterCard.id,
     name: encounterCard.name,
     type: "asset",
     faction: "neutral",

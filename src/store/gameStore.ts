@@ -1454,7 +1454,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       return;
     }
-    const card = playArea.find((entry) => entry.id === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardId);
     if (!card) return;
     if (!canActivatePlayAreaCardAbility(card)) {
       get().pushLog(
@@ -1472,7 +1472,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
     set({
       playArea: playArea.map((entry) =>
-        entry.id !== cardId
+        entry.instanceId !== cardId
           ? entry
           : {
             ...entry,
@@ -1542,14 +1542,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
     const cardsToRedraw = hand.filter((card) =>
-      selectedMulliganCardIds.includes(card.id),
+      selectedMulliganCardIds.includes(card.instanceId),
     );
     const keptCards = hand.filter(
-      (card) => !selectedMulliganCardIds.includes(card.id),
+      (card) => !selectedMulliganCardIds.includes(card.instanceId),
     );
     let reshuffledDeck = shuffleArray([...deck, ...cardsToRedraw]);
     const drawnCards = hand.filter((card) =>
-      selectedMulliganCardIds.includes(card.id),
+      selectedMulliganCardIds.includes(card.instanceId),
     );
     const skippedWeaknesses = [];
     while (
@@ -2184,14 +2184,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((c) => c.id === cardId);
+    const card = hand.find((c) => c.instanceId === cardId);
 
     if (!card) {
       return;
     }
 
     set({
-      hand: hand.filter((c) => c.id !== cardId),
+      hand: hand.filter((c) => c.instanceId !== cardId),
       discard: [...discard, card],
     });
 
@@ -2235,7 +2235,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((currentCard) => currentCard.id === cardId);
+    const card = hand.find((currentCard) => currentCard.instanceId === cardId);
 
     if (!card) {
       set({ draggedCardId: null, pendingAssetPlay: null });
@@ -2275,7 +2275,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           set({
             draggedCardId: null,
             pendingAssetPlay: {
-              cardId: card.id,
+              cardId: card.instanceId,
               replacedSlot: replacementPlan.blockedSlot,
               replacementChoices: replacementPlan.replacementChoices,
               selectedReplacementIds: [],
@@ -2301,7 +2301,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    const updatedHand = hand.filter((currentCard) => currentCard.id !== cardId);
+    const updatedHand = hand.filter((currentCard) => currentCard.instanceId !== cardId);
     const updatedInvestigator = {
       ...investigator,
       resources: investigator.resources - cost,
@@ -2396,10 +2396,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     if (!pendingAssetPlay) return;
     const cardToPlay = hand.find(
-      (entry) => entry.id === pendingAssetPlay.cardId,
+      (entry) => entry.instanceId === pendingAssetPlay.cardId,
     );
     const selectedReplacementCards = playArea.filter((entry) =>
-      pendingAssetPlay.selectedReplacementIds.includes(entry.id),
+      pendingAssetPlay.selectedReplacementIds.includes(entry.instanceId),
     );
     if (!cardToPlay) {
       set({ pendingAssetPlay: null, draggedCardId: null });
@@ -2450,7 +2450,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingAssetPlay.selectedReplacementIds,
     );
     const updatedPlayArea = playArea
-      .filter((entry) => !selectedReplacementIds.has(entry.id))
+      .filter((entry) => !selectedReplacementIds.has(entry.instanceId))
       .concat({
         ...cardToPlay,
         exhausted: false,
@@ -2461,7 +2461,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...investigator,
         resources: investigator.resources - cost,
       },
-      hand: hand.filter((entry) => entry.id !== cardToPlay.id),
+      hand: hand.filter((entry) => entry.instanceId !== cardToPlay.instanceId),
       discard: [...discard, ...selectedReplacementCards],
       playArea: updatedPlayArea,
       turn: { ...turn, actionsRemaining: turn.actionsRemaining - 1 },
@@ -2491,7 +2491,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   canPlayCardInSlots: (cardId: string) => {
     const { hand, playArea, investigator } = get();
-    const card = hand.find((entry) => entry.id === cardId);
+    const card = hand.find((entry) => entry.instanceId === cardId);
 
     if (!card) {
       return false;
@@ -2503,7 +2503,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   togglePlayAreaCardExhausted: (cardId: string) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.id === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardId);
 
     if (!card) {
       return;
@@ -2513,7 +2513,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) =>
-        entry.id === cardId ? { ...entry, exhausted: nextExhausted } : entry,
+        entry.instanceId === cardId ? { ...entry, exhausted: nextExhausted } : entry,
       ),
       log: [
         ...log,
@@ -2527,7 +2527,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   incrementPlayAreaCardCounter: (cardId, counterType) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.id === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardId);
     if (!card) {
       return;
     }
@@ -2537,7 +2537,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) =>
-        entry.id === cardId
+        entry.instanceId === cardId
           ? {
             ...entry,
             counters: {
@@ -2554,7 +2554,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   decrementPlayAreaCardCounter: (cardId, counterType) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.id === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardId);
     if (!card) {
       return;
     }
@@ -2564,7 +2564,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) => {
-        if (entry.id !== cardId) {
+        if (entry.instanceId !== cardId) {
           return entry;
         }
 
@@ -3186,7 +3186,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((currentCard) => currentCard.id === cardId);
+    const card = hand.find((currentCard) => currentCard.instanceId === cardId);
 
     if (!card) {
       set({
@@ -3213,7 +3213,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const alreadyCommitted = activeSkillTest.committedCards.some(
-      (entry) => entry.card.id === card.id,
+      (entry) => entry.card.instanceId === card.instanceId,
     );
 
     if (alreadyCommitted) {
@@ -3227,7 +3227,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const updatedHand = hand.filter((currentCard) => currentCard.id !== cardId);
+    const updatedHand = hand.filter((currentCard) => currentCard.instanceId !== cardId);
     const committedCard: CommittedSkillCard = {
       card,
       matchingIcons,

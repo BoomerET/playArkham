@@ -14,7 +14,7 @@ export default function DiscardPanel() {
         <div className="card-grid">
           {discard.map((card) => (
             <div
-              key={card.id}
+              key={card.instanceId}
               className={`entity-card dim player-card ${getCardTypeClassName(card)}`}
             >
               <div className="card-topline">

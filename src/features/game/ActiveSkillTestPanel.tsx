@@ -184,7 +184,7 @@ export default function ActiveSkillTestPanel() {
 
                 return (
                   <div
-                    key={entry.card.id}
+                    key={entry.card.instanceId}
                     className={`entity-card player-card active-skill-mini-card ${getCardTypeClassName(
                       entry.card,
                     )}`}
@@ -204,7 +204,7 @@ export default function ActiveSkillTestPanel() {
                       {committedIcons.length > 0 ? (
                         committedIcons.map((icon, index) => (
                           <span
-                            key={`${entry.card.id}-${icon}-${index}`}
+                            key={`${entry.card.instanceId}-${icon}-${index}`}
                             className={`skill-icon-badge ${skillMeta[icon].className}`}
                             title={skillMeta[icon].label}
                             aria-label={skillMeta[icon].label}
@@ -249,16 +249,16 @@ export default function ActiveSkillTestPanel() {
 
                 return (
                   <div
-                    key={card.id}
+                    key={card.instanceId}
                     className={`entity-card player-card active-skill-hand-card ${getCardTypeClassName(
                       card,
-                    )} ${draggedCardId === card.id ? "dragging-card" : ""
+                    )} ${draggedCardId === card.instanceId ? "dragging-card" : ""
                       }`}
                     draggable
                     onDragStart={(event) => {
-                      event.dataTransfer.setData("text/plain", card.id);
+                      event.dataTransfer.setData("text/plain", card.instanceId);
                       event.dataTransfer.effectAllowed = "move";
-                      setDraggedCardId(card.id);
+                      setDraggedCardId(card.instanceId);
                     }}
                     onDragEnd={() => {
                       setDraggedCardId(null);
@@ -279,7 +279,7 @@ export default function ActiveSkillTestPanel() {
                       {cardIcons.length > 0 ? (
                         cardIcons.map((icon, index) => (
                           <span
-                            key={`${card.id}-${icon}-${index}`}
+                            key={`${card.instanceId}-${icon}-${index}`}
                             className={`skill-icon-badge ${skillMeta[icon].className}`}
                             title={skillMeta[icon].label}
                             aria-label={skillMeta[icon].label}
@@ -314,7 +314,7 @@ export default function ActiveSkillTestPanel() {
                     {card.text && <p className="entity-text">{card.text}</p>}
 
                     <div className="card-actions">
-                      <button onClick={() => commitSkillCard(card.id)}>
+                      <button onClick={() => commitSkillCard(card.instanceId)}>
                         Commit
                       </button>
                     </div>

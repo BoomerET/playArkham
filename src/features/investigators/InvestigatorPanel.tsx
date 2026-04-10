@@ -242,18 +242,18 @@ export default function InvestigatorPanel() {
             <div className="asset-replacement-modal__choices">
               {pendingAssetPlay.replacementChoices.map((card) => {
                 const selected =
-                  pendingAssetPlay.selectedReplacementIds.includes(card.id);
+                  pendingAssetPlay.selectedReplacementIds.includes(card.instanceId);
 
                 return (
                   <button
-                    key={card.id}
+                    key={card.instanceId}
                     type="button"
                     className={`asset-replacement-modal__choice ${
                       selected
                         ? "asset-replacement-modal__choice--selected"
                         : ""
                     }`}
-                    onClick={() => togglePendingAssetReplacementChoice(card.id)}
+                    onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
                   >
                     {card.name}
                     {card.slot ? ` (${card.slot})` : ""}

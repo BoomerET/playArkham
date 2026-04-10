@@ -34,7 +34,7 @@ export async function loadArkhamDeck(deckId: string): Promise<PlayerCard[]> {
   }
 
   const deckCards: PlayerCard[] = [];
-  let copyIndex = 0;
+  //let copyIndex = 0;
 
   for (const [code, count] of Object.entries(data.slots)) {
     const matchingCard = playerDeck.find((card) => card.code === code);

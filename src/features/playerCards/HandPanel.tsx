@@ -185,7 +185,7 @@ export default function HandPanel() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        sethoveredCardInstanceId(null);
+        setHoveredCardInstanceId(null);
         return;
       }
 
@@ -315,11 +315,11 @@ export default function HandPanel() {
                   setDraggedCardId(null);
                 }}
                 onMouseEnter={() => {
-                  sethoveredCardInstanceId(card.instanceId);
+                  setHoveredCardInstanceId(card.instanceId);
                   setPreviewSide("front");
                 }}
                 onMouseLeave={() =>
-                  sethoveredCardInstanceId((current) =>
+                  setHoveredCardInstanceId((current) =>
                     current === card.instanceId ? null : current,
                   )
                 }
@@ -427,7 +427,7 @@ export default function HandPanel() {
           <div
             className="card-preview-overlay hand-preview-overlay"
             aria-hidden="true"
-            onMouseLeave={() => sethoveredCardInstanceId(null)}
+            onMouseLeave={() => setHoveredCardInstanceId(null)}
           >
             <div className="card-preview-frame hand-preview-frame">
               {previewCard.backImageUrl ? (

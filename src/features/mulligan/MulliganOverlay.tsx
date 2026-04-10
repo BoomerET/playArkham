@@ -86,7 +86,7 @@ export default function MulliganOverlay() {
       return null;
     }
 
-    const card = hand.find((entry) => entry.id === hoveredCardId);
+    const card = hand.find((entry) => entry.instanceId === hoveredCardId);
 
     if (!card) {
       return null;
@@ -99,7 +99,7 @@ export default function MulliganOverlay() {
     }
 
     return {
-      id: card.id,
+      id: card.instanceId,
       name: card.name,
       frontImageUrl,
       backImageUrl: null,
@@ -165,24 +165,24 @@ export default function MulliganOverlay() {
 
           <div className="mulligan-overlay__grid">
             {hand.map((card) => {
-              const selected = selectedMulliganCardIds.includes(card.id);
+              const selected = selectedMulliganCardIds.includes(card.instanceId);
               const imageUrl = getPlayerCardImageUrl(card.image);
 
               return (
                 <button
-                  key={card.id}
+                  key={card.instanceId}
                   type="button"
                   className={`mulligan-card ${
                     selected ? "mulligan-card--selected" : ""
                   }`}
-                  onClick={() => toggleMulliganCardSelection(card.id)}
+                  onClick={() => toggleMulliganCardSelection(card.instanceId)}
                   onMouseEnter={() => {
-                    setHoveredCardId(card.id);
+                    setHoveredCardId(card.instanceId);
                     setPreviewSide("front");
                   }}
                   onMouseLeave={() =>
                     setHoveredCardId((current) =>
-                      current === card.id ? null : current,
+                      current === card.instanceId ? null : current,
                     )
                   }
                 >

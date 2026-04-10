@@ -111,7 +111,7 @@ function getCardImageUrl(card: PlayerCard): string | null {
     return explicit;
   }
 
-  return findImageUrlByBaseNames([card.id, slugifyName(card.name)]);
+  return findImageUrlByBaseNames([card.instanceId, slugifyName(card.name)]);
 }
 
 function getCardBackImageUrl(card: PlayerCard): string | null {
@@ -121,9 +121,9 @@ function getCardBackImageUrl(card: PlayerCard): string | null {
   }
 
   return findImageUrlByBaseNames([
-    `${card.id}-back`,
+    `${card.instanceId}-back`,
     `${slugifyName(card.name)}-back`,
-    `${card.id}_back`,
+    `${card.instanceId}_back`,
     `${slugifyName(card.name)}_back`,
   ]);
 }
@@ -157,7 +157,7 @@ export default function PlayAreaPanel() {
       return null;
     }
 
-    const card = playArea.find((entry) => entry.id === hoveredCardId);
+    const card = playArea.find((entry) => entry.instanceId === hoveredCardId);
     if (!card) {
       return null;
     }
@@ -168,7 +168,7 @@ export default function PlayAreaPanel() {
     }
 
     return {
-      id: card.id,
+      id: card.instanceId,
       name: card.name,
       frontImageUrl,
       backImageUrl: getCardBackImageUrl(card),
@@ -261,22 +261,22 @@ export default function PlayAreaPanel() {
 
             return (
               <div
-                key={card.id}
+                key={card.instanceId}
                 className={`play-area-image-card ${card.exhausted ? "play-area-card-exhausted" : ""
                   }`}
                 onMouseEnter={() => {
-                  setHoveredCardId(card.id);
+                  setHoveredCardId(card.instanceId);
                   setPreviewSide("front");
                 }}
                 onMouseLeave={() =>
                   setHoveredCardId((current) =>
-                    current === card.id ? null : current,
+                    current === card.instanceId ? null : current,
                   )
                 }
               >
                 <div
                   className="play-area-card-interactive"
-                  onDoubleClick={() => togglePlayAreaCardExhausted(card.id)}
+                  onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
                 >
                   {imageUrl ? (
@@ -315,7 +315,7 @@ export default function PlayAreaPanel() {
                     >
                       {cardIcons.map((icon, index) => (
                         <span
-                          key={`${card.id}-${icon}-${index}`}
+                          key={`${card.instanceId}-${icon}-${index}`}
                           className={`skill-icon-badge skill-${icon}`}
                           title={icon}
                           aria-label={icon}
@@ -352,7 +352,7 @@ export default function PlayAreaPanel() {
                           className="secondary-button"
                           onClick={(event) => {
                             event.stopPropagation();
-                            triggerPlayAreaCardAbility(card.id);
+                            triggerPlayAreaCardAbility(card.instanceId);
                           }}
                         >
                           Use Ability
