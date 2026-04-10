@@ -5,7 +5,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
-import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
+import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
 
 //const playerCardImages = import.meta.glob(
 //  [
@@ -51,84 +51,6 @@ function useModifierKey(key: "Alt" | "Shift") {
   return active;
 }
 
-function slugifyName(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/['".,!?]/g, "")
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function getExplicitImageName(card: PlayerCard): string | undefined {
-  const maybeCard = card as PlayerCard & {
-    image?: string;
-    imageFront?: string;
-    portrait?: string;
-  };
-
-  return maybeCard.image ?? maybeCard.imageFront ?? maybeCard.portrait;
-}
-
-function getExplicitBackImageName(card: PlayerCard): string | undefined {
-  const maybeCard = card as PlayerCard & {
-    imageBack?: string;
-    backImage?: string;
-    portraitBack?: string;
-  };
-
-  return maybeCard.imageBack ?? maybeCard.backImage ?? maybeCard.portraitBack;
-}
-
-function findImageUrlByName(imageName?: string): string | null {
-  if (!imageName) {
-    return null;
-  }
-
-  const normalized = imageName.toLowerCase();
-
-  const match = Object.entries(getPlayerCardImageUrl).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-
-  return match?.[1] ?? null;
-}
-
-function findImageUrlByBaseNames(baseNames: string[]): string | null {
-  const normalizedBases = baseNames.map((name) => name.toLowerCase());
-
-  const match = Object.entries(getPlayerCardImageUrl).find(([path]) => {
-    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
-    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-    return normalizedBases.includes(baseName);
-  });
-
-  return match?.[1] ?? null;
-}
-
-function getCardImageUrl(card: PlayerCard): string | null {
-  const explicit = findImageUrlByName(getExplicitImageName(card));
-  if (explicit) {
-    return explicit;
-  }
-
-  return findImageUrlByBaseNames([card.instanceId, slugifyName(card.name)]);
-}
-
-function getCardBackImageUrl(card: PlayerCard): string | null {
-  const explicit = findImageUrlByName(getExplicitBackImageName(card));
-  if (explicit) {
-    return explicit;
-  }
-
-  return findImageUrlByBaseNames([
-    `${card.instanceId}-back`,
-    `${slugifyName(card.name)}-back`,
-    `${card.instanceId}_back`,
-    `${slugifyName(card.name)}_back`,
-  ]);
-}
-
 type PreviewCard = {
   id: string;
   name: string;
@@ -163,7 +85,7 @@ export default function PlayAreaPanel() {
       return null;
     }
 
-    const frontImageUrl = getCardImageUrl(card);
+    const frontImageUrl = getPlayerCardImageUrl(card);
     if (!frontImageUrl) {
       return null;
     }
@@ -172,7 +94,7 @@ export default function PlayAreaPanel() {
       id: card.instanceId,
       name: card.name,
       frontImageUrl,
-      backImageUrl: getCardBackImageUrl(card),
+      backImageUrl: getPlayerCardBackImageUrl(card),
     };
   }, [hoveredCardId, playArea, zoomHeld]);
 
