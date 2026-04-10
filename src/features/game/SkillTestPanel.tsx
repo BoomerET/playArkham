@@ -14,9 +14,8 @@ export default function SkillTestPanel() {
           <div className="token-row">
             <span className="token-chip gold">{lastSkillTest.skill}</span>
             <span
-              className={`token-chip ${
-                lastSkillTest.success ? "success" : "danger"
-              }`}
+              className={`token-chip ${lastSkillTest.success ? "success" : "danger"
+                }`}
             >
               {lastSkillTest.success ? "Success" : "Failure"}
             </span>
@@ -31,13 +30,19 @@ export default function SkillTestPanel() {
               Modifier Sources:{" "}
               {lastSkillTest.modifierDetails.length > 0
                 ? lastSkillTest.modifierDetails
-                    .map((modifier) => `${modifier.source} (+${modifier.amount})`)
-                    .join(", ")
+                  .map((modifier) => `${modifier.source} (+${modifier.amount})`)
+                  .join(", ")
                 : "None"}
             </p>
             <p className="entity-meta">Difficulty: {lastSkillTest.difficulty}</p>
             <p className="entity-meta">Token: {String(lastSkillTest.token)}</p>
-            <p className="entity-meta">Token Modifier: {lastSkillTest.tokenModifier}</p>
+            {/* <p className="entity-meta">Token Modifier: {lastSkillTest.tokenModifier}</p> */}
+            <p>
+              Token Modifier:{" "}
+              {lastSkillTest.token === "autoFail"
+                ? "Auto-fail"
+                : lastSkillTest.tokenModifier}
+            </p>
             <p className="entity-meta">
               Final Value:{" "}
               {lastSkillTest.token === "autoFail"
