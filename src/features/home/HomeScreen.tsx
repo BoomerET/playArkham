@@ -15,13 +15,6 @@ function findInvestigatorImageByBaseName(baseName?: string): string | null {
     return null;
   }
 
-<<<<<<< HEAD
-  const normalized = imageName.toLowerCase();
-console.log(normalized);
-  const match = Object.entries(investigatorImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-=======
   const normalized = baseName.toLowerCase();
 
   const match = Object.entries(investigatorImages).find(([path]) => {
@@ -29,7 +22,6 @@ console.log(normalized);
     const withoutExtension = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
     return withoutExtension === normalized;
   });
->>>>>>> d09b24b18e23fe36e0f8dda78f19fb8268dac304
 
   return match?.[1] ?? null;
 }
