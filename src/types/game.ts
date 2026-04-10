@@ -1,9 +1,11 @@
-export type PassiveSkillModifiers = {
+export type PassiveSkillModifier = {
   skill: SkillType;
   amount: number;
-  appliesTo?: "any" | "investigate" | "fight" | "evade";
+  appliesTo?: "any" | "investigate" | "fight" | "evade" | "none";
   whileCommitted?: boolean;
 };
+
+export type PassiveSkillModifiers = PassiveSkillModifier[];
 
 
 export type ChaosToken =

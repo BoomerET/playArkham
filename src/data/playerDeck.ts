@@ -20,7 +20,7 @@ export const playerDeck: PlayerCard[] = [
       "Melee"
     ],
     "faction": "guardian",
-    "code": "12002"
+    "code": "12002",
   },
   {
     "id": "in-harms-way-3",
@@ -33,7 +33,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "12003"
+    "code": "12003",
   },
   {
     "id": "detectives-intuition-5",
@@ -51,7 +51,7 @@ export const playerDeck: PlayerCard[] = [
       "Insight"
     ],
     "faction": "seeker",
-    "code": "12005"
+    "code": "12005",
   },
   {
     "id": "dead-ends-6",
@@ -65,7 +65,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "12006"
+    "code": "12006",
   },
   {
     "id": "covert-ops-8",
@@ -84,7 +84,7 @@ export const playerDeck: PlayerCard[] = [
       "Illicit"
     ],
     "faction": "rogue",
-    "code": "12008"
+    "code": "12008",
   },
   {
     "id": "black-chamber-operative-9",
@@ -98,7 +98,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "12009"
+    "code": "12009",
   },
   {
     "id": "for-my-next-trick-1",
@@ -117,7 +117,7 @@ export const playerDeck: PlayerCard[] = [
       "Trick"
     ],
     "faction": "mystic",
-    "code": "12011"
+    "code": "12011",
   },
   {
     "id": "the-necronomicon-2",
@@ -133,7 +133,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "12012"
+    "code": "12012",
   },
   {
     "id": "isabelles-twin-45s-4",
@@ -154,7 +154,7 @@ export const playerDeck: PlayerCard[] = [
       "Firearm"
     ],
     "faction": "survivor",
-    "code": "12014"
+    "code": "12014",
   },
   {
     "id": "breaking-point-5",
@@ -167,7 +167,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "12015"
+    "code": "12015",
   },
   {
     "id": "bodyguard-6",
@@ -184,7 +184,7 @@ export const playerDeck: PlayerCard[] = [
       "Ally"
     ],
     "faction": "guardian",
-    "code": "12016"
+    "code": "12016",
   },
   {
     "id": "endurance-7",
@@ -201,7 +201,7 @@ export const playerDeck: PlayerCard[] = [
       "Talent"
     ],
     "faction": "guardian",
-    "code": "12017"
+    "code": "12017",
   },
   {
     "id": "logan-hastings-8",
