@@ -3,19 +3,8 @@ import { createPortal } from "react-dom";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
-import type { PlayerCard } from "../../types/game";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
-import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
-
-//const playerCardImages = import.meta.glob(
-//  [
-//    "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-//  ],
-//  {
-//    eager: true,
-//    import: "default",
-//  },
-//) as Record<string, string>;
+import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -52,7 +41,7 @@ function useModifierKey(key: "Alt" | "Shift") {
 }
 
 type PreviewCard = {
-  id: string;
+  instanceId: string;
   name: string;
   frontImageUrl: string;
   backImageUrl: string | null;
@@ -72,31 +61,35 @@ export default function PlayAreaPanel() {
 
   const [isDragOver, setIsDragOver] = useState(false);
   const zoomHeld = useModifierKey("Shift");
-  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [hoveredCardInstanceId, setHoveredCardInstanceId] = useState<string | null>(null);
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const previewCard = useMemo<PreviewCard | null>(() => {
-    if (!zoomHeld || !hoveredCardId) {
+    if (!zoomHeld || !hoveredCardInstanceId) {
       return null;
     }
 
-    const card = playArea.find((entry) => entry.instanceId === hoveredCardId);
+    const card = playArea.find(
+      (entry) => entry.instanceId === hoveredCardInstanceId,
+    );
+
     if (!card) {
       return null;
     }
 
     const frontImageUrl = getPlayerCardImageUrl(card);
+
     if (!frontImageUrl) {
       return null;
     }
 
     return {
-      id: card.instanceId,
+      instanceId: card.instanceId,
       name: card.name,
       frontImageUrl,
-      backImageUrl: getCardBackImageUrl(card),
+      backImageUrl: getPlayerCardBackImageUrl(card),
     };
-  }, [hoveredCardId, playArea, zoomHeld]);
+  }, [hoveredCardInstanceId, playArea, zoomHeld]);
 
   useEffect(() => {
     if (!previewCard) {
@@ -105,7 +98,7 @@ export default function PlayAreaPanel() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setHoveredCardId(null);
+        setHoveredCardInstanceId(null);
         return;
       }
 
@@ -175,7 +168,7 @@ export default function PlayAreaPanel() {
       ) : (
         <div className="play-area-image-grid">
           {playArea.map((card) => {
-            const imageUrl = getCardImageUrl(card);
+            const imageUrl = getPlayerCardImageUrl(card);
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
               .filter(
@@ -188,11 +181,11 @@ export default function PlayAreaPanel() {
                 className={`play-area-image-card ${card.exhausted ? "play-area-card-exhausted" : ""
                   }`}
                 onMouseEnter={() => {
-                  setHoveredCardId(card.instanceId);
+                  setHoveredCardInstanceId(card.instanceId);
                   setPreviewSide("front");
                 }}
                 onMouseLeave={() =>
-                  setHoveredCardId((current) =>
+                  setHoveredCardInstanceId((current) =>
                     current === card.instanceId ? null : current,
                   )
                 }
@@ -296,7 +289,7 @@ export default function PlayAreaPanel() {
           <div
             className="card-preview-overlay play-area-preview-overlay"
             aria-hidden="true"
-            onMouseLeave={() => setHoveredCardId(null)}
+            onMouseLeave={() => setHoveredCardInstanceId(null)}
           >
             <div className="card-preview-frame play-area-preview-frame">
               {previewCard.backImageUrl ? (
