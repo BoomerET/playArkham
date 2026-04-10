@@ -73,7 +73,6 @@
   flex-direction: column;
   gap: 16px;
   order: 1;
-  min-height: 0;
 }
 
 .game-table-board {
@@ -161,10 +160,6 @@
 
 .game-table-enemies {
   min-height: 160px;
-  max-height: 260px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 .game-table-log-panel {
