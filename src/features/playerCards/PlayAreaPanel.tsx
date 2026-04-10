@@ -155,7 +155,7 @@ export default function PlayAreaPanel() {
             exhaust or ready it.
           </p>
           <div
-            className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${zoomHeld ? "active" : ""
+            className={`card-zoom-hint ${hoveredCardInstanceId ? "visible" : ""} ${zoomHeld ? "active" : ""
               }`}
           >
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
