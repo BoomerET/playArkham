@@ -6,27 +6,27 @@ import {
   getPlayerCardBackImageUrl,
 } from "../../lib/playerCardImages";
 
-const playerCardImages = import.meta.glob(
-  "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-  {
-    eager: true,
-    import: "default",
-  },
-) as Record<string, string>;
+//const playerCardImages = import.meta.glob(
+//  "../../assets/images/players/*.{jpg,jpeg,png,webp}",
+//  {
+//    eager: true,
+//    import: "default",
+//  },
+//) as Record<string, string>;
 
-function getPlayerCardImageUrl(imageName?: string): string | null {
-  if (!imageName) {
-    return null;
-  }
-
-  const normalized = imageName.toLowerCase();
-
-  const match = Object.entries(playerCardImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-
-  return match?.[1] ?? null;
-}
+//function getPlayerCardImageUrl(imageName?: string): string | null {
+//  if (!imageName) {
+//    return null;
+//  }
+//
+//  const normalized = imageName.toLowerCase();
+//
+//  const match = Object.entries(playerCardImages).find(([path]) =>
+//    path.toLowerCase().endsWith(`/${normalized}`),
+//  );
+//
+//  return match?.[1] ?? null;
+//}
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -63,7 +63,7 @@ function useModifierKey(key: "Alt" | "Shift") {
 }
 
 type PreviewCard = {
-  id: string;
+  instanceId: string;
   name: string;
   frontImageUrl: string;
   backImageUrl: string | null;
@@ -82,21 +82,21 @@ export default function MulliganOverlay() {
   const skipMulligan = useGameStore((state) => state.skipMulligan);
 
   const zoomHeld = useModifierKey("Shift");
-  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [hoveredCardInstanceId, sethoveredCardInstanceId] = useState<string | null>(null);
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const previewCard = useMemo<PreviewCard | null>(() => {
-    if (!zoomHeld || !hoveredCardId) {
+    if (!zoomHeld || !hoveredCardInstanceId) {
       return null;
     }
 
-    const card = hand.find((entry) => entry.instanceId === hoveredCardId);
+    const card = hand.find((entry) => entry.instanceId === hoveredCardInstanceId);
 
     if (!card) {
       return null;
     }
 
-    const frontImageUrl = getPlayerCardImageUrl(card.image);
+    const frontImageUrl = getPlayerCardImageUrl(card);
 
     if (!frontImageUrl) {
       return null;
@@ -108,7 +108,7 @@ export default function MulliganOverlay() {
       frontImageUrl,
       backImageUrl: null,
     };
-  }, [hand, hoveredCardId, zoomHeld]);
+  }, [hand, hoveredCardInstanceId, zoomHeld]);
 
   useEffect(() => {
     if (!previewCard) {
@@ -117,7 +117,7 @@ export default function MulliganOverlay() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setHoveredCardId(null);
+        sethoveredCardInstanceId(null);
         return;
       }
 
@@ -154,7 +154,7 @@ export default function MulliganOverlay() {
           </p>
 
           <div
-            className={`mulligan-overlay__zoom-hint ${hoveredCardId ? "visible" : ""
+            className={`mulligan-overlay__zoom-hint ${hoveredCardInstanceId ? "visible" : ""
               } ${zoomHeld ? "active" : ""}`}
           >
             Hold <kbd>Shift</kbd> to zoom
@@ -169,7 +169,7 @@ export default function MulliganOverlay() {
           <div className="mulligan-overlay__grid">
             {hand.map((card) => {
               const selected = selectedMulliganCardIds.includes(card.instanceId);
-              const imageUrl = getPlayerCardImageUrl(card.image);
+              const imageUrl = getPlayerCardImageUrl(card);
 
               return (
                 <button
@@ -179,11 +179,11 @@ export default function MulliganOverlay() {
                     }`}
                   onClick={() => toggleMulliganCardSelection(card.instanceId)}
                   onMouseEnter={() => {
-                    setHoveredCardId(card.instanceId);
+                    sethoveredCardInstanceId(card.instanceId);
                     setPreviewSide("front");
                   }}
                   onMouseLeave={() =>
-                    setHoveredCardId((current) =>
+                    sethoveredCardInstanceId((current) =>
                       current === card.instanceId ? null : current,
                     )
                   }
