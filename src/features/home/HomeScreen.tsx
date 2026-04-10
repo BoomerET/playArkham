@@ -151,13 +151,11 @@ export default function HomeScreen() {
 
     let cancelled = false;
 
-    const investigatorCode = data.investigator_code?.trim() ?? "";
-
     const loadDeckSummary = async () => {
       setDeckLookupState("loading");
       setDeckLookupMessage("Looking up ArkhamDB deck...");
       setDetectedDeckName(null);
-      setDetectedInvestigatorCode(investigatorCode || null);
+      setDetectedInvestigatorCode(null);
 
       try {
         const response = await fetch(
@@ -174,6 +172,7 @@ export default function HomeScreen() {
           return;
         }
 
+        const investigatorCode = data.investigator_code?.trim() ?? "";
         const deckName = data.name?.trim() ?? null;
 
         setDetectedDeckName(deckName);
