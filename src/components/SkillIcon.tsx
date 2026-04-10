@@ -5,6 +5,7 @@ import BrainIcon from "../assets/skill-icons/brain.svg?react";
 import BookIcon from "../assets/skill-icons/book.svg?react";
 import FistIcon from "../assets/skill-icons/fist.svg?react";
 import FootIcon from "../assets/skill-icons/foot.svg?react";
+import WildIcon from "../assets/skill-icons/wild.svg?react";
 
 interface SkillIconProps extends SVGProps<SVGSVGElement> {
   skill: SkillIconType;
@@ -34,13 +35,7 @@ export default function SkillIcon({
     case "agility":
       return <FootIcon {...sharedProps} />;
     case "wild":
-      return (
-        <svg viewBox="0 0 24 24" {...sharedProps}>
-          <text x="12" y="16" textAnchor="middle" fontSize="18">
-            ?
-          </text>
-        </svg>
-      );
+      return <WildIcon {...sharedProps} />;
     default:
       return null;
   }
