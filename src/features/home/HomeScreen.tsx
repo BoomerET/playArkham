@@ -103,9 +103,8 @@ export default function HomeScreen() {
     "Enter an ArkhamDB deck ID to begin.",
   );
   const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
-  const [detectedInvestigatorName, setDetectedInvestigatorName] = useState<
-    string | null
-  >(null);
+  const [detectedInvestigatorCode, setDetectedInvestigatorCode] = useState<string | null>(null); string | null
+    > (null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -147,7 +146,7 @@ export default function HomeScreen() {
       setDeckLookupState("idle");
       setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
       setDetectedDeckName(null);
-      setDetectedInvestigatorName(null);
+      setDetectedInvestigatorCode(null);
       return;
     }
 
@@ -157,7 +156,7 @@ export default function HomeScreen() {
       setDeckLookupState("loading");
       setDeckLookupMessage("Looking up ArkhamDB deck...");
       setDetectedDeckName(null);
-      setDetectedInvestigatorName(null);
+      setDetectedInvestigatorCode(investigatorCode || null);
 
       try {
         const response = await fetch(
@@ -327,7 +326,7 @@ export default function HomeScreen() {
               id="arkhamdb-deck-id"
               type="text"
               className="home-screen__input"
-              value={selectedDeckId || 5884619}
+              value={selectedDeckId || "5884619"}
               onChange={(event) => setSelectedDeckId(event.target.value)}
               placeholder="Required, e.g. 5841936"
               autoComplete="off"
@@ -350,9 +349,9 @@ export default function HomeScreen() {
                 </div>
               )}
 
-              {detectedInvestigatorName && (
+              {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
-                  Investigator: <strong>{detectedInvestigatorName}</strong>
+                  Investigator: <strong>{selectedInvestigator.name}</strong>
                 </div>
               )}
             </div>
