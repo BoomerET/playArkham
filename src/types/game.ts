@@ -77,7 +77,7 @@ export type CardCounterType =
 export type CardCounters = Partial<Record<CardCounterType, number>>;
 
 export interface PlayerCard {
-  id: string;
+  instanceId: string;
   name: string;
   type:
   | "asset"

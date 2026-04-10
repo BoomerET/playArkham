@@ -5,12 +5,10 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
-function cloneCard(card: PlayerCard, index: number): PlayerCard {
+function cloneCard(card: PlayerCard): PlayerCard {
   return {
     ...card,
-    id: `${card.code ?? card.id}-${index}-${Math.random()
-      .toString(36)
-      .slice(2, 8)}`,
+    instanceId: `${card.code}-${crypto.randomUUID()}`,
   };
 }
 
@@ -46,8 +44,7 @@ export async function loadArkhamDeck(deckId: string): Promise<PlayerCard[]> {
     }
 
     for (let i = 0; i < count; i += 1) {
-      deckCards.push(cloneCard(matchingCard, copyIndex));
-      copyIndex += 1;
+      deckCards.push(cloneCard(matchingCard));
     }
   }
 

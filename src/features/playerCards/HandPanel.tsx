@@ -113,7 +113,10 @@ function getCardImageUrl(card: PlayerCard): string | null {
     return explicit;
   }
 
-  return findImageUrlByBaseNames([card.id, slugifyName(card.name)]);
+  return findImageUrlByBaseNames([
+    card.code ?? "",
+    slugifyName(card.name),
+  ]);
 }
 
 function getCardBackImageUrl(card: PlayerCard): string | null {
@@ -123,15 +126,15 @@ function getCardBackImageUrl(card: PlayerCard): string | null {
   }
 
   return findImageUrlByBaseNames([
-    `${card.id}-back`,
+    `${card.code}-back`,
     `${slugifyName(card.name)}-back`,
-    `${card.id}_back`,
+    `${card.code}_back`,
     `${slugifyName(card.name)}_back`,
   ]);
 }
 
 type PreviewCard = {
-  id: string;
+  instanceId: string;
   name: string;
   frontImageUrl: string;
   backImageUrl: string | null;
@@ -148,17 +151,16 @@ export default function HandPanel() {
   const deckCount = useGameStore((state) => state.deck.length);
 
   const zoomHeld = useModifierKey("Shift");
-  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [hoveredCardInstanceId, setHoveredCardInstanceId] = useState<string | null>(null);
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
   const title = activeSkillTest ? "Hand — Commit Skill Cards" : "Hand";
 
   const previewCard = useMemo<PreviewCard | null>(() => {
-    if (!zoomHeld || !hoveredCardId) {
+    if (!zoomHeld || !hoveredCardInstanceId) {
       return null;
     }
-
-    const card = hand.find((entry) => entry.id === hoveredCardId);
+    const card = hand.find((entry) => entry.instanceId === hoveredCardInstanceId);
     if (!card) {
       return null;
     }
@@ -169,12 +171,12 @@ export default function HandPanel() {
     }
 
     return {
-      id: card.id,
+      id: card.instanceId,
       name: card.name,
       frontImageUrl,
       backImageUrl: getCardBackImageUrl(card),
     };
-  }, [hand, hoveredCardId, zoomHeld]);
+  }, [hand, hoveredCardInstanceId, zoomHeld]);
 
   useEffect(() => {
     if (!previewCard) {
@@ -183,7 +185,7 @@ export default function HandPanel() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setHoveredCardId(null);
+        sethoveredCardInstanceId(null);
         return;
       }
 
@@ -214,7 +216,7 @@ export default function HandPanel() {
           </h2>
           <p className="panel-subtitle hand-panel-subtitle">
             {activeSkillTest ? (
-              "Only skill cards can be dragged and committed during an active skill test."
+              "Cards with matching icons can be dragged and committed during an active skill test."
             ) : (
               <>
                 Play cards normally • <kbd>Shift</kbd>+Click or Right-click to
@@ -223,9 +225,8 @@ export default function HandPanel() {
             )}
           </p>
           <div
-            className={`card-zoom-hint ${hoveredCardId ? "visible" : ""} ${
-              zoomHeld ? "active" : ""
-            }`}
+            className={`card-zoom-hint ${hoveredCardInstanceId ? "visible" : ""} ${zoomHeld ? "active" : ""
+              }`}
           >
             Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
           </div>
@@ -252,10 +253,7 @@ export default function HandPanel() {
         <div className="hand-card-grid-image">
           {hand.map((card) => {
             const imageUrl = getCardImageUrl(card);
-            const isDragging = draggedCardId === card.id;
-            const draggable = activeSkillTest
-              ? card.type === "skill"
-              : card.type !== "skill";
+            const isDragging = draggedCardId === card.instanceId;
 
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
@@ -263,12 +261,27 @@ export default function HandPanel() {
                 (icon): icon is NonNullable<typeof icon> => icon !== null,
               );
 
+            const activeSkill = activeSkillTest
+              ? normalizeSkillIcon(activeSkillTest.skill)
+              : null;
+
+            const matchingIcons = activeSkill
+              ? cardIcons.filter(
+                (icon) => icon === activeSkill || icon === "wild",
+              ).length
+              : 0;
+
+            const draggable = activeSkillTest
+              ? matchingIcons > 0
+              : card.type !== "skill";
+
+
+
             return (
               <div
-                key={card.id}
-                className={`hand-card-image-shell ${
-                  isDragging ? "dragging-card" : ""
-                } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
+                key={card.instanceId}
+                className={`hand-card-image-shell ${isDragging ? "dragging-card" : ""
+                  } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
                 draggable={draggable}
                 onClick={(event) => {
                   if (activeSkillTest) {
@@ -278,7 +291,7 @@ export default function HandPanel() {
                   if (event.shiftKey) {
                     event.preventDefault();
                     event.stopPropagation();
-                    discardCard(card.id);
+                    discardCard(card.instanceId);
                   }
                 }}
                 onContextMenu={(event) => {
@@ -287,27 +300,27 @@ export default function HandPanel() {
                   }
 
                   event.preventDefault();
-                  discardCard(card.id);
+                  discardCard(card.instanceId);
                 }}
                 onDragStart={(event) => {
                   if (!draggable) {
                     return;
                   }
 
-                  event.dataTransfer.setData("text/plain", card.id);
+                  event.dataTransfer.setData("text/plain", card.instanceId);
                   event.dataTransfer.effectAllowed = "move";
-                  setDraggedCardId(card.id);
+                  setDraggedCardId(card.instanceId);
                 }}
                 onDragEnd={() => {
                   setDraggedCardId(null);
                 }}
                 onMouseEnter={() => {
-                  setHoveredCardId(card.id);
+                  sethoveredCardInstanceId(card.instanceId);
                   setPreviewSide("front");
                 }}
                 onMouseLeave={() =>
-                  setHoveredCardId((current) =>
-                    current === card.id ? null : current,
+                  sethoveredCardInstanceId((current) =>
+                    current === card.instanceId ? null : current,
                   )
                 }
               >
@@ -327,9 +340,8 @@ export default function HandPanel() {
 
                 <div className="hand-card-image-topbar">
                   <span
-                    className={`hand-card-cost-chip ${
-                      card.cost === undefined ? "hand-card-cost-chip-empty" : ""
-                    }`}
+                    className={`hand-card-cost-chip ${card.cost === undefined ? "hand-card-cost-chip-empty" : ""
+                      }`}
                   >
                     {card.cost ?? "—"}
                   </span>
@@ -346,7 +358,7 @@ export default function HandPanel() {
                   >
                     {cardIcons.map((icon, index) => (
                       <span
-                        key={`${card.id}-${icon}-${index}`}
+                        key={`${card.instanceId}-${icon}-${index}`}
                         className={`skill-icon-badge skill-${icon}`}
                         title={icon}
                         aria-label={icon}
@@ -376,14 +388,14 @@ export default function HandPanel() {
                         <button
                           type="button"
                           className="secondary-button"
-                          onClick={() => playCard(card.id)}
+                          onClick={() => playCard(card.instanceId)}
                         >
                           Play
                         </button>
                         <button
                           type="button"
                           className="secondary-button"
-                          onClick={() => discardCard(card.id)}
+                          onClick={() => discardCard(card.instanceId)}
                         >
                           Discard
                         </button>
@@ -415,7 +427,7 @@ export default function HandPanel() {
           <div
             className="card-preview-overlay hand-preview-overlay"
             aria-hidden="true"
-            onMouseLeave={() => setHoveredCardId(null)}
+            onMouseLeave={() => sethoveredCardInstanceId(null)}
           >
             <div className="card-preview-frame hand-preview-frame">
               {previewCard.backImageUrl ? (
