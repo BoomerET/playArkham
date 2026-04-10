@@ -171,7 +171,7 @@ export default function HandPanel() {
     }
 
     return {
-      id: card.instanceId,
+      instanceId: card.instanceId,
       name: card.name,
       frontImageUrl,
       backImageUrl: getCardBackImageUrl(card),
