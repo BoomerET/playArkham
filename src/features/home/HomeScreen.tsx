@@ -103,8 +103,7 @@ export default function HomeScreen() {
     "Enter an ArkhamDB deck ID to begin.",
   );
   const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
-  const [detectedInvestigatorCode, setDetectedInvestigatorCode] = useState<string | null>(null); string | null
-    > (null);
+  const [setDetectedInvestigatorCode] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -152,6 +151,8 @@ export default function HomeScreen() {
 
     let cancelled = false;
 
+    const investigatorCode = data.investigator_code?.trim() ?? "";
+
     const loadDeckSummary = async () => {
       setDeckLookupState("loading");
       setDeckLookupMessage("Looking up ArkhamDB deck...");
@@ -173,11 +174,10 @@ export default function HomeScreen() {
           return;
         }
 
-        const investigatorCode = data.investigator_code?.trim() ?? "";
         const deckName = data.name?.trim() ?? null;
 
         setDetectedDeckName(deckName);
-        setDetectedInvestigatorName(investigatorCode || null);
+        setDetectedInvestigatorCode(investigatorCode || null);
 
         const matchingInvestigator = availableInvestigators.find((item) => {
           const itemWithOptionalCode = item as typeof item & {

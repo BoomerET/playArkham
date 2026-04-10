@@ -3,6 +3,7 @@ import { useGameStore } from "../../store/gameStore";
 import "./mulliganOverlay.css";
 import {
   getPlayerCardImageUrl,
+  getPlayerCardBackImageUrl
 } from "../../lib/playerCardImages";
 
 function useModifierKey(key: "Alt" | "Shift") {
@@ -80,10 +81,10 @@ export default function MulliganOverlay() {
     }
 
     return {
-      id: card.instanceId,
+      instanceId: card.instanceId,
       name: card.name,
       frontImageUrl,
-      backImageUrl: null,
+      backImageUrl: getPlayerCardBackImageUrl(card),
     };
   }, [hand, hoveredCardInstanceId, zoomHeld]);
 

@@ -1680,7 +1680,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (card.type === "enemy") {
       const spawnedEnemy = {
-        id: `${card.id}-${Date.now()}`,
+        id: `${card.code}-${Date.now()}`,
         name: card.name,
         fight: card.fight ?? 0,
         evade: card.evade ?? 0,
@@ -1993,9 +1993,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
-    let deckCards;
+    let loadedDeck;
     try {
-      deckCards = await loadArkhamDeck(selectedDeckId);
+      loadedDeck = await loadArkhamDeck(selectedDeckId);
     } catch (error) {
       console.error(error);
       get().pushLog(
@@ -2004,6 +2004,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       throw error;
     }
+
+    const deckCards = loadedDeck.cards;
+
     if (deckCards.length === 0) {
       get().pushLog(
         "system",
@@ -2011,6 +2014,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       throw new Error("ArkhamDB deck contained no supported local cards.");
     }
+
     const shuffledDeck = shuffle(deckCards);
     set({
       investigator: chosenInvestigator,

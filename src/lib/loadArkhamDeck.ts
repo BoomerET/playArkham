@@ -61,5 +61,8 @@ export async function loadArkhamDeck(deckId: string): Promise<{
     }
   }
 
-  return deckCards;
+  return {
+    investigatorCode: data.investigator_code?.trim() ?? null,
+    cards: deckCards,
+  };
 }
