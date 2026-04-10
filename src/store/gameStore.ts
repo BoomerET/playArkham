@@ -1548,9 +1548,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       (card) => !selectedMulliganCardIds.includes(card.instanceId),
     );
     let reshuffledDeck = shuffleArray([...deck, ...cardsToRedraw]);
-    const drawnCards = hand.filter((card) =>
-      selectedMulliganCardIds.includes(card.instanceId),
-    );
+
+
+    const drawnCards: PlayerCard[] = [];
     const skippedWeaknesses = [];
     while (
       drawnCards.length < cardsToRedraw.length &&
