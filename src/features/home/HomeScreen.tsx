@@ -43,13 +43,20 @@ function getInvestigatorFrontImageUrl(
 function getInvestigatorBackImageUrl(
   investigator: Investigator,
 ): string | null {
-  const investigatorWithCode = investigator as typeof investigator & {
+  const investigatorWithCode = investigator as Investigator & {
     code?: string;
   };
 
   return (
     findInvestigatorImageByBaseName(
-      investigatorWithCode.code ? `${investigatorWithCode.code}-back` : undefined,
+      investigatorWithCode.code
+        ? `${investigatorWithCode.code}_back`
+        : undefined,
+    ) ||
+    findInvestigatorImageByBaseName(
+      investigatorWithCode.code
+        ? `${investigatorWithCode.code}-back`
+        : undefined,
     ) ||
     findInvestigatorImageByBaseName(investigator.portraitBack)
   );
