@@ -4,6 +4,7 @@ import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
+import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
 
 const playerCardImages = import.meta.glob(
   [
@@ -252,7 +253,7 @@ export default function HandPanel() {
       ) : (
         <div className="hand-card-grid-image">
           {hand.map((card) => {
-            const imageUrl = getCardImageUrl(card);
+            const imageUrl = getPlayerCardImageUrl(card);
             const isDragging = draggedCardId === card.instanceId;
 
             const cardIcons = (card.icons ?? [])
