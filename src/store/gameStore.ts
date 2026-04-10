@@ -3199,18 +3199,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (card.type !== "skill") {
+    const matchingIcons = countMatchingIcons(card, activeSkillTest.skill);
+
+    if (matchingIcons <= 0) {
       set({
         draggedCardId: null,
       });
       get().pushLog(
         "system",
-        `${card.name} is not a skill card and cannot be committed.`,
+        `${card.name} does not have a matching ${activeSkillTest.skill} icon and cannot be committed.`,
       );
       return;
     }
-
-    const matchingIcons = countMatchingIcons(card, activeSkillTest.skill);
 
     const alreadyCommitted = activeSkillTest.committedCards.some(
       (entry) => entry.card.id === card.id,
