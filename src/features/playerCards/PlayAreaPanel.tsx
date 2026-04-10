@@ -5,7 +5,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
-import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
+import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
 
 //const playerCardImages = import.meta.glob(
 //  [
@@ -94,7 +94,7 @@ export default function PlayAreaPanel() {
       id: card.instanceId,
       name: card.name,
       frontImageUrl,
-      backImageUrl: getPlayerCardBackImageUrl(card),
+      backImageUrl: getCardBackImageUrl(card),
     };
   }, [hoveredCardId, playArea, zoomHeld]);
 
