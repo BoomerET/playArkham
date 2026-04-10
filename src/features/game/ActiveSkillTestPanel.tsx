@@ -50,9 +50,17 @@ export default function ActiveSkillTestPanel() {
 
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const skillCards = useMemo(() => hand.filter((card) => card.type === "skill"), [hand]);
+  //const committableCards = useMemo(() => hand, [hand]);
 
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
+  const committableCards = useMemo(() => {
+    if (!activeSkill) return hand;
+
+    return hand.filter((card) => {
+      const icons = formatSkillList(card.icons);
+      return icons.includes(activeSkill);
+    });
+  }, [hand, activeSkill]);
   const committedBonus = useMemo(() => {
     if (!activeSkillTest) {
       return 0;
@@ -72,9 +80,8 @@ export default function ActiveSkillTestPanel() {
 
   return (
     <section
-      className={`game-panel active-skill-test-panel drop-zone ${
-        isDragOver ? "drop-zone-active" : ""
-      }`}
+      className={`game-panel active-skill-test-panel drop-zone ${isDragOver ? "drop-zone-active" : ""
+        }`}
       onDragOver={(event) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = "move";
@@ -99,7 +106,7 @@ export default function ActiveSkillTestPanel() {
           <p className="active-skill-test-kicker">Active Skill Test</p>
           <h2 className="active-skill-test-title">{activeSkillTest.source}</h2>
           <p className="panel-subtitle">
-            Commit skill cards, then resolve the test.
+            Commit cards, then resolve the test.
           </p>
         </div>
 
@@ -205,15 +212,15 @@ export default function ActiveSkillTestPanel() {
           )}
         </div>
 
-        {skillCards.length > 0 && (
+        {committableCards.length > 0 && (
           <div className="active-skill-test-hand-area">
             <div className="active-skill-test-section-heading">
-              <strong>Skill Cards in Hand</strong>
-              <span>{skillCards.length} available</span>
+              <strong>Cards in Hand</strong>
+              <span>{committableCards.length} available</span>
             </div>
 
             <div className="horizontal-card-grid active-skill-hand-grid">
-              {skillCards.map((card) => {
+              {committableCards.map((card) => {
                 const cardIcons = formatSkillList(card.icons);
 
                 return (
