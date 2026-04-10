@@ -1,26 +1,18 @@
-import type { PlayerCard, SkillType } from "../types/game";
+import type {
+  PassiveSkillModifier,
+  PlayerCard,
+  SkillModifierDetail,
+  SkillType,
+} from "../types/game";
 
 export type SkillTestKind = "investigate" | "fight" | "evade" | "none";
-
-export type PassiveSkillModifier = {
-  skill: SkillType;
-  amount: number;
-  appliesTo?: SkillTestKind | "any";
-};
 
 export type SkillModifierContext = {
   skill: SkillType;
   testKind: SkillTestKind;
 };
 
-export type SkillModifierDetail = {
-  source: string;
-  amount: number;
-};
-
-function getPassiveSkillModifiers(
-  card: PlayerCard,
-): PassiveSkillModifier[] {
+function getPassiveSkillModifiers(card: PlayerCard): PassiveSkillModifier[] {
   return Array.isArray(card.passiveSkillModifiers)
     ? card.passiveSkillModifiers
     : [];
@@ -63,6 +55,7 @@ export function getSkillModifiersFromPlayArea(
 
       details.push({
         source: card.name,
+        skill: modifier.skill,
         amount: modifier.amount,
       });
     }
