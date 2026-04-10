@@ -16,7 +16,7 @@ function getInvestigatorImageUrl(imageName?: string): string | null {
   }
 
   const normalized = imageName.toLowerCase();
-
+console.log(normalized);
   const match = Object.entries(investigatorImages).find(([path]) =>
     path.toLowerCase().endsWith(`/${normalized}`),
   );
