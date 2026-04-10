@@ -2,6 +2,7 @@ import type { PlayerCard } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
 
 type ArkhamDeckResponse = {
+  investigator_code?: string;
   slots?: Record<string, number>;
 };
 
@@ -21,7 +22,10 @@ function cloneCard(card: PlayerCard): PlayerCard {
   };
 }
 
-export async function loadArkhamDeck(deckId: string): Promise<PlayerCard[]> {
+export async function loadArkhamDeck(deckId: string): Promise<{
+  investigatorCode: string | null;
+  cards: PlayerCard[];
+}> {
   const trimmedDeckId = deckId.trim();
 
   if (!trimmedDeckId) {
