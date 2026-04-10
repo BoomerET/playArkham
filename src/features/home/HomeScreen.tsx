@@ -103,7 +103,7 @@ export default function HomeScreen() {
     "Enter an ArkhamDB deck ID to begin.",
   );
   const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
-  const [setDetectedInvestigatorCode] = useState<string | null>(null);
+  //const [setDetectedInvestigatorCode] = useState<string | null>(null);
   //const [setDetectedInvestigatorCode] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
@@ -146,7 +146,6 @@ export default function HomeScreen() {
       setDeckLookupState("idle");
       setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
       setDetectedDeckName(null);
-      setDetectedInvestigatorCode(null);
       return;
     }
 
@@ -156,7 +155,6 @@ export default function HomeScreen() {
       setDeckLookupState("loading");
       setDeckLookupMessage("Looking up ArkhamDB deck...");
       setDetectedDeckName(null);
-      setDetectedInvestigatorCode(null);
 
       try {
         const response = await fetch(
@@ -177,7 +175,6 @@ export default function HomeScreen() {
         const deckName = data.name?.trim() ?? null;
 
         setDetectedDeckName(deckName);
-        setDetectedInvestigatorCode(investigatorCode || null);
 
         const matchingInvestigator = availableInvestigators.find((item) => {
           const itemWithOptionalCode = item as typeof item & {
