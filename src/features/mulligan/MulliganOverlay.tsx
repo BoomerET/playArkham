@@ -3,30 +3,7 @@ import { useGameStore } from "../../store/gameStore";
 import "./mulliganOverlay.css";
 import {
   getPlayerCardImageUrl,
-  getPlayerCardBackImageUrl,
 } from "../../lib/playerCardImages";
-
-//const playerCardImages = import.meta.glob(
-//  "../../assets/images/players/*.{jpg,jpeg,png,webp}",
-//  {
-//    eager: true,
-//    import: "default",
-//  },
-//) as Record<string, string>;
-
-//function getPlayerCardImageUrl(imageName?: string): string | null {
-//  if (!imageName) {
-//    return null;
-//  }
-//
-//  const normalized = imageName.toLowerCase();
-//
-//  const match = Object.entries(playerCardImages).find(([path]) =>
-//    path.toLowerCase().endsWith(`/${normalized}`),
-//  );
-//
-//  return match?.[1] ?? null;
-//}
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);

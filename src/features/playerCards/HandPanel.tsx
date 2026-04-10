@@ -4,7 +4,7 @@ import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
-import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
+import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
 
 const playerCardImages = import.meta.glob(
   [
