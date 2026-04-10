@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
+import type { Investigator } from "../../types/game";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
@@ -27,7 +28,7 @@ function findInvestigatorImageByBaseName(baseName?: string): string | null {
 }
 
 function getInvestigatorFrontImageUrl(
-  investigator: typeof availableInvestigators[number],
+  investigator: Investigator,
 ): string | null {
   const investigatorWithCode = investigator as typeof investigator & {
     code?: string;
@@ -40,7 +41,7 @@ function getInvestigatorFrontImageUrl(
 }
 
 function getInvestigatorBackImageUrl(
-  investigator: typeof availableInvestigators[number],
+  investigator: Investigator,
 ): string | null {
   const investigatorWithCode = investigator as typeof investigator & {
     code?: string;
