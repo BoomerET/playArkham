@@ -290,6 +290,7 @@ export interface EncounterCard {
 }
 
 export const ENCOUNTER_CARD_CODES = {
+  DAVES_TEST: "14001",
   SERVANT_OF_FLAME: "12114",
   CANTOR_OF_FLAME: "12121",
   HELLHOUND: "12122",
