@@ -118,8 +118,30 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
+
+  function getInvestigatorHeadUrl(imageName?: string): string | null {
+    if (!imageName) {
+      return null;
+    }
+
+    const normalized = imageName.toLowerCase();
+
+    const match = Object.entries(investigatorHeadImages).find(([path]) => {
+      const fileName = path.split("/").pop()?.toLowerCase() ?? "";
+      const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+
+      return (
+        fileName === normalized ||
+        path.toLowerCase().endsWith(`/${normalized}`) ||
+        baseName === normalized
+      );
+    });
+
+    return match?.[1] ?? null;
+  }
+
   const portraitUrl = getInvestigatorHeadUrl(
-    investigator.portraitHead ?? investigator.portrait,
+    investigator.code ?? investigator.portraitHead ?? investigator.portrait,
   );
 
   const engagedEnemies = enemies.filter(
