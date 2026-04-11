@@ -5,7 +5,6 @@ import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
 } from "../data/scenarios/scenarioTypes";
-//import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 import {
@@ -116,11 +115,6 @@ type PendingAssetPlay = {
   selectedReplacementIds: string[];
   requiredHandSlotsToFree?: number;
 } | null;
-
-//type EncounterSkillTestOutcome =
-//  | { kind: "none" }
-//  | { kind: "damage"; amount: number }
-//  | { kind: "horror"; amount: number };
 
 type EncounterSkillTestOutcome =
   | { kind: "none" }
@@ -1021,13 +1015,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }).locations,
   ),
   campaignState: initialCampaignState,
-  //enemies: buildScenarioEnemies(
-  //  getSelectedScenario({
-  //    availableScenarios: scenarios,
-  //    selectedScenarioId: initialSelectedScenarioId,
-  //    campaignState: initialCampaignState,
-  //  }).enemySpawns,
-  //),
   enemies: [],
   agenda: getInitialAgendaState(
     getSelectedScenario({
@@ -2114,7 +2101,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
       locations: cloneScenarioLocations(selectedScenario.locations),
-      //enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
@@ -2201,7 +2187,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         chosenInvestigator.id,
         selectedScenario.startingLocationId,
       ),
-      //enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",

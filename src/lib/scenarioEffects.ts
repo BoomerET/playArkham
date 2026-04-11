@@ -1,4 +1,3 @@
-//import { buildScenarioEnemies } from "./buildScenarioEnemies";
 import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
@@ -70,7 +69,6 @@ function applyCardAdvanceEffects(
     revealLocationIds = [],
     hideLocationIds = [],
     unrevealLocationIds = [],
-    //spawnEnemies = [],
     logEntries = [],
     advanceAgenda = false,
     advanceAct = false,
@@ -119,9 +117,6 @@ function applyCardAdvanceEffects(
     return location;
   });
 
-  //const spawnedEnemies =
-  //  spawnEnemies.length > 0 ? buildScenarioEnemies(spawnEnemies) : [];
-
   const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
 
   if (grantEncounterCardToInvestigator) {
@@ -141,7 +136,6 @@ function applyCardAdvanceEffects(
   return {
     ...state,
     locations: updatedLocations,
-    //enemies: [...state.enemies, ...spawnedEnemies],
     log: [...state.log, ...effectLogEntries],
     grantedPlayerCards,
     advanceAgendaRequested: advanceAgenda,
