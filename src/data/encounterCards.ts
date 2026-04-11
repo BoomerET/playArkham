@@ -289,7 +289,6 @@ export const encounterCards: EncounterCard[] = [
         subname: "Disillusioned Eschatologist",
         type: "enemy",
         text: [
-            "Aloof (This enemy does not automatically engage investigators at its location.)",
             "Reaction - After you successfully investigate David Renfield's location.",
         ],
         damage: 0,
@@ -305,6 +304,9 @@ export const encounterCards: EncounterCard[] = [
         ],
         inEncounterDeck: false,
         victoryPoints: 1,
+        ability: [
+            "Aloof"
+        ],
     },
     {
         id: "cornelia-akely",
@@ -385,7 +387,6 @@ export const encounterCards: EncounterCard[] = [
         subname: "Wary Librarian",
         type: "enemy",
         text: [
-            "Aloof. (This enemy does not automatically engage investigators at its location.)",
             "Action: Parley. Test INT (X), where X is the number of clues on Abigail Foreman's location. If you succeed, place 1 clue (from the token pool) on Abigail Foreman's location. (Del 5)",
         ],
         damage: 0,
@@ -401,6 +402,9 @@ export const encounterCards: EncounterCard[] = [
         ],
         inEncounterDeck: false,
         victoryPoints: 1,
+        ability: [
+            "Aloof"
+        ],
     },
     {
         id: "maragaret-lui",
@@ -409,7 +413,6 @@ export const encounterCards: EncounterCard[] = [
         subname: "Beguiling Lounge Singer",
         type: "enemy",
         text: [
-            "Aloof. (This enemy does not automatically engage investigators at its location.)",
             "Reaction: After you succeed at a skill test by 2 or more at Margaret Liu's location: (Del 6)",
         ],
         damage: 0,
@@ -425,6 +428,9 @@ export const encounterCards: EncounterCard[] = [
         ],
         inEncounterDeck: false,
         victoryPoints: 1,
+        ability: [
+            "Aloof"
+        ],
     },
     {
         id: "arcane-lock",

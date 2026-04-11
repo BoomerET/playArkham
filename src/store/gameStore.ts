@@ -831,6 +831,10 @@ function enemyHasHunter(enemy: Enemy | undefined): boolean {
   return enemy?.ability?.includes("Hunter") ?? false;
 }
 
+function enemyHasAloof(enemy: Enemy | undefined): boolean {
+  return enemy?.ability?.includes("Aloof") ?? false;
+}
+
 function getNextLocationTowardTarget(
   locations: GameState["locations"],
   startLocationId: string,
@@ -909,6 +913,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
 
       if (enemy.locationId === investigatorLocation.id) {
+        if (enemyHasAloof(enemy)) {
+          return enemy;
+        }
         return {
           ...enemy,
           engagedInvestigatorId: investigator.id,
@@ -1833,7 +1840,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         damage: card.damage ?? 0,
         horror: card.horror ?? 0,
         locationId: currentLocation.id,
-        engagedInvestigatorId: investigator.id,
+        engagedInvestigatorId:
+          card.ability?.includes("Aloof") ? null : investigator.id,
         exhausted: false,
         damageOnEnemy: 0,
         ability: card.ability,
@@ -1845,7 +1853,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       get().pushLog(
         "enemy",
-        `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
+        card.ability?.includes("Aloof")
+          ? `${card.name} was drawn from the encounter deck and spawned at ${currentLocation.name} aloof.`
+          : `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
       );
       return;
     }
@@ -2957,6 +2967,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let didEngage = false;
 
     const updatedEnemies = enemies.map((enemy) => {
+      if (enemyHasAloof(enemy)) {
+        return enemy;
+      }
       if (
         enemy.locationId === currentLocation.id &&
         enemy.engagedInvestigatorId === null &&
