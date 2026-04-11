@@ -119,6 +119,10 @@ export default function InvestigatorPanel() {
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
 
+  const portraitUrl = getInvestigatorHeadUrl(
+    investigator.code ?? investigator.portraitHead ?? investigator.portrait,
+  );
+
   function getInvestigatorHeadUrl(imageName?: string): string | null {
     if (!imageName) {
       return null;
@@ -140,9 +144,7 @@ export default function InvestigatorPanel() {
     return match?.[1] ?? null;
   }
 
-  const portraitUrl = getInvestigatorHeadUrl(
-    investigator.code ?? investigator.portraitHead ?? investigator.portrait,
-  );
+
 
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
