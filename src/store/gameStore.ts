@@ -1868,7 +1868,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (card.type === "enemy") {
-      const spawnedEnemy = {
+      const spawnedEnemy: Enemy = {
         id: `${card.code}-${Date.now()}`,
         name: card.name,
         fight: card.fight ?? 0,
