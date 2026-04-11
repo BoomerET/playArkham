@@ -9,7 +9,11 @@ export const encounterCards: EncounterCard[] = [
         name: "Servant of Flame",
         subname: "Raging Fury",
         type: "enemy",
-        ability: ["Hunter", "Prey (lowest speed)", "Retaliate."],
+        ability: [
+            "Hunter",
+            "Prey (lowest SPD)",
+            "Retaliate."
+        ],
         damage: 2,
         horror: 2,
         fight: 4,
@@ -206,9 +210,8 @@ export const encounterCards: EncounterCard[] = [
         code: "12132",
         name: "Mutated Experiment",
         type: "enemy",
-        ability: ["Retaliate"],
         text: [
-            "Forced - AWhen this enemy is defeated: Each investigator at it's location takes 1 horror.",
+            "Forced - When this enemy is defeated: Each investigator at it's location takes 1 horror.",
         ],
         damage: 1,
         horror: 1,
