@@ -827,6 +827,14 @@ function advanceActState(
   return result;
 }
 
+function enemyHasRetaliate(enemy: Enemy | undefined): boolean {
+  if (!enemy) {
+    return false;
+  }
+
+  return enemy.name === "Mutated Experiment";
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
@@ -3541,6 +3549,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
             `Fight against ${enemy?.name ?? "that enemy"} failed. 1 action spent.`,
           ),
         );
+
+        if (enemyHasRetaliate(enemy)) {
+          updatedInvestigator = {
+            ...updatedInvestigator,
+            damage: updatedInvestigator.damage + enemy.damage,
+            horror: updatedInvestigator.horror + enemy.horror,
+          };
+
+          resolutionLog.push(
+            createLogEntry(
+              "enemy",
+              `${enemy.name} retaliated. Took ${enemy.damage} damage and ${enemy.horror} horror.`,
+            ),
+          );
+        }
       } else if (!enemy) {
         resolutionLog.push(
           createLogEntry(
