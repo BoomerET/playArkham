@@ -251,15 +251,15 @@ export interface GameState {
   locationAttachments: LocationAttachment[];
 }
 
-export interface EnemyDefinition {
-  id: string;
-  name: string;
-  fight: number;
-  evade: number;
-  health: number;
-  damage: number;
-  horror: number;
-}
+//export interface EnemyDefinition {
+//  id: string;
+//  name: string;
+//  fight: number;
+//  evade: number;
+//  health: number;
+//  damage: number;
+//  horror: number;
+//}
 
 export interface EnemySpawn {
   enemyId: string;
