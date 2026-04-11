@@ -829,11 +829,7 @@ function advanceActState(
 }
 
 function enemyHasRetaliate(enemy: Enemy | undefined): boolean {
-  if (!enemy) {
-    return false;
-  }
-
-  return enemy.name === "Mutated Experiment";
+  return enemy?.ability?.includes("Retaliate") ?? false;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -1702,6 +1698,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         engagedInvestigatorId: investigator.id,
         exhausted: false,
         damageOnEnemy: 0,
+        ability: card.ability,
       };
 
       set({

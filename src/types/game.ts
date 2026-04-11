@@ -133,6 +133,7 @@ export interface Enemy {
   engagedInvestigatorId: string | null;
   exhausted: boolean;
   damageOnEnemy: number;
+  ability?: string[];
 }
 
 export interface TurnState {
