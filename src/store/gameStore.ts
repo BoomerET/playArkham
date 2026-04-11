@@ -42,6 +42,7 @@ import type {
   ChaosToken,
   CommittedSkillCard,
   EncounterCard,
+  Enemy,
   GameLogKind,
   GameState,
   Investigator,
@@ -3550,7 +3551,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ),
         );
 
-        if (enemyHasRetaliate(enemy)) {
+        if (enemy && enemyHasRetaliate(enemy)) {
           updatedInvestigator = {
             ...updatedInvestigator,
             damage: updatedInvestigator.damage + enemy.damage,
