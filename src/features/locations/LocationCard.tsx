@@ -160,7 +160,6 @@ export default function LocationCard({ location }: Props) {
   }, [location.revealed]);
 
   const imageUrl = getLocationImageUrl(location);
-  console.log("location", location.id, location.name, location.code, imageUrl);
   const previewLocation = useMemo<PreviewLocation | null>(() => {
     if (!location.revealed || !zoomHeld || !isHovering || !imageUrl) {
       return null;
