@@ -5,7 +5,7 @@ import type {
   ScenarioCardDefinition,
   ScenarioDefinition,
 } from "../data/scenarios/scenarioTypes";
-import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
+//import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 import {
@@ -1021,13 +1021,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }).locations,
   ),
   campaignState: initialCampaignState,
-  enemies: buildScenarioEnemies(
-    getSelectedScenario({
-      availableScenarios: scenarios,
-      selectedScenarioId: initialSelectedScenarioId,
-      campaignState: initialCampaignState,
-    }).enemySpawns,
-  ),
+  //enemies: buildScenarioEnemies(
+  //  getSelectedScenario({
+  //    availableScenarios: scenarios,
+  //    selectedScenarioId: initialSelectedScenarioId,
+  //    campaignState: initialCampaignState,
+  //  }).enemySpawns,
+  //),
+  enemies: [],
   agenda: getInitialAgendaState(
     getSelectedScenario({
       availableScenarios: scenarios,
@@ -2113,7 +2114,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
       locations: cloneScenarioLocations(selectedScenario.locations),
-      enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      //enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
@@ -2200,7 +2201,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         chosenInvestigator.id,
         selectedScenario.startingLocationId,
       ),
-      enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
+      //enemies: buildScenarioEnemies(selectedScenario.enemySpawns),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
