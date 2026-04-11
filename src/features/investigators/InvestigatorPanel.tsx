@@ -98,7 +98,6 @@ export default function InvestigatorPanel() {
   const setSelectedEnemyTarget = useGameStore(
     (state) => state.setSelectedEnemyTarget,
   );
-  //const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   //const confirmAssetReplacement = useGameStore(
   //  (state) => state.confirmAssetReplacement,
   //);
@@ -233,9 +232,8 @@ export default function InvestigatorPanel() {
 
             <p className="asset-replacement-modal__text">
               {pendingAssetPlay.requiredHandSlotsToFree
-                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${
-                    pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
-                  }.`
+                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
+                }.`
                 : "Choose one in-play asset to discard."}
             </p>
 
@@ -248,11 +246,10 @@ export default function InvestigatorPanel() {
                   <button
                     key={card.instanceId}
                     type="button"
-                    className={`asset-replacement-modal__choice ${
-                      selected
+                    className={`asset-replacement-modal__choice ${selected
                         ? "asset-replacement-modal__choice--selected"
                         : ""
-                    }`}
+                      }`}
                     onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
                   >
                     {card.name}
@@ -339,9 +336,8 @@ export default function InvestigatorPanel() {
                   <button
                     key={enemy.id}
                     type="button"
-                    className={`engaged-enemy-card ${
-                      isSelectedTarget ? "engaged-enemy-card-primary" : ""
-                    } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                    className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
+                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
                     onClick={() => setSelectedEnemyTarget(enemy.id)}
                     disabled={!isSelectable}
                     aria-pressed={isSelectedTarget}
