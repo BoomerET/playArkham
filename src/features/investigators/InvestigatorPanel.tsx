@@ -98,12 +98,6 @@ export default function InvestigatorPanel() {
   const setSelectedEnemyTarget = useGameStore(
     (state) => state.setSelectedEnemyTarget,
   );
-  //const confirmAssetReplacement = useGameStore(
-  //  (state) => state.confirmAssetReplacement,
-  //);
-  //const cancelPendingAssetPlay = useGameStore(
-  //  (state) => state.cancelPendingAssetPlay,
-  //);
 
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
@@ -247,8 +241,8 @@ export default function InvestigatorPanel() {
                     key={card.instanceId}
                     type="button"
                     className={`asset-replacement-modal__choice ${selected
-                        ? "asset-replacement-modal__choice--selected"
-                        : ""
+                      ? "asset-replacement-modal__choice--selected"
+                      : ""
                       }`}
                     onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
                   >
