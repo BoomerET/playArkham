@@ -3325,13 +3325,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       activeSkillTest.skill,
     );
-    const currentLocation = findCurrentLocation(locations, investigator.id);
+    const skillTestLocation = findCurrentLocation(locations, investigator.id);
 
     const locationDifficultyModifierDetails =
       getDifficultyModifiersFromLocationAttachments(locationAttachments, {
         skill: activeSkillTest.skill,
         testKind: pendingTestResolution?.kind ?? "none",
-        locationId: currentLocation?.id ?? null,
+        locationId: skillTestLocation?.id ?? null,
       });
 
     const locationDifficultyModifier = locationDifficultyModifierDetails.reduce(
