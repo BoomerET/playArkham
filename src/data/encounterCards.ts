@@ -268,11 +268,11 @@ export const encounterCards: EncounterCard[] = [
     },
     {
         id: "mark-of-elokoss",
-        code: "12131",
-        name: "Mutated!",
+        code: "12137",
+        name: "Mark of Elokoss",
         type: "weakness",
         text: [
-            "Revelation - Put Mark of Elokoss into play in your thread area.",
+            "Revelation - Put Mark of Elokoss into play in your threat area.",
             "Forced - When your turn ends: Take 1 damage. Assign that damage to an asset you control, if able.",
             "Action x2: Discard Mark of Elokoss.",
         ],
