@@ -300,8 +300,11 @@ export default function HandPanel() {
                     return;
                   }
 
-                  event.preventDefault();
-                  discardCard(card.instanceId);
+                  if (event.shiftKey) {
+                    event.preventDefault(); // only block browser menu when discarding
+                    discardCard(card.instanceId);
+                  }
+                  // otherwise: do nothing → browser context menu works
                 }}
                 onDragStart={(event) => {
                   if (!draggable) {
