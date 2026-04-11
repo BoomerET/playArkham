@@ -7,6 +7,7 @@ import type {
 } from "../data/scenarios/scenarioTypes";
 import { buildScenarioEnemies } from "../lib/buildScenarioEnemies";
 import { getChaosTokenModifier } from "../lib/chaosToken";
+import { ENCOUNTER_CARD_CODES } from "../types/game";
 import {
   canSpendInvestigationAction,
   cloneScenarioLocations,
@@ -34,6 +35,7 @@ import {
   hasCommittedCardByName,
 } from "../lib/skillTestHelpers";
 import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
+import { getDifficultyModifiersFromLocationAttachments } from "../lib/locationModifiers";
 import type {
   ActiveSkillTest,
   CardCounterType,
@@ -1826,6 +1828,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
             text: card.text,
             traits: card.traits,
             attachedLocationId: currentLocation.id,
+            difficultyModifiers:
+              card.code === ENCOUNTER_CARD_CODES.FIRE
+                ? [
+                  {
+                    amount: 1,
+                    skill: "intellect",
+                    appliesTo: "investigate",
+                  },
+                ]
+                : undefined,
           },
         ],
       });
@@ -3291,6 +3303,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       locations,
+      locationAttachments,
       enemies,
       turn,
       selectedEnemyTargetId,
@@ -3311,6 +3324,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const baseValue = getInvestigatorSkillValue(
       investigator,
       activeSkillTest.skill,
+    );
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    const locationDifficultyModifierDetails =
+      getDifficultyModifiersFromLocationAttachments(locationAttachments, {
+        skill: activeSkillTest.skill,
+        testKind: pendingTestResolution?.kind ?? "none",
+        locationId: currentLocation?.id ?? null,
+      });
+
+    const locationDifficultyModifier = locationDifficultyModifierDetails.reduce(
+      (sum, modifier) => sum + modifier.amount,
+      0,
     );
     const modifierDetails = getSkillModifiersFromPlayArea(playArea, {
       skill: activeSkillTest.skill,
@@ -3337,15 +3363,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
         committedModifier +
         tokenModifier;
 
+    const modifiedDifficulty =
+      activeSkillTest.difficulty + locationDifficultyModifier;
+
     const success =
-      token !== "autoFail" && finalValue >= activeSkillTest.difficulty;
+      token !== "autoFail" && finalValue >= modifiedDifficulty;
 
     const failureAmount =
       success
         ? 0
         : token === "autoFail"
-          ? activeSkillTest.difficulty
-          : Math.max(0, activeSkillTest.difficulty - finalValue);
+          ? modifiedDifficulty
+          : Math.max(0, modifiedDifficulty - finalValue);
 
     const result: SkillTestResult = {
       skill: activeSkillTest.skill,
@@ -3353,7 +3382,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       assetModifier: assetModifier + activatedAbilityModifier,
       committedModifier,
       modifierDetails,
-      difficulty: activeSkillTest.difficulty,
+      difficulty: modifiedDifficulty,
       token,
       tokenModifier,
       finalValue,
@@ -3378,11 +3407,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
           .join(", ")}.`
         : "";
 
+    const difficultyModifierText =
+      locationDifficultyModifierDetails.length > 0
+        ? ` Difficulty modifiers: ${locationDifficultyModifierDetails
+          .map((modifier) => `${modifier.source} +${modifier.amount}`)
+          .join(", ")}.`
+        : "";
+
     const comparisonText =
       token === "autoFail"
-        ? `${activeSkillTest.source}: AUTO-FAIL token drawn. Base ${baseValue}, asset bonus ${assetModifier}, committed bonus ${committedModifier}.${modifierText}${committedText} Test failed.`
-        : `${activeSkillTest.source}: ${activeSkillTest.skill} ${baseValue} + asset bonus ${assetModifier} + committed bonus ${committedModifier} + token ${tokenModifier} vs ${activeSkillTest.difficulty}, final ${finalValue} => ${success ? "success" : "failure"
-        }.${modifierText}${committedText}`;
+        ? `${activeSkillTest.source}: AUTO-FAIL token drawn. Base ${baseValue}, asset bonus ${assetModifier}, committed bonus ${committedModifier}.${modifierText}${committedText} Test failed.${difficultyModifierText}`
+        : `${activeSkillTest.source}: ${activeSkillTest.skill} ${baseValue} + asset bonus ${assetModifier} + committed bonus ${committedModifier} + token ${tokenModifier} vs ${modifiedDifficulty}, final ${finalValue} => ${success ? "success" : "failure"}.${difficultyModifierText}`
 
     let updatedLocations = locations;
     let updatedEnemies = enemies;

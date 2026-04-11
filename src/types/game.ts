@@ -7,7 +7,6 @@ export type PassiveSkillModifier = {
 
 export type PassiveSkillModifiers = PassiveSkillModifier[];
 
-
 export type ChaosToken =
   | "skull"
   | "cultist"
@@ -176,6 +175,14 @@ export interface SkillTestResult {
 
 export type ScenarioCardKind = "agenda" | "act";
 
+export type SkillTestKind = "investigate" | "fight" | "evade" | "none";
+
+export type LocationDifficultyModifier = {
+  amount: number;
+  skill?: SkillType;
+  appliesTo?: SkillTestKind | "any";
+};
+
 export interface ScenarioCardState {
   id: string;
   kind: ScenarioCardKind;
@@ -213,6 +220,7 @@ export interface LocationAttachment {
   text?: string | string[];
   traits?: string[];
   attachedLocationId: string;
+  difficultyModifiers?: LocationDifficultyModifier[];
 }
 
 export interface GameState {
