@@ -619,6 +619,36 @@ export const encounterCards: EncounterCard[] = [
         ],
         inEncounterDeck: true,
     },
+
+    /*
+    This is my test card
+    */
+
+    {
+        id: "davesaloof",
+        code: "14001",
+        name: "Dave's Test Encounter",
+        type: "enemy",
+        damage: 1,
+        horror: 1,
+        fight: 2,
+        health: 1,
+        evade: 4,
+        set: "daves-tests",
+        traits: [
+            "Creature",
+        ],
+        ability: [
+            "Aloof",
+            "Hunter",
+        ],
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
+        inEncounterDeck: true,
+    },
+
+
 ];
 
 export const encounterCardsByCode: Record<string, EncounterCardDefinition> =
