@@ -63,19 +63,19 @@ const investigatorHeadImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-function getInvestigatorHeadUrl(imageName?: string): string | null {
-  if (!imageName) {
-    return null;
-  }
-
-  const normalized = imageName.toLowerCase();
-
-  const match = Object.entries(investigatorHeadImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
-
-  return match?.[1] ?? null;
-}
+//function getInvestigatorHeadUrl(imageName?: string): string | null {
+//  if (!imageName) {
+//    return null;
+//  }
+//
+//  const normalized = imageName.toLowerCase();
+//
+//  const match = Object.entries(investigatorHeadImages).find(([path]) =>
+//    path.toLowerCase().endsWith(`/${normalized}`),
+//  );
+//
+//  return match?.[1] ?? null;
+//}
 
 export default function InvestigatorPanel() {
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
