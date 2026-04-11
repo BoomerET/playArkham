@@ -251,6 +251,7 @@ type GameStore = GameState & CampaignStoreActions & {
   discardThreatAreaCard: (cardId: string) => void;
   discardLocationAttachment: (attachmentId: string) => void;
   randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
+  moveHunterEnemies: () => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -832,7 +833,156 @@ function enemyHasRetaliate(enemy: Enemy | undefined): boolean {
   return enemy?.ability?.includes("Retaliate") ?? false;
 }
 
+function enemyHasHunter(enemy: Enemy | undefined): boolean {
+  return enemy?.ability?.includes("Hunter") ?? false;
+}
+
+function getNextLocationTowardTarget(
+  locations: GameState["locations"],
+  startLocationId: string,
+  targetLocationId: string,
+): string | null {
+  if (startLocationId === targetLocationId) {
+    return targetLocationId;
+  }
+
+  const visited = new Set<string>([startLocationId]);
+  const queue: Array<{ locationId: string; firstStep: string | null }> = [
+    { locationId: startLocationId, firstStep: null },
+  ];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) {
+      continue;
+    }
+
+    const location = locations.find((entry) => entry.id === current.locationId);
+    if (!location) {
+      continue;
+    }
+
+    for (const connectedId of location.connections) {
+      if (visited.has(connectedId)) {
+        continue;
+      }
+
+      const firstStep = current.firstStep ?? connectedId;
+
+      if (connectedId === targetLocationId) {
+        return firstStep;
+      }
+
+      visited.add(connectedId);
+      queue.push({
+        locationId: connectedId,
+        firstStep,
+      });
+    }
+  }
+
+  return null;
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
+  moveHunterEnemies: () => {
+    const { enemies, locations, investigator, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    const investigatorLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!investigatorLocation) {
+      return;
+    }
+
+    let movedAny = false;
+
+    const updatedEnemies = enemies.map((enemy) => {
+      if (!enemyHasHunter(enemy)) {
+        return enemy;
+      }
+
+      if (enemy.exhausted) {
+        return enemy;
+      }
+
+      if (enemy.engagedInvestigatorId) {
+        return enemy;
+      }
+
+      if (enemy.locationId === investigatorLocation.id) {
+        return {
+          ...enemy,
+          engagedInvestigatorId: investigator.id,
+        };
+      }
+
+      const nextLocationId = getNextLocationTowardTarget(
+        locations,
+        enemy.locationId,
+        investigatorLocation.id,
+      );
+
+      if (!nextLocationId) {
+        return enemy;
+      }
+
+      movedAny = true;
+
+      const movedEnemy =
+        nextLocationId === investigatorLocation.id
+          ? {
+            ...enemy,
+            locationId: nextLocationId,
+            engagedInvestigatorId: investigator.id,
+          }
+          : {
+            ...enemy,
+            locationId: nextLocationId,
+          };
+
+      return movedEnemy;
+    });
+
+    set({
+      enemies: updatedEnemies,
+    });
+
+    if (!movedAny) {
+      return;
+    }
+
+    for (const enemy of updatedEnemies) {
+      if (!enemyHasHunter(enemy)) {
+        continue;
+      }
+
+      const originalEnemy = enemies.find((entry) => entry.id === enemy.id);
+      if (!originalEnemy || originalEnemy.locationId === enemy.locationId) {
+        continue;
+      }
+
+      const destination = locations.find((entry) => entry.id === enemy.locationId);
+
+      get().pushLog(
+        "enemy",
+        destination
+          ? `${enemy.name} moved to ${destination.name} because of Hunter.`
+          : `${enemy.name} moved because of Hunter.`,
+      );
+
+      if (enemy.engagedInvestigatorId === investigator.id) {
+        get().pushLog(
+          "enemy",
+          `${enemy.name} engaged ${investigator.name}.`,
+        );
+      }
+    }
+  },
   screen: "home",
   availableInvestigators: investigators,
   availableScenarios: scenarios,
@@ -2985,6 +3135,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "enemy") {
+      get().pushLog("system", "Enemy phase: Hunter enemies move.");
+      get().moveHunterEnemies();
+
+      get().pushLog("system", "Enemy phase: Enemies attack.");
+      get().enemyPhaseAttack();
       set({
         turn: {
           ...turn,
