@@ -1,11 +1,14 @@
-export type PassiveSkillModifier = {
+export interface ActiveSkillTest {
   skill: SkillType;
-  amount: number;
-  appliesTo?: "any" | "investigate" | "fight" | "evade" | "none";
-  whileCommitted?: boolean;
-};
+  difficulty: number;
+  source: string;
+  committedCards: CommittedSkillCard[];
+}
 
-export type PassiveSkillModifiers = PassiveSkillModifier[];
+export interface CommittedSkillCard {
+  card: PlayerCard;
+  matchingIcons: number;
+}
 
 export type ChaosToken =
   | "skull"
@@ -16,10 +19,6 @@ export type ChaosToken =
   | "elderSign"
   | number;
 
-export type Phase = "setup" | "mythos" | "investigation" | "enemy" | "upkeep";
-
-export type SkillType = "willpower" | "intellect" | "combat" | "agility";
-
 export type Faction =
   | "guardian"
   | "seeker"
@@ -27,6 +26,21 @@ export type Faction =
   | "rogue"
   | "survivor"
   | "neutral";
+
+export type PassiveSkillModifier = {
+  skill: SkillType;
+  amount: number;
+  appliesTo?: "any" | "investigate" | "fight" | "evade" | "none";
+  whileCommitted?: boolean;
+};
+
+export type PassiveSkillModifiers = PassiveSkillModifier[];
+
+
+export type Phase = "setup" | "mythos" | "investigation" | "enemy" | "upkeep";
+
+export type SkillType = "willpower" | "intellect" | "combat" | "agility";
+
 
 export type ScenarioStatus = "inProgress" | "won" | "lost";
 
@@ -134,7 +148,12 @@ export interface Enemy {
   exhausted: boolean;
   damageOnEnemy: number;
   ability?: string[];
+  onDefeat?: EnemyDefeatEffect;
 }
+
+export type EnemyDefeatEffect =
+  | { kind: "none" }
+  | { kind: "horrorToInvestigatorsAtLocation"; amount: number };
 
 export interface TurnState {
   round: number;
@@ -148,17 +167,8 @@ export interface SkillModifierDetail {
   amount: number;
 }
 
-export interface CommittedSkillCard {
-  card: PlayerCard;
-  matchingIcons: number;
-}
 
-export interface ActiveSkillTest {
-  skill: SkillType;
-  difficulty: number;
-  source: string;
-  committedCards: CommittedSkillCard[];
-}
+
 
 export interface SkillTestResult {
   skill: SkillType;

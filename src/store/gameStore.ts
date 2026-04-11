@@ -882,6 +882,43 @@ function getNextLocationTowardTarget(
   return null;
 }
 
+function resolveEnemyDefeatEffect(args: {
+  enemy: Enemy;
+  investigator: Investigator;
+}): {
+  investigator: Investigator;
+  logEntries: GameState["log"];
+} {
+  const { enemy, investigator } = args;
+
+  if (!enemy.onDefeat || enemy.onDefeat.kind === "none") {
+    return {
+      investigator,
+      logEntries: [],
+    };
+  }
+
+  if (enemy.onDefeat.kind === "horrorToInvestigatorsAtLocation") {
+    return {
+      investigator: {
+        ...investigator,
+        horror: investigator.horror + enemy.onDefeat.amount,
+      },
+      logEntries: [
+        createLogEntry(
+          "enemy",
+          `${enemy.name}: when defeated, took ${enemy.onDefeat.amount} horror.`,
+        ),
+      ],
+    };
+  }
+
+  return {
+    investigator,
+    logEntries: [],
+  };
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   moveHunterEnemies: () => {
     const { enemies, locations, investigator, scenarioStatus } = get();
@@ -1845,6 +1882,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         exhausted: false,
         damageOnEnemy: 0,
         ability: card.ability,
+        onDefeat:
+          card.code === "12132"
+            ? { kind: "horrorToInvestigatorsAtLocation", amount: 1 }
+            : undefined,
       };
 
       set({
@@ -3737,6 +3778,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
           );
 
         const defeated = enemy.damageOnEnemy + totalDamage >= enemy.health;
+
+        if (defeated) {
+          const defeatResolution = resolveEnemyDefeatEffect({
+            enemy,
+            investigator: updatedInvestigator,
+          });
+
+          updatedInvestigator = defeatResolution.investigator;
+          resolutionLog.push(...defeatResolution.logEntries);
+        }
 
         resolutionLog.push(
           createLogEntry(
