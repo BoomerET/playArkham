@@ -78,6 +78,8 @@ import { buildEncounterDeckFromCodes } from "../lib/buildEncounterDeck";
 
 type Screen = "home" | "game";
 
+const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -442,8 +444,6 @@ function applyAdvanceOutcome(
     log,
   };
 }
-
-const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";
 
 type PersistedCampaignSetup = {
   selectedDeckId: string;
