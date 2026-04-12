@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 
 const [showLocationsMenu, setShowLocationsMenu] = useState(false);
-const [showScenarioMenu, setShowScenarioMenu] = useState(false);
 
 function prettyPhase(phase: string): string {
   return phase.charAt(0).toUpperCase() + phase.slice(1);
