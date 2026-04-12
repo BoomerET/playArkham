@@ -105,6 +105,7 @@ export default function InvestigatorPanel() {
 
   const [selectedAdjustment, setSelectedAdjustment] =
     useState<AdjustmentOption>("");
+  const [adjustmentsOpen, setAdjustmentsOpen] = useState(false);
 
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
@@ -194,6 +195,27 @@ export default function InvestigatorPanel() {
     }
 
     setSelectedAction("");
+  }
+
+  function handleAdjustmentExecute() {
+    switch (selectedAdjustment) {
+      case "spendResource":
+        spendResource(1);
+        break;
+      case "gainClue":
+        gainClue(1);
+        break;
+      case "takeDamage":
+        takeDamage(1);
+        break;
+      case "takeHorror":
+        takeHorror(1);
+        break;
+      default:
+        return;
+    }
+
+    setSelectedAdjustment("");
   }
 
   function handleAdjustmentExecute() {
@@ -462,32 +484,51 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      <div className="button-row">
-        <select
-          value={selectedAction}
-          onChange={(event) =>
-            setSelectedAction(event.target.value as ActionOption)
-          }
-          disabled={!canTakeAction}
-        >
-          <option value="">Select Action</option>
-          <option value="resource">Resource</option>
-          <option value="draw">Draw</option>
-          <option value="investigate">Investigate</option>
-          <option value="fight">{fightLabel}</option>
-          <option value="evade">{evadeLabel}</option>
-        </select>
-
+      <section className="investigator-collapsible">
         <button
-          onClick={handleActionExecute}
-          disabled={!canTakeAction || !selectedAction}
+          type="button"
+          className="investigator-collapsible__toggle"
+          onClick={() => setAdjustmentsOpen((open) => !open)}
+          aria-expanded={adjustmentsOpen}
         >
-          Go
+          <span>Manual Adjustments</span>
+          <span className="investigator-collapsible__chevron">
+            {adjustmentsOpen ? "▾" : "▸"}
+          </span>
         </button>
-      </div>
+
+        {adjustmentsOpen && (
+          <div className="investigator-collapsible__content">
+            <div className="button-row">
+              <select
+                className="investigator-action-select"
+                value={selectedAdjustment}
+                onChange={(event) =>
+                  setSelectedAdjustment(event.target.value as AdjustmentOption)
+                }
+              >
+                <option value="">Adjust Stats</option>
+                <option value="spendResource">-1 Resource</option>
+                <option value="gainClue">+1 Clue</option>
+                <option value="takeDamage">+1 Damage</option>
+                <option value="takeHorror">+1 Horror</option>
+              </select>
+
+              <button
+                type="button"
+                className="investigator-action-go"
+                onClick={handleAdjustmentExecute}
+                disabled={!selectedAdjustment}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
 
       <hr />
-<h3 className="investigator-panel__section-title">Adjustments</h3>
+      <h3 className="investigator-panel__section-title">Adjustments</h3>
       <div className="button-row">
         <select
           className="investigator-action-select"
