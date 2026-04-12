@@ -5,7 +5,7 @@ import { useGameStore } from "../../store/gameStore";
 import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
 import { useState } from "react";
-
+import { findCurrentLocation } from "../../lib/ gameStateHelpers";
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
@@ -157,17 +157,30 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
+  const locations = useGameStore((state) => state.locations);
+  const currentLocation = findCurrentLocation(locations, investigator.id);
+  const engageableEnemies = currentLocation
+    ? enemies.filter(
+      (enemy) =>
+        enemy.locationId === currentLocation.id &&
+        enemy.engagedInvestigatorId === null,
+    )
+    : [];
+  const activeEngageTarget = engageableEnemies[0] ?? null;
+
   const parleyLabel = "Parley";
   const resignLabel = "Resign";
-  const engageLabel = activeTargetEnemy
-    ? `Engage ${activeTargetEnemy.name}`
+  const engageLabel = activeEngageTarget
+    ? `Engage ${activeEngageTarget.name}`
     : "Engage";
-
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedAdjustment, setSelectedAdjustment] = useState("");
+  const engageEnemy = useGameStore((state) => state.engageEnemy);
+  const parleyAction = useGameStore((state) => state.parleyAction);
+  const resignAction = useGameStore((state) => state.resignAction);
 
   function handleExecuteAction() {
     switch (selectedAction) {
@@ -185,6 +198,19 @@ export default function InvestigatorPanel() {
         break;
       case "evade":
         evadeAction();
+        break;
+      case "engage":
+        if (activeEngageTarget) {
+          engageEnemy(activeEngageTarget.id);
+        }
+        break;
+      case "parley":
+        if (activeEngageTarget) {
+          parleyAction();
+        }
+        break;
+      case "resign":
+        resignAction();
         break;
       default:
         break;
@@ -499,7 +525,7 @@ export default function InvestigatorPanel() {
               <option value="evade">{evadeLabel}</option>
               <option value="parley">{parleyLabel}</option>
               <option value="resign">{resignLabel}</option>
-              <option value="engage" disabled={!activeTargetEnemy}>
+              <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
               </option>
             </select>
