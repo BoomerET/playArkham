@@ -4,6 +4,8 @@ import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
+import { useMemo, useState } from "react";
+
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
