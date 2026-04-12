@@ -1858,7 +1858,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   resignAction: () => {
     const { turn, scenarioStatus } = get();
-
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
       return;
@@ -1885,8 +1884,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scenarioResolutionText:
         resignResolution?.text ??
         `${get().investigator.name} resigned from the scenario.`,
-      ...
-});
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+    });
 
     get().pushLog("scenario", `${get().investigator.name} resigned from the scenario.`);
   },
