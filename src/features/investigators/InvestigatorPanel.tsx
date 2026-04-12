@@ -1,3 +1,4 @@
+import type { Investigator } from "../../types/game";
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
@@ -70,11 +71,24 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
 
   const normalized = imageName.toLowerCase();
 
-  const match = Object.entries(investigatorHeadImages).find(([path]) =>
-    path.toLowerCase().endsWith(`/${normalized}`),
-  );
+  const match = Object.entries(investigatorHeadImages).find(([path]) => {
+    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
+    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+
+    return (
+      fileName === normalized ||
+      path.toLowerCase().endsWith(`/${normalized}`) ||
+      baseName === normalized
+    );
+  });
 
   return match?.[1] ?? null;
+}
+
+function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
+  return getInvestigatorHeadUrl(
+    investigator.code ?? investigator.portraitHead ?? investigator.portrait,
+  );
 }
 
 export default function InvestigatorPanel() {
@@ -98,13 +112,6 @@ export default function InvestigatorPanel() {
   const setSelectedEnemyTarget = useGameStore(
     (state) => state.setSelectedEnemyTarget,
   );
-  //const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
-  //const confirmAssetReplacement = useGameStore(
-  //  (state) => state.confirmAssetReplacement,
-  //);
-  //const cancelPendingAssetPlay = useGameStore(
-  //  (state) => state.cancelPendingAssetPlay,
-  //);
 
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
@@ -125,9 +132,7 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
-  const portraitUrl = getInvestigatorHeadUrl(
-    investigator.portraitHead ?? investigator.portrait,
-  );
+  const portraitUrl = getInvestigatorPortraitUrl(investigator);
 
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
@@ -233,15 +238,16 @@ export default function InvestigatorPanel() {
 
             <p className="asset-replacement-modal__text">
               {pendingAssetPlay.requiredHandSlotsToFree
-                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
-                }.`
+                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"}.`
                 : "Choose one in-play asset to discard."}
             </p>
 
             <div className="asset-replacement-modal__choices">
               {pendingAssetPlay.replacementChoices.map((card) => {
                 const selected =
-                  pendingAssetPlay.selectedReplacementIds.includes(card.instanceId);
+                  pendingAssetPlay.selectedReplacementIds.includes(
+                    card.instanceId,
+                  );
 
                 return (
                   <button
@@ -251,7 +257,9 @@ export default function InvestigatorPanel() {
                         ? "asset-replacement-modal__choice--selected"
                         : ""
                       }`}
-                    onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
+                    onClick={() =>
+                      togglePendingAssetReplacementChoice(card.instanceId)
+                    }
                   >
                     {card.name}
                     {card.slot ? ` (${card.slot})` : ""}
@@ -338,7 +346,8 @@ export default function InvestigatorPanel() {
                     key={enemy.id}
                     type="button"
                     className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
-                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""
+                      }`}
                     onClick={() => setSelectedEnemyTarget(enemy.id)}
                     disabled={!isSelectable}
                     aria-pressed={isSelectedTarget}
