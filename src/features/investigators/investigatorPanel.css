@@ -615,7 +615,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
   width: 100%;
-  min-width: 0;
+  min-width: 2;
 }
 
 .investigator-skill-stat {
@@ -685,10 +685,10 @@
 }
 
 .investigator-header .investigator-skill-grid {
-  width: 164px;
-  margin-left: -34px;
+  width: 184px;
+  margin-left: 0px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  gap: 9px;
 }
 
 .investigator-header .investigator-skill-stat {
