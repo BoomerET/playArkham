@@ -5,7 +5,7 @@ import { useGameStore } from "../../store/gameStore";
 import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
 import { useState } from "react";
-import { findCurrentLocation } from "../../lib/ gameStateHelpers";
+import { findCurrentLocation } from "../../lib/gameStateHelpers";
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
