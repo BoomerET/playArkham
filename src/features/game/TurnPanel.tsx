@@ -1,8 +1,6 @@
 import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 
-
-
 function prettyPhase(phase: string): string {
   return phase.charAt(0).toUpperCase() + phase.slice(1);
 }
@@ -14,6 +12,7 @@ export default function TurnPanel() {
   const act = useGameStore((state) => state.act);
 
   const [showLocationsMenu, setShowLocationsMenu] = useState(false);
+  const [showScenarioMenu, setShowScenarioMenu] = useState(false);
 
   const advancePhase = useGameStore((state) => state.advancePhase);
   const setLocationVisible = useGameStore((state) => state.setLocationVisible);
@@ -64,59 +63,39 @@ export default function TurnPanel() {
 
       <hr />
 
-      <div>
-        <h3 style={{ margin: "0 0 10px" }}>Scenario Progress</h3>
+      <section className="investigator-control-group">
+        <button
+          type="button"
+          className="investigator-control-toggle"
+          onClick={() => setShowScenarioMenu((current) => !current)}
+        >
+          Scenario Progress {showScenarioMenu ? "▴" : "▾"}
+        </button>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {agenda && (
-            <div>
-              <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
-                Agenda: {agenda.title}
-              </p>
-
+        {showScenarioMenu && (
+          <div className="investigator-admin-list">
+            <div className="investigator-admin-row">
+              <span>Agenda</span>
               <div className="button-row">
-                <button
-                  onClick={() =>
-                    setAgendaProgress(Math.max(0, agenda.progress - 1))
-                  }
-                >
-                  -1 {agenda.thresholdLabel}
+                <button onClick={() => setAgendaProgress((agenda?.progress ?? 0) + 1)}>
+                  +1 Doom
                 </button>
-
-                <button
-                  onClick={() => setAgendaProgress(agenda.progress + 1)}
-                >
-                  +1 {agenda.thresholdLabel}
-                </button>
-
                 <button onClick={advanceAgenda}>Advance Agenda</button>
               </div>
             </div>
-          )}
 
-          {act && (
-            <div>
-              <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
-                Act: {act.title}
-              </p>
-
+            <div className="investigator-admin-row">
+              <span>Act</span>
               <div className="button-row">
-                <button
-                  onClick={() => setActProgress(Math.max(0, act.progress - 1))}
-                >
-                  -1 {act.thresholdLabel}
+                <button onClick={() => setActProgress((act?.progress ?? 0) + 1)}>
+                  +1 Clue
                 </button>
-
-                <button onClick={() => setActProgress(act.progress + 1)}>
-                  +1 {act.thresholdLabel}
-                </button>
-
                 <button onClick={advanceAct}>Advance Act</button>
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        )}
+      </section>
 
       <hr />
 
