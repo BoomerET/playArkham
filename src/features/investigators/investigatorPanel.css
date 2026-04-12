@@ -87,6 +87,33 @@
   font-weight: bold;
 }
 
+.investigator-skill-stat--will {
+  background: rgba(62, 88, 134, 0.92);
+  border-color: rgba(125, 170, 235, 0.3);
+}
+
+.investigator-skill-stat--int {
+  background: rgba(45, 108, 98, 0.92);
+  border-color: rgba(110, 212, 191, 0.28);
+}
+
+.investigator-skill-stat--com {
+  background: rgba(123, 70, 42, 0.92);
+  border-color: rgba(231, 163, 112, 0.3);
+}
+
+.investigator-skill-stat--agi {
+  background: rgba(88, 83, 36, 0.92);
+  border-color: rgba(214, 204, 106, 0.28);
+}
+
+.investigator-skill-stat--will .investigator-skill-stat__label,
+.investigator-skill-stat--int .investigator-skill-stat__label,
+.investigator-skill-stat--com .investigator-skill-stat__label,
+.investigator-skill-stat--agi .investigator-skill-stat__label {
+  color: rgba(230, 237, 243, 0.78);
+}
+
 @media (max-width: 640px) {
   .investigator-header {
     gap: 12px;
@@ -447,7 +474,7 @@
 
 .asset-replacement-modal__title {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.02rem;
 }
 
 .asset-replacement-modal__text {
@@ -586,8 +613,9 @@
 .investigator-skill-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
+  gap: 6px;
   width: 100%;
+  min-width: 0;
 }
 
 .investigator-skill-stat {
@@ -595,8 +623,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 6px 4px;
+  min-height: 44px;
+  min-width: 0;
+  padding: 7px 8px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(18, 28, 40, 0.92);
@@ -606,14 +635,14 @@
 }
 
 .investigator-skill-stat__label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--muted);
 }
 
 .investigator-skill-stat__value {
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 800;
 }
 
@@ -628,8 +657,8 @@
   }
 
   .investigator-skill-stat {
-    min-height: 36px;
-    padding: 5px 3px;
+    min-height: 38px;
+    padding: 5px 6px;
   }
 
   .investigator-skill-stat__label {

@@ -225,25 +225,25 @@ export default function InvestigatorPanel() {
           </div>
 
           <div className="investigator-skill-grid">
-            <div className="investigator-skill-stat">
+            <div className="investigator-skill-stat investigator-skill-stat--will">
               <span className="investigator-skill-stat__label">WIL</span>
               <span className="investigator-skill-stat__value">
                 {investigator.willpower}
               </span>
             </div>
-            <div className="investigator-skill-stat">
+            <div className="investigator-skill-stat investigator-skill-stat--int">
               <span className="investigator-skill-stat__label">INT</span>
               <span className="investigator-skill-stat__value">
                 {investigator.intellect}
               </span>
             </div>
-            <div className="investigator-skill-stat">
+            <div className="investigator-skill-stat investigator-skill-stat--com">
               <span className="investigator-skill-stat__label">COM</span>
               <span className="investigator-skill-stat__value">
                 {investigator.combat}
               </span>
             </div>
-            <div className="investigator-skill-stat">
+            <div className="investigator-skill-stat investigator-skill-stat--agi">
               <span className="investigator-skill-stat__label">AGI</span>
               <span className="investigator-skill-stat__value">
                 {investigator.agility}
