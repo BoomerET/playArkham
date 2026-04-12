@@ -760,3 +760,27 @@
   opacity: 0.7;
 }
 
+.investigator-control-group {
+  margin-top: 0.75rem;
+}
+
+.investigator-control-toggle {
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+}
+
+.investigator-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.investigator-admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
