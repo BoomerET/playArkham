@@ -487,7 +487,7 @@ export default function InvestigatorPanel() {
       </div>
 
       <hr />
-
+<h3 className="investigator-panel__section-title">Adjustments</h3>
       <div className="button-row">
         <select
           className="investigator-action-select"
