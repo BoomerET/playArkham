@@ -490,6 +490,9 @@ export default function InvestigatorPanel() {
               <option value="investigate">Investigate</option>
               <option value="fight">{fightLabel}</option>
               <option value="evade">{evadeLabel}</option>
+              <option value="parley">Parley</option>
+              <option value="resign">Resign</option>
+              <option value="engage">Engage</option>
             </select>
 
             <button

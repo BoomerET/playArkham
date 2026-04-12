@@ -248,6 +248,9 @@ type GameStore = GameState & CampaignStoreActions & {
   discardLocationAttachment: (attachmentId: string) => void;
   randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
   moveHunterEnemies: () => void;
+  engageEnemy: (enemyId: string) => void;
+  parleyAction: () => void;
+  resignAction: () => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -1473,6 +1476,78 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     get().pushLog("scenario", `${location.name} was revealed.`);
+  },
+
+  engageEnemy: (enemyId) => {
+    const { enemies, investigator, locations, turn } = get();
+
+    if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
+      return;
+    }
+
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+    if (!currentLocation) return;
+
+    const enemy = enemies.find(
+      (e) =>
+        e.id === enemyId &&
+        e.locationId === currentLocation.id &&
+        e.engagedInvestigatorId === null,
+    );
+
+    if (!enemy) {
+      get().pushLog("system", "Cannot engage that enemy.");
+      return;
+    }
+
+    set({
+      enemies: enemies.map((e) =>
+        e.id === enemyId
+          ? { ...e, engagedInvestigatorId: investigator.id }
+          : e,
+      ),
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+    });
+
+    get().pushLog("enemy", `Engaged ${enemy.name}.`);
+  },
+
+  parleyAction: () => {
+    const { turn } = get();
+
+    if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
+      return;
+    }
+
+    set({
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+    });
+
+    get().pushLog("system", "Parley action taken.");
+  },
+
+  resignAction: () => {
+    const { turn } = get();
+
+    if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
+      return;
+    }
+
+    set({
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      scenarioStatus: "resigned",
+    });
+
+    get().pushLog("system", "You resigned from the scenario.");
   },
 
   setAgendaProgress: (progress) => {

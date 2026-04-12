@@ -42,7 +42,7 @@ export type Phase = "setup" | "mythos" | "investigation" | "enemy" | "upkeep";
 export type SkillType = "willpower" | "intellect" | "combat" | "agility";
 
 
-export type ScenarioStatus = "inProgress" | "won" | "lost";
+export type ScenarioStatus = "inProgress" | "won" | "lost" | "resigned";
 
 export type InvestigatorSlotType =
   | "Hand"
@@ -166,9 +166,6 @@ export interface SkillModifierDetail {
   skill: SkillType;
   amount: number;
 }
-
-
-
 
 export interface SkillTestResult {
   skill: SkillType;
