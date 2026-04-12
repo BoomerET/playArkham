@@ -256,8 +256,12 @@ export default function InvestigatorPanel() {
             <span className="token-chip gold">
               INT {investigator.intellect}
             </span>
-            <span className="token-chip gold">COM {investigator.combat}</span>
-            <span className="token-chip gold">AGI {investigator.agility}</span>
+            <span className="token-chip gold">
+              COM {investigator.combat}
+            </span>
+            <span className="token-chip gold">
+              AGI {investigator.agility}
+            </span>
           </div>
         </div>
       </div>
