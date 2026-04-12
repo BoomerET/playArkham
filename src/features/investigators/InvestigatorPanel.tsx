@@ -159,6 +159,29 @@ export default function InvestigatorPanel() {
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
+  const [selectedAction, setSelectedAction] = useState("");
+
+  function handleExecuteAction() {
+    switch (selectedAction) {
+      case "resource":
+        takeResourceAction();
+        break;
+      case "draw":
+        takeDrawAction();
+        break;
+      case "investigate":
+        investigateAction();
+        break;
+      case "fight":
+        fightAction();
+        break;
+      case "evade":
+        evadeAction();
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -417,20 +440,28 @@ export default function InvestigatorPanel() {
 
         {showActionsMenu && (
           <div className="button-row">
-            <button onClick={takeResourceAction} disabled={!canTakeAction}>
-              Resource
-            </button>
-            <button onClick={takeDrawAction} disabled={!canTakeAction}>
-              Draw
-            </button>
-            <button onClick={investigateAction} disabled={!canTakeAction}>
-              Investigate
-            </button>
-            <button onClick={fightAction} disabled={!canTakeAction}>
-              {fightLabel}
-            </button>
-            <button onClick={evadeAction} disabled={!canTakeAction}>
-              {evadeLabel}
+            <select
+              className="investigator-action-select"
+              value={selectedAction}
+              onChange={(event) => setSelectedAction(event.target.value)}
+              disabled={!canTakeAction}
+              aria-label="Choose an action"
+            >
+              <option value="">Choose action…</option>
+              <option value="resource">Resource</option>
+              <option value="draw">Draw</option>
+              <option value="investigate">Investigate</option>
+              <option value="fight">{fightLabel}</option>
+              <option value="evade">{evadeLabel}</option>
+            </select>
+
+            <button
+              type="button"
+              className="investigator-action-go"
+              onClick={handleExecuteAction}
+              disabled={!canTakeAction || !selectedAction}
+            >
+              Go
             </button>
           </div>
         )}
