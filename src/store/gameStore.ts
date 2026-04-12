@@ -1538,24 +1538,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("system", "Parley action taken.");
   },
 
-  //resignAction: () => {
-  //  const { turn } = get();
-
-  //  if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
-  //    return;
-  //  }
-
-  //  set({
-  //    turn: {
-  //      ...turn,
-  //      actionsRemaining: turn.actionsRemaining - 1,
-  //    },
-  //    scenarioStatus: "resigned",
-  //  });
-
-  //  get().pushLog("system", "You resigned from the scenario.");
-  //},
-
   setAgendaProgress: (progress) => {
     const { agenda } = get();
 
@@ -1857,14 +1839,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resignAction: () => {
-    const { turn, scenarioStatus } = get();
+    const { turn, scenarioStatus, campaignState } = get();
+
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
       return;
     }
 
     if (turn.phase !== "investigation") {
-      get().pushLog("system", "You can only resign during the Investigation phase.");
+      get().pushLog(
+        "system",
+        "You can only resign during the Investigation phase.",
+      );
       return;
     }
 
@@ -1875,22 +1861,59 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const selectedScenario = getSelectedScenario(get());
     const resignResolution = selectedScenario.resign;
+    const resignEffects = resignResolution?.effects;
+
+    let nextScenarioStatus: ScenarioStatus = "resigned";
+
+    if (resignEffects?.winScenario) {
+      nextScenarioStatus = "won";
+    } else if (resignEffects?.loseScenario) {
+      nextScenarioStatus = "lost";
+    }
+
+    const nextCampaignState =
+      resignEffects?.setPreviousScenarioOutcome != null
+        ? {
+          ...campaignState,
+          previousScenarioOutcome: resignEffects.setPreviousScenarioOutcome,
+        }
+        : campaignState;
+
+    const resolutionTitle =
+      resignResolution?.title ??
+      resignEffects?.resolutionTitle ??
+      "Resigned";
+
+    const resolutionSubtitle =
+      resignResolution?.subtitle ??
+      resignEffects?.resolutionSubtitle ??
+      "You resigned from the scenario.";
+
+    const resolutionText =
+      resignResolution?.text ??
+      resignEffects?.resolutionText ??
+      `${get().investigator.name} resigned from the scenario.`;
 
     set({
-      scenarioStatus: "resigned",
-      scenarioResolutionTitle: resignResolution?.title ?? "Resigned",
-      scenarioResolutionSubtitle:
-        resignResolution?.subtitle ?? "You resigned from the scenario.",
-      scenarioResolutionText:
-        resignResolution?.text ??
-        `${get().investigator.name} resigned from the scenario.`,
+      scenarioStatus: nextScenarioStatus,
+      scenarioResolutionTitle: resolutionTitle,
+      scenarioResolutionSubtitle: resolutionSubtitle,
+      scenarioResolutionText: resolutionText,
+      campaignState: nextCampaignState,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
     });
 
-    get().pushLog("scenario", `${get().investigator.name} resigned from the scenario.`);
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
+
+    get().pushLog("scenario", resolutionText);
   },
 
   skipMulligan: () => {

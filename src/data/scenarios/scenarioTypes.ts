@@ -44,10 +44,20 @@ export interface ScenarioCardDefinition {
   onAdvance?: ScenarioAdvanceEffects;
 }
 
+export type ScenarioResolutionEffects = {
+  winScenario?: boolean;
+  loseScenario?: boolean;
+  resolutionText?: string;
+  resolutionTitle?: string;
+  resolutionSubtitle?: string;
+  setPreviousScenarioOutcome?: string;
+};
+
 export type ScenarioResignResolution = {
   title?: string;
   subtitle?: string;
   text: string;
+  effects?: ScenarioResolutionEffects;
 };
 
 export interface ScenarioDefinition {

@@ -23,6 +23,10 @@ ruin. The head librarian is clearly in shock. His face goes ashen \
 as you explain the odd circumstances surrounding your friend’s \
 disappearance. Who was your burning nemesis? And what did the \
 hooded figures patrolling the campus want?",
+    effects: {
+      winScenario: false,
+      setPreviousScenarioOutcome: "flames",
+    }
   },
   locations: [
     {
