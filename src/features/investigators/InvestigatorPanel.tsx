@@ -1,10 +1,11 @@
-import { useState } from "react";
 import type { Investigator } from "../../types/game";
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
+import { useState } from "react";
+
 
 function formatFaction(faction: string): string {
   return faction.charAt(0).toUpperCase() + faction.slice(1);
@@ -92,8 +93,6 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
   );
 }
 
-type OpenMenu = "actions" | "adjustments" | "locations" | "scenario" | null;
-
 export default function InvestigatorPanel() {
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
@@ -105,15 +104,10 @@ export default function InvestigatorPanel() {
   const cancelPendingAssetPlay = useGameStore(
     (state) => state.cancelPendingAssetPlay,
   );
-
   const investigator = useGameStore((state) => state.investigator);
   const playArea = useGameStore((state) => state.playArea);
   const enemies = useGameStore((state) => state.enemies);
-  const locations = useGameStore((state) => state.locations);
-  const agenda = useGameStore((state) => state.agenda);
-  const act = useGameStore((state) => state.act);
   const turn = useGameStore((state) => state.turn);
-
   const selectedEnemyTargetId = useGameStore(
     (state) => state.selectedEnemyTargetId,
   );
@@ -131,13 +125,6 @@ export default function InvestigatorPanel() {
   const investigateAction = useGameStore((state) => state.investigateAction);
   const fightAction = useGameStore((state) => state.fightAction);
   const evadeAction = useGameStore((state) => state.evadeAction);
-
-  const setLocationVisible = useGameStore((state) => state.setLocationVisible);
-  const revealLocation = useGameStore((state) => state.revealLocation);
-  const setAgendaProgress = useGameStore((state) => state.setAgendaProgress);
-  const setActProgress = useGameStore((state) => state.setActProgress);
-  const advanceAgenda = useGameStore((state) => state.advanceAgenda);
-  const advanceAct = useGameStore((state) => state.advanceAct);
 
   const usedSlots = getUsedSlots(playArea);
   const slotCapacity = getSlotCapacity(investigator);
@@ -170,11 +157,8 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
-  const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
-
-  function toggleMenu(menu: OpenMenu) {
-    setOpenMenu((current) => (current === menu ? null : menu));
-  }
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -275,8 +259,8 @@ export default function InvestigatorPanel() {
                     key={card.instanceId}
                     type="button"
                     className={`asset-replacement-modal__choice ${selected
-                        ? "asset-replacement-modal__choice--selected"
-                        : ""
+                      ? "asset-replacement-modal__choice--selected"
+                      : ""
                       }`}
                     onClick={() =>
                       togglePendingAssetReplacementChoice(card.instanceId)
@@ -422,126 +406,56 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      <div className="investigator-menu-bar">
-        <div className="investigator-menu">
-          <button
-            type="button"
-            className="investigator-menu-toggle"
-            onClick={() => toggleMenu("actions")}
-          >
-            Actions {openMenu === "actions" ? "▴" : "▾"}
-          </button>
+      <section className="investigator-control-group">
+        <button
+          type="button"
+          className="investigator-control-toggle"
+          onClick={() => setShowActionsMenu((current) => !current)}
+        >
+          Actions {showActionsMenu ? "▴" : "▾"}
+        </button>
 
-          {openMenu === "actions" && (
-            <div className="investigator-menu-panel">
-              <button onClick={takeResourceAction} disabled={!canTakeAction}>
-                Resource
-              </button>
-              <button onClick={takeDrawAction} disabled={!canTakeAction}>
-                Draw
-              </button>
-              <button onClick={investigateAction} disabled={!canTakeAction}>
-                Investigate
-              </button>
-              <button onClick={fightAction} disabled={!canTakeAction}>
-                {fightLabel}
-              </button>
-              <button onClick={evadeAction} disabled={!canTakeAction}>
-                {evadeLabel}
-              </button>
-            </div>
-          )}
-        </div>
+        {showActionsMenu && (
+          <div className="button-row">
+            <button onClick={takeResourceAction} disabled={!canTakeAction}>
+              Resource
+            </button>
+            <button onClick={takeDrawAction} disabled={!canTakeAction}>
+              Draw
+            </button>
+            <button onClick={investigateAction} disabled={!canTakeAction}>
+              Investigate
+            </button>
+            <button onClick={fightAction} disabled={!canTakeAction}>
+              {fightLabel}
+            </button>
+            <button onClick={evadeAction} disabled={!canTakeAction}>
+              {evadeLabel}
+            </button>
+          </div>
+        )}
+      </section>
 
-        <div className="investigator-menu">
-          <button
-            type="button"
-            className="investigator-menu-toggle"
-            onClick={() => toggleMenu("adjustments")}
-          >
-            Adjust {openMenu === "adjustments" ? "▴" : "▾"}
-          </button>
+      <hr />
 
-          {openMenu === "adjustments" && (
-            <div className="investigator-menu-panel">
-              <button onClick={() => spendResource(1)}>-1 Resource</button>
-              <button onClick={() => gainClue(1)}>+1 Clue</button>
-              <button onClick={() => takeDamage(1)}>+1 Damage</button>
-              <button onClick={() => takeHorror(1)}>+1 Horror</button>
-            </div>
-          )}
-        </div>
+      <section className="investigator-control-group">
+        <button
+          type="button"
+          className="investigator-control-toggle"
+          onClick={() => setShowAdjustmentsMenu((current) => !current)}
+        >
+          Adjustments {showAdjustmentsMenu ? "▴" : "▾"}
+        </button>
 
-        <div className="investigator-menu">
-          <button
-            type="button"
-            className="investigator-menu-toggle"
-            onClick={() => toggleMenu("locations")}
-          >
-            Locations {openMenu === "locations" ? "▴" : "▾"}
-          </button>
-
-          {openMenu === "locations" && (
-            <div className="investigator-menu-panel investigator-menu-panel-wide">
-              {locations.map((location) => (
-                <div key={location.id} className="investigator-menu-row">
-                  <span className="investigator-menu-row-label">
-                    {location.name}
-                  </span>
-                  <div className="investigator-menu-row-actions">
-                    <button onClick={() => setLocationVisible(location.id, true)}>
-                      Show
-                    </button>
-                    <button onClick={() => revealLocation(location.id)}>
-                      Reveal
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="investigator-menu">
-          <button
-            type="button"
-            className="investigator-menu-toggle"
-            onClick={() => toggleMenu("scenario")}
-          >
-            Scenario {openMenu === "scenario" ? "▴" : "▾"}
-          </button>
-
-          {openMenu === "scenario" && (
-            <div className="investigator-menu-panel investigator-menu-panel-wide">
-              <div className="investigator-menu-row">
-                <span className="investigator-menu-row-label">
-                  Agenda {agenda ? `${agenda.progress}/${agenda.threshold}` : "—"}
-                </span>
-                <div className="investigator-menu-row-actions">
-                  <button
-                    onClick={() => setAgendaProgress((agenda?.progress ?? 0) + 1)}
-                  >
-                    +1 Doom
-                  </button>
-                  <button onClick={advanceAgenda}>Advance</button>
-                </div>
-              </div>
-
-              <div className="investigator-menu-row">
-                <span className="investigator-menu-row-label">
-                  Act {act ? `${act.progress}/${act.threshold}` : "—"}
-                </span>
-                <div className="investigator-menu-row-actions">
-                  <button onClick={() => setActProgress((act?.progress ?? 0) + 1)}>
-                    +1 Clue
-                  </button>
-                  <button onClick={advanceAct}>Advance</button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+        {showAdjustmentsMenu && (
+          <div className="button-row">
+            <button onClick={() => spendResource(1)}>-1 Resource</button>
+            <button onClick={() => gainClue(1)}>+1 Clue</button>
+            <button onClick={() => takeDamage(1)}>+1 Damage</button>
+            <button onClick={() => takeHorror(1)}>+1 Horror</button>
+          </div>
+        )}
+      </section>
     </section>
   );
 }
