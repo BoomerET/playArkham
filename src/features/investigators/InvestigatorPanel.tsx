@@ -155,6 +155,11 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
+  const [showLocationsMenu, setShowLocationsMenu] = useState(false);
+  const [showScenarioMenu, setShowScenarioMenu] = useState(false);
+
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
       <div className="investigator-header">
@@ -254,8 +259,8 @@ export default function InvestigatorPanel() {
                     key={card.instanceId}
                     type="button"
                     className={`asset-replacement-modal__choice ${selected
-                        ? "asset-replacement-modal__choice--selected"
-                        : ""
+                      ? "asset-replacement-modal__choice--selected"
+                      : ""
                       }`}
                     onClick={() =>
                       togglePendingAssetReplacementChoice(card.instanceId)
@@ -401,32 +406,56 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      <div className="button-row">
-        <button onClick={takeResourceAction} disabled={!canTakeAction}>
-          Resource
+      <section className="investigator-control-group">
+        <button
+          type="button"
+          className="investigator-control-toggle"
+          onClick={() => setShowActionsMenu((current) => !current)}
+        >
+          Actions {showActionsMenu ? "▴" : "▾"}
         </button>
-        <button onClick={takeDrawAction} disabled={!canTakeAction}>
-          Draw
-        </button>
-        <button onClick={investigateAction} disabled={!canTakeAction}>
-          Investigate
-        </button>
-        <button onClick={fightAction} disabled={!canTakeAction}>
-          {fightLabel}
-        </button>
-        <button onClick={evadeAction} disabled={!canTakeAction}>
-          {evadeLabel}
-        </button>
-      </div>
+
+        {showActionsMenu && (
+          <div className="button-row">
+            <button onClick={takeResourceAction} disabled={!canTakeAction}>
+              Resource
+            </button>
+            <button onClick={takeDrawAction} disabled={!canTakeAction}>
+              Draw
+            </button>
+            <button onClick={investigateAction} disabled={!canTakeAction}>
+              Investigate
+            </button>
+            <button onClick={fightAction} disabled={!canTakeAction}>
+              {fightLabel}
+            </button>
+            <button onClick={evadeAction} disabled={!canTakeAction}>
+              {evadeLabel}
+            </button>
+          </div>
+        )}
+      </section>
 
       <hr />
 
-      <div className="button-row">
-        <button onClick={() => spendResource(1)}>-1 Resource</button>
-        <button onClick={() => gainClue(1)}>+1 Clue</button>
-        <button onClick={() => takeDamage(1)}>+1 Damage</button>
-        <button onClick={() => takeHorror(1)}>+1 Horror</button>
-      </div>
+      <section className="investigator-control-group">
+        <button
+          type="button"
+          className="investigator-control-toggle"
+          onClick={() => setShowAdjustmentsMenu((current) => !current)}
+        >
+          Adjustments {showAdjustmentsMenu ? "▴" : "▾"}
+        </button>
+
+        {showAdjustmentsMenu && (
+          <div className="button-row">
+            <button onClick={() => spendResource(1)}>-1 Resource</button>
+            <button onClick={() => gainClue(1)}>+1 Clue</button>
+            <button onClick={() => takeDamage(1)}>+1 Damage</button>
+            <button onClick={() => takeHorror(1)}>+1 Horror</button>
+          </div>
+        )}
+      </section>
     </section>
   );
 }
