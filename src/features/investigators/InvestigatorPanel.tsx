@@ -1,4 +1,3 @@
-import { useState } from "react";
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
@@ -71,42 +70,14 @@ function getInvestigatorHeadUrl(imageName?: string): string | null {
 
   const normalized = imageName.toLowerCase();
 
-  const match = Object.entries(investigatorHeadImages).find(([path]) => {
-    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
-    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-
-    return (
-      fileName === normalized ||
-      path.toLowerCase().endsWith(`/${normalized}`) ||
-      baseName === normalized
-    );
-  });
+  const match = Object.entries(investigatorHeadImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
 
   return match?.[1] ?? null;
 }
 
-type ActionOption =
-  | ""
-  | "resource"
-  | "draw"
-  | "investigate"
-  | "fight"
-  | "evade";
-
 export default function InvestigatorPanel() {
-  const [selectedAction, setSelectedAction] = useState<ActionOption>("");
-
-  type AdjustmentOption =
-    | ""
-    | "spendResource"
-    | "gainClue"
-    | "takeDamage"
-    | "takeHorror";
-
-  const [selectedAdjustment, setSelectedAdjustment] =
-    useState<AdjustmentOption>("");
-  const [adjustmentsOpen, setAdjustmentsOpen] = useState(false);
-
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,
@@ -128,6 +99,7 @@ export default function InvestigatorPanel() {
     (state) => state.setSelectedEnemyTarget,
   );
 
+
   const spendResource = useGameStore((state) => state.spendResource);
   const gainClue = useGameStore((state) => state.gainClue);
   const takeDamage = useGameStore((state) => state.takeDamage);
@@ -147,9 +119,8 @@ export default function InvestigatorPanel() {
 
   const factionClass = getFactionClassName(investigator.faction);
   const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
-
   const portraitUrl = getInvestigatorHeadUrl(
-    investigator.code ?? investigator.portraitHead ?? investigator.portrait,
+    investigator.portraitHead ?? investigator.portrait,
   );
 
   const engagedEnemies = enemies.filter(
@@ -172,72 +143,6 @@ export default function InvestigatorPanel() {
   const evadeLabel = activeTargetEnemy
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
-
-  function handleActionExecute() {
-    switch (selectedAction) {
-      case "resource":
-        takeResourceAction();
-        break;
-      case "draw":
-        takeDrawAction();
-        break;
-      case "investigate":
-        investigateAction();
-        break;
-      case "fight":
-        fightAction();
-        break;
-      case "evade":
-        evadeAction();
-        break;
-      default:
-        return;
-    }
-
-    setSelectedAction("");
-  }
-
-  function handleAdjustmentExecute() {
-    switch (selectedAdjustment) {
-      case "spendResource":
-        spendResource(1);
-        break;
-      case "gainClue":
-        gainClue(1);
-        break;
-      case "takeDamage":
-        takeDamage(1);
-        break;
-      case "takeHorror":
-        takeHorror(1);
-        break;
-      default:
-        return;
-    }
-
-    setSelectedAdjustment("");
-  }
-
-  function handleAdjustmentExecute() {
-    switch (selectedAdjustment) {
-      case "spendResource":
-        spendResource(1);
-        break;
-      case "gainClue":
-        gainClue(1);
-        break;
-      case "takeDamage":
-        takeDamage(1);
-        break;
-      case "takeHorror":
-        takeHorror(1);
-        break;
-      default:
-        return;
-    }
-
-    setSelectedAdjustment("");
-  }
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -337,12 +242,10 @@ export default function InvestigatorPanel() {
                     key={card.instanceId}
                     type="button"
                     className={`asset-replacement-modal__choice ${selected
-                      ? "asset-replacement-modal__choice--selected"
-                      : ""
+                        ? "asset-replacement-modal__choice--selected"
+                        : ""
                       }`}
-                    onClick={() =>
-                      togglePendingAssetReplacementChoice(card.instanceId)
-                    }
+                    onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
                   >
                     {card.name}
                     {card.slot ? ` (${card.slot})` : ""}
@@ -429,8 +332,7 @@ export default function InvestigatorPanel() {
                     key={enemy.id}
                     type="button"
                     className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
-                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""
-                      }`}
+                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
                     onClick={() => setSelectedEnemyTarget(enemy.id)}
                     disabled={!isSelectable}
                     aria-pressed={isSelectedTarget}
@@ -484,75 +386,32 @@ export default function InvestigatorPanel() {
 
       <hr />
 
-      <section className="investigator-collapsible">
-        <button
-          type="button"
-          className="investigator-collapsible__toggle"
-          onClick={() => setAdjustmentsOpen((open) => !open)}
-          aria-expanded={adjustmentsOpen}
-        >
-          <span>Manual Adjustments</span>
-          <span className="investigator-collapsible__chevron">
-            {adjustmentsOpen ? "▾" : "▸"}
-          </span>
+      <div className="button-row">
+        <button onClick={takeResourceAction} disabled={!canTakeAction}>
+          Resource
         </button>
-
-        {adjustmentsOpen && (
-          <div className="investigator-collapsible__content">
-            <div className="button-row">
-              <select
-                className="investigator-action-select"
-                value={selectedAdjustment}
-                onChange={(event) =>
-                  setSelectedAdjustment(event.target.value as AdjustmentOption)
-                }
-              >
-                <option value="">Adjust Stats</option>
-                <option value="spendResource">-1 Resource</option>
-                <option value="gainClue">+1 Clue</option>
-                <option value="takeDamage">+1 Damage</option>
-                <option value="takeHorror">+1 Horror</option>
-              </select>
-
-              <button
-                type="button"
-                className="investigator-action-go"
-                onClick={handleAdjustmentExecute}
-                disabled={!selectedAdjustment}
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-        )}
-      </section>
+        <button onClick={takeDrawAction} disabled={!canTakeAction}>
+          Draw
+        </button>
+        <button onClick={investigateAction} disabled={!canTakeAction}>
+          Investigate
+        </button>
+        <button onClick={fightAction} disabled={!canTakeAction}>
+          {fightLabel}
+        </button>
+        <button onClick={evadeAction} disabled={!canTakeAction}>
+          {evadeLabel}
+        </button>
+      </div>
 
       <hr />
-      <h3 className="investigator-panel__section-title">Adjustments</h3>
-      <div className="button-row">
-        <select
-          className="investigator-action-select"
-          value={selectedAdjustment}
-          onChange={(e) =>
-            setSelectedAdjustment(e.target.value as AdjustmentOption)
-          }
-        >
-          <option value="">Adjust Stats</option>
-          <option value="spendResource">-1 Resource</option>
-          <option value="gainClue">+1 Clue</option>
-          <option value="takeDamage">+1 Damage</option>
-          <option value="takeHorror">+1 Horror</option>
-        </select>
 
-        <button
-          className="investigator-action-go"
-          onClick={handleAdjustmentExecute}
-          disabled={!selectedAdjustment}
-        >
-          Apply
-        </button>
+      <div className="button-row">
+        <button onClick={() => spendResource(1)}>-1 Resource</button>
+        <button onClick={() => gainClue(1)}>+1 Clue</button>
+        <button onClick={() => takeDamage(1)}>+1 Damage</button>
+        <button onClick={() => takeHorror(1)}>+1 Horror</button>
       </div>
     </section>
   );
 }
-
