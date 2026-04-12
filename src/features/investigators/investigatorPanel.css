@@ -113,7 +113,7 @@
 .investigator-engaged-enemies {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
   margin-top: 8px;
 }
 
@@ -326,14 +326,14 @@
 .engaged-enemy-name-stack {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
 .engaged-enemy-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
 }
 
 .engaged-enemy-tag-primary {
@@ -413,7 +413,7 @@
 .investigator-panel__slots {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .investigator-panel__slot-row {
@@ -585,8 +585,8 @@
 
 .investigator-skill-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
   width: 100%;
 }
 
