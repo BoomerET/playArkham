@@ -157,6 +157,13 @@ export default function InvestigatorPanel() {
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
 
+  const parleyLabel = "Parley";
+  const resignLabel = "Resign";
+  const engageLabel = activeTargetEnemy
+    ? `Engage ${activeTargetEnemy.name}`
+    : "Engage";
+
+
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
@@ -490,9 +497,11 @@ export default function InvestigatorPanel() {
               <option value="investigate">Investigate</option>
               <option value="fight">{fightLabel}</option>
               <option value="evade">{evadeLabel}</option>
-              <option value="parley">Parley</option>
-              <option value="resign">Resign</option>
-              <option value="engage">Engage</option>
+              <option value="parley">{parleyLabel}</option>
+              <option value="resign">{resignLabel}</option>
+              <option value="engage" disabled={!activeTargetEnemy}>
+                {engageLabel}
+              </option>
             </select>
 
             <button
