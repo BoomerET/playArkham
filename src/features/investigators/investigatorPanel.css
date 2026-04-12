@@ -669,3 +669,46 @@
     font-size: 0.92rem;
   }
 }
+
+
+/* Forced width override for portrait + stat row */
+.investigator-header .investigator-portrait-column {
+  width: 180px !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.investigator-header .investigator-portrait-frame {
+  width: 180px !important;
+  height: 180px !important;
+}
+
+.investigator-header .investigator-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(40px, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.investigator-header .investigator-skill-stat {
+  min-height: 48px;
+  padding: 8px 10px;
+}
+
+@media (max-width: 640px) {
+  .investigator-header .investigator-portrait-column {
+    width: 156px !important;
+  }
+
+  .investigator-header .investigator-portrait-frame {
+    width: 156px !important;
+    height: 156px !important;
+  }
+
+  .investigator-header .investigator-skill-grid {
+    grid-template-columns: repeat(4, minmax(34px, 1fr));
+    gap: 6px;
+  }
+}
+
