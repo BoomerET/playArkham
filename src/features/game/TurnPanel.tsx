@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
-import "./game.css";
+import "./gameTable.css";
 
 function prettyPhase(phase: string): string {
   return phase.charAt(0).toUpperCase() + phase.slice(1);
