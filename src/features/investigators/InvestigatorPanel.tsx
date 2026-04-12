@@ -1,5 +1,3 @@
-// Updated InvestigatorPanel with dropdown actions and collapsible adjustments
-import { useState } from "react";
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
@@ -32,17 +30,80 @@ function splitInvestigatorName(name: string): {
   };
 }
 
-type ActionOption = "" | "resource" | "draw" | "investigate" | "fight" | "evade";
-type AdjustmentOption = "" | "spendResource" | "gainClue" | "takeDamage" | "takeHorror";
+type SlotRowProps = {
+  label: string;
+  used: number;
+  max: number;
+};
+
+function SlotRow({ label, used, max }: SlotRowProps) {
+  const full = used >= max;
+
+  return (
+    <div className="investigator-panel__slot-row">
+      <span className="investigator-panel__slot-label">{label}</span>
+      <span
+        className={
+          full
+            ? "investigator-panel__slot-value investigator-panel__slot-value--full"
+            : "investigator-panel__slot-value"
+        }
+      >
+        {used}/{max}
+      </span>
+    </div>
+  );
+}
+
+const investigatorHeadImages = import.meta.glob(
+  "../../assets/images/investigatorHeads/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  },
+) as Record<string, string>;
+
+function getInvestigatorHeadUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorHeadImages).find(([path]) =>
+    path.toLowerCase().endsWith(`/${normalized}`),
+  );
+
+  return match?.[1] ?? null;
+}
 
 export default function InvestigatorPanel() {
-  const [selectedAction, setSelectedAction] = useState<ActionOption>("");
-  const [selectedAdjustment, setSelectedAdjustment] = useState<AdjustmentOption>("");
-  const [adjustmentsOpen, setAdjustmentsOpen] = useState(false);
-
+  const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
+  const togglePendingAssetReplacementChoice = useGameStore(
+    (state) => state.togglePendingAssetReplacementChoice,
+  );
+  const confirmAssetReplacement = useGameStore(
+    (state) => state.confirmAssetReplacement,
+  );
+  const cancelPendingAssetPlay = useGameStore(
+    (state) => state.cancelPendingAssetPlay,
+  );
   const investigator = useGameStore((state) => state.investigator);
+  const playArea = useGameStore((state) => state.playArea);
   const enemies = useGameStore((state) => state.enemies);
   const turn = useGameStore((state) => state.turn);
+  const selectedEnemyTargetId = useGameStore(
+    (state) => state.selectedEnemyTargetId,
+  );
+  const setSelectedEnemyTarget = useGameStore(
+    (state) => state.setSelectedEnemyTarget,
+  );
+
+
+  const spendResource = useGameStore((state) => state.spendResource);
+  const gainClue = useGameStore((state) => state.gainClue);
+  const takeDamage = useGameStore((state) => state.takeDamage);
+  const takeHorror = useGameStore((state) => state.takeHorror);
 
   const takeResourceAction = useGameStore((state) => state.takeResourceAction);
   const takeDrawAction = useGameStore((state) => state.takeDrawAction);
@@ -50,107 +111,307 @@ export default function InvestigatorPanel() {
   const fightAction = useGameStore((state) => state.fightAction);
   const evadeAction = useGameStore((state) => state.evadeAction);
 
-  const spendResource = useGameStore((state) => state.spendResource);
-  const gainClue = useGameStore((state) => state.gainClue);
-  const takeDamage = useGameStore((state) => state.takeDamage);
-  const takeHorror = useGameStore((state) => state.takeHorror);
+  const usedSlots = getUsedSlots(playArea);
+  const slotCapacity = getSlotCapacity(investigator);
 
-  const canTakeAction = turn.phase === "investigation" && turn.actionsRemaining > 0;
+  const canTakeAction =
+    turn.phase === "investigation" && turn.actionsRemaining > 0;
+
+  const factionClass = getFactionClassName(investigator.faction);
+  const { firstLine, secondLine } = splitInvestigatorName(investigator.name);
+  const portraitUrl = getInvestigatorHeadUrl(
+    investigator.portraitHead ?? investigator.portrait,
+  );
 
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
   );
 
-  const activeEnemy = engagedEnemies[0];
+  const activeTargetId = engagedEnemies.some(
+    (enemy) => enemy.id === selectedEnemyTargetId,
+  )
+    ? selectedEnemyTargetId
+    : (engagedEnemies[0]?.id ?? null);
 
-  const fightLabel = activeEnemy ? `Fight ${activeEnemy.name}` : "Fight";
-  const evadeLabel = activeEnemy ? `Evade ${activeEnemy.name}` : "Evade";
+  const activeTargetEnemy =
+    engagedEnemies.find((enemy) => enemy.id === activeTargetId) ?? null;
 
-  function handleActionExecute() {
-    switch (selectedAction) {
-      case "resource": takeResourceAction(); break;
-      case "draw": takeDrawAction(); break;
-      case "investigate": investigateAction(); break;
-      case "fight": fightAction(); break;
-      case "evade": evadeAction(); break;
-    }
-    setSelectedAction("");
-  }
+  const fightLabel = activeTargetEnemy
+    ? `Fight ${activeTargetEnemy.name}`
+    : "Fight";
 
-  function handleAdjustmentExecute() {
-    switch (selectedAdjustment) {
-      case "spendResource": spendResource(1); break;
-      case "gainClue": gainClue(1); break;
-      case "takeDamage": takeDamage(1); break;
-      case "takeHorror": takeHorror(1); break;
-    }
-    setSelectedAdjustment("");
-  }
+  const evadeLabel = activeTargetEnemy
+    ? `Evade ${activeTargetEnemy.name}`
+    : "Evade";
 
   return (
-    <section className="game-panel investigator-panel">
+    <section className={`game-panel investigator-panel ${factionClass}`}>
+      <div className="investigator-header">
+        <div className="investigator-portrait-column">
+          <div
+            className={`portrait-frame investigator-portrait-frame ${factionClass}`}
+          >
+            {portraitUrl ? (
+              <img
+                src={portraitUrl}
+                alt={investigator.name}
+                className="portrait-image"
+                draggable={false}
+              />
+            ) : (
+              <div className="investigator-portrait-fallback">
+                {investigator.name}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="investigator-header-text">
+          <h2 className="investigator-name">
+            <span className="investigator-name-line">{firstLine}</span>
+            {secondLine && (
+              <span className="investigator-name-line">{secondLine}</span>
+            )}
+          </h2>
+
+          <div className="investigator-faction-row">
+            <span className={`faction-label ${factionClass}`}>
+              <FactionIcon
+                faction={investigator.faction}
+                className="faction-icon"
+              />
+              {formatFaction(investigator.faction)}
+            </span>
+          </div>
+
+          <div className="investigator-skill-row">
+            <span className="token-chip gold">
+              WIL {investigator.willpower}
+            </span>
+            <span className="token-chip gold">
+              INT {investigator.intellect}
+            </span>
+            <span className="token-chip gold">COM {investigator.combat}</span>
+            <span className="token-chip gold">AGI {investigator.agility}</span>
+          </div>
+        </div>
+      </div>
+
+      <section className="investigator-panel__section">
+        <h3 className="investigator-panel__section-title">Equipment Slots</h3>
+
+        <div className="investigator-panel__slots">
+          <SlotRow label="Hand" used={usedSlots.Hand} max={slotCapacity.Hand} />
+          <SlotRow
+            label="Arcane"
+            used={usedSlots.Arcane}
+            max={slotCapacity.Arcane}
+          />
+          <SlotRow label="Ally" used={usedSlots.Ally} max={slotCapacity.Ally} />
+          <SlotRow
+            label="Accessory"
+            used={usedSlots.Accessory}
+            max={slotCapacity.Accessory}
+          />
+          <SlotRow label="Head" used={usedSlots.Head} max={slotCapacity.Head} />
+          <SlotRow label="Body" used={usedSlots.Body} max={slotCapacity.Body} />
+        </div>
+      </section>
+
+      {pendingAssetPlay && (
+        <section className="asset-replacement-modal">
+          <div className="asset-replacement-modal__card">
+            <h3 className="asset-replacement-modal__title">
+              Replace {pendingAssetPlay.replacedSlot} Asset
+            </h3>
+
+            <p className="asset-replacement-modal__text">
+              {pendingAssetPlay.requiredHandSlotsToFree
+                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
+                }.`
+                : "Choose one in-play asset to discard."}
+            </p>
+
+            <div className="asset-replacement-modal__choices">
+              {pendingAssetPlay.replacementChoices.map((card) => {
+                const selected =
+                  pendingAssetPlay.selectedReplacementIds.includes(card.instanceId);
+
+                return (
+                  <button
+                    key={card.instanceId}
+                    type="button"
+                    className={`asset-replacement-modal__choice ${selected
+                      ? "asset-replacement-modal__choice--selected"
+                      : ""
+                      }`}
+                    onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
+                  >
+                    {card.name}
+                    {card.slot ? ` (${card.slot})` : ""}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="asset-replacement-modal__actions">
+              <button
+                type="button"
+                className="asset-replacement-modal__confirm"
+                onClick={confirmAssetReplacement}
+              >
+                Confirm Replacement
+              </button>
+
+              <button
+                type="button"
+                className="asset-replacement-modal__cancel"
+                onClick={cancelPendingAssetPlay}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <hr />
+
+      <div className="stat-grid">
+        <div className="stat-box">
+          <span className="stat-label">Health: </span>
+          <span className="stat-value">{investigator.health}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Sanity: </span>
+          <span className="stat-value">{investigator.sanity}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Damage: </span>
+          <span className="stat-value">{investigator.damage}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Horror: </span>
+          <span className="stat-value">{investigator.horror}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Resources: </span>
+          <span className="stat-value">{investigator.resources}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Clues: </span>
+          <span className="stat-value">{investigator.clues}</span>
+        </div>
+      </div>
+
+      {engagedEnemies.length > 0 && (
+        <>
+          <hr />
+
+          <div className="engaged-enemies-section">
+            <div className="engaged-enemies-header">Engaged Enemies</div>
+
+            {engagedEnemies.length > 1 && activeTargetEnemy && (
+              <p className="engaged-enemies-targeting-note">
+                Click an enemy to choose the current target. Fight and Evade
+                will target <strong>{activeTargetEnemy.name}</strong>.
+              </p>
+            )}
+
+            <div className="engaged-enemies-list">
+              {engagedEnemies.map((enemy) => {
+                const remainingHealth = Math.max(
+                  enemy.health - enemy.damageOnEnemy,
+                  0,
+                );
+                const isSelectedTarget = enemy.id === activeTargetId;
+                const isSelectable = engagedEnemies.length > 1;
+
+                return (
+                  <button
+                    key={enemy.id}
+                    type="button"
+                    className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
+                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                    onClick={() => setSelectedEnemyTarget(enemy.id)}
+                    disabled={!isSelectable}
+                    aria-pressed={isSelectedTarget}
+                    title={
+                      isSelectable
+                        ? `Select ${enemy.name} as the current target`
+                        : undefined
+                    }
+                  >
+                    <div className="engaged-enemy-main">
+                      <div className="engaged-enemy-name-row">
+                        <div className="engaged-enemy-name-stack">
+                          <span className="engaged-enemy-name">
+                            {enemy.name}
+                          </span>
+
+                          <div className="engaged-enemy-badges">
+                            {isSelectedTarget && (
+                              <span className="engaged-enemy-tag engaged-enemy-tag-primary">
+                                Current Target
+                              </span>
+                            )}
+
+                            {enemy.exhausted && (
+                              <span className="engaged-enemy-tag">
+                                Exhausted
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="engaged-enemy-meta">
+                        <span className="token-chip danger">
+                          Damage {enemy.damageOnEnemy}/{enemy.health}
+                        </span>
+                        <span className="token-chip">
+                          HP Left {remainingHealth}
+                        </span>
+                        <span className="token-chip">Fight {enemy.fight}</span>
+                        <span className="token-chip">Evade {enemy.evade}</span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
+
+      <hr />
 
       <div className="button-row">
-        <select
-          className="investigator-action-select"
-          value={selectedAction}
-          onChange={(e) => setSelectedAction(e.target.value as ActionOption)}
-          disabled={!canTakeAction}
-        >
-          <option value="">Select Action</option>
-          <option value="resource">Resource</option>
-          <option value="draw">Draw</option>
-          <option value="investigate">Investigate</option>
-          <option value="fight">{fightLabel}</option>
-          <option value="evade">{evadeLabel}</option>
-        </select>
-
-        <button
-          className="investigator-action-go"
-          onClick={handleActionExecute}
-          disabled={!selectedAction || !canTakeAction}
-        >
-          Go
+        <button onClick={takeResourceAction} disabled={!canTakeAction}>
+          Resource
+        </button>
+        <button onClick={takeDrawAction} disabled={!canTakeAction}>
+          Draw
+        </button>
+        <button onClick={investigateAction} disabled={!canTakeAction}>
+          Investigate
+        </button>
+        <button onClick={fightAction} disabled={!canTakeAction}>
+          {fightLabel}
+        </button>
+        <button onClick={evadeAction} disabled={!canTakeAction}>
+          {evadeLabel}
         </button>
       </div>
 
       <hr />
 
-      <section className="investigator-collapsible">
-        <button
-          className="investigator-collapsible__toggle"
-          onClick={() => setAdjustmentsOpen(!adjustmentsOpen)}
-        >
-          Manual Adjustments {adjustmentsOpen ? "▾" : "▸"}
-        </button>
-
-        {adjustmentsOpen && (
-          <div className="investigator-collapsible__content">
-            <div className="button-row">
-              <select
-                className="investigator-action-select"
-                value={selectedAdjustment}
-                onChange={(e) => setSelectedAdjustment(e.target.value as AdjustmentOption)}
-              >
-                <option value="">Adjust Stats</option>
-                <option value="spendResource">-1 Resource</option>
-                <option value="gainClue">+1 Clue</option>
-                <option value="takeDamage">+1 Damage</option>
-                <option value="takeHorror">+1 Horror</option>
-              </select>
-
-              <button
-                className="investigator-action-go"
-                onClick={handleAdjustmentExecute}
-                disabled={!selectedAdjustment}
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-        )}
-      </section>
-
+      <div className="button-row">
+        <button onClick={() => spendResource(1)}>-1 Resource</button>
+        <button onClick={() => gainClue(1)}>+1 Clue</button>
+        <button onClick={() => takeDamage(1)}>+1 Damage</button>
+        <button onClick={() => takeHorror(1)}>+1 Horror</button>
+      </div>
     </section>
   );
 }
