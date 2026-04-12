@@ -220,7 +220,7 @@ export default function HandPanel() {
               "Cards with matching icons can be dragged and committed during an active skill test."
             ) : (
               <>
-                Play cards normally • <kbd>Shift</kbd>+Click or Right-click to
+                Play cards normally • <kbd>Shift</kbd>+Click to
                 discard • Hold <kbd>Shift</kbd> to zoom
               </>
             )}
