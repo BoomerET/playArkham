@@ -167,6 +167,7 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
+  resignAction: () => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -514,9 +515,15 @@ function isScenarioResolved(status: ScenarioStatus): boolean {
 }
 
 function getScenarioResolvedMessage(status: ScenarioStatus): string {
-  return status === "won"
-    ? "The scenario is already complete. Return to home to start again."
-    : "The scenario is over. Return to home to try again.";
+  if (status === "won") {
+    return "The scenario is already complete. Return to home to start again.";
+  }
+
+  if (status === "resigned") {
+    return "You already resigned from the scenario. Return to home to start again.";
+  }
+
+  return "The scenario is over. Return to home to try again.";
 }
 
 function advanceAgendaState(
@@ -1848,6 +1855,40 @@ export const useGameStore = create<GameStore>((set, get) => ({
       turn: { round: 1, phase: "investigation", actionsRemaining: 3 },
     });
     get().engageEnemiesAtLocation();
+  },
+
+  resignAction: () => {
+    const { turn, scenarioStatus, scenarioResolutionTitle, scenarioResolutionSubtitle } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (turn.phase !== "investigation") {
+      get().pushLog("system", "You can only resign during the Investigation phase.");
+      return;
+    }
+
+    if (turn.actionsRemaining < 1) {
+      get().pushLog("system", "Cannot resign. No actions remaining.");
+      return;
+    }
+
+    set({
+      scenarioStatus: "resigned",
+      scenarioResolutionTitle: scenarioResolutionTitle ?? "Resigned",
+      scenarioResolutionSubtitle:
+        scenarioResolutionSubtitle ?? "You resigned from the scenario.",
+      scenarioResolutionText:
+        "The investigator resigned from the scenario.",
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+    });
+
+    get().pushLog("scenario", `${get().investigator.name} resigned from the scenario.`);
   },
 
   skipMulligan: () => {

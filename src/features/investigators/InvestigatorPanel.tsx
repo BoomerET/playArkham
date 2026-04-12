@@ -125,6 +125,7 @@ export default function InvestigatorPanel() {
   const investigateAction = useGameStore((state) => state.investigateAction);
   const fightAction = useGameStore((state) => state.fightAction);
   const evadeAction = useGameStore((state) => state.evadeAction);
+  const resignAction = useGameStore((state) => state.resignAction);
 
   const usedSlots = getUsedSlots(playArea);
   const slotCapacity = getSlotCapacity(investigator);
@@ -215,6 +216,7 @@ export default function InvestigatorPanel() {
       default:
         break;
     }
+    setSelectedAction("");
   }
 
   function handleExecuteAdjustment() {
