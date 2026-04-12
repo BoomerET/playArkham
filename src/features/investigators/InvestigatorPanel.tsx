@@ -223,6 +223,33 @@ export default function InvestigatorPanel() {
               </div>
             )}
           </div>
+
+          <div className="investigator-skill-grid">
+            <div className="investigator-skill-stat">
+              <span className="investigator-skill-stat__label">WIL</span>
+              <span className="investigator-skill-stat__value">
+                {investigator.willpower}
+              </span>
+            </div>
+            <div className="investigator-skill-stat">
+              <span className="investigator-skill-stat__label">INT</span>
+              <span className="investigator-skill-stat__value">
+                {investigator.intellect}
+              </span>
+            </div>
+            <div className="investigator-skill-stat">
+              <span className="investigator-skill-stat__label">COM</span>
+              <span className="investigator-skill-stat__value">
+                {investigator.combat}
+              </span>
+            </div>
+            <div className="investigator-skill-stat">
+              <span className="investigator-skill-stat__label">AGI</span>
+              <span className="investigator-skill-stat__value">
+                {investigator.agility}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="investigator-header-text">
@@ -243,16 +270,6 @@ export default function InvestigatorPanel() {
             </span>
           </div>
 
-          <div className="investigator-skill-row">
-            <span className="token-chip gold">
-              WIL {investigator.willpower}
-            </span>
-            <span className="token-chip gold">
-              INT {investigator.intellect}
-            </span>
-            <span className="token-chip gold">COM {investigator.combat}</span>
-            <span className="token-chip gold">AGI {investigator.agility}</span>
-          </div>
         </div>
       </div>
 
