@@ -4,7 +4,7 @@ import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
 import { getSlotCapacity, getUsedSlots } from "../playerCards/slots";
 import "./investigatorPanel.css";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 
 function formatFaction(faction: string): string {
@@ -159,8 +159,6 @@ export default function InvestigatorPanel() {
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
-  const [showLocationsMenu, setShowLocationsMenu] = useState(false);
-  const [showScenarioMenu, setShowScenarioMenu] = useState(false);
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
