@@ -160,6 +160,7 @@ export default function InvestigatorPanel() {
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState("");
+  const [selectedAdjustment, setSelectedAdjustment] = useState("");
 
   function handleExecuteAction() {
     switch (selectedAction) {
@@ -177,6 +178,25 @@ export default function InvestigatorPanel() {
         break;
       case "evade":
         evadeAction();
+        break;
+      default:
+        break;
+    }
+  }
+
+  function handleExecuteAdjustment() {
+    switch (selectedAdjustment) {
+      case "spend-resource":
+        spendResource(1);
+        break;
+      case "gain-clue":
+        gainClue(1);
+        break;
+      case "take-damage":
+        takeDamage(1);
+        break;
+      case "take-horror":
+        takeHorror(1);
         break;
       default:
         break;
@@ -480,10 +500,27 @@ export default function InvestigatorPanel() {
 
         {showAdjustmentsMenu && (
           <div className="button-row">
-            <button onClick={() => spendResource(1)}>-1 Resource</button>
-            <button onClick={() => gainClue(1)}>+1 Clue</button>
-            <button onClick={() => takeDamage(1)}>+1 Damage</button>
-            <button onClick={() => takeHorror(1)}>+1 Horror</button>
+            <select
+              className="investigator-action-select"
+              value={selectedAdjustment}
+              onChange={(event) => setSelectedAdjustment(event.target.value)}
+              aria-label="Choose an adjustment"
+            >
+              <option value="">Choose adjustment…</option>
+              <option value="spend-resource">-1 Resource</option>
+              <option value="gain-clue">+1 Clue</option>
+              <option value="take-damage">+1 Damage</option>
+              <option value="take-horror">+1 Horror</option>
+            </select>
+
+            <button
+              type="button"
+              className="investigator-action-go"
+              onClick={handleExecuteAdjustment}
+              disabled={!selectedAdjustment}
+            >
+              Go
+            </button>
           </div>
         )}
       </section>
