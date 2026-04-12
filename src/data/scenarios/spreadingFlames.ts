@@ -7,6 +7,23 @@ export const spreadingFlamesScenario: ScenarioDefinition = {
   description:
     "A recent spate of fires and grisly “accidents” have the entire city on edge.",
   startingLocationId: "friends-room",
+  resign: {
+    title: "Resigned",
+    subtitle: "You flee before things get worse.",
+    text: "You awaken at the edge of campus, eyes stinging \
+from the smoke, and watch in stunned silence as Miskatonic \
+University burns. Embers dance in the sky above the conflagration \
+like burning stars. Too exhausted to help, you watch a cadre of \
+students struggle in vain to stop the blaze. First the observatory, \
+then the dorms, and finally the science building succumb to the \
+flames. Amidst the clamor, you find Dr. Henry Armitage standing \
+under a birch tree, watching Orne Library burn. The flames lick \
+the bones of the stately building clean, leaving behind a skeletal \
+ruin. The head librarian is clearly in shock. His face goes ashen \
+as you explain the odd circumstances surrounding your friend’s \
+disappearance. Who was your burning nemesis? And what did the \
+hooded figures patrolling the campus want?",
+  },
   locations: [
     {
       id: "friends-room",

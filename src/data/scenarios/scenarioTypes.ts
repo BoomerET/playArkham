@@ -44,6 +44,12 @@ export interface ScenarioCardDefinition {
   onAdvance?: ScenarioAdvanceEffects;
 }
 
+export type ScenarioResignResolution = {
+  title?: string;
+  subtitle?: string;
+  text: string;
+};
+
 export interface ScenarioDefinition {
   id: string;
   name: string;
@@ -61,6 +67,7 @@ export interface ScenarioDefinition {
   randomizedLocationOptions?: ScenarioRandomizedLocationGroup[];
   encounterCardCodes?: string[];
   encounterDeck?: EncounterCard[];
+  resign?: ScenarioResignResolution;
 }
 
 export interface ScenarioRandomizedLocationOption {

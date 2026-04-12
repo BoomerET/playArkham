@@ -167,7 +167,6 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
-  resignAction: () => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -1539,23 +1538,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("system", "Parley action taken.");
   },
 
-  resignAction: () => {
-    const { turn } = get();
+  //resignAction: () => {
+  //  const { turn } = get();
 
-    if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
-      return;
-    }
+  //  if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
+  //    return;
+  //  }
 
-    set({
-      turn: {
-        ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
-      },
-      scenarioStatus: "resigned",
-    });
+  //  set({
+  //    turn: {
+  //      ...turn,
+  //      actionsRemaining: turn.actionsRemaining - 1,
+  //    },
+  //    scenarioStatus: "resigned",
+  //  });
 
-    get().pushLog("system", "You resigned from the scenario.");
-  },
+  //  get().pushLog("system", "You resigned from the scenario.");
+  //},
 
   setAgendaProgress: (progress) => {
     const { agenda } = get();
@@ -1858,7 +1857,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resignAction: () => {
-    const { turn, scenarioStatus, scenarioResolutionTitle, scenarioResolutionSubtitle } = get();
+    const { turn, scenarioStatus } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -1875,18 +1874,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const selectedScenario = getSelectedScenario(get());
+    const resignResolution = selectedScenario.resign;
+
     set({
       scenarioStatus: "resigned",
-      scenarioResolutionTitle: scenarioResolutionTitle ?? "Resigned",
+      scenarioResolutionTitle: resignResolution?.title ?? "Resigned",
       scenarioResolutionSubtitle:
-        scenarioResolutionSubtitle ?? "You resigned from the scenario.",
+        resignResolution?.subtitle ?? "You resigned from the scenario.",
       scenarioResolutionText:
-        "The investigator resigned from the scenario.",
-      turn: {
-        ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
-      },
-    });
+        resignResolution?.text ??
+        `${get().investigator.name} resigned from the scenario.`,
+      ...
+});
 
     get().pushLog("scenario", `${get().investigator.name} resigned from the scenario.`);
   },
