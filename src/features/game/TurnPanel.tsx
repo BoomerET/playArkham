@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 
-const [showLocationsMenu, setShowLocationsMenu] = useState(false);
+
 
 function prettyPhase(phase: string): string {
   return phase.charAt(0).toUpperCase() + phase.slice(1);
@@ -12,6 +12,8 @@ export default function TurnPanel() {
   const locations = useGameStore((state) => state.locations);
   const agenda = useGameStore((state) => state.agenda);
   const act = useGameStore((state) => state.act);
+
+  const [showLocationsMenu, setShowLocationsMenu] = useState(false);
 
   const advancePhase = useGameStore((state) => state.advancePhase);
   const setLocationVisible = useGameStore((state) => state.setLocationVisible);
