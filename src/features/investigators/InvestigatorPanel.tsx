@@ -1,3 +1,4 @@
+import { useState } from "react";
 import FactionIcon from "../../components/FactionIcon";
 import { getFactionClassName } from "../../lib/ui";
 import { useGameStore } from "../../store/gameStore";
@@ -63,21 +64,38 @@ const investigatorHeadImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-//function getInvestigatorHeadUrl(imageName?: string): string | null {
-//  if (!imageName) {
-//    return null;
-//  }
-//
-//  const normalized = imageName.toLowerCase();
-//
-//  const match = Object.entries(investigatorHeadImages).find(([path]) =>
-//    path.toLowerCase().endsWith(`/${normalized}`),
-//  );
-//
-//  return match?.[1] ?? null;
-//}
+function getInvestigatorHeadUrl(imageName?: string): string | null {
+  if (!imageName) {
+    return null;
+  }
+
+  const normalized = imageName.toLowerCase();
+
+  const match = Object.entries(investigatorHeadImages).find(([path]) => {
+    const fileName = path.split("/").pop()?.toLowerCase() ?? "";
+    const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+
+    return (
+      fileName === normalized ||
+      path.toLowerCase().endsWith(`/${normalized}`) ||
+      baseName === normalized
+    );
+  });
+
+  return match?.[1] ?? null;
+}
+
+type ActionOption =
+  | ""
+  | "resource"
+  | "draw"
+  | "investigate"
+  | "fight"
+  | "evade";
 
 export default function InvestigatorPanel() {
+  const [selectedAction, setSelectedAction] = useState<ActionOption>("");
+
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,
@@ -123,29 +141,6 @@ export default function InvestigatorPanel() {
     investigator.code ?? investigator.portraitHead ?? investigator.portrait,
   );
 
-  function getInvestigatorHeadUrl(imageName?: string): string | null {
-    if (!imageName) {
-      return null;
-    }
-
-    const normalized = imageName.toLowerCase();
-
-    const match = Object.entries(investigatorHeadImages).find(([path]) => {
-      const fileName = path.split("/").pop()?.toLowerCase() ?? "";
-      const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-
-      return (
-        fileName === normalized ||
-        path.toLowerCase().endsWith(`/${normalized}`) ||
-        baseName === normalized
-      );
-    });
-
-    return match?.[1] ?? null;
-  }
-
-
-
   const engagedEnemies = enemies.filter(
     (enemy) => enemy.engagedInvestigatorId === investigator.id,
   );
@@ -166,6 +161,30 @@ export default function InvestigatorPanel() {
   const evadeLabel = activeTargetEnemy
     ? `Evade ${activeTargetEnemy.name}`
     : "Evade";
+
+  function handleActionExecute() {
+    switch (selectedAction) {
+      case "resource":
+        takeResourceAction();
+        break;
+      case "draw":
+        takeDrawAction();
+        break;
+      case "investigate":
+        investigateAction();
+        break;
+      case "fight":
+        fightAction();
+        break;
+      case "evade":
+        evadeAction();
+        break;
+      default:
+        return;
+    }
+
+    setSelectedAction("");
+  }
 
   return (
     <section className={`game-panel investigator-panel ${factionClass}`}>
@@ -250,8 +269,9 @@ export default function InvestigatorPanel() {
 
             <p className="asset-replacement-modal__text">
               {pendingAssetPlay.requiredHandSlotsToFree
-                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
-                }.`
+                ? `Choose replacements that free ${pendingAssetPlay.requiredHandSlotsToFree} hand slot${
+                    pendingAssetPlay.requiredHandSlotsToFree === 1 ? "" : "s"
+                  }.`
                 : "Choose one in-play asset to discard."}
             </p>
 
@@ -264,11 +284,14 @@ export default function InvestigatorPanel() {
                   <button
                     key={card.instanceId}
                     type="button"
-                    className={`asset-replacement-modal__choice ${selected
-                      ? "asset-replacement-modal__choice--selected"
-                      : ""
-                      }`}
-                    onClick={() => togglePendingAssetReplacementChoice(card.instanceId)}
+                    className={`asset-replacement-modal__choice ${
+                      selected
+                        ? "asset-replacement-modal__choice--selected"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      togglePendingAssetReplacementChoice(card.instanceId)
+                    }
                   >
                     {card.name}
                     {card.slot ? ` (${card.slot})` : ""}
@@ -354,8 +377,11 @@ export default function InvestigatorPanel() {
                   <button
                     key={enemy.id}
                     type="button"
-                    className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
-                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                    className={`engaged-enemy-card ${
+                      isSelectedTarget ? "engaged-enemy-card-primary" : ""
+                    } ${
+                      isSelectable ? "engaged-enemy-card-selectable" : ""
+                    }`}
                     onClick={() => setSelectedEnemyTarget(enemy.id)}
                     disabled={!isSelectable}
                     aria-pressed={isSelectedTarget}
@@ -410,20 +436,26 @@ export default function InvestigatorPanel() {
       <hr />
 
       <div className="button-row">
-        <button onClick={takeResourceAction} disabled={!canTakeAction}>
-          Resource
-        </button>
-        <button onClick={takeDrawAction} disabled={!canTakeAction}>
-          Draw
-        </button>
-        <button onClick={investigateAction} disabled={!canTakeAction}>
-          Investigate
-        </button>
-        <button onClick={fightAction} disabled={!canTakeAction}>
-          {fightLabel}
-        </button>
-        <button onClick={evadeAction} disabled={!canTakeAction}>
-          {evadeLabel}
+        <select
+          value={selectedAction}
+          onChange={(event) =>
+            setSelectedAction(event.target.value as ActionOption)
+          }
+          disabled={!canTakeAction}
+        >
+          <option value="">Select Action</option>
+          <option value="resource">Resource</option>
+          <option value="draw">Draw</option>
+          <option value="investigate">Investigate</option>
+          <option value="fight">{fightLabel}</option>
+          <option value="evade">{evadeLabel}</option>
+        </select>
+
+        <button
+          onClick={handleActionExecute}
+          disabled={!canTakeAction || !selectedAction}
+        >
+          Go
         </button>
       </div>
 
@@ -438,3 +470,4 @@ export default function InvestigatorPanel() {
     </section>
   );
 }
+
