@@ -1,5 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
+
+const [showLocationsMenu, setShowLocationsMenu] = useState(false);
+const [showScenarioMenu, setShowScenarioMenu] = useState(false);
 
 function prettyPhase(phase: string): string {
   return phase.charAt(0).toUpperCase() + phase.slice(1);
@@ -124,45 +127,33 @@ export default function TurnPanel() {
             No hidden or unrevealed locations right now.
           </p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {hiddenLocations.length > 0 && (
-              <div>
-                <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
-                  Put hidden locations onto the board
-                </p>
+          <section className="investigator-control-group">
+            <button
+              type="button"
+              className="investigator-control-toggle"
+              onClick={() => setShowLocationsMenu((current) => !current)}
+            >
+              Locations {showLocationsMenu ? "▴" : "▾"}
+            </button>
 
-                <div className="button-row">
-                  {hiddenLocations.map((location) => (
-                    <button
-                      key={location.id}
-                      onClick={() => setLocationVisible(location.id, true)}
-                    >
-                      Show {location.name}
-                    </button>
-                  ))}
-                </div>
+            {showLocationsMenu && (
+              <div className="investigator-admin-list">
+                {locations.map((location) => (
+                  <div key={location.id} className="investigator-admin-row">
+                    <span>{location.name}</span>
+                    <div className="button-row">
+                      <button onClick={() => setLocationVisible(location.id, true)}>
+                        Show
+                      </button>
+                      <button onClick={() => revealLocation(location.id)}>
+                        Reveal
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
-
-            {visibleUnrevealedLocations.length > 0 && (
-              <div>
-                <p className="panel-subtitle" style={{ margin: "0 0 8px" }}>
-                  Reveal visible face-down locations
-                </p>
-
-                <div className="button-row">
-                  {visibleUnrevealedLocations.map((location) => (
-                    <button
-                      key={location.id}
-                      onClick={() => revealLocation(location.id)}
-                    >
-                      Reveal {location.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          </section>
         )}
       </div>
     </section>
