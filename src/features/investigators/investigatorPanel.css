@@ -16,8 +16,8 @@
 }
 
 .investigator-portrait-frame {
-  width: 156px;
-  height: 156px;
+  width: 96px;
+  height: 96px;
 }
 
 .investigator-header-text {
@@ -121,11 +121,11 @@
 
   .investigator-portrait-column,
   .investigator-portrait-frame {
-    width: 132px;
+    width: 80px;
   }
 
   .investigator-portrait-frame {
-    height: 132px;
+    height: 80px;
   }
 
   .investigator-name {
@@ -171,8 +171,8 @@
 }
 
 .investigator-portrait-frame {
-  width: 156px;
-  height: 156px;
+  width: 96px;
+  height: 96px;
 }
 
 .investigator-header-text {
@@ -314,11 +314,11 @@
 
   .investigator-portrait-column,
   .investigator-portrait-frame {
-    width: 132px;
+    width: 80px;
   }
 
   .investigator-portrait-frame {
-    height: 132px;
+    height: 80px;
   }
 
   .investigator-name {
@@ -623,9 +623,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
+  min-height: 44px;
   min-width: 0;
-  padding: 7px 10px;
+  padding: 7px 8px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(18, 28, 40, 0.92);
@@ -649,11 +649,11 @@
 @media (max-width: 640px) {
   .investigator-portrait-column,
   .investigator-portrait-frame {
-    width: 132px;
+    width: 80px;
   }
 
   .investigator-portrait-frame {
-    height: 132px;
+    height: 80px;
   }
 
   .investigator-skill-stat {
@@ -671,44 +671,49 @@
 }
 
 
-/* Forced width override for portrait + stat row */
+/* Keep the portrait compact, but let the 4 stat tiles breathe */
 .investigator-header .investigator-portrait-column {
-  width: 180px !important;
+  width: 96px !important;
   display: flex !important;
   flex-direction: column;
   gap: 10px;
 }
 
 .investigator-header .investigator-portrait-frame {
-  width: 180px !important;
-  height: 180px !important;
+  width: 96px !important;
+  height: 96px !important;
 }
 
 .investigator-header .investigator-skill-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(40px, 1fr));
-  gap: 8px;
-  width: 100%;
+  width: 164px;
+  margin-left: -34px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .investigator-header .investigator-skill-stat {
-  min-height: 48px;
-  padding: 8px 10px;
+  min-height: 42px;
+  padding: 6px 6px;
 }
 
 @media (max-width: 640px) {
   .investigator-header .investigator-portrait-column {
-    width: 156px !important;
+    width: 80px !important;
   }
 
   .investigator-header .investigator-portrait-frame {
-    width: 156px !important;
-    height: 156px !important;
+    width: 80px !important;
+    height: 80px !important;
   }
 
   .investigator-header .investigator-skill-grid {
-    grid-template-columns: repeat(4, minmax(34px, 1fr));
-    gap: 6px;
+    width: 148px;
+    margin-left: -34px;
+    gap: 5px;
+  }
+
+  .investigator-header .investigator-skill-stat {
+    min-height: 38px;
+    padding: 5px 4px;
   }
 }
-
