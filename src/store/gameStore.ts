@@ -1861,37 +1861,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const selectedScenario = getSelectedScenario(get());
     const resignResolution = selectedScenario.resign;
-    const resignEffects = resignResolution?.effects;
+    const effects = resignResolution?.effects;
 
-    let nextScenarioStatus: ScenarioStatus = "resigned";
-
-    if (resignEffects?.winScenario) {
-      nextScenarioStatus = "won";
-    } else if (resignEffects?.loseScenario) {
-      nextScenarioStatus = "lost";
-    }
+    const nextScenarioStatus =
+      effects?.scenarioStatus ?? "resigned";
 
     const nextCampaignState =
-      resignEffects?.setPreviousScenarioOutcome != null
+      effects?.setPreviousScenarioOutcome != null
         ? {
           ...campaignState,
-          previousScenarioOutcome: resignEffects.setPreviousScenarioOutcome,
+          previousScenarioOutcome: effects.setPreviousScenarioOutcome,
         }
         : campaignState;
 
     const resolutionTitle =
       resignResolution?.title ??
-      resignEffects?.resolutionTitle ??
+      effects?.resolutionTitle ??
       "Resigned";
 
     const resolutionSubtitle =
       resignResolution?.subtitle ??
-      resignEffects?.resolutionSubtitle ??
+      effects?.resolutionSubtitle ??
       "You resigned from the scenario.";
 
     const resolutionText =
       resignResolution?.text ??
-      resignEffects?.resolutionText ??
+      effects?.resolutionText ??
       `${get().investigator.name} resigned from the scenario.`;
 
     set({

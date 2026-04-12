@@ -5,7 +5,7 @@ import type {
   ScenarioCardKind,
 } from "../../types/game";
 
-import type { EncounterCard } from "../../types/game";
+import type { EncounterCard, ScenarioStatus } from "../../types/game";
 
 export interface ScenarioAdvanceEffects {
   showLocationIds?: string[];
@@ -45,8 +45,7 @@ export interface ScenarioCardDefinition {
 }
 
 export type ScenarioResolutionEffects = {
-  winScenario?: boolean;
-  loseScenario?: boolean;
+  scenarioStatus?: ScenarioStatus;
   resolutionText?: string;
   resolutionTitle?: string;
   resolutionSubtitle?: string;
