@@ -24,7 +24,6 @@ as you explain the odd circumstances surrounding your friend’s \
 disappearance. Who was your burning nemesis? And what did the \
 hooded figures patrolling the campus want?",
     effects: {
-      winScenario: false,
       setPreviousScenarioOutcome: "flames",
     }
   },
@@ -44,6 +43,14 @@ hooded figures patrolling the campus want?",
         "Miskatonic"
       ],
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+      parley: {
+        label: "Parley",
+        text: "You parley with the Goldfish.",
+        effect: {
+          kind: "gainClues",
+          amount: 1,
+        },
+      },
     },
     {
       id: "dormitories",
