@@ -22,10 +22,17 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
       parley: {
         label: "Parley",
-        text: "You parley with a Frat Bro.",
-        effect: {
-          kind: "gainResources",
-          amount: 1,
+        text: "Test (intellect) 2 to reason with him.",
+        skillTest: {
+          skill: "intellect",
+          difficulty: 2,
+          onSuccess: {
+            kind: "gainResources",
+            amount: 1,
+          },
+          onFail: {
+            kind: "none",
+          },
         },
       },
 

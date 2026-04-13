@@ -119,22 +119,18 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
-type EncounterSkillTestOutcome =
-  | { kind: "none" }
-  | { kind: "damage"; amount: number }
-  | { kind: "horror"; amount: number }
-  | { kind: "damageByFailure" }
-  | { kind: "horrorByFailure" };
+type PendingParleyResolution = {
+  sourceName: string;
+  currentLocationId: string;
+  onSuccess: ParleyEffect;
+  onFail?: ParleyEffect;
+} | null;
 
 type PendingEncounterResolution = {
   cardName: string;
   onPass?: EncounterSkillTestOutcome;
   onFail?: EncounterSkillTestOutcome;
 } | null;
-
-type ChoiceEffect =
-  | { kind: "doomOnAgenda"; amount: number }
-  | { kind: "surge" };
 
 type PendingChoice = {
   sourceCard: EncounterCard;
@@ -144,6 +140,17 @@ type PendingChoice = {
     effect: ChoiceEffect;
   }[];
 } | null;
+
+type EncounterSkillTestOutcome =
+  | { kind: "none" }
+  | { kind: "damage"; amount: number }
+  | { kind: "horror"; amount: number }
+  | { kind: "damageByFailure" }
+  | { kind: "horrorByFailure" };
+
+type ChoiceEffect =
+  | { kind: "doomOnAgenda"; amount: number }
+  | { kind: "surge" };
 
 type GameStore = GameState & CampaignStoreActions & {
   screen: Screen;
@@ -165,6 +172,7 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingFightCombatModifier: number;
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
+  pendingParleyResolution: PendingParleyResolution;
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
@@ -1151,6 +1159,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingAssetPlay: null,
   pendingChoice: null,
   pendingEncounterResolution: null,
+  pendingParleyResolution: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -1629,7 +1638,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   parleyAction: (enemyId) => {
-    const { turn, scenarioStatus, investigator, locations, enemies, campaignState } = get();
+    const {
+      turn,
+      scenarioStatus,
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+    } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -1637,7 +1653,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase !== "investigation") {
-      get().pushLog("system", "You can only parley during the Investigation phase.");
+      get().pushLog(
+        "system",
+        "You can only parley during the Investigation phase.",
+      );
       return;
     }
 
@@ -1649,7 +1668,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
-      get().pushLog("system", "Cannot parley because your location is unknown.");
+      get().pushLog(
+        "system",
+        "Cannot parley because your location is unknown.",
+      );
       return;
     }
 
@@ -1667,6 +1689,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!parleySource) {
       get().pushLog("system", "There is nothing to parley with here.");
+      return;
+    }
+
+    if (parleySource.skillTest) {
+      set((state) => ({
+        pendingParleyResolution: {
+          sourceName: parleyEnemy ? parleyEnemy.name : currentLocation.name,
+          currentLocationId: currentLocation.id,
+          onSuccess: parleySource.skillTest!.onSuccess,
+          onFail: parleySource.skillTest!.onFail,
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - 1,
+        },
+        log: [
+          ...state.log,
+          createLogEntry(
+            "scenario",
+            parleyEnemy
+              ? `${parleyEnemy.name}: ${parleySource.text}`
+              : parleySource.text,
+          ),
+        ],
+      }));
+
+      get().beginSkillTest(
+        parleySource.skillTest.skill,
+        parleySource.skillTest.difficulty,
+        parleyEnemy
+          ? `Parley ${parleyEnemy.name}`
+          : `Parley ${currentLocation.name}`,
+      );
+
+      return;
+    }
+
+    if (!parleySource.effect) {
+      get().pushLog("system", "This parley has no effect configured.");
       return;
     }
 
@@ -3811,12 +3872,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingEncounterResolution,
       pendingFightCombatModifier,
       pendingFightDamageBonus,
+      pendingParleyResolution,
       locations,
       locationAttachments,
       enemies,
       turn,
       selectedEnemyTargetId,
       log,
+      campaignState,
     } = get();
 
     if (!activeSkillTest) {
@@ -4223,6 +4286,40 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    if (pendingParleyResolution) {
+      const parleyEffect = success
+        ? pendingParleyResolution.onSuccess
+        : pendingParleyResolution.onFail;
+
+      resolutionLog.push(
+        createLogEntry(
+          "scenario",
+          success
+            ? `${pendingParleyResolution.sourceName}: parley succeeded.`
+            : `${pendingParleyResolution.sourceName}: parley failed.`,
+        ),
+      );
+
+      if (parleyEffect) {
+        const parleyResolution = resolveParleyEffect({
+          effect: parleyEffect,
+          investigator: updatedInvestigator,
+          currentLocationId: pendingParleyResolution.currentLocationId,
+          locations: updatedLocations,
+          campaignState,
+        });
+
+        updatedInvestigator = parleyResolution.investigator;
+        updatedLocations = parleyResolution.locations;
+
+        resolutionLog.push(...parleyResolution.logEntries);
+
+        set({
+          campaignState: parleyResolution.campaignState,
+        });
+      }
+    }
+
     let updatedDeck = get().deck;
     let updatedHand = get().hand;
 
@@ -4272,6 +4369,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       activeSkillTest: null,
       pendingTestResolution: null,
       pendingEncounterResolution: null,
+      pendingParleyResolution: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
@@ -4293,6 +4391,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
         ...resolutionLog,
       ],
+    });
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
     });
 
     return result;

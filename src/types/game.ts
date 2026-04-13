@@ -250,7 +250,7 @@ export type ParleySkillTestDefinition = {
 export type ParleyActionDefinition = {
   label?: string;
   text: string;
-  effect: ParleyEffect;
+  effect?: ParleyEffect;
   skillTest?: ParleySkillTestDefinition;
 };
 
