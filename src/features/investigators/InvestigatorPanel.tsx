@@ -170,9 +170,20 @@ export default function InvestigatorPanel() {
     : [];
   const activeEngageTarget = engageableEnemies[0] ?? null;
 
+  const parleyEnemy =
+    currentLocation
+      ? enemies.find(
+        (enemy) =>
+          enemy.locationId === currentLocation.id &&
+          enemy.parley,
+      ) ?? null
+      : null;
+
+
   const resignLabel = "Resign";
-  const parleyLabel =
-    currentLocation?.parley?.label ??
+  const parleyLabel = parleyEnemy
+    ? `Parley ${parleyEnemy.name}`
+    : currentLocation?.parley?.label ??
     (currentLocation?.parley ? `Parley at ${currentLocation.name}` : "Parley");
   const engageLabel = activeEngageTarget
     ? `Engage ${activeEngageTarget.name}`
@@ -183,15 +194,6 @@ export default function InvestigatorPanel() {
   const [selectedAction, setSelectedAction] = useState("");
   const [selectedAdjustment, setSelectedAdjustment] = useState("");
   const engageEnemy = useGameStore((state) => state.engageEnemy);
-
-  const parleyEnemy =
-    currentLocation
-      ? enemies.find(
-        (enemy) =>
-          enemy.locationId === currentLocation.id &&
-          enemy.parley,
-      ) ?? null
-      : null;
 
   function handleExecuteAction() {
     switch (selectedAction) {
