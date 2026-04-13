@@ -15,7 +15,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       code: "12113",
       parley: {
         label: "Parley",
-        text: "You parley with the librarian.",
+        text: "You parley with a Frat Bro.",
         effect: {
           kind: "gainResources",
           amount: 1,
@@ -48,6 +48,14 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
       code: "12117",
+      parley: {
+        label: "Parley",
+        text: "You parley with the RA.",
+        effect: {
+          kind: "gainClues",
+          amount: 1,
+        },
+      },
     },
     {
       id: "miskatonic-quad",
