@@ -247,13 +247,6 @@ export type LocationActionDefinition = {
   effect: LocationActionEffect;
 };
 
-export type ParleySkillTestDefinition = {
-  skill: SkillType;
-  difficulty: number;
-  onSuccess: ParleyEffect;
-  onFail?: ParleyEffect;
-};
-
 export type ParleyActionDefinition = {
   label?: string;
   text: string;
@@ -273,13 +266,6 @@ export type ParleySkillTestDefinition = {
   difficulty: number;
   onSuccess: ParleyEffect;
   onFail?: ParleyEffect;
-};
-
-export type ParleyActionDefinition = {
-  label?: string;
-  text: string;
-  effect?: ParleyEffect;
-  skillTest?: ParleySkillTestDefinition;
 };
 
 export interface GameState {
