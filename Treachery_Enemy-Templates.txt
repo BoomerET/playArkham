@@ -29,3 +29,29 @@ Enemy Template
     inEncounterDeck: true,
     victoryPoints: 1,
 },
+
+Location Template:
+{
+      id: "friends-rooma",
+      name: "Your Friend's Room",
+      shroud: 2,
+      code: "12113",
+      parley: {
+        label: "Parley",
+        text: "You parley with a Frat Bro.",
+        effect: {
+          kind: "gainResources",
+          amount: 1,
+        },
+      },
+      clues: 2,
+      revealed: true,
+      connections: ["dormitoriesa"],
+      investigatorsHere: [],
+      mapPosition: { x: 8, y: 16 },
+      isVisible: true,
+      traits: [
+        "Miskatonic"
+      ],
+      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+    },

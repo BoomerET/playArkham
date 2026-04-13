@@ -549,7 +549,6 @@ export default function InvestigatorPanel() {
               <option value="investigate">Investigate</option>
               <option value="fight">{fightLabel}</option>
               <option value="evade">{evadeLabel}</option>
-              {/*<option value="parley">{parleyLabel}</option>*/}
               {parleyEnemies.map((enemy) => (
                 <option key={`parley-enemy-${enemy.id}`} value={`parley-enemy:${enemy.id}`}>
                   Parley {enemy.name}
