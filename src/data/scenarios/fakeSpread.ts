@@ -9,7 +9,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   startingLocationId: "friends-room",
   locations: [
     {
-      id: "friends-room",
+      id: "friends-rooma",
       name: "Your Friend's Room",
       shroud: 2,
       code: "12113",
@@ -23,7 +23,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
       clues: 2,
       revealed: true,
-      connections: ["dormitories"],
+      connections: ["dormitoriesa"],
       investigatorsHere: [],
       mapPosition: { x: 8, y: 16 },
       isVisible: true,
@@ -34,12 +34,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
 
     },
     {
-      id: "dormitories",
+      id: "dormitoriesa",
       name: "Dormitories",
       shroud: 3,
       clues: 1,
       revealed: true,
-      connections: ["friends-room", "miskatonic-quad"],
+      connections: ["friends-rooma", "miskatonic-quada"],
       investigatorsHere: [],
       mapPosition: { x: 30, y: 16 },
       isVisible: true,
@@ -58,14 +58,14 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "miskatonic-quad",
+      id: "miskatonic-quada",
       name: "Miskatonic Quad",
       shroud: 1,
       clues: 0,
       revealed: true,
       connections: [
-        "dormitories",
-        "science-hall",
+        "dormitoriesa",
+        "science-halla",
       ],
       investigatorsHere: [],
       mapPosition: { x: 51, y: 16 },
@@ -78,12 +78,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       code: "12116",
     },
     {
-      id: "science-hall",
+      id: "science-halla",
       name: "Science Hall",
       shroud: 2,
       clues: 1,
       revealed: true,
-      connections: ["miskatonic-quad", "orne-library"],
+      connections: ["miskatonic-quada", "orne-librarya"],
       investigatorsHere: [],
       mapPosition: { x: 72, y: 16 },
       isVisible: true,
@@ -95,12 +95,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       code: "12118",
     },
     {
-      id: "orne-library",
+      id: "orne-librarya",
       name: "Orne Library",
       shroud: 4,
       clues: 1,
       revealed: true,
-      connections: ["science-hall"],
+      connections: ["science-halla"],
       investigatorsHere: [],
       mapPosition: { x: 93, y: 16 },
       isVisible: true,
@@ -123,7 +123,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   enemySpawns: [],
   acts: [
     {
-      id: "spreading-flames-act-1",
+      id: "spreading-flames-act-1a",
       kind: "act",
       sequence: "1a",
       title: "Where There's Smoke",
@@ -132,7 +132,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
     },
     {
-      id: "spreading-flames-act-2",
+      id: "spreading-flames-act-2a",
       kind: "act",
       sequence: "2a",
       title: "Escape the Dorms",
@@ -144,7 +144,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-3",
+      id: "spreading-flames-act-3a",
       kind: "act",
       sequence: "3a",
       title: "Searching for Dr. Armitage",
@@ -158,7 +158,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-4",
+      id: "spreading-flames-act-4a",
       kind: "act",
       sequence: "4a",
       title: "Blaze of Glory",
@@ -169,7 +169,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   ],
   agendas: [
     {
-      id: "spreading-flames-agenda-1",
+      id: "spreading-flames-agenda-1a",
       kind: "agenda",
       sequence: "1a",
       title: "Past Curfew",
@@ -178,7 +178,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-2",
+      id: "spreading-flames-agenda-2a",
       kind: "agenda",
       sequence: "2a",
       title: "Lit Up",
@@ -187,7 +187,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-3",
+      id: "spreading-flames-agenda-3a",
       kind: "agenda",
       sequence: "3a",
       title: "Wild Flames",
