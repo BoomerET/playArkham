@@ -64,7 +64,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         },
       },
 
-
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
 
@@ -92,7 +91,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       mapPosition: { x: 51, y: 16 },
 
-
       revealed: true,
       isVisible: true,
       investigatorsHere: [],
@@ -107,6 +105,15 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       victoryPoints: 1,
       traits: [
         "Miskatonic",
+      ],
+      actions: [
+        {
+          label: "Engage from connected location",
+          text: "You call out to a nearby enemy and draw it toward you.",
+          effect: {
+            kind: "engageEnemyFromConnectedLocation",
+          },
+        },
       ],
 
       text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",

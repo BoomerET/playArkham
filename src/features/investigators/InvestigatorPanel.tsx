@@ -160,7 +160,9 @@ export default function InvestigatorPanel() {
     : "Evade";
 
   const locations = useGameStore((state) => state.locations);
+  const locationAction = useGameStore((state) => state.locationAction);
   const currentLocation = findCurrentLocation(locations, investigator.id);
+  const availableLocationActions = currentLocation?.actions ?? [];
   const engageableEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
@@ -223,6 +225,13 @@ export default function InvestigatorPanel() {
         if (selectedAction.startsWith("parley-enemy:")) {
           const enemyId = selectedAction.slice("parley-enemy:".length);
           parleyAction(enemyId);
+        } else if (selectedAction.startsWith("location-action:")) {
+          const indexText = selectedAction.slice("location-action:".length);
+          const index = Number(indexText);
+
+          if (!Number.isNaN(index)) {
+            locationAction(index);
+          }
         }
         break;
     }
@@ -551,6 +560,11 @@ export default function InvestigatorPanel() {
               <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
               </option>
+              {availableLocationActions.map((action, index) => (
+                <option key={`location-action-${index}`} value={`location-action:${index}`}>
+                  {action.label}
+                </option>
+              ))}
             </select>
 
             <button

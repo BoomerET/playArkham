@@ -134,6 +134,7 @@ export interface GameLocation {
   subname?: string;
   code: string;
   parley?: ParleyActionDefinition;
+  actions?: LocationActionDefinition[];
 }
 
 export interface Enemy {
@@ -187,12 +188,6 @@ export type ScenarioCardKind = "agenda" | "act";
 
 export type SkillTestKind = "investigate" | "fight" | "evade" | "none";
 
-export type LocationDifficultyModifier = {
-  amount: number;
-  skill?: SkillType;
-  appliesTo?: SkillTestKind | "any";
-};
-
 export interface ScenarioCardState {
   id: string;
   kind: ScenarioCardKind;
@@ -232,6 +227,39 @@ export interface LocationAttachment {
   attachedLocationId: string;
   difficultyModifiers?: LocationDifficultyModifier[];
 }
+export type LocationDifficultyModifier = {
+  amount: number;
+  skill?: SkillType;
+  appliesTo?: SkillTestKind | "any";
+};
+
+export type LocationActionEffect =
+  | { kind: "none" }
+  | { kind: "engageEnemyFromConnectedLocation" }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "gainClues"; amount: number }
+  | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "setPreviousScenarioOutcome"; outcome: string };
+
+export type LocationActionDefinition = {
+  label: string;
+  text: string;
+  effect: LocationActionEffect;
+};
+
+export type ParleySkillTestDefinition = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: ParleyEffect;
+  onFail?: ParleyEffect;
+};
+
+export type ParleyActionDefinition = {
+  label?: string;
+  text: string;
+  effect?: ParleyEffect;
+  skillTest?: ParleySkillTestDefinition;
+};
 
 export type ParleyEffect =
   | { kind: "gainClues"; amount: number }

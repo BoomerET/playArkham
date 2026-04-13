@@ -260,6 +260,7 @@ type GameStore = GameState & CampaignStoreActions & {
   engageEnemy: (enemyId: string) => void;
   parleyAction: (enemyId?: string) => void;
   resignAction: () => void;
+  locationAction: (actionIndex: number) => void;
 };
 
 const startingChaosBag: ChaosToken[] = [
@@ -360,6 +361,189 @@ function getScenarioSequenceNumber(sequence: string): string {
 
 function getScenarioSequenceSide(sequence: string): string {
   return sequence.slice(-1).toLowerCase();
+}
+
+function resolveLocationActionEffect(args: {
+  effect: LocationActionEffect;
+  investigator: Investigator;
+  currentLocationId: string;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    effect,
+    investigator,
+    currentLocationId,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  if (effect.kind === "none") {
+    return {
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+      logEntries: [],
+    };
+  }
+
+  if (effect.kind === "gainResources") {
+    return {
+      investigator: {
+        ...investigator,
+        resources: investigator.resources + effect.amount,
+      },
+      locations,
+      enemies,
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Gained ${effect.amount} resource${effect.amount === 1 ? "" : "s"}.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "gainClues") {
+    return {
+      investigator: {
+        ...investigator,
+        clues: investigator.clues + effect.amount,
+      },
+      locations,
+      enemies,
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Gained ${effect.amount} clue${effect.amount === 1 ? "" : "s"}.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "discoverLocationClue") {
+    const location = locations.find((entry) => entry.id === currentLocationId);
+    const cluesToDiscover = Math.min(effect.amount, location?.clues ?? 0);
+
+    return {
+      investigator: {
+        ...investigator,
+        clues: investigator.clues + cluesToDiscover,
+      },
+      locations: locations.map((entry) =>
+        entry.id === currentLocationId
+          ? { ...entry, clues: Math.max(0, entry.clues - cluesToDiscover) }
+          : entry,
+      ),
+      enemies,
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Discovered ${cluesToDiscover} clue${cluesToDiscover === 1 ? "" : "s"} at this location.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "setPreviousScenarioOutcome") {
+    return {
+      investigator,
+      locations,
+      enemies,
+      campaignState: {
+        ...campaignState,
+        previousScenarioOutcome: effect.outcome,
+      },
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Scenario outcome set to "${effect.outcome}".`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "engageEnemyFromConnectedLocation") {
+    const currentLocation = locations.find((entry) => entry.id === currentLocationId);
+
+    if (!currentLocation) {
+      return {
+        investigator,
+        locations,
+        enemies,
+        campaignState,
+        logEntries: [
+          createLogEntry(
+            "system",
+            "Current location could not be found for this action.",
+          ),
+        ],
+      };
+    }
+
+    const enemyToMove =
+      enemies.find(
+        (enemy) =>
+          enemy.engagedInvestigatorId === null &&
+          currentLocation.connections.includes(enemy.locationId),
+      ) ?? null;
+
+    if (!enemyToMove) {
+      return {
+        investigator,
+        locations,
+        enemies,
+        campaignState,
+        logEntries: [
+          createLogEntry(
+            "system",
+            "There is no valid enemy at a connecting location.",
+          ),
+        ],
+      };
+    }
+
+    return {
+      investigator,
+      locations,
+      enemies: enemies.map((enemy) =>
+        enemy.id === enemyToMove.id
+          ? {
+            ...enemy,
+            locationId: currentLocationId,
+            engagedInvestigatorId: investigator.id,
+          }
+          : enemy,
+      ),
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "enemy",
+          `${enemyToMove.name} moved to ${currentLocation.name} and engaged ${investigator.name}.`,
+        ),
+      ],
+    };
+  }
+
+  return {
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+    logEntries: [],
+  };
 }
 
 function getNextScenarioCardDefinition(
@@ -1339,6 +1523,84 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   discardCardFromHand: (cardId) => {
     get().discardCard(cardId);
+  },
+
+  locationAction: (actionIndex) => {
+    const {
+      turn,
+      scenarioStatus,
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (turn.phase !== "investigation") {
+      get().pushLog(
+        "system",
+        "You can only use location actions during the Investigation phase.",
+      );
+      return;
+    }
+
+    if (turn.actionsRemaining < 1) {
+      get().pushLog("system", "Cannot use a location action. No actions remaining.");
+      return;
+    }
+
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!currentLocation) {
+      get().pushLog(
+        "system",
+        "Cannot use a location action because your location is unknown.",
+      );
+      return;
+    }
+
+    const action = currentLocation.actions?.[actionIndex];
+
+    if (!action) {
+      get().pushLog("system", "That location action is not available.");
+      return;
+    }
+
+    const resolution = resolveLocationActionEffect({
+      effect: action.effect,
+      investigator,
+      currentLocationId: currentLocation.id,
+      locations,
+      enemies,
+      campaignState,
+    });
+
+    set((state) => ({
+      investigator: resolution.investigator,
+      locations: resolution.locations,
+      enemies: resolution.enemies,
+      campaignState: resolution.campaignState,
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      log: [
+        ...state.log,
+        createLogEntry("scenario", action.text),
+        ...resolution.logEntries,
+      ],
+    }));
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
   },
 
   discardThreatAreaCard: (cardId) => {
