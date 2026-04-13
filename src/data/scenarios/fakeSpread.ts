@@ -58,8 +58,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       connections: [
         "dormitories",
         "science-hall",
-        "orne-library",
-        "warren-observatory",
       ],
       investigatorsHere: [],
       mapPosition: { x: 51, y: 16 },
@@ -94,7 +92,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       shroud: 4,
       clues: 1,
       revealed: true,
-      connections: ["miskatonic-quad", "science-hall"],
+      connections: ["science-hall"],
       investigatorsHere: [],
       mapPosition: { x: 93, y: 16 },
       isVisible: true,
