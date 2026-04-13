@@ -133,6 +133,7 @@ export interface GameLocation {
   victoryPoints?: number;
   subname?: string;
   code: string;
+  parley?: ParleyActionDefinition;
 }
 
 export interface Enemy {
@@ -230,6 +231,19 @@ export interface LocationAttachment {
   attachedLocationId: string;
   difficultyModifiers?: LocationDifficultyModifier[];
 }
+
+export type ParleyEffect =
+  | { kind: "gainClues"; amount: number }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "setPreviousScenarioOutcome"; outcome: string }
+  | { kind: "none" };
+
+export type ParleyActionDefinition = {
+  label?: string;
+  text: string;
+  effect: ParleyEffect;
+};
 
 export interface GameState {
   investigator: Investigator;

@@ -6,7 +6,6 @@ import type {
   ScenarioDefinition,
 } from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
-import { ENCOUNTER_CARD_CODES } from "../types/game";
 import {
   canSpendInvestigationAction,
   cloneScenarioLocations,
@@ -52,6 +51,8 @@ import type {
   ScenarioStatus,
   SkillTestResult,
   SkillType,
+  ENCOUNTER_CARD_CODES,
+  ParleyEffect,
 } from "../types/game";
 
 import {
@@ -928,6 +929,112 @@ function resolveEnemyDefeatEffect(args: {
   };
 }
 
+function resolveParleyEffect(args: {
+  effect: ParleyEffect;
+  investigator: Investigator;
+  currentLocationId: string;
+  locations: GameState["locations"];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  campaignState: CampaignState;
+  logEntries: GameState["log"];
+} {
+  const { effect, investigator, currentLocationId, locations, campaignState } = args;
+
+  if (effect.kind === "none") {
+    return {
+      investigator,
+      locations,
+      campaignState,
+      logEntries: [],
+    };
+  }
+
+  if (effect.kind === "gainClues") {
+    return {
+      investigator: {
+        ...investigator,
+        clues: investigator.clues + effect.amount,
+      },
+      locations,
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Parley succeeded. Gained ${effect.amount} clue${effect.amount === 1 ? "" : "s"}.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "gainResources") {
+    return {
+      investigator: {
+        ...investigator,
+        resources: investigator.resources + effect.amount,
+      },
+      locations,
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Parley succeeded. Gained ${effect.amount} resource${effect.amount === 1 ? "" : "s"}.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "discoverLocationClue") {
+    const location = locations.find((entry) => entry.id === currentLocationId);
+    const cluesToDiscover = Math.min(effect.amount, location?.clues ?? 0);
+
+    return {
+      investigator: {
+        ...investigator,
+        clues: investigator.clues + cluesToDiscover,
+      },
+      locations: locations.map((entry) =>
+        entry.id === currentLocationId
+          ? { ...entry, clues: Math.max(0, entry.clues - cluesToDiscover) }
+          : entry,
+      ),
+      campaignState,
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Parley succeeded. Discovered ${cluesToDiscover} clue${cluesToDiscover === 1 ? "" : "s"} at this location.`,
+        ),
+      ],
+    };
+  }
+
+  if (effect.kind === "setPreviousScenarioOutcome") {
+    return {
+      investigator,
+      locations,
+      campaignState: {
+        ...campaignState,
+        previousScenarioOutcome: effect.outcome,
+      },
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Parley changed the campaign outcome to "${effect.outcome}".`,
+        ),
+      ],
+    };
+  }
+
+  return {
+    investigator,
+    locations,
+    campaignState,
+    logEntries: [],
+  };
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   moveHunterEnemies: () => {
     const { enemies, locations, investigator, scenarioStatus } = get();
@@ -1522,20 +1629,68 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   parleyAction: () => {
-    const { turn } = get();
+    const { turn, scenarioStatus, investigator, locations, campaignState } = get();
 
-    if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
       return;
     }
 
+    if (turn.phase !== "investigation") {
+      get().pushLog("system", "You can only parley during the Investigation phase.");
+      return;
+    }
+
+    if (turn.actionsRemaining < 1) {
+      get().pushLog("system", "Cannot parley. No actions remaining.");
+      return;
+    }
+
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!currentLocation) {
+      get().pushLog("system", "Cannot parley because your location is unknown.");
+      return;
+    }
+
+    if (!currentLocation.parley) {
+      get().pushLog("system", "There is nothing to parley with here.");
+      return;
+    }
+
+    const resolution = resolveParleyEffect({
+      effect: currentLocation.parley.effect,
+      investigator,
+      currentLocationId: currentLocation.id,
+      locations,
+      campaignState,
+    });
+
     set({
+      investigator: resolution.investigator,
+      locations: resolution.locations,
+      campaignState: resolution.campaignState,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
     });
 
-    get().pushLog("system", "Parley action taken.");
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
+
+    get().pushLog(
+      "scenario",
+      currentLocation.parley.text,
+    );
+
+    for (const entry of resolution.logEntries) {
+      get().pushLog(entry.kind, entry.text);
+    }
   },
 
   setAgendaProgress: (progress) => {
