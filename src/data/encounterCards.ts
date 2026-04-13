@@ -715,9 +715,9 @@ export const encounterCards: EncounterCard[] = [
 
         set: "whippoorwills",
     },
-  /*
+    /*
       This is my test card
-      */,
+    */
     {
         id: "davesaloof",
         code: "14001",
