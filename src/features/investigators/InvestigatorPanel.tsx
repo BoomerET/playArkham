@@ -190,10 +190,10 @@ export default function InvestigatorPanel() {
   const hasLocationParley = Boolean(currentLocation?.parley);
 
   const resignLabel = "Resign";
-  const parleyLabel = parleyEnemy
-    ? `Parley ${parleyEnemy.name}`
-    : currentLocation?.parley?.label ??
-    (currentLocation?.parley ? `Parley at ${currentLocation.name}` : "Parley");
+  //const parleyLabel = parleyEnemy
+  //  ? `Parley ${parleyEnemy.name}`
+  //  : currentLocation?.parley?.label ??
+  //  (currentLocation?.parley ? `Parley at ${currentLocation.name}` : "Parley");
   const engageLabel = activeEngageTarget
     ? `Engage ${activeEngageTarget.name}`
     : "Engage";
