@@ -95,6 +95,14 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "Action x2: Draw 3 cards (Limit once per game.)",
       victoryPoints: 1,
       code: "12120",
+      parley: {
+        label: "Parley",
+        text: "You parley with the librarian.",
+        effect: {
+          kind: "gainClues",
+          amount: 1,
+        },
+      },
     },
   ],
   enemySpawns: [],

@@ -641,14 +641,13 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Aloof",
             "Hunter",
+            "Parley",
         ],
         text: [
             "This is an ememy that I use for testing.",
         ],
         inEncounterDeck: true,
     },
-
-
 ];
 
 export const encounterCardsByCode: Record<string, EncounterCardDefinition> =
