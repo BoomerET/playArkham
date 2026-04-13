@@ -6,7 +6,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   name: "Fake Spreading Flames",
   description:
     "A recent spate of fires and grisly “accidents” have the entire city on edge.",
-  startingLocationId: "friends-room",
+  startingLocationId: "friends-rooma",
   locations: [
     {
       id: "friends-rooma",
