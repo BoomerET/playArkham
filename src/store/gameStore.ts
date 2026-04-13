@@ -3995,6 +3995,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedEnemies = enemies;
     const resolutionLog: GameState["log"] = [];
     let updatedInvestigator = investigator;
+    let updatedCampaignState = campaignState;
 
     let cardsToDrawOnSuccess = 0;
     let bonusCluesOnSuccess = 0;
@@ -4306,17 +4307,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
           investigator: updatedInvestigator,
           currentLocationId: pendingParleyResolution.currentLocationId,
           locations: updatedLocations,
-          campaignState,
+          campaignState: updatedCampaignState,
         });
 
         updatedInvestigator = parleyResolution.investigator;
         updatedLocations = parleyResolution.locations;
+        updatedCampaignState = parleyResolution.campaignState;
 
         resolutionLog.push(...parleyResolution.logEntries);
-
-        set({
-          campaignState: parleyResolution.campaignState,
-        });
       }
     }
 
@@ -4362,6 +4360,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
       deck: updatedDeck,
       hand: updatedHand,
       discard: [...discard, ...committedCards],
