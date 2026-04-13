@@ -647,6 +647,14 @@ export const encounterCards: EncounterCard[] = [
             "This is an ememy that I use for testing.",
         ],
         inEncounterDeck: true,
+        parley: {
+            label: "Parley",
+            text: "You calm the frat bro and get useful information.",
+            effect: {
+                kind: "gainResources",
+                amount: 1,
+            },
+        },
     },
 ];
 

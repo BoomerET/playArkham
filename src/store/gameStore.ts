@@ -1629,7 +1629,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   parleyAction: () => {
-    const { turn, scenarioStatus, investigator, locations, campaignState } = get();
+    const { turn, scenarioStatus, investigator, locations, enemies, campaignState } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -1647,22 +1647,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
-    console.log(currentLocation);
 
     if (!currentLocation) {
       get().pushLog("system", "Cannot parley because your location is unknown.");
       return;
     }
 
-    const parley = currentLocation.parley;
+    const parleyEnemy =
+      enemies.find(
+        (enemy) =>
+          enemy.locationId === currentLocation.id &&
+          enemy.parley,
+      ) ?? null;
 
-    if (!parley) {
+    const parleySource = parleyEnemy?.parley ?? currentLocation.parley;
+
+    if (!parleySource) {
       get().pushLog("system", "There is nothing to parley with here.");
       return;
     }
 
     const resolution = resolveParleyEffect({
-      effect: parley.effect,
+      effect: parleySource.effect,
       investigator,
       currentLocationId: currentLocation.id,
       locations,
@@ -1679,10 +1685,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
       log: [
         ...state.log,
-        createLogEntry("scenario", parley.text),
+        createLogEntry(
+          "scenario",
+          parleyEnemy
+            ? `${parleyEnemy.name}: ${parleySource.text}`
+            : parleySource.text,
+        ),
         ...resolution.logEntries,
       ],
     }));
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
   },
 
   parleyEnemy: () => {

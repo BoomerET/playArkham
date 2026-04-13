@@ -184,6 +184,15 @@ export default function InvestigatorPanel() {
   const [selectedAdjustment, setSelectedAdjustment] = useState("");
   const engageEnemy = useGameStore((state) => state.engageEnemy);
 
+  const parleyEnemy =
+    currentLocation
+      ? enemies.find(
+        (enemy) =>
+          enemy.locationId === currentLocation.id &&
+          enemy.parley,
+      ) ?? null
+      : null;
+
   function handleExecuteAction() {
     switch (selectedAction) {
       case "resource":
