@@ -170,15 +170,6 @@ export default function InvestigatorPanel() {
     : [];
   const activeEngageTarget = engageableEnemies[0] ?? null;
 
-  //const parleyEnemy =
-  //  currentLocation
-  //    ? enemies.find(
-  //      (enemy) =>
-  //        enemy.locationId === currentLocation.id &&
-  //        enemy.parley,
-  //    ) ?? null
-  //    : null;
-
   const parleyEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
@@ -190,10 +181,6 @@ export default function InvestigatorPanel() {
   const hasLocationParley = Boolean(currentLocation?.parley);
 
   const resignLabel = "Resign";
-  //const parleyLabel = parleyEnemy
-  //  ? `Parley ${parleyEnemy.name}`
-  //  : currentLocation?.parley?.label ??
-  //  (currentLocation?.parley ? `Parley at ${currentLocation.name}` : "Parley");
   const engageLabel = activeEngageTarget
     ? `Engage ${activeEngageTarget.name}`
     : "Engage";
