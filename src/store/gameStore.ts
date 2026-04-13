@@ -1653,18 +1653,33 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (!currentLocation.parley) {
+    const parley = currentLocation.parley;
+
+    if (!parley) {
       get().pushLog("system", "There is nothing to parley with here.");
       return;
     }
 
     const resolution = resolveParleyEffect({
-      effect: currentLocation.parley.effect,
+      effect: parley.effect,
       investigator,
       currentLocationId: currentLocation.id,
       locations,
       campaignState,
     });
+
+    //if (!currentLocation.parley) {
+    //  get().pushLog("system", "There is nothing to parley with here.");
+    //  return;
+    //}
+
+    //const resolution = resolveParleyEffect({
+    //  effect: currentLocation.parley.effect,
+    //  investigator,
+    //  currentLocationId: currentLocation.id,
+    //  locations,
+    //  campaignState,
+    //});
 
     //set({
     //  investigator: resolution.investigator,
@@ -1698,7 +1713,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
       log: [
         ...state.log,
-        createLogEntry("scenario", currentLocation.parley.text),
+        createLogEntry("scenario", parley.text),
         ...resolution.logEntries,
       ],
     }));
