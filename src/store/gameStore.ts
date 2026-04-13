@@ -939,7 +939,7 @@ function resolveParleyEffect(args: {
   investigator: Investigator;
   locations: GameState["locations"];
   campaignState: CampaignState;
-  logEntries: GameState["log"];
+  logEntries: ReturnType<typeof createLogEntry>[];
 } {
   const { effect, investigator, currentLocationId, locations, campaignState } = args;
 
@@ -1666,7 +1666,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState,
     });
 
-    set({
+    //set({
+    //  investigator: resolution.investigator,
+    //  locations: resolution.locations,
+    //  campaignState: resolution.campaignState,
+    //  turn: {
+    //    ...turn,
+    //    actionsRemaining: turn.actionsRemaining - 1,
+    //  },
+    //});
+
+    //const updatedState = get();
+    //savePersistedCampaignSetup({
+    //  selectedDeckId: updatedState.selectedDeckId,
+    //  selectedScenarioId: updatedState.selectedScenarioId,
+    //  campaignState: updatedState.campaignState,
+    //});
+
+    //get().pushLog(
+    //  "scenario",
+    //  currentLocation.parley.text,
+    //);
+
+    set((state) => ({
       investigator: resolution.investigator,
       locations: resolution.locations,
       campaignState: resolution.campaignState,
@@ -1674,19 +1696,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
-    });
-
-    const updatedState = get();
-    savePersistedCampaignSetup({
-      selectedDeckId: updatedState.selectedDeckId,
-      selectedScenarioId: updatedState.selectedScenarioId,
-      campaignState: updatedState.campaignState,
-    });
-
-    get().pushLog(
-      "scenario",
-      currentLocation.parley.text,
-    );
+      log: [
+        ...state.log,
+        createLogEntry("scenario", currentLocation.parley.text),
+        ...resolution.logEntries,
+      ],
+    }));
 
     for (const entry of resolution.logEntries) {
       get().pushLog(entry.kind, entry.text);
