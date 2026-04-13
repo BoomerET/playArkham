@@ -3,31 +3,31 @@ Treachery Template
 
 Enemy Template
 {
-  code: "12XXX",
-  name: "EnemyName",
+  id: "servant-of-flame",
+  code: "12114",
+  name: "Servant of Flame",
+  subname: "Raging Fury",
   type: "enemy",
-  damage: 0,
-  horror: 0,
-  fight: 0,
-  health: 0,
-  evade: 0,
-  set: "campaign-set",
+
+  fight: 4,
+  health: 5,
+  evade: 4,
+  damage: 2,
+  horror: 2,
+  victoryPoints: 2,
+
   traits: [
-      "Trait1",
-      "Trait2",
+    "Humanoid",
+    "Elite",
   ],
   ability: [
-      "Ability1",
-      "Ability2",
+    "Hunter",
+    "Prey (lowest SPD)",
+    "Retaliate.",
   ],
-  text: [
-      "Actions: ",
-      "Reaction: ",
-      "Free: ",
-  ],
-  inEncounterDeck: true,
-  victoryPoints: 1,
-},
+
+  set: "spreading-flames",
+}
 
 Location Template:
 {
@@ -54,7 +54,7 @@ Location Template:
 
   connections: ["fake-dormitories"],
   mapPosition: { x: 8, y: 16 }, 
-  
+
   revealed: true,
   isVisible: true,
   investigatorsHere: [],
