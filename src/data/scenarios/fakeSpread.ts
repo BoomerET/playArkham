@@ -13,6 +13,14 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       name: "Your Friend's Room",
       shroud: 2,
       code: "12113",
+      parley: {
+        label: "Parley",
+        text: "You parley with the librarian.",
+        effect: {
+          kind: "gainResources",
+          amount: 1,
+        },
+      },
       clues: 2,
       revealed: true,
       connections: ["dormitories"],
@@ -23,6 +31,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic"
       ],
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+
     },
     {
       id: "dormitories",
