@@ -299,7 +299,7 @@ export interface EncounterCard {
   traits?: string[];
   inEncounterDeck?: boolean;
   victoryPoints?: number;
-  parley?: string;
+  parley?: ParleyActionDefinition
 }
 
 export const ENCOUNTER_CARD_CODES = {
