@@ -51,9 +51,10 @@ import type {
   ScenarioStatus,
   SkillTestResult,
   SkillType,
-  ENCOUNTER_CARD_CODES,
   ParleyEffect,
 } from "../types/game";
+
+import { ENCOUNTER_CARD_CODES } from "../types/game";
 
 import {
   canPlayInAvailableSlots,
