@@ -2,56 +2,60 @@ Treachery Template
 
 
 Enemy Template
-
 {
-    code: "12XXX",
-    name: "EnemyName",
-    type: "enemy",
-    damage: 0,
-    horror: 0,
-    fight: 0,
-    health: 0,
-    evade: 0,
-    set: "campaign-set",
-    traits: [
-        "Trait1",
-        "Trait2",
-    ],
-    ability: [
-        "Ability1",
-        "Ability2",
-    ],
-    text: [
-        "Actions: ",
-        "Reaction: ",
-        "Free: ",
-    ],
-    inEncounterDeck: true,
-    victoryPoints: 1,
+  code: "12XXX",
+  name: "EnemyName",
+  type: "enemy",
+  damage: 0,
+  horror: 0,
+  fight: 0,
+  health: 0,
+  evade: 0,
+  set: "campaign-set",
+  traits: [
+      "Trait1",
+      "Trait2",
+  ],
+  ability: [
+      "Ability1",
+      "Ability2",
+  ],
+  text: [
+      "Actions: ",
+      "Reaction: ",
+      "Free: ",
+  ],
+  inEncounterDeck: true,
+  victoryPoints: 1,
 },
 
 Location Template:
 {
-      id: "friends-rooma",
-      name: "Your Friend's Room",
-      shroud: 2,
-      code: "12113",
-      parley: {
-        label: "Parley",
-        text: "You parley with a Frat Bro.",
-        effect: {
-          kind: "gainResources",
-          amount: 1,
-        },
-      },
-      clues: 2,
-      revealed: true,
-      connections: ["dormitoriesa"],
-      investigatorsHere: [],
-      mapPosition: { x: 8, y: 16 },
-      isVisible: true,
-      traits: [
-        "Miskatonic"
-      ],
-      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+  id: "fake-friends-room",
+  code: "12113",
+  name: "Your Friend's Room", 
+
+  shroud: 2,
+  clues: 2,
+  victoryPoints: 1,
+  traits: [
+    "Miskatonic"
+  ],  
+
+  text: "Action: .",
+  parley: {
+    label: "Parley",
+    text: "You parley with a Frat Bro.",
+    effect: {
+      kind: "gainResources",
+      amount: 1,
     },
+  },  
+
+  connections: ["fake-dormitories"],
+  mapPosition: { x: 8, y: 16 }, 
+  
+  revealed: true,
+  isVisible: true,
+  investigatorsHere: [],
+},

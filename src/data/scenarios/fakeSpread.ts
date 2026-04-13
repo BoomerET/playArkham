@@ -6,13 +6,20 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   name: "Fake Spreading Flames",
   description:
     "A recent spate of fires and grisly “accidents” have the entire city on edge.",
-  startingLocationId: "friends-rooma",
+  startingLocationId: "fake-friends-room",
   locations: [
     {
-      id: "friends-rooma",
-      name: "Your Friend's Room",
-      shroud: 2,
+      id: "fake-friends-room",
       code: "12113",
+      name: "Your Friend's Room",
+
+      shroud: 2,
+      clues: 2,
+      traits: [
+        "Miskatonic",
+      ],
+
+      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
       parley: {
         label: "Parley",
         text: "You parley with a Frat Bro.",
@@ -21,33 +28,26 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           amount: 1,
         },
       },
-      clues: 2,
-      revealed: true,
-      connections: ["dormitoriesa"],
-      investigatorsHere: [],
-      mapPosition: { x: 8, y: 16 },
-      isVisible: true,
-      traits: [
-        "Miskatonic"
-      ],
-      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
 
+      connections: ["fake-dormitories"],
+      mapPosition: { x: 8, y: 16 },
+
+      revealed: true,
+      isVisible: true,
+      investigatorsHere: [],
     },
     {
-      id: "dormitoriesa",
+      id: "fake-dormitories",
       name: "Dormitories",
+      code: "12117",
+
       shroud: 3,
       clues: 1,
-      revealed: true,
-      connections: ["friends-rooma", "miskatonic-quada"],
-      investigatorsHere: [],
-      mapPosition: { x: 30, y: 16 },
-      isVisible: true,
       traits: [
-        "Miskatonic"
+        "Miskatonic",
       ],
+
       text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
-      code: "12117",
       parley: {
         label: "Parley",
         text: "You parley with the RA.",
@@ -56,60 +56,75 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           amount: 1,
         },
       },
+
+
+      connections: ["fake-friends-room", "fake-miskatonic-quad"],
+      mapPosition: { x: 30, y: 16 },
+
+      revealed: true,
+      isVisible: true,
+      investigatorsHere: [],
     },
     {
-      id: "miskatonic-quada",
+      id: "fake-miskatonic-quad",
+      code: "12116",
       name: "Miskatonic Quad",
+
       shroud: 1,
       clues: 0,
-      revealed: true,
-      connections: [
-        "dormitoriesa",
-        "science-halla",
-      ],
-      investigatorsHere: [],
-      mapPosition: { x: 51, y: 16 },
-      isVisible: true,
       traits: [
         "Miskatonic",
-        "Central"
+        "Central",
       ],
+
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
-      code: "12116",
+
+      connections: [
+        "fake-dormitories",
+        "fake-science-hall",
+      ],
+      mapPosition: { x: 51, y: 16 },
+
+
+      revealed: true,
+      isVisible: true,
+      investigatorsHere: [],
     },
     {
-      id: "science-halla",
+      id: "fake-science-hall",
+      code: "12118",
       name: "Science Hall",
+
       shroud: 2,
       clues: 1,
-      revealed: true,
-      connections: ["miskatonic-quada", "orne-librarya"],
-      investigatorsHere: [],
-      mapPosition: { x: 72, y: 16 },
-      isVisible: true,
-      traits: [
-        "Miskatonic"
-      ],
-      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
       victoryPoints: 1,
-      code: "12118",
+      traits: [
+        "Miskatonic",
+      ],
+
+      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
+
+      connections: ["fake-miskatonic-quad", "fake-orne-library"],
+      mapPosition: { x: 72, y: 16 },
+
+      investigatorsHere: [],
+
+      revealed: true,
+      isVisible: true,
     },
     {
-      id: "orne-librarya",
+      id: "fake-orne-library",
+      code: "12120",
       name: "Orne Library",
+
       shroud: 4,
       clues: 1,
-      revealed: true,
-      connections: ["science-halla"],
-      investigatorsHere: [],
-      mapPosition: { x: 93, y: 16 },
-      isVisible: true,
+      victoryPoints: 1,
       traits: [
         "Miskatonic"
       ],
+
       text: "Action x2: Draw 3 cards (Limit once per game.)",
-      victoryPoints: 1,
-      code: "12120",
       parley: {
         label: "Parley",
         text: "You parley with the librarian.",
@@ -118,12 +133,19 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           amount: 1,
         },
       },
+
+      connections: ["fake-science-hall"],
+      mapPosition: { x: 93, y: 16 },
+
+      revealed: true,
+      isVisible: true,
+      investigatorsHere: [],
     },
   ],
   enemySpawns: [],
   acts: [
     {
-      id: "spreading-flames-act-1a",
+      id: "fake-spreading-flames-act-1a",
       kind: "act",
       sequence: "1a",
       title: "Where There's Smoke",
@@ -132,7 +154,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
     },
     {
-      id: "spreading-flames-act-2a",
+      id: "fake-spreading-flames-act-2a",
       kind: "act",
       sequence: "2a",
       title: "Escape the Dorms",
@@ -144,7 +166,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-3a",
+      id: "fake-spreading-flames-act-3a",
       kind: "act",
       sequence: "3a",
       title: "Searching for Dr. Armitage",
@@ -158,7 +180,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
-      id: "spreading-flames-act-4a",
+      id: "fake-spreading-flames-act-4a",
       kind: "act",
       sequence: "4a",
       title: "Blaze of Glory",
@@ -169,7 +191,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   ],
   agendas: [
     {
-      id: "spreading-flames-agenda-1a",
+      id: "fake-spreading-flames-agenda-1a",
       kind: "agenda",
       sequence: "1a",
       title: "Past Curfew",
@@ -178,7 +200,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-2a",
+      id: "fake-spreading-flames-agenda-2a",
       kind: "agenda",
       sequence: "2a",
       title: "Lit Up",
@@ -187,7 +209,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Doom",
     },
     {
-      id: "spreading-flames-agenda-3a",
+      id: "fake-spreading-flames-agenda-3a",
       kind: "agenda",
       sequence: "3a",
       title: "Wild Flames",

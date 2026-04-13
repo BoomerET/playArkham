@@ -9,23 +9,25 @@ export const encounterCards: EncounterCard[] = [
         name: "Servant of Flame",
         subname: "Raging Fury",
         type: "enemy",
+
+        fight: 4,
+        health: 5,
+        evade: 4,
+        damage: 2,
+        horror: 2,
+        victoryPoints: 2,
+
+        traits: [
+            "Humanoid",
+            "Elite"
+        ],
         ability: [
             "Hunter",
             "Prey (lowest SPD)",
             "Retaliate."
         ],
-        damage: 2,
-        horror: 2,
-        fight: 4,
-        health: 5,
-        evade: 4,
+
         set: "spreading-flames",
-        traits: [
-            "Humanoid",
-            "Elite"
-        ],
-        inEncounterDeck: false,
-        victoryPoints: 2,
     },
     {
         id: "cantor-of-flame",
@@ -43,7 +45,6 @@ export const encounterCards: EncounterCard[] = [
             "Humanoid",
             "Cultist"
         ],
-        inEncounterDeck: true,
     },
     {
         id: "hellhound",
@@ -64,7 +65,6 @@ export const encounterCards: EncounterCard[] = [
             "Creature",
             "Monster"
         ],
-        inEncounterDeck: true,
     },
     {
         id: "bystander",
@@ -85,7 +85,6 @@ export const encounterCards: EncounterCard[] = [
             "Humanoid",
             "Civilian"
         ],
-        inEncounterDeck: true,
     },
     {
         id: "cosmic-evils",
@@ -100,7 +99,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Omen",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "unspeakable-truths",
@@ -116,7 +114,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Terror",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "forbidden-secrets",
@@ -130,7 +127,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Pact",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "extraplanar-visions",
@@ -144,7 +140,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Power",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "wild-compulsion",
@@ -159,7 +154,6 @@ export const encounterCards: EncounterCard[] = [
             "Madness",
             "Bane"
         ],
-        inEncounterDeck: true,
     },
     {
         id: "fire",
@@ -175,7 +169,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: false,
     },
     {
         id: "noxious-smoke",
@@ -189,7 +182,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "mutated",
@@ -203,7 +195,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Mutation",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "mutated-experiment",
@@ -223,7 +214,6 @@ export const encounterCards: EncounterCard[] = [
             "Creature",
             "Mutated"
         ],
-        inEncounterDeck: true,
     },
     {
         id: "dr-henry-armitage",
@@ -240,7 +230,6 @@ export const encounterCards: EncounterCard[] = [
             "Ally",
             "Miskatonic"
         ],
-        inEncounterDeck: false,
     },
     {
         id: "servant-of-flame_2",
@@ -263,7 +252,6 @@ export const encounterCards: EncounterCard[] = [
             "Cultist",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
     },
     {
@@ -280,7 +268,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Curse",
         ],
-        inEncounterDeck: false,
     },
     {
         id: "david-renfield",
@@ -302,7 +289,6 @@ export const encounterCards: EncounterCard[] = [
             "Silver Twilight",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
         ability: [
             "Aloof"
@@ -329,7 +315,6 @@ export const encounterCards: EncounterCard[] = [
             "Worker",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
     },
     {
@@ -353,7 +338,6 @@ export const encounterCards: EncounterCard[] = [
             "Syndicate",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
     },
     {
@@ -377,7 +361,6 @@ export const encounterCards: EncounterCard[] = [
             "Police",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
     },
     {
@@ -400,7 +383,6 @@ export const encounterCards: EncounterCard[] = [
             "Miskatonic",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
         ability: [
             "Aloof"
@@ -426,7 +408,6 @@ export const encounterCards: EncounterCard[] = [
             "Socialite",
             "Elite",
         ],
-        inEncounterDeck: false,
         victoryPoints: 1,
         ability: [
             "Aloof"
@@ -447,7 +428,6 @@ export const encounterCards: EncounterCard[] = [
             "Hex",
             "Obstacle",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "downpour",
@@ -461,7 +441,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "flash-flood",
@@ -476,7 +455,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "raising-suspicions",
@@ -490,7 +468,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Blunder",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "red-herring",
@@ -504,7 +481,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Scheme",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "bat-horror",
@@ -524,7 +500,6 @@ export const encounterCards: EncounterCard[] = [
             "Elusive",
             "Hunter",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "aerial-pursuit",
@@ -538,7 +513,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: true,
         ability: [
             "Surge",
         ],
@@ -566,7 +540,6 @@ export const encounterCards: EncounterCard[] = [
         text: [
             "Forced - After Rogue Gangster engages you: Lose 1 resource. If you cannot, this enemy attacks you.",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "crossfire",
@@ -580,7 +553,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Hazard",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "whippoorwill",
@@ -603,7 +575,6 @@ export const encounterCards: EncounterCard[] = [
         text: [
             "Each investigator at Whippoorwill's location gets -1 WIL, -1 INT, -1 COM, and -1 SPD.",
         ],
-        inEncounterDeck: true,
     },
     {
         id: "eager-for-death",
@@ -617,7 +588,6 @@ export const encounterCards: EncounterCard[] = [
         traits: [
             "Omen",
         ],
-        inEncounterDeck: true,
     },
 
     /*
@@ -646,7 +616,6 @@ export const encounterCards: EncounterCard[] = [
         text: [
             "This is an ememy that I use for testing.",
         ],
-        inEncounterDeck: true,
         parley: {
             label: "Parley",
             text: "You calm the frat bro and get useful information.",

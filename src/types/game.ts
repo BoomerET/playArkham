@@ -240,10 +240,18 @@ export type ParleyEffect =
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
   | { kind: "none" };
 
+export type ParleySkillTestDefinition = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: ParleyEffect;
+  onFail?: ParleyEffect;
+};
+
 export type ParleyActionDefinition = {
   label?: string;
   text: string;
   effect: ParleyEffect;
+  skillTest?: ParleySkillTestDefinition;
 };
 
 export interface GameState {
@@ -297,7 +305,6 @@ export interface EncounterCard {
   health?: number;
   set?: string;
   traits?: string[];
-  inEncounterDeck?: boolean;
   victoryPoints?: number;
   parley?: ParleyActionDefinition
 }
