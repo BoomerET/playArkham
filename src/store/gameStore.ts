@@ -1647,6 +1647,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
+    console.log(currentLocation);
 
     if (!currentLocation) {
       get().pushLog("system", "Cannot parley because your location is unknown.");
@@ -1668,41 +1669,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState,
     });
 
-    //if (!currentLocation.parley) {
-    //  get().pushLog("system", "There is nothing to parley with here.");
-    //  return;
-    //}
-
-    //const resolution = resolveParleyEffect({
-    //  effect: currentLocation.parley.effect,
-    //  investigator,
-    //  currentLocationId: currentLocation.id,
-    //  locations,
-    //  campaignState,
-    //});
-
-    //set({
-    //  investigator: resolution.investigator,
-    //  locations: resolution.locations,
-    //  campaignState: resolution.campaignState,
-    //  turn: {
-    //    ...turn,
-    //    actionsRemaining: turn.actionsRemaining - 1,
-    //  },
-    //});
-
-    //const updatedState = get();
-    //savePersistedCampaignSetup({
-    //  selectedDeckId: updatedState.selectedDeckId,
-    //  selectedScenarioId: updatedState.selectedScenarioId,
-    //  campaignState: updatedState.campaignState,
-    //});
-
-    //get().pushLog(
-    //  "scenario",
-    //  currentLocation.parley.text,
-    //);
-
     set((state) => ({
       investigator: resolution.investigator,
       locations: resolution.locations,
@@ -1717,10 +1683,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...resolution.logEntries,
       ],
     }));
-
-    for (const entry of resolution.logEntries) {
-      get().pushLog(entry.kind, entry.text);
-    }
   },
 
   setAgendaProgress: (progress) => {
