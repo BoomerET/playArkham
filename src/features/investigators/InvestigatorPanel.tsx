@@ -185,6 +185,7 @@ export default function InvestigatorPanel() {
   const engageEnemy = useGameStore((state) => state.engageEnemy);
 
   function handleExecuteAction() {
+    console.log("Entered handleExecuteAction");
     switch (selectedAction) {
       case "resource":
         takeResourceAction();
