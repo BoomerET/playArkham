@@ -250,7 +250,7 @@ type GameStore = GameState & CampaignStoreActions & {
   randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
   moveHunterEnemies: () => void;
   engageEnemy: (enemyId: string) => void;
-  parleyAction: () => void;
+  parleyAction: (enemyId?: string) => void;
   resignAction: () => void;
 };
 
@@ -1628,7 +1628,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("enemy", `Engaged ${enemy.name}.`);
   },
 
-  parleyAction: () => {
+  parleyAction: (enemyId) => {
     const { turn, scenarioStatus, investigator, locations, enemies, campaignState } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
@@ -1654,11 +1654,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const parleyEnemy =
-      enemies.find(
-        (enemy) =>
-          enemy.locationId === currentLocation.id &&
-          enemy.parley,
-      ) ?? null;
+      enemyId != null
+        ? enemies.find(
+          (enemy) =>
+            enemy.id === enemyId &&
+            enemy.locationId === currentLocation.id &&
+            enemy.parley,
+        ) ?? null
+        : null;
 
     const parleySource = parleyEnemy?.parley ?? currentLocation.parley;
 

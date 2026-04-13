@@ -179,6 +179,15 @@ export default function InvestigatorPanel() {
       ) ?? null
       : null;
 
+  const parleyEnemies = currentLocation
+    ? enemies.filter(
+      (enemy) =>
+        enemy.locationId === currentLocation.id &&
+        enemy.parley,
+    )
+    : [];
+
+  const hasLocationParley = Boolean(currentLocation?.parley);
 
   const resignLabel = "Resign";
   const parleyLabel = parleyEnemy
@@ -217,15 +226,20 @@ export default function InvestigatorPanel() {
           engageEnemy(activeEngageTarget.id);
         }
         break;
-      case "parley":
+      case "parley-location":
         parleyAction();
         break;
       case "resign":
         resignAction();
         break;
       default:
+        if (selectedAction.startsWith("parley-enemy:")) {
+          const enemyId = selectedAction.slice("parley-enemy:".length);
+          parleyAction(enemyId);
+        }
         break;
     }
+
     setSelectedAction("");
   }
 
@@ -535,7 +549,18 @@ export default function InvestigatorPanel() {
               <option value="investigate">Investigate</option>
               <option value="fight">{fightLabel}</option>
               <option value="evade">{evadeLabel}</option>
-              <option value="parley">{parleyLabel}</option>
+              {/*<option value="parley">{parleyLabel}</option>*/}
+              {parleyEnemies.map((enemy) => (
+                <option key={`parley-enemy-${enemy.id}`} value={`parley-enemy:${enemy.id}`}>
+                  Parley {enemy.name}
+                </option>
+              ))}
+
+              {hasLocationParley && currentLocation && (
+                <option value="parley-location">
+                  {currentLocation.parley?.label ?? `Parley at ${currentLocation.name}`}
+                </option>
+              )}
               <option value="resign">{resignLabel}</option>
               <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
