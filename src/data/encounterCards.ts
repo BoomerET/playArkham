@@ -25,7 +25,7 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Hunter",
             "Prey (lowest SPD)",
-            "Retaliate.",
+            "Retaliate",
         ],
 
         set: "spreading-flames",
