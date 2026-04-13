@@ -44,6 +44,7 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
+  LocationActionEffect,
   LocationAttachment,
   Phase,
   PlayerCard,
