@@ -150,6 +150,7 @@ export interface Enemy {
   damageOnEnemy: number;
   ability?: string[];
   onDefeat?: EnemyDefeatEffect;
+  parley?: ParleyActionDefinition;
 }
 
 export type EnemyDefeatEffect =
@@ -298,6 +299,7 @@ export interface EncounterCard {
   traits?: string[];
   inEncounterDeck?: boolean;
   victoryPoints?: number;
+  parley?: string;
 }
 
 export const ENCOUNTER_CARD_CODES = {

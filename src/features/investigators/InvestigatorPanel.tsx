@@ -185,7 +185,6 @@ export default function InvestigatorPanel() {
   const engageEnemy = useGameStore((state) => state.engageEnemy);
 
   function handleExecuteAction() {
-    console.log("Entered handleExecuteAction");
     switch (selectedAction) {
       case "resource":
         takeResourceAction();
@@ -208,7 +207,10 @@ export default function InvestigatorPanel() {
         }
         break;
       case "parley":
-        parleyAction();
+        if (activeEngageTarget) {
+          parleyEnemy(activeEngageTarget.id);
+        } else
+          parleyAction();
         break;
       case "resign":
         resignAction();

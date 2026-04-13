@@ -43,14 +43,6 @@ hooded figures patrolling the campus want?",
         "Miskatonic"
       ],
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
-      parley: {
-        label: "Parley",
-        text: "You parley with the Goldfish.",
-        effect: {
-          kind: "gainClues",
-          amount: 1,
-        },
-      },
     },
     {
       id: "dormitories",

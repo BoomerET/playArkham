@@ -1685,6 +1685,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
+  parleyEnemy: () => {
+  },
+
   setAgendaProgress: (progress) => {
     const { agenda } = get();
 
@@ -2169,6 +2172,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           card.code === "12132"
             ? { kind: "horrorToInvestigatorsAtLocation", amount: 1 }
             : undefined,
+        parley: card.parley,
       };
 
       set({
