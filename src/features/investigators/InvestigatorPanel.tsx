@@ -207,9 +207,7 @@ export default function InvestigatorPanel() {
         }
         break;
       case "parley":
-        if (activeEngageTarget) {
-          parleyAction();
-        }
+        parleyAction();
         break;
       case "resign":
         resignAction();
