@@ -170,14 +170,14 @@ export default function InvestigatorPanel() {
     : [];
   const activeEngageTarget = engageableEnemies[0] ?? null;
 
-  const parleyEnemy =
-    currentLocation
-      ? enemies.find(
-        (enemy) =>
-          enemy.locationId === currentLocation.id &&
-          enemy.parley,
-      ) ?? null
-      : null;
+  //const parleyEnemy =
+  //  currentLocation
+  //    ? enemies.find(
+  //      (enemy) =>
+  //        enemy.locationId === currentLocation.id &&
+  //        enemy.parley,
+  //    ) ?? null
+  //    : null;
 
   const parleyEnemies = currentLocation
     ? enemies.filter(
