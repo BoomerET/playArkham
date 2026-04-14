@@ -25,6 +25,9 @@ Enemy Template
     "Prey (lowest SPD)",
     "Retaliate.",
   ],
+  text: [
+    "Forced - When Servant of Flame is defeated: (Codex Theta)",
+  ],
 
   set: "spreading-flames",
 }

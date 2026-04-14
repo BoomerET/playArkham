@@ -745,6 +745,67 @@ export const encounterCards: EncounterCard[] = [
 
         set: "queen-of-ash",
     },
+    {
+        id: "elokoss_a",
+        code: "12179a",
+        name: "Elokoss",
+        subname: "Faint Embers",
+        type: "enemy",
+
+        fight: 5,
+        health: 5,
+        evade: 5,
+        damage: 3,
+        horror: 3,
+        victoryPoints: 5,
+
+        traits: [
+            "Ancient One",
+            "Flora",
+            "Elite",
+        ],
+        ability: [
+            "Massive",
+            "Retaliate.",
+        ],
+        text: [
+            "Elokoss gets +5 health, cannot move, and cannot make attacks of opportunity.",
+            "Free - Spend 1 (Investigator) clues: Pleace 1 clue on Elokoss. If Elokoss has 5 clues on her, (-> R2) (page 14)",
+        ],
+
+        set: "queen-of-ash",
+    },
+    {
+        id: "elokoss_b",
+        code: "12179b",
+        name: "Elokoss",
+        subname: "Mother of Flame",
+        type: "enemy",
+
+        fight: 5,
+        health: 5,
+        evade: 5,
+        damage: 3,
+        horror: 3,
+        victoryPoints: 5,
+
+        traits: [
+            "Ancient One",
+            "Flora",
+            "Elite",
+        ],
+        ability: [
+            "Hunter",
+            "Massive",
+            "Retaliate.",
+        ],
+        text: [
+            "Elokoss gets +5 health",
+            "Forced - After you evade Elokoss: Ready her. She cannot attack you for the remainder of the round."
+        ],
+
+        set: "queen-of-ash",
+    },
     /*
       This is my test card
     */
