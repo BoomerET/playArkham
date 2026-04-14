@@ -241,12 +241,15 @@ export type LocationActionEffect =
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string };
 
-export type LocationActionDefinition = {
-  label: string;
-  text: string;
-  effect?: LocationActionEffect;
-  skillTest?: LocationActionSkillTestDefinition;
-};
+//export type LocationActionDefinition = {
+//  label: string;
+//  text: string;
+//  effect?: LocationActionEffect;
+//  skillTest?: LocationActionSkillTestDefinition;
+//};
+
+export type LocationActionDefinition =
+  InteractiveActionDefinition<LocationActionEffect>;
 
 export type LocationActionSkillTestDefinition = {
   skill: SkillType;
@@ -255,12 +258,14 @@ export type LocationActionSkillTestDefinition = {
   onFail?: LocationActionEffect;
 };
 
-export type ParleyActionDefinition = {
-  label?: string;
-  text: string;
-  effect?: ParleyEffect;
-  skillTest?: ParleySkillTestDefinition;
-};
+//export type ParleyActionDefinition = {
+//  label?: string;
+//  text: string;
+//  effect?: ParleyEffect;
+//  skillTest?: ParleySkillTestDefinition;
+//};
+
+export type ParleyActionDefinition = InteractiveActionDefinition<ParleyEffect>;
 
 export type ParleyEffect =
   | { kind: "gainClues"; amount: number }
@@ -274,6 +279,20 @@ export type ParleySkillTestDefinition = {
   difficulty: number;
   onSuccess: ParleyEffect;
   onFail?: ParleyEffect;
+};
+
+export type InteractionSkillTestDefinition<TActionEffect> = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: TActionEffect;
+  onFail?: TActionEffect;
+};
+
+export type InteractiveActionDefinition<TActionEffect> = {
+  label?: string;
+  text: string;
+  effect?: TActionEffect;
+  skillTest?: InteractionSkillTestDefinition<TActionEffect>;
 };
 
 export interface GameState {

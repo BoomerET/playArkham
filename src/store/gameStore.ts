@@ -127,6 +127,23 @@ type PendingParleyResolution = {
   onFail?: ParleyEffect;
 } | null;
 
+type PendingInteractiveResolution =
+  | {
+    sourceName: string;
+    sourceKind: "parley" | "locationAction";
+    currentLocationId: string;
+    onSuccess: ParleyEffect | LocationActionEffect;
+    onFail?: ParleyEffect | LocationActionEffect;
+  }
+  | null;
+
+type PendingLocationActionResolution = {
+  sourceName: string;
+  currentLocationId: string;
+  onSuccess: LocationActionEffect;
+  onFail?: LocationActionEffect;
+} | null;
+
 type PendingEncounterResolution = {
   cardName: string;
   onPass?: EncounterSkillTestOutcome;
@@ -140,13 +157,6 @@ type PendingChoice = {
     label: string;
     effect: ChoiceEffect;
   }[];
-} | null;
-
-type PendingLocationActionResolution = {
-  sourceName: string;
-  currentLocationId: string;
-  onSuccess: LocationActionEffect;
-  onFail?: LocationActionEffect;
 } | null;
 
 type EncounterSkillTestOutcome =
@@ -180,11 +190,12 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingFightCombatModifier: number;
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
-  pendingParleyResolution: PendingParleyResolution;
+  //pendingParleyResolution: PendingParleyResolution;
+  pendingInteractiveResolution: PendingInteractiveResolution;
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
-  pendingLocationActionResolution: PendingLocationActionResolution;
+  //pendingLocationActionResolution: PendingLocationActionResolution;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -370,6 +381,59 @@ function getScenarioSequenceNumber(sequence: string): string {
 
 function getScenarioSequenceSide(sequence: string): string {
   return sequence.slice(-1).toLowerCase();
+}
+
+function resolveInteractiveEffect(args: {
+  sourceKind: "parley" | "locationAction";
+  effect: ParleyEffect | LocationActionEffect;
+  investigator: Investigator;
+  currentLocationId: string;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    sourceKind,
+    effect,
+    investigator,
+    currentLocationId,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  if (sourceKind === "parley") {
+    const result = resolveParleyEffect({
+      effect: effect as ParleyEffect,
+      investigator,
+      currentLocationId,
+      locations,
+      campaignState,
+    });
+
+    return {
+      investigator: result.investigator,
+      locations: result.locations,
+      enemies,
+      campaignState: result.campaignState,
+      logEntries: result.logEntries,
+    };
+  }
+
+  return resolveLocationActionEffect({
+    effect: effect as LocationActionEffect,
+    investigator,
+    currentLocationId,
+    locations,
+    enemies,
+    campaignState,
+  });
 }
 
 function resolveLocationActionEffect(args: {
@@ -1236,6 +1300,80 @@ function resolveParleyEffect(args: {
   };
 }
 
+function beginInteractiveAction<TActionEffect>(args: {
+  action: InteractiveActionDefinition<TActionEffect>;
+  sourceName: string;
+  sourceKind: "parley" | "locationAction";
+  currentLocationId: string;
+  turn: GameState["turn"];
+  log: GameState["log"];
+}):
+  | {
+    kind: "skillTest";
+    pending: {
+      sourceName: string;
+      sourceKind: "parley" | "locationAction";
+      currentLocationId: string;
+      onSuccess: TActionEffect;
+      onFail?: TActionEffect;
+    };
+    turn: GameState["turn"];
+    log: GameState["log"];
+    skill: SkillType;
+    difficulty: number;
+    skillTestSource: string;
+  }
+  | {
+    kind: "immediate";
+    effect: TActionEffect;
+    turn: GameState["turn"];
+    log: GameState["log"];
+  }
+  | {
+    kind: "invalid";
+    message: string;
+  } {
+  const { action, sourceName, sourceKind, currentLocationId, turn, log } = args;
+
+  if (action.skillTest) {
+    return {
+      kind: "skillTest",
+      pending: {
+        sourceName,
+        sourceKind,
+        currentLocationId,
+        onSuccess: action.skillTest.onSuccess,
+        onFail: action.skillTest.onFail,
+      },
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      log: [...log, createLogEntry("scenario", action.text)],
+      skill: action.skillTest.skill,
+      difficulty: action.skillTest.difficulty,
+      skillTestSource: action.label ?? sourceName,
+    };
+  }
+
+  if (action.effect) {
+    return {
+      kind: "immediate",
+      effect: action.effect,
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - 1,
+      },
+      log: [...log, createLogEntry("scenario", action.text)],
+    };
+  }
+
+  return {
+    kind: "invalid",
+    message: "This action has no effect configured.",
+  };
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   moveHunterEnemies: () => {
     const { enemies, locations, investigator, scenarioStatus } = get();
@@ -1352,8 +1490,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingAssetPlay: null,
   pendingChoice: null,
   pendingEncounterResolution: null,
-  pendingParleyResolution: null,
-  pendingLocationActionResolution: null,
+  //pendingParleyResolution: null,
+  //pendingLocationActionResolution: null,
+  pendingInteractiveResolution: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -1996,72 +2135,54 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (parleySource.skillTest) {
-      set((state) => ({
-        pendingParleyResolution: {
-          sourceName: parleyEnemy ? parleyEnemy.name : currentLocation.name,
-          currentLocationId: currentLocation.id,
-          onSuccess: parleySource.skillTest!.onSuccess,
-          onFail: parleySource.skillTest!.onFail,
-        },
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
-        log: [
-          ...state.log,
-          createLogEntry(
-            "scenario",
-            parleyEnemy
-              ? `${parleyEnemy.name}: ${parleySource.text}`
-              : parleySource.text,
-          ),
-        ],
-      }));
+    const interaction = beginInteractiveAction({
+      action: parleySource,
+      sourceName: parleyEnemy ? parleyEnemy.name : currentLocation.name,
+      sourceKind: "parley",
+      currentLocationId: currentLocation.id,
+      turn,
+      log: get().log,
+    });
+
+    if (interaction.kind === "invalid") {
+      get().pushLog("system", interaction.message);
+      return;
+    }
+
+    if (interaction.kind === "skillTest") {
+      set({
+        pendingInteractiveResolution: interaction.pending,
+        turn: interaction.turn,
+        log: interaction.log,
+      });
 
       get().beginSkillTest(
-        parleySource.skillTest.skill,
-        parleySource.skillTest.difficulty,
-        parleyEnemy
-          ? `Parley ${parleyEnemy.name}`
-          : `Parley ${currentLocation.name}`,
+        interaction.skill,
+        interaction.difficulty,
+        interaction.skillTestSource,
       );
 
       return;
     }
 
-    if (!parleySource.effect) {
-      get().pushLog("system", "This parley has no effect configured.");
-      return;
-    }
-
-    const resolution = resolveParleyEffect({
-      effect: parleySource.effect,
+    const resolution = resolveInteractiveEffect({
+      sourceKind: "parley",
+      effect: interaction.effect,
       investigator,
       currentLocationId: currentLocation.id,
       locations,
+      enemies,
       campaignState,
     });
 
-    set((state) => ({
+    set({
       investigator: resolution.investigator,
       locations: resolution.locations,
+      enemies: resolution.enemies,
       campaignState: resolution.campaignState,
-      turn: {
-        ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
-      },
-      log: [
-        ...state.log,
-        createLogEntry(
-          "scenario",
-          parleyEnemy
-            ? `${parleyEnemy.name}: ${parleySource.text}`
-            : parleySource.text,
-        ),
-        ...resolution.logEntries,
-      ],
-    }));
+      turn: interaction.turn,
+      log: [...interaction.log, ...resolution.logEntries],
+    });
 
     const updatedState = get();
     savePersistedCampaignSetup({
@@ -2070,6 +2191,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: updatedState.campaignState,
     });
   },
+
 
   parleyEnemy: () => {
   },
