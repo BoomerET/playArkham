@@ -4715,7 +4715,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (pendingInteractiveResolution) {
-      const parleyEffect = success
+      const interactiveEffect = success
         ? pendingInteractiveResolution.onSuccess
         : pendingInteractiveResolution.onFail;
 
@@ -4723,25 +4723,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
         createLogEntry(
           "scenario",
           success
-            ? `${pendingInteractiveResolution.sourceName}: parley succeeded.`
-            : `${pendingInteractiveResolution.sourceName}: parley failed.`,
+            ? `${pendingInteractiveResolution.sourceName}: action succeeded.`
+            : `${pendingInteractiveResolution.sourceName}: action failed.`,
         ),
       );
 
-      if (parleyEffect) {
-        const parleyResolution = resolveParleyEffect({
-          effect: parleyEffect,
+      if (interactiveEffect) {
+        const interactiveResolution = resolveInteractiveEffect({
+          sourceKind: pendingInteractiveResolution.sourceKind,
+          effect: interactiveEffect,
           investigator: updatedInvestigator,
           currentLocationId: pendingInteractiveResolution.currentLocationId,
           locations: updatedLocations,
+          enemies: updatedEnemies,
           campaignState: updatedCampaignState,
         });
 
-        updatedInvestigator = parleyResolution.investigator;
-        updatedLocations = parleyResolution.locations;
-        updatedCampaignState = parleyResolution.campaignState;
+        updatedInvestigator = interactiveResolution.investigator;
+        updatedLocations = interactiveResolution.locations;
+        updatedEnemies = interactiveResolution.enemies;
+        updatedCampaignState = interactiveResolution.campaignState;
 
-        resolutionLog.push(...parleyResolution.logEntries);
+        resolutionLog.push(...interactiveResolution.logEntries);
       }
     }
 
