@@ -1301,8 +1301,8 @@ function resolveParleyEffect(args: {
   };
 }
 
-function beginInteractiveAction<TActionEffect>(args: {
-  action: InteractiveActionDefinition<TActionEffect>;
+function beginInteractiveAction(args: {
+  action: InteractiveActionDefinition<ParleyEffect | LocationActionEffect>;
   sourceName: string;
   sourceKind: "parley" | "locationAction";
   currentLocationId: string;
@@ -1315,8 +1315,8 @@ function beginInteractiveAction<TActionEffect>(args: {
       sourceName: string;
       sourceKind: "parley" | "locationAction";
       currentLocationId: string;
-      onSuccess: TActionEffect;
-      onFail?: TActionEffect;
+      onSuccess: ParleyEffect | LocationActionEffect;
+      onFail?: ParleyEffect | LocationActionEffect;
     };
     turn: GameState["turn"];
     log: GameState["log"];
@@ -1326,7 +1326,7 @@ function beginInteractiveAction<TActionEffect>(args: {
   }
   | {
     kind: "immediate";
-    effect: TActionEffect;
+    effect: ParleyEffect | LocationActionEffect;
     turn: GameState["turn"];
     log: GameState["log"];
   }
@@ -4299,8 +4299,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingEncounterResolution,
       pendingFightCombatModifier,
       pendingFightDamageBonus,
-      pendingParleyResolution,
-      pendingLocationActionResolution,
+      pendingInteractiveResolution,
       locations,
       locationAttachments,
       enemies,
@@ -4715,17 +4714,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    if (pendingParleyResolution) {
+    if (pendingInteractiveResolution) {
       const parleyEffect = success
-        ? pendingParleyResolution.onSuccess
-        : pendingParleyResolution.onFail;
+        ? pendingInteractiveResolution.onSuccess
+        : pendingInteractiveResolution.onFail;
 
       resolutionLog.push(
         createLogEntry(
           "scenario",
           success
-            ? `${pendingParleyResolution.sourceName}: parley succeeded.`
-            : `${pendingParleyResolution.sourceName}: parley failed.`,
+            ? `${pendingInteractiveResolution.sourceName}: parley succeeded.`
+            : `${pendingInteractiveResolution.sourceName}: parley failed.`,
         ),
       );
 
@@ -4733,7 +4732,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const parleyResolution = resolveParleyEffect({
           effect: parleyEffect,
           investigator: updatedInvestigator,
-          currentLocationId: pendingParleyResolution.currentLocationId,
+          currentLocationId: pendingInteractiveResolution.currentLocationId,
           locations: updatedLocations,
           campaignState: updatedCampaignState,
         });
@@ -4746,17 +4745,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    if (pendingLocationActionResolution) {
+    if (pendingInteractiveResolution) {
       const locationActionEffect = success
-        ? pendingLocationActionResolution.onSuccess
-        : pendingLocationActionResolution.onFail;
+        ? pendingInteractiveResolution.onSuccess
+        : pendingInteractiveResolution.onFail;
 
       resolutionLog.push(
         createLogEntry(
           "scenario",
           success
-            ? `${pendingLocationActionResolution.sourceName}: action succeeded.`
-            : `${pendingLocationActionResolution.sourceName}: action failed.`,
+            ? `${pendingInteractiveResolution.sourceName}: action succeeded.`
+            : `${pendingInteractiveResolution.sourceName}: action failed.`,
         ),
       );
 
@@ -4764,7 +4763,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const locationActionResolution = resolveLocationActionEffect({
           effect: locationActionEffect,
           investigator: updatedInvestigator,
-          currentLocationId: pendingLocationActionResolution.currentLocationId,
+          currentLocationId: pendingInteractiveResolution.currentLocationId,
           locations: updatedLocations,
           enemies: updatedEnemies,
           campaignState: updatedCampaignState,
@@ -4829,11 +4828,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       activeSkillTest: null,
       pendingTestResolution: null,
       pendingEncounterResolution: null,
-      pendingParleyResolution: null,
+      pendingInteractiveResolution: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
-      pendingLocationActionResolution: null,
       selectedEnemyTargetId: preferredTargetId,
       draggedCardId: null,
       turn: {
