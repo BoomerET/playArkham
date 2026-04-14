@@ -120,12 +120,12 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
-type PendingParleyResolution = {
-  sourceName: string;
-  currentLocationId: string;
-  onSuccess: ParleyEffect;
-  onFail?: ParleyEffect;
-} | null;
+//type PendingParleyResolution = {
+//  sourceName: string;
+//  currentLocationId: string;
+//  onSuccess: ParleyEffect;
+//  onFail?: ParleyEffect;
+//} | null;
 
 type PendingInteractiveResolution =
   | {
@@ -137,12 +137,12 @@ type PendingInteractiveResolution =
   }
   | null;
 
-type PendingLocationActionResolution = {
-  sourceName: string;
-  currentLocationId: string;
-  onSuccess: LocationActionEffect;
-  onFail?: LocationActionEffect;
-} | null;
+//type PendingLocationActionResolution = {
+//  sourceName: string;
+//  currentLocationId: string;
+//  onSuccess: LocationActionEffect;
+//  onFail?: LocationActionEffect;
+//} | null;
 
 type PendingEncounterResolution = {
   cardName: string;
