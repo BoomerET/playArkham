@@ -715,6 +715,36 @@ export const encounterCards: EncounterCard[] = [
 
         set: "whippoorwills",
     },
+    {
+        id: "servant-of-flame_3",
+        code: "12180",
+        name: "Servant of Flame",
+        subname: "A Willing Sacrifice",
+        type: "enemy",
+
+        fight: 4,
+        health: 5,
+        evade: 4,
+        damage: 2,
+        horror: 2,
+        victoryPoints: 2,
+
+        traits: [
+            "Humanoid",
+            "Cultist",
+            "Elite",
+        ],
+
+        ability: [
+            "Hunter",
+            "Retaliate",
+        ],
+        text: [
+            "Forced - When Servant of Flame is defeated: (Codex Theta)",
+        ],
+
+        set: "queen-of-ash",
+    },
     /*
       This is my test card
     */
