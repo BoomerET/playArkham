@@ -86,6 +86,7 @@ const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
+  scenarioFlags: {},
 };
 
 const persistedCampaignSetup = loadPersistedCampaignSetup();

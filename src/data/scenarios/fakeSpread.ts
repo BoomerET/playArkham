@@ -18,6 +18,17 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
+      actions: [
+        {
+          label: "Set Test Flag",
+          text: "You flip a mysterious switch.",
+          effect: {
+            kind: "setScenarioFlag",
+            key: "testFlag",
+            value: true,
+          },
+        }
+      ],
 
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
       parley: {

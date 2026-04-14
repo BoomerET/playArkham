@@ -241,12 +241,9 @@ export type LocationActionEffect =
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string };
 
-//export type LocationActionDefinition = {
-//  label: string;
-//  text: string;
-//  effect?: LocationActionEffect;
-//  skillTest?: LocationActionSkillTestDefinition;
-//};
+export type ScenarioFlagValue = boolean | string | number;
+
+export type ScenarioFlags = Record<string, ScenarioFlagValue>;
 
 export type LocationActionDefinition =
   InteractiveActionDefinition<LocationActionEffect>;
@@ -257,13 +254,6 @@ export type LocationActionSkillTestDefinition = {
   onSuccess: LocationActionEffect;
   onFail?: LocationActionEffect;
 };
-
-//export type ParleyActionDefinition = {
-//  label?: string;
-//  text: string;
-//  effect?: ParleyEffect;
-//  skillTest?: ParleySkillTestDefinition;
-//};
 
 export type ParleyActionDefinition = InteractiveActionDefinition<ParleyEffect>;
 

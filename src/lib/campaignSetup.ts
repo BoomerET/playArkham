@@ -8,6 +8,7 @@ import { buildScenarioWithSelections } from "./buildScenarioWithSelections";
 export type CampaignState = {
     previousScenarioOutcome: string | null;
     randomizedSelectionsByCampaignKey: Record<string, Record<string, string>>;
+    scenarioFlags: Record<string, boolean | string | number>;
 };
 
 export function resolveScenarioForCampaign(args: {
