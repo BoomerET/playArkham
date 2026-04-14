@@ -568,6 +568,10 @@ function resolveLocationActionEffect(args: {
     };
   }
 
+  const actionEffect = action.effect;
+
+
+
   if (effect.kind === "engageEnemyFromConnectedLocation") {
     const currentLocation = locations.find((entry) => entry.id === currentLocationId);
 
@@ -1826,12 +1830,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (!action.effect) {
+    const actionEffect = action.effect;
+
+    if (!actionEffect && !action.skillTest) {
       get().pushLog("system", "This location action has no effect configured.");
       return;
     }
 
-    if (action.effect.kind === "engageEnemyFromConnectedLocation") {
+    if (actionEffect?.kind === "engageEnemyFromConnectedLocation") {
       const validTargets = getConnectedEnemyTargets({
         currentLocationId: currentLocation.id,
         locations,
@@ -1848,7 +1854,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           sourceName: action.label ?? currentLocation.name,
           sourceKind: "locationAction",
           currentLocationId: currentLocation.id,
-          effect: action.effect,
+          effect: actionEffect,
           validEnemyIds: validTargets.map((enemy) => enemy.id),
         },
         turn: {
@@ -4416,7 +4422,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       pendingInteractiveResolution,
-      pendingInteractiveTargetSelection,
       locations,
       locationAttachments,
       enemies,
