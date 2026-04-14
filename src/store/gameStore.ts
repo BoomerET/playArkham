@@ -1741,7 +1741,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       get().beginSkillTest(
         action.skillTest.skill,
         action.skillTest.difficulty,
-        action.label ?? sourceName
+        action.label ?? currentLocation.name
       );
 
       return;
