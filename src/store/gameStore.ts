@@ -1383,6 +1383,8 @@ function beginInteractiveAction(args: {
     };
   }
 
+  //const actionEffect = action.effect;
+
   if (action.effect) {
     return {
       kind: "immediate",
@@ -1864,18 +1866,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
         log: [
           ...state.log,
           createLogEntry("scenario", action.text),
-          createLogEntry(
-            "system",
-            "Choose an enemy at a connecting location.",
-          ),
+          createLogEntry("system", "Choose an enemy at a connecting location."),
         ],
       }));
 
       return;
     }
 
+    if (!actionEffect) {
+      get().pushLog("system", "This location action has no effect configured.");
+      return;
+    }
+
     const resolution = resolveLocationActionEffect({
-      effect: action.effect,
+      effect: actionEffect,
       investigator,
       currentLocationId: currentLocation.id,
       locations,
