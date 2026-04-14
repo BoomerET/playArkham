@@ -172,7 +172,13 @@ export default function InvestigatorPanel() {
   const locations = useGameStore((state) => state.locations);
   const locationAction = useGameStore((state) => state.locationAction);
   const currentLocation = findCurrentLocation(locations, investigator.id);
-  const availableLocationActions = currentLocation?.actions ?? [];
+  const campaignState = useGameStore((state) => state.campaignState);
+  const availableLocationActions = (currentLocation?.actions ?? []).filter(
+    (action) =>
+      !action.requiresFlag ||
+      campaignState.scenarioFlags[action.requiresFlag.key] ===
+      action.requiresFlag.equals,
+  );
   const engageableEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
