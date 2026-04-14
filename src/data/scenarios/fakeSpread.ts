@@ -27,7 +27,19 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
             key: "testFlag",
             value: true,
           },
-        }
+        },
+        {
+          label: "Hidden Compartment",
+          text: "The switch reveals a hidden compartment.",
+          effect: {
+            kind: "gainResources",
+            amount: 1,
+          },
+          requiresFlag: {
+            key: "testFlag",
+            equals: true,
+          },
+        },
       ],
 
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
