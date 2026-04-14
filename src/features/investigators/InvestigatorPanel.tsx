@@ -265,6 +265,7 @@ export default function InvestigatorPanel() {
       default:
         break;
     }
+    setSelectedAdjustment("");
   }
 
   return (
