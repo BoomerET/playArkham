@@ -244,7 +244,15 @@ export type LocationActionEffect =
 export type LocationActionDefinition = {
   label: string;
   text: string;
-  effect: LocationActionEffect;
+  effect?: LocationActionEffect;
+  skillTest?: LocationActionSkillTestDefinition;
+};
+
+export type LocationActionSkillTestDefinition = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: LocationActionEffect;
+  onFail?: LocationActionEffect;
 };
 
 export type ParleyActionDefinition = {

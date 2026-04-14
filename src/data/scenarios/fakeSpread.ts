@@ -82,6 +82,23 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
         "Central",
       ],
+      actions: [
+        {
+          label: "Search the Office",
+          text: "Test (intellect) 3. If you succeed, discover 1 clue at this location.",
+          skillTest: {
+            skill: "intellect",
+            difficulty: 3,
+            onSuccess: {
+              kind: "discoverLocationClue",
+              amount: 1,
+            },
+            onFail: {
+              kind: "none",
+            },
+          },
+        },
+      ],
 
       text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
 

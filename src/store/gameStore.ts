@@ -142,6 +142,13 @@ type PendingChoice = {
   }[];
 } | null;
 
+type PendingLocationActionResolution = {
+  sourceName: string;
+  currentLocationId: string;
+  onSuccess: LocationActionEffect;
+  onFail?: LocationActionEffect;
+} | null;
+
 type EncounterSkillTestOutcome =
   | { kind: "none" }
   | { kind: "damage"; amount: number }
@@ -177,6 +184,7 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
+  pendingLocationActionResolution: PendingLocationActionResolution;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -1345,6 +1353,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingChoice: null,
   pendingEncounterResolution: null,
   pendingParleyResolution: null,
+  pendingLocationActionResolution: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -1568,6 +1577,38 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!action) {
       get().pushLog("system", "That location action is not available.");
+      return;
+    }
+
+    if (action.skillTest) {
+      set((state) => ({
+        pendingLocationActionResolution: {
+          sourceName: currentLocation.name,
+          currentLocationId: currentLocation.id,
+          onSuccess: action.skillTest!.onSuccess,
+          onFail: action.skillTest!.onFail,
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - 1,
+        },
+        log: [
+          ...state.log,
+          createLogEntry("scenario", action.text),
+        ],
+      }));
+
+      get().beginSkillTest(
+        action.skillTest.skill,
+        action.skillTest.difficulty,
+        action.label,
+      );
+
+      return;
+    }
+
+    if (!action.effect) {
+      get().pushLog("system", "This location action has no effect configured.");
       return;
     }
 
@@ -4136,6 +4177,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       pendingParleyResolution,
+      pendingLocationActionResolution,
       locations,
       locationAttachments,
       enemies,
@@ -4581,6 +4623,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    if (pendingLocationActionResolution) {
+      const locationActionEffect = success
+        ? pendingLocationActionResolution.onSuccess
+        : pendingLocationActionResolution.onFail;
+
+      resolutionLog.push(
+        createLogEntry(
+          "scenario",
+          success
+            ? `${pendingLocationActionResolution.sourceName}: action succeeded.`
+            : `${pendingLocationActionResolution.sourceName}: action failed.`,
+        ),
+      );
+
+      if (locationActionEffect) {
+        const locationActionResolution = resolveLocationActionEffect({
+          effect: locationActionEffect,
+          investigator: updatedInvestigator,
+          currentLocationId: pendingLocationActionResolution.currentLocationId,
+          locations: updatedLocations,
+          enemies: updatedEnemies,
+          campaignState: updatedCampaignState,
+        });
+
+        updatedInvestigator = locationActionResolution.investigator;
+        updatedLocations = locationActionResolution.locations;
+        updatedEnemies = locationActionResolution.enemies;
+        updatedCampaignState = locationActionResolution.campaignState;
+
+        resolutionLog.push(...locationActionResolution.logEntries);
+      }
+    }
+
     let updatedDeck = get().deck;
     let updatedHand = get().hand;
 
@@ -4635,6 +4710,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
+      pendingLocationActionResolution: null,
       selectedEnemyTargetId: preferredTargetId,
       draggedCardId: null,
       turn: {
