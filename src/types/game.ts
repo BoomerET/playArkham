@@ -48,6 +48,10 @@ export type ScenarioCardKind = "agenda" | "act";
 
 export type ScenarioFlagValue = boolean | string | number;
 export type ScenarioFlags = Record<string, ScenarioFlagValue>;
+export type ScenarioFlagCondition = {
+  key: string;
+  equals: ScenarioFlagValue;
+};
 
 
 // ============================================================
@@ -190,8 +194,8 @@ export type ParleyEffect =
   | { kind: "gainResources"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "none" }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
+  | { kind: "none" };
 
 export type InteractionSkillTestDefinition<TActionEffect> = {
   skill: SkillType;
@@ -205,6 +209,7 @@ export type InteractiveActionDefinition<TActionEffect> = {
   text: string;
   effect?: TActionEffect;
   skillTest?: InteractionSkillTestDefinition<TActionEffect>;
+  requiresFlag?: ScenarioFlagCondition
 };
 
 export type LocationActionDefinition =
