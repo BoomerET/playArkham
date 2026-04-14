@@ -94,6 +94,15 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
 }
 
 export default function InvestigatorPanel() {
+  const pendingInteractiveTargetSelection = useGameStore(
+    (state) => state.pendingInteractiveTargetSelection,
+  );
+  const chooseInteractiveEnemyTarget = useGameStore(
+    (state) => state.chooseInteractiveEnemyTarget,
+  );
+  const cancelInteractiveTargetSelection = useGameStore(
+    (state) => state.cancelInteractiveTargetSelection,
+  );
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,

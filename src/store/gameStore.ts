@@ -121,13 +121,6 @@ type PendingAssetPlay = {
   requiredHandSlotsToFree?: number;
 } | null;
 
-//type PendingParleyResolution = {
-//  sourceName: string;
-//  currentLocationId: string;
-//  onSuccess: ParleyEffect;
-//  onFail?: ParleyEffect;
-//} | null;
-
 type PendingInteractiveResolution =
   | {
     sourceName: string;
@@ -137,13 +130,6 @@ type PendingInteractiveResolution =
     onFail?: ParleyEffect | LocationActionEffect;
   }
   | null;
-
-//type PendingLocationActionResolution = {
-//  sourceName: string;
-//  currentLocationId: string;
-//  onSuccess: LocationActionEffect;
-//  onFail?: LocationActionEffect;
-//} | null;
 
 type PendingEncounterResolution = {
   cardName: string;
@@ -160,6 +146,14 @@ type PendingChoice = {
   }[];
 } | null;
 
+type PendingInteractiveTargetSelection = {
+  sourceName: string;
+  sourceKind: "locationAction";
+  currentLocationId: string;
+  effect: LocationActionEffect;
+  validEnemyIds: string[];
+} | null;
+
 type EncounterSkillTestOutcome =
   | { kind: "none" }
   | { kind: "damage"; amount: number }
@@ -171,6 +165,28 @@ type ChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
   | { kind: "surge" };
 
+function getConnectedEnemyTargets(args: {
+  currentLocationId: string;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+}): Enemy[] {
+  const { currentLocationId, locations, enemies } = args;
+
+  const currentLocation = locations.find(
+    (location) => location.id === currentLocationId,
+  );
+
+  if (!currentLocation) {
+    return [];
+  }
+
+  return enemies.filter(
+    (enemy) =>
+      enemy.engagedInvestigatorId === null &&
+      currentLocation.connections.includes(enemy.locationId),
+  );
+}
+
 type GameStore = GameState & CampaignStoreActions & {
   screen: Screen;
   availableInvestigators: Investigator[];
@@ -181,6 +197,7 @@ type GameStore = GameState & CampaignStoreActions & {
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
+  pendingInteractiveTargetSelection: PendingInteractiveTargetSelection;
   showDeckInspector: boolean;
   showEncounterInspector: boolean;
   encounterDeck: EncounterCard[];
@@ -191,12 +208,12 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingFightCombatModifier: number;
   pendingFightDamageBonus: number;
   pendingEncounterResolution: PendingEncounterResolution;
-  //pendingParleyResolution: PendingParleyResolution;
   pendingInteractiveResolution: PendingInteractiveResolution;
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
-  //pendingLocationActionResolution: PendingLocationActionResolution;
+  chooseInteractiveEnemyTarget: (enemyId: string) => void;
+  cancelInteractiveTargetSelection: () => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -444,6 +461,7 @@ function resolveLocationActionEffect(args: {
   locations: GameState["locations"];
   enemies: Enemy[];
   campaignState: CampaignState;
+  targetEnemyId?: string;
 }): {
   investigator: Investigator;
   locations: GameState["locations"];
@@ -458,6 +476,7 @@ function resolveLocationActionEffect(args: {
     locations,
     enemies,
     campaignState,
+    targetEnemyId,
   } = args;
 
   if (effect.kind === "none") {
@@ -568,11 +587,14 @@ function resolveLocationActionEffect(args: {
     }
 
     const enemyToMove =
-      enemies.find(
-        (enemy) =>
-          enemy.engagedInvestigatorId === null &&
-          currentLocation.connections.includes(enemy.locationId),
-      ) ?? null;
+      targetEnemyId != null
+        ? enemies.find(
+          (enemy) =>
+            enemy.id === targetEnemyId &&
+            enemy.engagedInvestigatorId === null &&
+            currentLocation.connections.includes(enemy.locationId),
+        ) ?? null
+        : null;
 
     if (!enemyToMove) {
       return {
@@ -1376,6 +1398,64 @@ function beginInteractiveAction(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  cancelInteractiveTargetSelection: () => {
+    const { pendingInteractiveTargetSelection } = get();
+
+    if (!pendingInteractiveTargetSelection) {
+      return;
+    }
+
+    set({
+      pendingInteractiveTargetSelection: null,
+    });
+
+    get().pushLog("system", "Cancelled target selection.");
+  },
+  chooseInteractiveEnemyTarget: (enemyId) => {
+    const {
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+      pendingInteractiveTargetSelection,
+    } = get();
+
+    if (!pendingInteractiveTargetSelection) {
+      get().pushLog("system", "There is no pending interactive target selection.");
+      return;
+    }
+
+    if (!pendingInteractiveTargetSelection.validEnemyIds.includes(enemyId)) {
+      get().pushLog("system", "That enemy is not a valid target.");
+      return;
+    }
+
+    const resolution = resolveLocationActionEffect({
+      effect: pendingInteractiveTargetSelection.effect,
+      investigator,
+      currentLocationId: pendingInteractiveTargetSelection.currentLocationId,
+      locations,
+      enemies,
+      campaignState,
+      targetEnemyId: enemyId,
+    });
+
+    set((state) => ({
+      investigator: resolution.investigator,
+      locations: resolution.locations,
+      enemies: resolution.enemies,
+      campaignState: resolution.campaignState,
+      pendingInteractiveTargetSelection: null,
+      log: [...state.log, ...resolution.logEntries],
+    }));
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
+  },
   moveHunterEnemies: () => {
     const { enemies, locations, investigator, scenarioStatus } = get();
 
@@ -1491,9 +1571,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingAssetPlay: null,
   pendingChoice: null,
   pendingEncounterResolution: null,
-  //pendingParleyResolution: null,
-  //pendingLocationActionResolution: null,
   pendingInteractiveResolution: null,
+  pendingInteractiveTargetSelection: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -1749,6 +1828,43 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!action.effect) {
       get().pushLog("system", "This location action has no effect configured.");
+      return;
+    }
+
+    if (action.effect.kind === "engageEnemyFromConnectedLocation") {
+      const validTargets = getConnectedEnemyTargets({
+        currentLocationId: currentLocation.id,
+        locations,
+        enemies,
+      });
+
+      if (validTargets.length === 0) {
+        get().pushLog("system", "There is no valid enemy at a connecting location.");
+        return;
+      }
+
+      set((state) => ({
+        pendingInteractiveTargetSelection: {
+          sourceName: action.label ?? currentLocation.name,
+          sourceKind: "locationAction",
+          currentLocationId: currentLocation.id,
+          effect: action.effect,
+          validEnemyIds: validTargets.map((enemy) => enemy.id),
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - 1,
+        },
+        log: [
+          ...state.log,
+          createLogEntry("scenario", action.text),
+          createLogEntry(
+            "system",
+            "Choose an enemy at a connecting location.",
+          ),
+        ],
+      }));
+
       return;
     }
 
@@ -4300,6 +4416,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier,
       pendingFightDamageBonus,
       pendingInteractiveResolution,
+      pendingInteractiveTargetSelection,
       locations,
       locationAttachments,
       enemies,
@@ -4832,6 +4949,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingTestResolution: null,
       pendingEncounterResolution: null,
       pendingInteractiveResolution: null,
+      pendingInteractiveTargetSelection: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
