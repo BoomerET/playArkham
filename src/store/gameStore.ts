@@ -569,9 +569,26 @@ function resolveLocationActionEffect(args: {
     };
   }
 
-  //const actionEffect = action.effect;
-
-
+  if (effect.kind === "setScenarioFlag") {
+    return {
+      investigator,
+      locations,
+      enemies,
+      campaignState: {
+        ...campaignState,
+        scenarioFlags: {
+          ...campaignState.scenarioFlags,
+          [effect.key]: effect.value,
+        },
+      },
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Set scenario flag "${effect.key}" to ${String(effect.value)}.`,
+        ),
+      ],
+    };
+  }
 
   if (effect.kind === "engageEnemyFromConnectedLocation") {
     const currentLocation = locations.find((entry) => entry.id === currentLocationId);
@@ -1298,6 +1315,25 @@ function resolveParleyEffect(args: {
         createLogEntry(
           "scenario",
           `Parley succeeded. Discovered ${cluesToDiscover} clue${cluesToDiscover === 1 ? "" : "s"} at this location.`,
+        ),
+      ],
+    };
+  }
+  if (effect.kind === "setScenarioFlag") {
+    return {
+      investigator,
+      locations,
+      campaignState: {
+        ...campaignState,
+        scenarioFlags: {
+          ...campaignState.scenarioFlags,
+          [effect.key]: effect.value,
+        },
+      },
+      logEntries: [
+        createLogEntry(
+          "scenario",
+          `Set scenario flag "${effect.key}" to ${String(effect.value)}.`,
         ),
       ],
     };

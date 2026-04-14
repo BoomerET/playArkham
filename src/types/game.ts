@@ -1,14 +1,6 @@
-export interface ActiveSkillTest {
-  skill: SkillType;
-  difficulty: number;
-  source: string;
-  committedCards: CommittedSkillCard[];
-}
-
-export interface CommittedSkillCard {
-  card: PlayerCard;
-  matchingIcons: number;
-}
+// ============================================================
+// Core primitives
+// ============================================================
 
 export type ChaosToken =
   | "skull"
@@ -27,22 +19,40 @@ export type Faction =
   | "survivor"
   | "neutral";
 
-export type PassiveSkillModifier = {
-  skill: SkillType;
-  amount: number;
-  appliesTo?: "any" | "investigate" | "fight" | "evade" | "none";
-  whileCommitted?: boolean;
-};
+export type Phase =
+  | "setup"
+  | "mythos"
+  | "investigation"
+  | "enemy"
+  | "upkeep";
 
-export type PassiveSkillModifiers = PassiveSkillModifier[];
+export type SkillType =
+  | "willpower"
+  | "intellect"
+  | "combat"
+  | "agility";
+
+export type SkillTestKind =
+  | "investigate"
+  | "fight"
+  | "evade"
+  | "none";
+
+export type ScenarioStatus =
+  | "inProgress"
+  | "won"
+  | "lost"
+  | "resigned";
+
+export type ScenarioCardKind = "agenda" | "act";
+
+export type ScenarioFlagValue = boolean | string | number;
+export type ScenarioFlags = Record<string, ScenarioFlagValue>;
 
 
-export type Phase = "setup" | "mythos" | "investigation" | "enemy" | "upkeep";
-
-export type SkillType = "willpower" | "intellect" | "combat" | "agility";
-
-
-export type ScenarioStatus = "inProgress" | "won" | "lost" | "resigned";
+// ============================================================
+// Investigator / player card / counters / slots
+// ============================================================
 
 export type InvestigatorSlotType =
   | "Hand"
@@ -55,6 +65,28 @@ export type InvestigatorSlotType =
 export type InvestigatorSlotCounts = Record<InvestigatorSlotType, number>;
 
 export type PlayerCardSlot = InvestigatorSlotType | "Hand x2";
+
+export type CardCounterType =
+  | "ammo"
+  | "charge"
+  | "secret"
+  | "supply"
+  | "resource"
+  | "clue"
+  | "doom"
+  | "damage"
+  | "horror";
+
+export type CardCounters = Partial<Record<CardCounterType, number>>;
+
+export type PassiveSkillModifier = {
+  skill: SkillType;
+  amount: number;
+  appliesTo?: "any" | "investigate" | "fight" | "evade" | "none";
+  whileCommitted?: boolean;
+};
+
+export type PassiveSkillModifiers = PassiveSkillModifier[];
 
 export interface Investigator {
   id: string;
@@ -77,19 +109,6 @@ export interface Investigator {
   code?: string;
 }
 
-export type CardCounterType =
-  | "ammo"
-  | "charge"
-  | "secret"
-  | "supply"
-  | "resource"
-  | "clue"
-  | "doom"
-  | "damage"
-  | "horror";
-
-export type CardCounters = Partial<Record<CardCounterType, number>>;
-
 export interface PlayerCard {
   instanceId: string;
   name: string;
@@ -101,18 +120,133 @@ export interface PlayerCard {
   | "enemy"
   | "location"
   | "investigator";
+  faction: Faction;
   cost?: number;
   icons?: string[];
   text?: string;
   slot?: PlayerCardSlot;
   traits?: string[];
-  faction: Faction;
   image?: string;
   exhausted?: boolean;
   counters?: CardCounters;
   isWeakness?: boolean;
   code?: string;
   passiveSkillModifiers?: PassiveSkillModifiers;
+}
+
+
+// ============================================================
+// Skill tests
+// ============================================================
+
+export interface CommittedSkillCard {
+  card: PlayerCard;
+  matchingIcons: number;
+}
+
+export interface ActiveSkillTest {
+  skill: SkillType;
+  difficulty: number;
+  source: string;
+  committedCards: CommittedSkillCard[];
+}
+
+export interface SkillModifierDetail {
+  source: string;
+  skill: SkillType;
+  amount: number;
+}
+
+export interface SkillTestResult {
+  skill: SkillType;
+  baseValue: number;
+  assetModifier: number;
+  committedModifier: number;
+  modifierDetails: SkillModifierDetail[];
+  difficulty: number;
+  token: ChaosToken;
+  tokenModifier: number;
+  finalValue: number;
+  success: boolean;
+  source: string;
+}
+
+
+// ============================================================
+// Interaction / parley / location actions
+// ============================================================
+
+export type LocationActionEffect =
+  | { kind: "none" }
+  | { kind: "engageEnemyFromConnectedLocation" }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "gainClues"; amount: number }
+  | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "setPreviousScenarioOutcome"; outcome: string }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+
+export type ParleyEffect =
+  | { kind: "gainClues"; amount: number }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "setPreviousScenarioOutcome"; outcome: string }
+  | { kind: "none" }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+
+export type InteractionSkillTestDefinition<TActionEffect> = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: TActionEffect;
+  onFail?: TActionEffect;
+};
+
+export type InteractiveActionDefinition<TActionEffect> = {
+  label?: string;
+  text: string;
+  effect?: TActionEffect;
+  skillTest?: InteractionSkillTestDefinition<TActionEffect>;
+};
+
+export type LocationActionDefinition =
+  InteractiveActionDefinition<LocationActionEffect>;
+
+export type ParleyActionDefinition =
+  InteractiveActionDefinition<ParleyEffect>;
+
+export type LocationActionSkillTestDefinition = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: LocationActionEffect;
+  onFail?: LocationActionEffect;
+};
+
+export type ParleySkillTestDefinition = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: ParleyEffect;
+  onFail?: ParleyEffect;
+};
+
+
+// ============================================================
+// Locations / attachments
+// ============================================================
+
+export type LocationDifficultyModifier = {
+  amount: number;
+  skill?: SkillType;
+  appliesTo?: SkillTestKind | "any";
+};
+
+export interface LocationAttachment {
+  id: string;
+  cardId: string;
+  code?: string;
+  name: string;
+  text?: string | string[];
+  traits?: string[];
+  attachedLocationId: string;
+  difficultyModifiers?: LocationDifficultyModifier[];
 }
 
 export interface GameLocation {
@@ -137,6 +271,15 @@ export interface GameLocation {
   actions?: LocationActionDefinition[];
 }
 
+
+// ============================================================
+// Enemies / encounter cards
+// ============================================================
+
+export type EnemyDefeatEffect =
+  | { kind: "none" }
+  | { kind: "horrorToInvestigatorsAtLocation"; amount: number };
+
 export interface Enemy {
   id: string;
   name: string;
@@ -154,39 +297,44 @@ export interface Enemy {
   parley?: ParleyActionDefinition;
 }
 
-export type EnemyDefeatEffect =
-  | { kind: "none" }
-  | { kind: "horrorToInvestigatorsAtLocation"; amount: number };
+export interface EnemySpawn {
+  enemyId: string;
+  instanceId?: string;
+  locationId: string;
+  engagedInvestigatorId?: string | null;
+  exhausted?: boolean;
+  damageOnEnemy?: number;
+}
+
+export interface EncounterCard {
+  id: string;
+  code: string;
+  name: string;
+  subname?: string;
+  type: "enemy" | "treachery" | "ally" | "weakness";
+  ability?: string[];
+  text?: string[];
+  damage?: number;
+  horror?: number;
+  fight?: number;
+  evade?: number;
+  health?: number;
+  set?: string;
+  traits?: string[];
+  victoryPoints?: number;
+  parley?: ParleyActionDefinition;
+}
+
+
+// ============================================================
+// Scenario / log / turn state
+// ============================================================
 
 export interface TurnState {
   round: number;
   phase: Phase;
   actionsRemaining: number;
 }
-
-export interface SkillModifierDetail {
-  source: string;
-  skill: SkillType;
-  amount: number;
-}
-
-export interface SkillTestResult {
-  skill: SkillType;
-  baseValue: number;
-  assetModifier: number;
-  committedModifier: number;
-  modifierDetails: SkillModifierDetail[];
-  difficulty: number;
-  token: ChaosToken;
-  tokenModifier: number;
-  finalValue: number;
-  success: boolean;
-  source: string;
-}
-
-export type ScenarioCardKind = "agenda" | "act";
-
-export type SkillTestKind = "investigate" | "fight" | "evade" | "none";
 
 export interface ScenarioCardState {
   id: string;
@@ -217,75 +365,10 @@ export interface GameLogEntry {
 
 export type GameLogItem = string | GameLogEntry;
 
-export interface LocationAttachment {
-  id: string;
-  cardId: string;
-  code?: string;
-  name: string;
-  text?: string | string[];
-  traits?: string[];
-  attachedLocationId: string;
-  difficultyModifiers?: LocationDifficultyModifier[];
-}
-export type LocationDifficultyModifier = {
-  amount: number;
-  skill?: SkillType;
-  appliesTo?: SkillTestKind | "any";
-};
 
-export type LocationActionEffect =
-  | { kind: "none" }
-  | { kind: "engageEnemyFromConnectedLocation" }
-  | { kind: "gainResources"; amount: number }
-  | { kind: "gainClues"; amount: number }
-  | { kind: "discoverLocationClue"; amount: number }
-  | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
-
-export type ScenarioFlagValue = boolean | string | number;
-
-export type ScenarioFlags = Record<string, ScenarioFlagValue>;
-
-export type LocationActionDefinition =
-  InteractiveActionDefinition<LocationActionEffect>;
-
-export type LocationActionSkillTestDefinition = {
-  skill: SkillType;
-  difficulty: number;
-  onSuccess: LocationActionEffect;
-  onFail?: LocationActionEffect;
-};
-
-export type ParleyActionDefinition = InteractiveActionDefinition<ParleyEffect>;
-
-export type ParleyEffect =
-  | { kind: "gainClues"; amount: number }
-  | { kind: "gainResources"; amount: number }
-  | { kind: "discoverLocationClue"; amount: number }
-  | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "none" }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
-
-export type ParleySkillTestDefinition = {
-  skill: SkillType;
-  difficulty: number;
-  onSuccess: ParleyEffect;
-  onFail?: ParleyEffect;
-};
-
-export type InteractionSkillTestDefinition<TActionEffect> = {
-  skill: SkillType;
-  difficulty: number;
-  onSuccess: TActionEffect;
-  onFail?: TActionEffect;
-};
-
-export type InteractiveActionDefinition<TActionEffect> = {
-  label?: string;
-  text: string;
-  effect?: TActionEffect;
-  skillTest?: InteractionSkillTestDefinition<TActionEffect>;
-};
+// ============================================================
+// Root game state
+// ============================================================
 
 export interface GameState {
   investigator: Investigator;
@@ -314,33 +397,10 @@ export interface GameState {
   locationAttachments: LocationAttachment[];
 }
 
-export interface EnemySpawn {
-  enemyId: string;
-  instanceId?: string;
-  locationId: string;
-  engagedInvestigatorId?: string | null;
-  exhausted?: boolean;
-  damageOnEnemy?: number;
-}
 
-export interface EncounterCard {
-  id: string;
-  code: string;
-  name: string;
-  subname?: string;
-  type: "enemy" | "treachery" | "ally" | "weakness";
-  ability?: string[]
-  text?: string[];
-  damage?: number;
-  horror?: number;
-  fight?: number;
-  evade?: number;
-  health?: number;
-  set?: string;
-  traits?: string[];
-  victoryPoints?: number;
-  parley?: ParleyActionDefinition
-}
+// ============================================================
+// Encounter card codes
+// ============================================================
 
 export const ENCOUNTER_CARD_CODES = {
   DAVES_TEST: "14001",
@@ -358,8 +418,8 @@ export const ENCOUNTER_CARD_CODES = {
   MUTATED: "12131",
   MUTATED_EXPERIMENT: "12132",
   DR_HENRY_ARMITAGE: "12133",
-  SERVANT_OF_FLAME_2: "12138",
   MARK_OF_ELOKOSS: "12137",
+  SERVANT_OF_FLAME_2: "12138",
   DAVID_RENFIELD: "12139",
   CORNELIA_AKELY: "12140",
   NAOMI_O_BANNION: "12141",
