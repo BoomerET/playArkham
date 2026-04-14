@@ -239,7 +239,8 @@ export type LocationActionEffect =
   | { kind: "gainResources"; amount: number }
   | { kind: "gainClues"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
-  | { kind: "setPreviousScenarioOutcome"; outcome: string };
+  | { kind: "setPreviousScenarioOutcome"; outcome: string }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
 
 export type ScenarioFlagValue = boolean | string | number;
 
@@ -262,7 +263,8 @@ export type ParleyEffect =
   | { kind: "gainResources"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "none" };
+  | { kind: "none" }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
 
 export type ParleySkillTestDefinition = {
   skill: SkillType;
