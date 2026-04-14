@@ -787,6 +787,7 @@ function loadPersistedCampaignSetup(): PersistedCampaignSetup | null {
           ? parsed.selectedScenarioId
           : defaultScenarioId,
       campaignState: {
+        scenarioFlags: {},
         previousScenarioOutcome:
           typeof parsed.campaignState?.previousScenarioOutcome === "string"
             ? parsed.campaignState.previousScenarioOutcome
