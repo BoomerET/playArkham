@@ -170,15 +170,15 @@ export default function InvestigatorPanel() {
     : "Evade";
 
   const locations = useGameStore((state) => state.locations);
-  const locationAction = useGameStore((state) => state.locationAction);
+  //const locationAction = useGameStore((state) => state.locationAction);
   const currentLocation = findCurrentLocation(locations, investigator.id);
   const campaignState = useGameStore((state) => state.campaignState);
-  const availableLocationActions = (currentLocation?.actions ?? []).filter(
-    (action) =>
-      !action.requiresFlag ||
-      campaignState.scenarioFlags[action.requiresFlag.key] ===
-      action.requiresFlag.equals,
-  );
+  //const availableLocationActions = (currentLocation?.actions ?? []).filter(
+  //  (action) =>
+  //    !action.requiresFlag ||
+  //    campaignState.scenarioFlags[action.requiresFlag.key] ===
+  //    action.requiresFlag.equals,
+  //);
   const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
     (ability) =>
       (ability.trigger === "action" || ability.trigger === "doubleAction") &&
