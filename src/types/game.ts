@@ -208,6 +208,7 @@ export type InteractionSkillTestDefinition<TActionEffect> = {
 export type InteractiveActionDefinition<TActionEffect> = {
   label?: string;
   text: string;
+  trigger: CardAbilityTrigger;
   effect?: TActionEffect;
   skillTest?: InteractionSkillTestDefinition<TActionEffect>;
   requiresFlag?: ScenarioFlagCondition
@@ -241,7 +242,6 @@ export type CardAbilityTrigger =
   | "constant"
   | "free"
   | "revelation"
-  | "trigger";
 
 export type CardAbilityEffect =
   | { kind: "none" }
