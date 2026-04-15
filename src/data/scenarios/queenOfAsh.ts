@@ -158,6 +158,33 @@ of Ash, has been eradicated in the inferno.",
       isVisible: true,
       investigatorsHere: [],
     },
+    {
+      id: "underground-cistern",
+      code: "12174",
+      name: "Underground Cistern",
+      subname: "Ritual Site",
+
+      shroud: 4,
+      clues: 2,
+      traits: [
+        "Ritual Site"
+      ],
+
+      text: "Action: .",
+
+      connections: [
+        "sewer-tunnels-1",
+        "sewer-tunnels-2",
+        "sewer-tunnels-3",
+        "sewer-tunnels-4",
+        "sewer-tunnels-5"
+      ],
+      mapPosition: { x: 51, y: 16 },
+
+      revealed: true,
+      isVisible: true,
+      investigatorsHere: [],
+    },
   ],
   enemySpawns: [],
   acts: [

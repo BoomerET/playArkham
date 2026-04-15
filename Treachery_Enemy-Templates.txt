@@ -59,7 +59,18 @@ Location Template:
   victoryPoints: 1,
   traits: [
     "Miskatonic"
-  ],  
+  ],
+  actions: [
+    {
+      label: "Set Test Flag",
+      text: "You flip a mysterious switch.",
+      effect: {
+        kind: "setScenarioFlag",
+        key: "testFlag",
+        value: true,
+      },
+    },
+  ],
 
   text: "Action: .",
   parley: {
@@ -69,7 +80,11 @@ Location Template:
       kind: "gainResources",
       amount: 1,
     },
-  },  
+  },
+  revealCondition: {
+    key: "testFlag",
+    equals: true,
+  },
 
   connections: ["fake-dormitories"],
   mapPosition: { x: 8, y: 16 }, 
