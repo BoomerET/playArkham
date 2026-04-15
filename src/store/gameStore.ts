@@ -1479,14 +1479,6 @@ function applyConditionalLocationVisibility(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  locationAbility: () => {
-    const { locations } = get();
-    const currentLocation = findCurrentLocation(locations, investigator.id);
-    const locationAbility = currentLocation?.abilities.find(
-      (action) => action.trigger === "action",
-    );
-    return locationAbility;
-  },
   cancelInteractiveTargetSelection: () => {
     const { pendingInteractiveTargetSelection } = get();
 
@@ -1678,13 +1670,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingFightCombatModifier: 0,
   pendingFightDamageBonus: 0,
   chaosBag: [...startingChaosBag],
-  //locations: cloneScenarioLocations(
-  //  getSelectedScenario({
-  //    availableScenarios: scenarios,
-  //    selectedScenarioId: initialSelectedScenarioId,
-  //    campaignState: initialCampaignState,
-  //  }).locations,
-  //),
+
   locations: applyConditionalLocationVisibility({
     locations: cloneScenarioLocations(
       getSelectedScenario({
@@ -1695,6 +1681,162 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ),
     campaignState: initialCampaignState,
   }),
+  locationAbility: (abilityIndex) => {
+    const {
+      turn,
+      scenarioStatus,
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (turn.phase !== "investigation") {
+      get().pushLog(
+        "system",
+        "You can only use location abilities during the Investigation phase.",
+      );
+      return;
+    }
+
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+
+    if (!currentLocation) {
+      get().pushLog(
+        "system",
+        "Cannot use a location ability because your location is unknown.",
+      );
+      return;
+    }
+
+    const ability = currentLocation.abilities?.[abilityIndex];
+
+    if (!ability) {
+      get().pushLog("system", "That location ability is not available.");
+      return;
+    }
+
+    if (ability.trigger !== "action" && ability.trigger !== "doubleAction") {
+      get().pushLog("system", "That ability cannot be used this way.");
+      return;
+    }
+
+    const actionCost =
+      ability.costsActions ?? (ability.trigger === "doubleAction" ? 2 : 1);
+
+    if (turn.actionsRemaining < actionCost) {
+      get().pushLog("system", "Not enough actions remaining.");
+      return;
+    }
+
+    const actionEffect = ability.effect;
+
+    if (!actionEffect && !ability.skillTest) {
+      get().pushLog("system", "This location ability has no effect configured.");
+      return;
+    }
+
+    if (ability.skillTest) {
+      set((state) => ({
+        pendingInteractiveResolution: {
+          sourceName: ability.label ?? currentLocation.name,
+          sourceKind: "locationAction",
+          currentLocationId: currentLocation.id,
+          onSuccess: ability.skillTest!.onSuccess,
+          onFail: ability.skillTest!.onFail,
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - actionCost,
+        },
+        log: [...state.log, createLogEntry("scenario", ability.text)],
+      }));
+
+      get().beginSkillTest(
+        ability.skillTest.skill,
+        ability.skillTest.difficulty,
+        ability.label ?? currentLocation.name,
+      );
+
+      return;
+    }
+
+    if (actionEffect?.kind === "engageEnemyFromConnectedLocation") {
+      const validTargets = getConnectedEnemyTargets({
+        currentLocationId: currentLocation.id,
+        locations,
+        enemies,
+      });
+
+      if (validTargets.length === 0) {
+        get().pushLog("system", "There is no valid enemy at a connecting location.");
+        return;
+      }
+
+      set((state) => ({
+        pendingInteractiveTargetSelection: {
+          sourceName: ability.label ?? currentLocation.name,
+          sourceKind: "locationAction",
+          currentLocationId: currentLocation.id,
+          effect: actionEffect,
+          validEnemyIds: validTargets.map((enemy) => enemy.id),
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - actionCost,
+        },
+        log: [
+          ...state.log,
+          createLogEntry("scenario", ability.text),
+          createLogEntry("system", "Choose an enemy at a connecting location."),
+        ],
+      }));
+
+      return;
+    }
+
+    if (!actionEffect) {
+      get().pushLog("system", "This location ability has no effect configured.");
+      return;
+    }
+
+    const resolution = resolveLocationActionEffect({
+      effect: actionEffect,
+      investigator,
+      currentLocationId: currentLocation.id,
+      locations,
+      enemies,
+      campaignState,
+    });
+
+    set((state) => ({
+      investigator: resolution.investigator,
+      locations: resolution.locations,
+      enemies: resolution.enemies,
+      campaignState: resolution.campaignState,
+      turn: {
+        ...turn,
+        actionsRemaining: turn.actionsRemaining - actionCost,
+      },
+      log: [
+        ...state.log,
+        createLogEntry("scenario", ability.text),
+        ...resolution.logEntries,
+      ],
+    }));
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
+  },
   campaignState: initialCampaignState,
   enemies: [],
   agenda: getInitialAgendaState(
