@@ -28,18 +28,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
             value: true,
           },
         },
-        {
-          label: "Hidden Compartment",
-          text: "The switch reveals a hidden compartment.",
-          effect: {
-            kind: "gainResources",
-            amount: 1,
-          },
-          requiresFlag: {
-            key: "testFlag",
-            equals: true,
-          },
-        },
       ],
 
       text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
@@ -76,6 +64,17 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
+      actions: [
+        {
+          label: "Set Test Flag",
+          text: "You flip a mysterious switch.",
+          effect: {
+            kind: "setScenarioFlag",
+            key: "testFlag",
+            value: true,
+          },
+        },
+      ],
 
       text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
       parley: {
@@ -90,9 +89,13 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
 
-      revealed: true,
-      isVisible: true,
+      revealed: false,
+      isVisible: false,
       investigatorsHere: [],
+      revealCondition: {
+        key: "testFlag",
+        equals: true,
+      },
     },
     {
       id: "fake-miskatonic-quad",
