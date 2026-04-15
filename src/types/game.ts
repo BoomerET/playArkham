@@ -180,16 +180,6 @@ export interface SkillTestResult {
 // Interaction / parley / location actions
 // ============================================================
 
-//export type LocationActionEffect =
-//  | { kind: "none" }
-//  | { kind: "engageEnemyFromConnectedLocation" }
-//  | { kind: "gainResources"; amount: number }
-//  | { kind: "gainClues"; amount: number }
-//  | { kind: "discoverLocationClue"; amount: number }
-//  | { kind: "setPreviousScenarioOutcome"; outcome: string }
-//  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-//  | { kind: "trigger"; key: string; value: boolean | string | number };
-
 export type LocationAbilityEffect =
   | { kind: "none" }
   | { kind: "engageEnemyFromConnectedLocation" }
