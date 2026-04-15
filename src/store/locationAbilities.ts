@@ -39,6 +39,42 @@ export function resolveLocationAbilityEffect(args: {
         };
     }
 
+    if (effect.kind === "takeHorror") {
+        return {
+            investigator: {
+                ...investigator,
+                horror: investigator.horror + effect.amount,
+            },
+            locations,
+            enemies,
+            campaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Took ${effect.amount} horror.`,
+                ),
+            ],
+        };
+    }
+
+    if (effect.kind === "takeDamage") {
+        return {
+            investigator: {
+                ...investigator,
+                damage: investigator.damage + effect.amount,
+            },
+            locations,
+            enemies,
+            campaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Took ${effect.amount} damage.`,
+                ),
+            ],
+        };
+    }
+
     if (effect.kind === "gainResources") {
         return {
             investigator: {
