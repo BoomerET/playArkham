@@ -1,8 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import InvestigatorPanel from "../InvestigatorPanel";
 
-// mock the store module your component imports
 vi.mock("../../../store/gameStore", () => {
   const state = {
     pendingAssetPlay: null,
@@ -113,8 +112,16 @@ describe("InvestigatorPanel", () => {
   it("shows only abilities whose flag requirements are satisfied", () => {
     render(<InvestigatorPanel />);
 
-    expect(screen.getByText(/Set Test Flag/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Hidden Compartment/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /actions/i }));
+
+    const select = screen.getByRole("combobox", { name: /choose an action/i });
+
+    expect(
+      within(select).getByRole("option", { name: /set test flag/i }),
+    ).toBeInTheDocument();
+
+    expect(
+      within(select).queryByRole("option", { name: /hidden compartment/i }),
+    ).not.toBeInTheDocument();
   });
 });
-
