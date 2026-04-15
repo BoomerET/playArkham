@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { resolveLocationAbilityEffect } from "../locationAbilities"; // adjust path
-import type { CampaignState, Enemy, GameLocation, Investigator } from "../../types/game";
+import { resolveLocationAbilityEffect } from "../../store/locationAbilities";
+import type { Enemy, GameLocation, Investigator } from "../../types/game";
+import { type CampaignState } from "../../lib/campaignSetup";
 
 describe("resolveLocationAbilityEffect", () => {
   it("moves a chosen enemy from a connected location and engages it", () => {
