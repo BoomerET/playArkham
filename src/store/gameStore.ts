@@ -1479,6 +1479,14 @@ function applyConditionalLocationVisibility(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  locationAbility: () => {
+    const { locations } = get();
+    const currentLocation = findCurrentLocation(locations, investigator.id);
+    const locationAbility = currentLocation?.abilities.find(
+      (action) => action.trigger === "action",
+    );
+    return locationAbility;
+  },
   cancelInteractiveTargetSelection: () => {
     const { pendingInteractiveTargetSelection } = get();
 
