@@ -54,6 +54,7 @@ import type {
   SkillType,
   ParleyEffect,
   InteractiveActionDefinition,
+  ScenarioFlagCondition,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 
@@ -570,17 +571,22 @@ function resolveLocationActionEffect(args: {
   }
 
   if (effect.kind === "setScenarioFlag") {
+    const nextCampaignState = {
+      ...campaignState,
+      scenarioFlags: {
+        ...campaignState.scenarioFlags,
+        [effect.key]: effect.value,
+      },
+    };
+
     return {
       investigator,
-      locations,
+      locations: applyConditionalLocationVisibility({
+        locations,
+        campaignState: nextCampaignState,
+      }),
       enemies,
-      campaignState: {
-        ...campaignState,
-        scenarioFlags: {
-          ...campaignState.scenarioFlags,
-          [effect.key]: effect.value,
-        },
-      },
+      campaignState: nextCampaignState,
       logEntries: [
         createLogEntry(
           "scenario",
@@ -1321,16 +1327,21 @@ function resolveParleyEffect(args: {
     };
   }
   if (effect.kind === "setScenarioFlag") {
+    const nextCampaignState = {
+      ...campaignState,
+      scenarioFlags: {
+        ...campaignState.scenarioFlags,
+        [effect.key]: effect.value,
+      },
+    };
+
     return {
       investigator,
-      locations,
-      campaignState: {
-        ...campaignState,
-        scenarioFlags: {
-          ...campaignState.scenarioFlags,
-          [effect.key]: effect.value,
-        },
-      },
+      locations: applyConditionalLocationVisibility({
+        locations,
+        campaignState: nextCampaignState,
+      }),
+      campaignState: nextCampaignState,
       logEntries: [
         createLogEntry(
           "scenario",
@@ -1439,6 +1450,32 @@ function beginInteractiveAction(args: {
     kind: "invalid",
     message: "This action has no effect configured.",
   };
+}
+
+function applyConditionalLocationVisibility(args: {
+  locations: GameState["locations"];
+  campaignState: CampaignState;
+}): GameState["locations"] {
+  const { locations, campaignState } = args;
+
+  return locations.map((location) => {
+    if (!location.revealCondition) {
+      return location;
+    }
+
+    const matches =
+      campaignState.scenarioFlags[location.revealCondition.key] ===
+      location.revealCondition.equals;
+
+    if (!matches || location.isVisible) {
+      return location;
+    }
+
+    return {
+      ...location,
+      isVisible: true,
+    };
+  });
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -1633,13 +1670,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingFightCombatModifier: 0,
   pendingFightDamageBonus: 0,
   chaosBag: [...startingChaosBag],
-  locations: cloneScenarioLocations(
-    getSelectedScenario({
-      availableScenarios: scenarios,
-      selectedScenarioId: initialSelectedScenarioId,
-      campaignState: initialCampaignState,
-    }).locations,
-  ),
+  //locations: cloneScenarioLocations(
+  //  getSelectedScenario({
+  //    availableScenarios: scenarios,
+  //    selectedScenarioId: initialSelectedScenarioId,
+  //    campaignState: initialCampaignState,
+  //  }).locations,
+  //),
+  locations: applyConditionalLocationVisibility({
+    locations: cloneScenarioLocations(
+      getSelectedScenario({
+        availableScenarios: scenarios,
+        selectedScenarioId: initialSelectedScenarioId,
+        campaignState: initialCampaignState,
+      }).locations,
+    ),
+    campaignState: initialCampaignState,
+  }),
   campaignState: initialCampaignState,
   enemies: [],
   agenda: getInitialAgendaState(
@@ -3111,7 +3158,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      locations: cloneScenarioLocations(selectedScenario.locations),
+      locations: applyConditionalLocationVisibility({
+        locations: cloneScenarioLocations(selectedScenario.locations),
+        campaignState: get().campaignState,
+      }),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
@@ -3193,11 +3243,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      locations: normalizeScenarioLocations(
-        selectedScenario.locations,
-        chosenInvestigator.id,
-        selectedScenario.startingLocationId,
-      ),
+      //locations: normalizeScenarioLocations(
+      //  selectedScenario.locations,
+      //  chosenInvestigator.id,
+      //  selectedScenario.startingLocationId,
+      //),
+      locations: applyConditionalLocationVisibility({
+        locations: normalizeScenarioLocations(
+          selectedScenario.locations,
+          chosenInvestigator.id,
+          selectedScenario.startingLocationId,
+        ),
+        campaignState: get().campaignState,
+      }),
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",

@@ -274,6 +274,7 @@ export interface GameLocation {
   code: string;
   parley?: ParleyActionDefinition;
   actions?: LocationActionDefinition[];
+  revealCondition?: ScenarioFlagCondition;
 }
 
 

@@ -1,5 +1,20 @@
 Treachery Template
-
+{
+  id: "cosmic-evils",
+  code: "12124",
+  name: "Cosmic Evils",
+  type: "treachery",  
+  traits: [
+      "Omen",
+  ],  
+  ability: [
+      "Peril",
+  ],  
+  text: [
+      "Revelation - You must either (choose one): Place 1 doom on the current agenda. This effect can cause the agenta to advance. OR Take 1 direct damage and 1 direct horror. Cosmic Evils gains surge",
+  ],  
+  set: "cosmic-evils",
+},
 
 Enemy Template
 {

@@ -806,6 +806,57 @@ export const encounterCards: EncounterCard[] = [
 
         set: "queen-of-ash",
     },
+    {
+        id: "herald-of-flame",
+        code: "12178",
+        name: "Herald of Flame",
+        type: "enemy",
+
+        fight: 4,
+        health: 5,
+        evade: 2,
+        damage: 0,
+        horror: 2,
+        victoryPoints: 1,
+
+        traits: [
+            "Monster",
+        ],
+        ability: [
+            "Hunter",
+        ],
+        text: [
+            "Forced - After this enemy attacks: Heal 1 damage from each enemy at its location.",
+        ],
+
+        set: "queen-of-ash",
+    },
+    {
+        id: "queens-knight",
+        code: "12177",
+        name: "Queen's Knight",
+        type: "enemy",
+
+        fight: 2,
+        health: 5,
+        evade: 2,
+        damage: 2,
+        horror: 0,
+        victoryPoints: 1,
+
+        traits: [
+            "Humanoid",
+            "Cultist",
+        ],
+        ability: [
+            "Hunter",
+        ],
+        text: [
+            "Forced - When Queen's Knight takes 1 or more damage: Deal 1 damage to Elokoss.",
+        ],
+
+        set: "queen-of-ash",
+    },
     /*
       This is my test card
     */
