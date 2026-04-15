@@ -225,7 +225,7 @@ export type InteractiveActionDefinition<TActionEffect> = {
 };
 
 export type LocationActionDefinition =
-  InteractiveActionDefinition<LocationActionEffect>;
+  InteractiveActionDefinition<LocationAbilityEffect>;
 
 export type ParleyActionDefinition =
   InteractiveActionDefinition<ParleyEffect>;
@@ -233,8 +233,8 @@ export type ParleyActionDefinition =
 export type LocationActionSkillTestDefinition = {
   skill: SkillType;
   difficulty: number;
-  onSuccess: LocationActionEffect;
-  onFail?: LocationActionEffect;
+  onSuccess: LocationAbilityEffect;
+  onFail?: LocationAbilityEffect;
 };
 
 export type ParleySkillTestDefinition = {
