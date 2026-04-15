@@ -54,7 +54,6 @@ import type {
   SkillType,
   ParleyEffect,
   InteractiveActionDefinition,
-  ScenarioFlagCondition,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 

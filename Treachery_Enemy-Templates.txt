@@ -52,6 +52,7 @@ Location Template:
   id: "fake-friends-room",
   code: "12113",
   name: "Your Friend's Room", 
+  subname: "Messy Tom",
 
   shroud: 2,
   clues: 2,
