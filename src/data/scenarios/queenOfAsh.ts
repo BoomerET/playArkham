@@ -49,7 +49,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
         "Central",
       ],
-      text: "Sewer Culvert is connected to each Sewer Tunnels location, and vice versa",
+      text: ["Sewer Culvert is connected to each Sewer Tunnels location, and vice versa",],
     },
     {
       id: "sewer-tunnels-1",
@@ -64,7 +64,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
       ],
 
-      text: "Forced - When you end your turn at this location: Take 1 horror.",
+      text: ["Forced - When you end your turn at this location: Take 1 horror.",],
 
       connections: ["sewer-culvert"],
       mapPosition: { x: 8, y: 50 },
@@ -85,7 +85,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
       ],
 
-      text: "Forced - After you enter this location: Discard cards from the top of the encounter deck until an enemy is discarded and draw it.",
+      text: ["Forced - After you enter this location: Discard cards from the top of the encounter deck until an enemy is discarded and draw it.",],
 
       connections: ["sewer-culvert"],
       mapPosition: { x: 30, y: 50 },
@@ -106,7 +106,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
       ],
 
-      text: "Forced - After you enter this location: Lose 1 action.",
+      text: ["Forced - After you enter this location: Lose 1 action.",],
 
       connections: ["sewer-culvert"],
       mapPosition: { x: 51, y: 50 },
@@ -127,7 +127,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
       ],
 
-      text: "Reaction - When you end your turn at this location: Gain 1 resource.",
+      text: ["Reaction - When you end your turn at this location: Gain 1 resource.",],
 
       connections: ["sewer-culvert"],
       mapPosition: { x: 72, y: 50 },
@@ -149,7 +149,7 @@ of Ash, has been eradicated in the inferno.",
         "Sewer",
       ],
 
-      text: "Forced - When you end your turn at this location: Choose and discard 1 card from your hand.",
+      text: ["Forced - When you end your turn at this location: Choose and discard 1 card from your hand.",],
 
       connections: ["sewer-culvert"],
       mapPosition: { x: 93, y: 50 },
@@ -170,7 +170,7 @@ of Ash, has been eradicated in the inferno.",
         "Ritual Site"
       ],
 
-      text: "Action: .",
+      text: ["Action: .",],
 
       connections: [
         "sewer-tunnels-1",

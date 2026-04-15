@@ -49,7 +49,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
               "Arkham",
             ],
             subname: "St. Mary's Hospital",
-            text: "Action: Heal up to 2 damage among investigators and/or Ally assets at this location. (Limit once per game.)",
+            text: ["Action: Heal up to 2 damage among investigators and/or Ally assets at this location. (Limit once per game.)",],
           },
         },
         {
@@ -69,7 +69,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
               "Arkham",
             ],
             subname: "Ye Olde Magick Shoppe",
-            text: "Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
+            text: ["Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",],
           },
         },
       ],
@@ -95,7 +95,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
               "Arkham",
             ],
             subname: "Arkham Sanatorium",
-            text: "Reaction: After you discover 1 or more clues at this location: Heal 1 horror from an investigator or Ally asset at this location.",
+            text: ["Reaction: After you discover 1 or more clues at this location: Heal 1 horror from an investigator or Ally asset at this location.",],
             victoryPoints: 1,
           },
         },
@@ -116,7 +116,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
               "Arkham",
             ],
             subname: "First Bank of Arkham",
-            text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
+            text: ["Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",],
             victoryPoints: 1,
           },
         },
@@ -141,7 +141,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham",
       ],
       subname: "First Bank of Arkham",
-      text: "Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",
+      text: ["Reaction: After you discover 1 or more clues at this location: Gain 1 resource.",],
       victoryPoints: 1,
     },
     {
@@ -159,7 +159,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham",
       ],
       subname: "Ye Olde Magick Shoppe",
-      text: "Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
+      text: ["Action: Search the top 9 cards of your deck for a Spell or Ritual asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",],
     },
     {
       id: "miskatonic-university",
@@ -179,7 +179,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham"
       ],
       subname: "In Flames",
-      text: "Forced - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",
+      text: ["Forced - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",],
       victoryPoints: 1,
       code: "12155",
     },
@@ -199,7 +199,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       traits: [
         "Arkham"
       ],
-      text: "Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",
+      text: ["Action: Spend 5 resources: Discover 1 clue from any revealed Arkham location. (Limit once per round.)",],
       code: "12149",
     },
     {
@@ -219,7 +219,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       traits: [
         "Arkham",
       ],
-      text: "Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",
+      text: ["Reaction: After you discover the last clue from Easttown: Search your deck for an Ally asset and play it (paying its cost). Shuffle your deck. (Limit once per game.)",],
       code: "12150",
     },
     {
@@ -241,7 +241,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham",
         "Central",
       ],
-      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
+      text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",],
       code: "12151",
     },
     {
@@ -257,7 +257,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
       mapPosition: { x: 78, y: 50 },
       isVisible: true,
-      text: "As an additional cost to investigate Waterfront District, you must spend 1 action.",
+      text: ["As an additional cost to investigate Waterfront District, you must spend 1 action.",],
       traits: [
         "Arkham"
       ],
@@ -281,7 +281,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
       traits: [
         "Arkham"
       ],
-      text: "Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
+      text: ["Action x2: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",],
       code: "12153",
     },
     {
@@ -300,7 +300,7 @@ export const smokeAndMirrorsFlamesScenario: ScenarioDefinition = {
         "Arkham"
       ],
       victoryPoints: 1,
-      text: "Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",
+      text: ["Action: Choose and discard 1 card from your HandPanel. Place 1 charge or secret on an asset you control. (Limit once per round.)",],
       code: "12154",
     },
   ],

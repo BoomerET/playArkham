@@ -232,6 +232,38 @@ export type ParleySkillTestDefinition = {
   onFail?: ParleyEffect;
 };
 
+export type CardAbilityTrigger =
+  | "action"
+  | "doubleAction"
+  | "forced"
+  | "reaction"
+  | "constant";
+
+export type CardAbilityEffect =
+  | { kind: "none" }
+  | { kind: "engageEnemyFromConnectedLocation" }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "gainClues"; amount: number }
+  | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+
+export type CardAbilitySkillTest = {
+  skill: SkillType;
+  difficulty: number;
+  onSuccess: CardAbilityEffect;
+  onFail?: CardAbilityEffect;
+};
+
+export type CardAbilityDefinition = {
+  label: string;
+  trigger: CardAbilityTrigger;
+  text: string;
+  effect?: CardAbilityEffect;
+  skillTest?: CardAbilitySkillTest;
+  costsActions?: number;
+  requiresFlag?: ScenarioFlagCondition;
+};
+
 
 // ============================================================
 // Locations / attachments
@@ -267,7 +299,7 @@ export interface GameLocation {
     x: number;
     y: number;
   };
-  text?: string;
+  text?: string[];
   traits?: string[];
   victoryPoints?: number;
   subname?: string;
@@ -275,6 +307,7 @@ export interface GameLocation {
   parley?: ParleyActionDefinition;
   actions?: LocationActionDefinition[];
   revealCondition?: ScenarioFlagCondition;
+  abilities?: CardAbilityDefinition[];
 }
 
 

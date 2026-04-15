@@ -42,7 +42,7 @@ hooded figures patrolling the campus want?",
       traits: [
         "Miskatonic"
       ],
-      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+      text: ["Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",],
     },
     {
       id: "dormitories",
@@ -57,7 +57,7 @@ hooded figures patrolling the campus want?",
       traits: [
         "Miskatonic"
       ],
-      text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
+      text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
       code: "12117",
     },
     {
@@ -79,7 +79,7 @@ hooded figures patrolling the campus want?",
         "Miskatonic",
         "Central"
       ],
-      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
+      text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
       code: "12116",
     },
     {
@@ -95,7 +95,7 @@ hooded figures patrolling the campus want?",
       traits: [
         "Miskatonic"
       ],
-      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
+      text: ["Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",],
       victoryPoints: 1,
       code: "12118",
     },
@@ -112,7 +112,7 @@ hooded figures patrolling the campus want?",
       traits: [
         "Miskatonic"
       ],
-      text: "Action x2: Draw 3 cards (Limit once per game.)",
+      text: ["Action x2: Draw 3 cards (Limit once per game.)",],
       victoryPoints: 1,
       code: "12120",
     },
@@ -129,7 +129,7 @@ hooded figures patrolling the campus want?",
       traits: [
         "Miskatonic"
       ],
-      text: "Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)",
+      text: ["Reaction: After you discover 1 or more clues at this location: Draw 1 card (Limit once per round.)",],
       code: "12119",
     },
   ],

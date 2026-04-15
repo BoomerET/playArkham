@@ -30,7 +30,9 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         },
       ],
 
-      text: "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+      text: [
+        "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
+      ],
       parley: {
         label: "Parley",
         text: "Test (intellect) 2 to reason with him.",
@@ -76,7 +78,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         },
       ],
 
-      text: "Action: Heal 1 damage and 1 horror. (Limit once per game)",
+      text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
       parley: {
         label: "Parley",
         text: "You parley with the RA.",
@@ -126,7 +128,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         },
       ],
 
-      text: "Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",
+      text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
 
       connections: [
         "fake-dormitories",
@@ -159,7 +161,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         },
       ],
 
-      text: "Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
+      text: ["Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",],
 
       connections: ["fake-miskatonic-quad", "fake-orne-library"],
       mapPosition: { x: 72, y: 16 },
@@ -181,7 +183,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic"
       ],
 
-      text: "Action x2: Draw 3 cards (Limit once per game.)",
+      text: ["Action x2: Draw 3 cards (Limit once per game.)",],
       parley: {
         label: "Parley",
         text: "You parley with the librarian.",
