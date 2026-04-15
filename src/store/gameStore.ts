@@ -5123,7 +5123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (pendingInteractiveResolution) {
-      const locationActionEffect = success
+      const locationAbilityEffect = success
         ? pendingInteractiveResolution.onSuccess
         : pendingInteractiveResolution.onFail;
 
@@ -5136,9 +5136,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
       );
 
-      if (locationActionEffect) {
+      if (locationAbilityEffect) {
         const locationActionResolution = resolveLocationAbilityEffect({
-          effect: locationActionEffect,
+          effect: locationAbilityEffect,
           investigator: updatedInvestigator,
           currentLocationId: pendingInteractiveResolution.currentLocationId,
           locations: updatedLocations,

@@ -170,16 +170,10 @@ export default function InvestigatorPanel() {
     : "Evade";
 
   const locations = useGameStore((state) => state.locations);
-  //const locationAction = useGameStore((state) => state.locationAction);
   const locationAbility = useGameStore((state) => state.locationAbility);
   const currentLocation = findCurrentLocation(locations, investigator.id);
   const campaignState = useGameStore((state) => state.campaignState);
-  //const availableLocationActions = (currentLocation?.actions ?? []).filter(
-  //  (action) =>
-  //    !action.requiresFlag ||
-  //    campaignState.scenarioFlags[action.requiresFlag.key] ===
-  //    action.requiresFlag.equals,
-  //);
+
   const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
     (ability) =>
       (ability.trigger === "action" || ability.trigger === "doubleAction") &&
@@ -213,7 +207,7 @@ export default function InvestigatorPanel() {
 
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showAdjustmentsMenu, setShowAdjustmentsMenu] = useState(false);
-  const [selectedAction, setSelectedAction] = useState("");
+  const [selectedAbility, setSelectedAbility] = useState("");
   const [selectedAdjustment, setSelectedAdjustment] = useState("");
   const engageEnemy = useGameStore((state) => state.engageEnemy);
 
@@ -224,7 +218,7 @@ export default function InvestigatorPanel() {
     : [];
 
   function handleExecuteAction() {
-    switch (selectedAction) {
+    switch (selectedAbility) {
       case "resource":
         takeResourceAction();
         break;
@@ -252,11 +246,11 @@ export default function InvestigatorPanel() {
         resignAction();
         break;
       default:
-        if (selectedAction.startsWith("parley-enemy:")) {
-          const enemyId = selectedAction.slice("parley-enemy:".length);
+        if (selectedAbility.startsWith("parley-enemy:")) {
+          const enemyId = selectedAbility.slice("parley-enemy:".length);
           parleyAction(enemyId);
-        } else if (selectedAction.startsWith("location-ability:")) {
-          const indexText = selectedAction.slice("location-ability:".length);
+        } else if (selectedAbility.startsWith("location-ability:")) {
+          const indexText = selectedAbility.slice("location-ability:".length);
           const index = Number(indexText);
 
           if (!Number.isNaN(index)) {
@@ -266,7 +260,7 @@ export default function InvestigatorPanel() {
         break;
     }
 
-    setSelectedAction("");
+    setSelectedAbility("");
   }
 
   function handleExecuteAdjustment() {
@@ -612,8 +606,8 @@ export default function InvestigatorPanel() {
           <div className="button-row">
             <select
               className="investigator-action-select"
-              value={selectedAction}
-              onChange={(event) => setSelectedAction(event.target.value)}
+              value={selectedAbility}
+              onChange={(event) => setSelectedAbility(event.target.value)}
               disabled={!canTakeAction}
               aria-label="Choose an action"
             >
@@ -638,13 +632,7 @@ export default function InvestigatorPanel() {
               <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
               </option>
-              {/*}
-              {availableLocationActions.map((action, index) => (
-                <option key={`location-action-${index}`} value={`location-action:${index}`}>
-                  {action.label}
-                </option>
-              ))}
-              */}
+
               {availableLocationAbilities.map((ability, index) => (
                 <option key={`location-ability-${index}`} value={`location-ability:${index}`}>
                   {ability.label}
@@ -656,7 +644,7 @@ export default function InvestigatorPanel() {
               type="button"
               className="investigator-action-go"
               onClick={handleExecuteAction}
-              disabled={!canTakeAction || !selectedAction}
+              disabled={!canTakeAction || !selectedAbility}
             >
               Go
             </button>
