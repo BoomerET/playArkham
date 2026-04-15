@@ -8,8 +8,10 @@ describe("applyConditionalLocationVisibility", () => {
     const locations: GameLocation[] = [
       {
         id: "hall",
-        name: "Hall",
+        shroud: 1,
         clues: 0,
+        code: "8675309a",
+        name: "Hall",
         revealed: true,
         connections: ["secret-room"],
         investigatorsHere: [],
@@ -17,10 +19,13 @@ describe("applyConditionalLocationVisibility", () => {
         mapPosition: { x: 0, y: 0 },
         text: [],
         traits: [],
+
       },
       {
         id: "secret-room",
+        code: "8675309b",
         name: "Secret Room",
+        shroud: 1,
         clues: 1,
         revealed: false,
         connections: ["hall"],
@@ -57,7 +62,9 @@ describe("applyConditionalLocationVisibility", () => {
       {
         id: "secret-room",
         name: "Secret Room",
+        code: "8675309c",
         clues: 1,
+        shroud: 0,
         revealed: false,
         connections: [],
         investigatorsHere: [],
