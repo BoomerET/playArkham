@@ -44,7 +44,8 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
-  LocationActionEffect,
+  //LocationActionEffect,
+  LocationAbilityEffect,
   LocationAttachment,
   Phase,
   PlayerCard,
@@ -127,8 +128,8 @@ type PendingInteractiveResolution =
     sourceName: string;
     sourceKind: "parley" | "locationAction";
     currentLocationId: string;
-    onSuccess: ParleyEffect | LocationActionEffect;
-    onFail?: ParleyEffect | LocationActionEffect;
+    onSuccess: ParleyEffect | LocationAbilityEffect;
+    onFail?: ParleyEffect | LocationAbilityEffect;
   }
   | null;
 
@@ -151,7 +152,7 @@ type PendingInteractiveTargetSelection = {
   sourceName: string;
   sourceKind: "locationAction";
   currentLocationId: string;
-  effect: LocationActionEffect;
+  effect: LocationAbilityEffect;
   validEnemyIds: string[];
 } | null;
 
@@ -405,7 +406,7 @@ function getScenarioSequenceSide(sequence: string): string {
 
 function resolveInteractiveEffect(args: {
   sourceKind: "parley" | "locationAction";
-  effect: ParleyEffect | LocationActionEffect;
+  effect: ParleyEffect | LocationAbilityEffect;
   investigator: Investigator;
   currentLocationId: string;
   locations: GameState["locations"];
@@ -446,8 +447,8 @@ function resolveInteractiveEffect(args: {
     };
   }
 
-  return resolveLocationActionEffect({
-    effect: effect as LocationActionEffect,
+  return resolveLocationAbilityEffect({
+    effect: effect as LocationAbilityEffect,
     investigator,
     currentLocationId,
     locations,
@@ -456,8 +457,8 @@ function resolveInteractiveEffect(args: {
   });
 }
 
-function resolveLocationActionEffect(args: {
-  effect: LocationActionEffect;
+function resolveLocationAbilityEffect(args: {
+  effect: LocationAbilityEffect;
   investigator: Investigator;
   currentLocationId: string;
   locations: GameState["locations"];
@@ -1377,7 +1378,7 @@ function resolveParleyEffect(args: {
 }
 
 function beginInteractiveAction(args: {
-  action: InteractiveActionDefinition<ParleyEffect | LocationActionEffect>;
+  action: InteractiveActionDefinition<ParleyEffect | LocationAbilityEffect>;
   sourceName: string;
   sourceKind: "parley" | "locationAction";
   currentLocationId: string;
@@ -1390,8 +1391,8 @@ function beginInteractiveAction(args: {
       sourceName: string;
       sourceKind: "parley" | "locationAction";
       currentLocationId: string;
-      onSuccess: ParleyEffect | LocationActionEffect;
-      onFail?: ParleyEffect | LocationActionEffect;
+      onSuccess: ParleyEffect | LocationAbilityEffect;
+      onFail?: ParleyEffect | LocationAbilityEffect;
     };
     turn: GameState["turn"];
     log: GameState["log"];
@@ -1401,7 +1402,7 @@ function beginInteractiveAction(args: {
   }
   | {
     kind: "immediate";
-    effect: ParleyEffect | LocationActionEffect;
+    effect: ParleyEffect | LocationAbilityEffect;
     turn: GameState["turn"];
     log: GameState["log"];
   }
@@ -1511,7 +1512,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const resolution = resolveLocationActionEffect({
+    const resolution = resolveLocationAbilityEffect({
       effect: pendingInteractiveTargetSelection.effect,
       investigator,
       currentLocationId: pendingInteractiveTargetSelection.currentLocationId,
@@ -1805,7 +1806,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const resolution = resolveLocationActionEffect({
+    const resolution = resolveLocationAbilityEffect({
       effect: actionEffect,
       investigator,
       currentLocationId: currentLocation.id,
@@ -2118,7 +2119,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const resolution = resolveLocationActionEffect({
+    const resolution = resolveLocationAbilityEffect({
       effect: actionEffect,
       investigator,
       currentLocationId: currentLocation.id,
@@ -5136,7 +5137,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
 
       if (locationActionEffect) {
-        const locationActionResolution = resolveLocationActionEffect({
+        const locationActionResolution = resolveLocationAbilityEffect({
           effect: locationActionEffect,
           investigator: updatedInvestigator,
           currentLocationId: pendingInteractiveResolution.currentLocationId,
