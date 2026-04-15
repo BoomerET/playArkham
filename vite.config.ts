@@ -5,5 +5,11 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [react(), svgr()],
   base: "/arkham/",
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/test/setupTests.ts",
+    css: true,
+  },
 });
 
