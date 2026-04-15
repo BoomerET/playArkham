@@ -19,36 +19,9 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
       ],
 
-      abilities: [
-        {
-          label: "Engage from connected location",
-          trigger: "action",
-          costsActions: 1,
-          text: "Choose an enemy at a connecting location. That enemy moves to this location and engages you. This action does not provoke attacks of opportunity.",
-          effect: {
-            kind: "engageEnemyFromConnectedLocation",
-          },
-        },
-      ],
-
       text: [
         "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages your. This action does not provoke attacks of opportunity.",
       ],
-      parley: {
-        label: "Parley",
-        text: "Test (intellect) 2 to reason with him.",
-        skillTest: {
-          skill: "intellect",
-          difficulty: 2,
-          onSuccess: {
-            kind: "gainResources",
-            amount: 1,
-          },
-          onFail: {
-            kind: "none",
-          },
-        },
-      },
 
       connections: ["fake-dormitories"],
       mapPosition: { x: 8, y: 16 },
@@ -67,27 +40,20 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
-      actions: [
+      abilities: [
         {
-          label: "Set Test Flag",
-          text: "You flip a mysterious switch.",
+          label: "Campus Dread",
+          trigger: "forced",
+          event: "enterLocation",
+          text: "After you enter this location, take 1 horror.",
           effect: {
-            kind: "setScenarioFlag",
-            key: "testFlag",
-            value: true,
+            kind: "takeHorror",
+            amount: 1,
           },
-        },
-      ],
+        }
 
+      ],
       text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
-      parley: {
-        label: "Parley",
-        text: "You parley with the RA.",
-        effect: {
-          kind: "gainClues",
-          amount: 1,
-        },
-      },
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
@@ -110,23 +76,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
         "Central",
-      ],
-      actions: [
-        {
-          label: "Search the Office",
-          text: "Test (intellect) 3. If you succeed, discover 1 clue at this location.",
-          skillTest: {
-            skill: "intellect",
-            difficulty: 3,
-            onSuccess: {
-              kind: "discoverLocationClue",
-              amount: 1,
-            },
-            onFail: {
-              kind: "none",
-            },
-          },
-        },
       ],
 
       text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
@@ -152,15 +101,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
-      actions: [
-        {
-          label: "Engage from connected location",
-          text: "You call out to a nearby enemy and draw it toward you.",
-          effect: {
-            kind: "engageEnemyFromConnectedLocation",
-          },
-        },
-      ],
 
       text: ["Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",],
 
@@ -185,14 +125,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
 
       text: ["Action x2: Draw 3 cards (Limit once per game.)",],
-      parley: {
-        label: "Parley",
-        text: "You parley with the librarian.",
-        effect: {
-          kind: "gainClues",
-          amount: 1,
-        },
-      },
 
       connections: ["fake-science-hall"],
       mapPosition: { x: 93, y: 16 },

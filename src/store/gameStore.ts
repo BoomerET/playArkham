@@ -4227,15 +4227,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
       };
     });
 
-    set({
-      locations: updatedLocations,
+    const destinationLocation = updatedLocations.find(
+      (location) => location.id === locationId,
+    );
+
+    let updatedInvestigator = investigator;
+    let finalLocations = updatedLocations;
+    let finalEnemies = get().enemies;
+    let finalCampaignState = get().campaignState;
+    let movementLog: ReturnType<typeof createLogEntry>[] = [
+      createLogEntry("player", `Moved to ${destination.name}.`),
+    ];
+
+    if (destinationLocation) {
+      const forcedResolution = executeForcedLocationAbilities({
+        location: destinationLocation,
+        event: "enterLocation",
+        investigator: updatedInvestigator,
+        locations: finalLocations,
+        enemies: finalEnemies,
+        campaignState: finalCampaignState,
+      });
+
+      updatedInvestigator = forcedResolution.investigator;
+      finalLocations = forcedResolution.locations;
+      finalEnemies = forcedResolution.enemies;
+      finalCampaignState = forcedResolution.campaignState;
+
+      movementLog.push(...forcedResolution.logEntries);
+    }
+
+    set((state) => ({
+      investigator: updatedInvestigator,
+      locations: finalLocations,
+      enemies: finalEnemies,
+      campaignState: finalCampaignState,
       selectedEnemyTargetId:
         currentLocation?.id === locationId ? selectedEnemyTargetId : null,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
       },
-    });
+      log: [...state.log, ...movementLog],
+    }));
 
     get().pushLog("player", `Moved to ${destination.name}. 1 action spent.`);
     get().engageEnemiesAtLocation();
