@@ -187,7 +187,8 @@ export type LocationActionEffect =
   | { kind: "gainClues"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
+  | { kind: "trigger"; key: string; value: boolean | string | number };
 
 export type ParleyEffect =
   | { kind: "gainClues"; amount: number }
