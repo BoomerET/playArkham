@@ -237,7 +237,9 @@ export type CardAbilityTrigger =
   | "doubleAction"
   | "forced"
   | "reaction"
-  | "constant";
+  | "constant"
+  | "free"
+  | "revelation";
 
 export type CardAbilityEffect =
   | { kind: "none" }

@@ -179,6 +179,13 @@ export default function InvestigatorPanel() {
       campaignState.scenarioFlags[action.requiresFlag.key] ===
       action.requiresFlag.equals,
   );
+  const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
+    (ability) =>
+      (ability.trigger === "action" || ability.trigger === "doubleAction") &&
+      (!ability.requiresFlag ||
+        campaignState.scenarioFlags[ability.requiresFlag.key] ===
+        ability.requiresFlag.equals),
+  );
   const engageableEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
@@ -247,12 +254,12 @@ export default function InvestigatorPanel() {
         if (selectedAction.startsWith("parley-enemy:")) {
           const enemyId = selectedAction.slice("parley-enemy:".length);
           parleyAction(enemyId);
-        } else if (selectedAction.startsWith("location-action:")) {
-          const indexText = selectedAction.slice("location-action:".length);
+        } else if (selectedAction.startsWith("location-ability:")) {
+          const indexText = selectedAction.slice("location-ability:".length);
           const index = Number(indexText);
 
           if (!Number.isNaN(index)) {
-            locationAction(index);
+            locationAbility(index);
           }
         }
         break;
@@ -630,9 +637,16 @@ export default function InvestigatorPanel() {
               <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
               </option>
+              {/*}
               {availableLocationActions.map((action, index) => (
                 <option key={`location-action-${index}`} value={`location-action:${index}`}>
                   {action.label}
+                </option>
+              ))}
+              */}
+              {availableLocationAbilities.map((ability, index) => (
+                <option key={`location-ability-${index}`} value={`location-ability:${index}`}>
+                  {ability.label}
                 </option>
               ))}
             </select>

@@ -213,6 +213,7 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
+  locationAbility: (abilityIndex: number) => void;
   chooseInteractiveEnemyTarget: (enemyId: string) => void;
   cancelInteractiveTargetSelection: () => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
@@ -1882,19 +1883,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const action = currentLocation.actions?.[actionIndex];
+    const ability = currentLocation.actions?.[actionIndex];
 
-    if (!action) {
-      get().pushLog("system", "That location action is not available.");
+    if (!ability) {
+      get().pushLog("system", "That location ability is not available.");
       return;
     }
 
-    if (action.skillTest) {
+    if (ability.trigger !== "action" && ability.trigger !== "doubleAction") {
+      get().pushLog("system", "That ability cannot be used this way.");
+      return;
+    }
+
+    if (ability.skillTest) {
       set((state) => ({
         pendingLocationActionResolution: {
           sourceName: currentLocation.name,
           currentLocationId: currentLocation.id,
-          onSuccess: action.skillTest!.onSuccess,
+          onSuccess: ability.skillTest!.onSuccess,
           onFail: action.skillTest!.onFail,
         },
         turn: {
