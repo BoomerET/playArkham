@@ -29,7 +29,9 @@ describe("resolveLocationAbilityEffect", () => {
       {
         id: "student-union",
         name: "Student Union",
+        code: "8675309d",
         clues: 0,
+        shroud: 0,
         revealed: true,
         connections: ["dormitories"],
         investigatorsHere: [investigator.id],
@@ -41,7 +43,9 @@ describe("resolveLocationAbilityEffect", () => {
       {
         id: "dormitories",
         name: "Dormitories",
+        code: "8675309e",
         clues: 0,
+        shroud: 0,
         revealed: true,
         connections: ["student-union"],
         investigatorsHere: [],
