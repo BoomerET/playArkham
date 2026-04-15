@@ -3243,11 +3243,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      //locations: normalizeScenarioLocations(
-      //  selectedScenario.locations,
-      //  chosenInvestigator.id,
-      //  selectedScenario.startingLocationId,
-      //),
+
       locations: applyConditionalLocationVisibility({
         locations: normalizeScenarioLocations(
           selectedScenario.locations,
