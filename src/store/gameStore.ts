@@ -1901,7 +1901,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           sourceName: currentLocation.name,
           currentLocationId: currentLocation.id,
           onSuccess: ability.skillTest!.onSuccess,
-          onFail: action.skillTest!.onFail,
+          onFail: ability.skillTest!.onFail,
         },
         turn: {
           ...turn,
@@ -1909,22 +1909,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
         log: [
           ...state.log,
-          createLogEntry("scenario", action.text),
+          createLogEntry("scenario", ability.text),
         ],
       }));
 
       get().beginSkillTest(
-        action.skillTest.skill,
-        action.skillTest.difficulty,
-        action.label ?? currentLocation.name
+        ability.skillTest.skill,
+        ability.skillTest.difficulty,
+        ability.label ?? currentLocation.name
       );
 
       return;
     }
 
-    const actionEffect = action.effect;
+    const actionEffect = ability.effect;
 
-    if (!actionEffect && !action.skillTest) {
+    if (!actionEffect && !ability.skillTest) {
       get().pushLog("system", "This location action has no effect configured.");
       return;
     }
@@ -1943,7 +1943,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       set((state) => ({
         pendingInteractiveTargetSelection: {
-          sourceName: action.label ?? currentLocation.name,
+          sourceName: ability.label ?? currentLocation.name,
           sourceKind: "locationAction",
           currentLocationId: currentLocation.id,
           effect: actionEffect,
@@ -1955,7 +1955,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
         log: [
           ...state.log,
-          createLogEntry("scenario", action.text),
+          createLogEntry("scenario", ability.text),
           createLogEntry("system", "Choose an enemy at a connecting location."),
         ],
       }));
@@ -1988,7 +1988,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
       log: [
         ...state.log,
-        createLogEntry("scenario", action.text),
+        createLogEntry("scenario", ability.text),
         ...resolution.logEntries,
       ],
     }));

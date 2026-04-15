@@ -239,7 +239,8 @@ export type CardAbilityTrigger =
   | "reaction"
   | "constant"
   | "free"
-  | "revelation";
+  | "revelation"
+  | "trigger";
 
 export type CardAbilityEffect =
   | { kind: "none" }
