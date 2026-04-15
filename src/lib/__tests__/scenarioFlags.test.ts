@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { applyConditionalLocationVisibility } from "../gameStateHelpers"; // adjust path if needed
-import type { CampaignState, GameLocation } from "../../types/game";
+import { applyConditionalLocationVisibility } from "../../store/locationVisibility";
+import type { GameLocation } from "../../types/game";
+import { type CampaignState } from "../../lib/campaignSetup"
 
 describe("applyConditionalLocationVisibility", () => {
   it("reveals a hidden location when its flag condition is met", () => {
