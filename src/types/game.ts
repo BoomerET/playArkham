@@ -185,6 +185,8 @@ export type LocationAbilityEffect =
   | { kind: "engageEnemyFromConnectedLocation" }
   | { kind: "gainResources"; amount: number }
   | { kind: "gainClues"; amount: number }
+  | { kind: "takeHorror"; amount: number }
+  | { kind: "takeDamage"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
@@ -248,6 +250,8 @@ export type CardAbilityEffect =
   | { kind: "engageEnemyFromConnectedLocation" }
   | { kind: "gainResources"; amount: number }
   | { kind: "gainClues"; amount: number }
+  | { kind: "takeHorror"; amount: number }
+  | { kind: "takeDamage"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
 
@@ -258,9 +262,13 @@ export type CardAbilitySkillTest = {
   onFail?: CardAbilityEffect;
 };
 
+export type CardAbilityEvent =
+  | "enterLocation";
+
 export type CardAbilityDefinition = {
   label: string;
   trigger: CardAbilityTrigger;
+  event?: CardAbilityEvent;
   text: string;
   effect?: CardAbilityEffect;
   skillTest?: CardAbilitySkillTest;

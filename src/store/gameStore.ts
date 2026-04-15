@@ -44,7 +44,7 @@ import type {
   GameLogKind,
   GameState,
   Investigator,
-  //LocationActionEffect,
+  CardAbilityEvent,
   LocationAbilityEffect,
   LocationAttachment,
   Phase,
@@ -55,8 +55,11 @@ import type {
   SkillType,
   ParleyEffect,
   InteractiveActionDefinition,
+  CardAbilityDefinition,
+  CardAbilityEffect,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
+import type { GameLocation } from "../types/game";
 import { applyConditionalLocationVisibility } from "./locationVisibility";
 import { resolveLocationAbilityEffect } from "./locationAbilities";
 
@@ -1455,31 +1458,117 @@ function beginInteractiveAction(args: {
   };
 }
 
-//function applyConditionalLocationVisibility(args: {
-//  locations: GameState["locations"];
-//  campaignState: CampaignState;
-//}): GameState["locations"] {
-//  const { locations, campaignState } = args;
-//
-//  return locations.map((location) => {
-//    if (!location.revealCondition) {
-//      return location;
-//    }
-//
-//    const matches =
-//      campaignState.scenarioFlags[location.revealCondition.key] ===
-//      location.revealCondition.equals;
-//
-//    if (!matches || location.isVisible) {
-//      return location;
-//    }
-//
-//    return {
-//      ...location,
-//      isVisible: true,
-//    };
-//  });
-//}
+function resolveImmediateAbilityEffect(args: {
+  effect: CardAbilityEffect;
+  investigator: Investigator;
+  currentLocationId: string;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  return resolveLocationAbilityEffect({
+    effect: args.effect as LocationAbilityEffect,
+    investigator: args.investigator,
+    currentLocationId: args.currentLocationId,
+    locations: args.locations,
+    enemies: args.enemies,
+    campaignState: args.campaignState,
+  });
+}
+
+function executeForcedLocationAbilities(args: {
+  location: GameLocation;
+  event: CardAbilityEvent;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const { location, event, investigator, locations, enemies, campaignState } = args;
+
+  const abilities = getMatchingForcedLocationAbilities({
+    location,
+    event,
+    campaignState,
+  });
+
+  let updatedInvestigator = investigator;
+  let updatedLocations = locations;
+  let updatedEnemies = enemies;
+  let updatedCampaignState = campaignState;
+  const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+  for (const ability of abilities) {
+    logEntries.push(createLogEntry("scenario", `${location.name}: ${ability.text}`));
+
+    if (!ability.effect) {
+      continue;
+    }
+
+    const resolution = resolveImmediateAbilityEffect({
+      effect: ability.effect,
+      investigator: updatedInvestigator,
+      currentLocationId: location.id,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
+    });
+
+    updatedInvestigator = resolution.investigator;
+    updatedLocations = resolution.locations;
+    updatedEnemies = resolution.enemies;
+    updatedCampaignState = resolution.campaignState;
+    logEntries.push(...resolution.logEntries);
+  }
+
+  return {
+    investigator: updatedInvestigator,
+    locations: updatedLocations,
+    enemies: updatedEnemies,
+    campaignState: updatedCampaignState,
+    logEntries,
+  };
+}
+
+function getMatchingForcedLocationAbilities(args: {
+  location: GameLocation;
+  event: CardAbilityEvent;
+  campaignState: CampaignState;
+}): CardAbilityDefinition[] {
+  const { location, event, campaignState } = args;
+
+  return (location.abilities ?? []).filter((ability) => {
+    if (ability.trigger !== "forced") {
+      return false;
+    }
+
+    if (ability.event !== event) {
+      return false;
+    }
+
+    if (
+      ability.requiresFlag &&
+      campaignState.scenarioFlags[ability.requiresFlag.key] !==
+      ability.requiresFlag.equals
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   cancelInteractiveTargetSelection: () => {
