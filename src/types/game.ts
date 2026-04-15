@@ -210,7 +210,8 @@ export type InteractiveActionDefinition<TActionEffect> = {
   text: string;
   effect?: TActionEffect;
   skillTest?: InteractionSkillTestDefinition<TActionEffect>;
-  requiresFlag?: ScenarioFlagCondition
+  requiresFlag?: ScenarioFlagCondition;
+  trigger?: CardAbilityTrigger;
 };
 
 export type LocationActionDefinition =
