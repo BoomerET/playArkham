@@ -1,3 +1,6 @@
+import type { GameState } from "../types/game";
+import { type CampaignState } from "../lib/campaignSetup";
+
 export function applyConditionalLocationVisibility(args: {
     locations: GameState["locations"];
     campaignState: CampaignState;

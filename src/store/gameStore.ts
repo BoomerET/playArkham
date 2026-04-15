@@ -57,10 +57,8 @@ import type {
   InteractiveActionDefinition,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
-import {
-  applyConditionalLocationVisibility,
-  resolveLocationAbilityEffect,
-} from "./gameStore";
+import { applyConditionalLocationVisibility } from "./locationVisibility";
+import { resolveLocationAbilityEffect } from "./locationAbilities";
 
 import {
   canPlayInAvailableSlots,
@@ -379,7 +377,7 @@ function isOpeningHandWeakness(card: PlayerCard): boolean {
   return card.isWeakness === true;
 }
 
-function createLogEntry(kind: GameLogKind, text: string) {
+export function createLogEntry(kind: GameLogKind, text: string) {
   return {
     id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     kind,
