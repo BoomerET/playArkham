@@ -885,15 +885,6 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         set: "daves-tests",
-
-        parley: {
-            label: "Parley",
-            text: "You calm the frat bro and get useful information.",
-            effect: {
-                kind: "gainResources",
-                amount: 1,
-            },
-        },
     },
     {
         id: "davestesttreachery",

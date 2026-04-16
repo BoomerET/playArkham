@@ -145,6 +145,13 @@ export function resolveEncounterCardImmediate(args: {
           "Fire! was drawn, but your location already has Fire! attached. It was discarded.",
       };
 
+    case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
+      return {
+        kind: "doomOnAgenda",
+        amount: 1,
+        logText:
+          "Dave's Test Treachery: place 1 doom on the current agenda.",
+      };
     default:
       return {
         kind: "genericTreachery",
