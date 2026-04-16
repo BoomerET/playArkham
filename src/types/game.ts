@@ -457,7 +457,8 @@ export interface GameState {
 // ============================================================
 
 export const ENCOUNTER_CARD_CODES = {
-  DAVES_TEST: "14001",
+  DAVES_TEST_ENEMY: "14001",
+  DAVES_TEST_TREACHERY: "14002",
   SERVANT_OF_FLAME: "12114",
   CANTOR_OF_FLAME: "12121",
   HELLHOUND: "12122",

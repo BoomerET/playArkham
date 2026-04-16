@@ -861,9 +861,9 @@ export const encounterCards: EncounterCard[] = [
       This is my test card
     */
     {
-        id: "davestestencounter",
+        id: "davestestenemy",
         code: "14001",
-        name: "Dave's Test Encounter",
+        name: "Dave's Test Enemy",
         type: "enemy",
 
         fight: 1,
@@ -894,7 +894,23 @@ export const encounterCards: EncounterCard[] = [
                 amount: 1,
             },
         },
-    }
+    },
+    {
+        id: "davestesttreachery",
+        code: "14002",
+        name: "Dave's Test Treachery",
+        type: "treachery",
+        traits: [
+            "Omen",
+        ],
+        ability: [
+            "Peril",
+        ],
+        text: [
+            "Revelation - You must either (choose one): Place 1 doom on the current agenda. This effect can cause the agenta to advance. OR Take 1 direct damage and 1 direct horror. Cosmic Evils gains surge",
+        ],
+        set: "daves-tests",
+    },
 ];
 
 export const encounterCardsByCode: Record<string, EncounterCardDefinition> =
