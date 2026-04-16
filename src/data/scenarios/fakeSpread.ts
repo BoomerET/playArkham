@@ -145,6 +145,19 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
     },
     {
+      id: "fake-spreading-flames-act-1b",
+      kind: "act",
+      sequence: "1b",
+      title: "There's Fire",
+      text: "Discard each enemy in play.",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12109",
+      onAdvance: {
+        showLocationIds: ["dormitories", "miskatonic-quad"],
+      },
+    },
+    {
       id: "fake-spreading-flames-act-2a",
       kind: "act",
       sequence: "2a",
@@ -154,6 +167,21 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Clues",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
+      },
+    },
+    {
+      id: "fake-spreading-flames-act-2b",
+      kind: "act",
+      sequence: "2b",
+      title: "In the Open",
+      text: "Search all in-play and all out-of-play areas for the Servant of Flame.",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12110",
+      onAdvance: {
+        showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
+        hideLocationIds: ["friends-room"],
+        grantEncounterCardToInvestigator: "dr-henry-armitage-1",
       },
     },
     {
@@ -171,6 +199,16 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       },
     },
     {
+      id: "fake-spreading-flames-act-3b",
+      kind: "act",
+      sequence: "3b",
+      title: "The Servant Unleashed",
+      text: "You find Dr. Armitage barricaded in one of Orne Library's lecture halls.",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12111",
+    },
+    {
       id: "fake-spreading-flames-act-4a",
       kind: "act",
       sequence: "4a",
@@ -178,6 +216,22 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
       threshold: 3,
       thresholdLabel: "Clues",
+    },
+    {
+      id: "fake-spreading-flames-act-4b",
+      kind: "act",
+      sequence: "4b",
+      title: "A Flame, Doused",
+      text: "Your nightmarish pursuer reels back, clutching both hand to their head.",
+      threshold: 0,
+      thresholdLabel: "Done",
+      code: "12112",
+      onAdvance: {
+        winScenario: true,
+        setPreviousScenarioOutcome: "quiet",
+        resolutionTitle: "Resolution 1",
+        resolutionText: "The campus remains eerily quiet...",
+      },
     },
   ],
   agendas: [

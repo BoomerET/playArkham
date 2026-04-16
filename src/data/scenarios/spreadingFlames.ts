@@ -193,7 +193,6 @@ hooded figures patrolling the campus want?",
       thresholdLabel: "Clues",
       code: "12111",
     },
-
     {
       id: "spreading-flames-act-3b",
       kind: "act",
