@@ -3037,11 +3037,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       encounterDiscard,
-      agenda,
       pendingChoice,
     } = get();
-
-    get().addAgendaProgress(1);
 
     if (pendingChoice) {
       get().pushLog(
@@ -3050,6 +3047,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       return;
     }
+
+    get().addAgendaProgress(1);
 
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
@@ -3125,16 +3124,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (immediate.kind === "doomOnAgenda") {
       set({
-        agenda: agenda
-          ? {
-            ...agenda,
-            progress: agenda.progress + immediate.amount,
-          }
-          : null,
         encounterDiscard: [...encounterDiscard, card],
       });
 
       get().pushLog("scenario", immediate.logText);
+      get().addAgendaProgress(immediate.amount);
       return;
     }
 
@@ -3142,15 +3136,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         enemies: [...enemies, immediate.enemy],
         encounterDiscard: [...encounterDiscard, card],
-        agenda: agenda
-          ? {
-            ...agenda,
-            progress: agenda.progress + immediate.doomOnAgenda,
-          }
-          : null,
       });
 
       get().pushLog("enemy", immediate.logText);
+
+      if (immediate.doomOnAgenda > 0) {
+        get().addAgendaProgress(immediate.doomOnAgenda);
+      }
+
       return;
     }
 
