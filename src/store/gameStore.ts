@@ -4235,7 +4235,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let finalLocations = updatedLocations;
     let finalEnemies = get().enemies;
     let finalCampaignState = get().campaignState;
-    let movementLog: ReturnType<typeof createLogEntry>[] = [
+    const movementLog: ReturnType<typeof createLogEntry>[] = [
       createLogEntry("player", `Moved to ${destination.name}.`),
     ];
 
