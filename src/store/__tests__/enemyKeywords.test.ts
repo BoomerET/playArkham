@@ -17,6 +17,8 @@ describe("Aloof enemy behavior", () => {
                     id: "student-union",
                     name: "Student Union",
                     clues: 0,
+                    code: "8675309h",
+                    shroud: 0,
                     revealed: true,
                     connections: [],
                     investigatorsHere: ["investigator-1"],
