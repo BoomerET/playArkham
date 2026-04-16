@@ -192,7 +192,8 @@ export default function LocationCard({ location }: Props) {
 
   const enemiesHere = enemies.filter(
     (enemy) =>
-      enemy.locationId === location.id && enemy.engagedInvestigatorId === null,
+      enemy.locationId === location.id &&
+      enemy.engagedInvestigatorId === null,
   );
 
   function getInvestigatorData(id: string) {
