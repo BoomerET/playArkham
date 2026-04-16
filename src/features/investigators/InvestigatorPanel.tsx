@@ -558,7 +558,7 @@ export default function InvestigatorPanel() {
                             <div className="engaged-enemy-badges">
                               {isSelectedTarget && (
                                 <span className="engaged-enemy-tag engaged-enemy-tag-primary">
-                                  Current Target
+                                  Target
                                 </span>
                               )}
 
