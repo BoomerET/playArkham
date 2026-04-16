@@ -137,6 +137,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   acts: [
     {
       id: "fake-spreading-flames-act-1a",
+      code: "12109",
       kind: "act",
       sequence: "1a",
       title: "Where There's Smoke",
@@ -160,6 +161,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
     {
       id: "fake-spreading-flames-act-2a",
       kind: "act",
+      code: "12110",
       sequence: "2a",
       title: "Escape the Dorms",
       text: "A burning apparition stands between you and the exit. You must escape the dormitories.",
@@ -186,6 +188,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
     },
     {
       id: "fake-spreading-flames-act-3a",
+      code: "12111",
       kind: "act",
       sequence: "3a",
       title: "Searching for Dr. Armitage",
@@ -210,6 +213,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
     },
     {
       id: "fake-spreading-flames-act-4a",
+      code: "12112",
       kind: "act",
       sequence: "4a",
       title: "Blaze of Glory",
@@ -237,6 +241,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   agendas: [
     {
       id: "fake-spreading-flames-agenda-1a",
+      code: "12106",
       kind: "agenda",
       sequence: "1a",
       title: "Past Curfew",
@@ -262,6 +267,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "The sky glows a faint orange as the flames spread.",
       threshold: 5,
       thresholdLabel: "Doom",
+      code: "12107",
     },
     {
       id: "fake-spreading-flames-agenda-2b",
@@ -281,6 +287,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is ablaze!",
       threshold: 10,
       thresholdLabel: "Doom",
+      code: "12108",
     },
     {
       id: "fake-spreading-flames-agenda-3b",
