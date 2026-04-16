@@ -876,7 +876,6 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         ability: [
-            "Aloof",
             "Hunter",
             "Parley",
         ],

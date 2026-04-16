@@ -1437,14 +1437,43 @@ export const useGameStore = create<GameStore>((set, get) => ({
       targetEnemyId: enemyId,
     });
 
+    let updatedInvestigator = resolution.investigator;
+    let updatedLocations = resolution.locations;
+    let finalEnemies = resolution.enemies;
+    let updatedCampaignState = resolution.campaignState;
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+
+    const forcedResolution = applyEnemyEngagedForcedAbilities({
+      locationId: pendingInteractiveTargetSelection.currentLocationId,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: finalEnemies,
+      campaignState: updatedCampaignState,
+    });
+
+    updatedInvestigator = forcedResolution.investigator;
+    updatedLocations = forcedResolution.locations;
+    finalEnemies = forcedResolution.enemies;
+    updatedCampaignState = forcedResolution.campaignState;
+    extraLog.push(...forcedResolution.logEntries);
+
     set((state) => ({
-      investigator: resolution.investigator,
-      locations: resolution.locations,
-      enemies: resolution.enemies,
-      campaignState: resolution.campaignState,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: finalEnemies,
+      campaignState: updatedCampaignState,
       pendingInteractiveTargetSelection: null,
-      log: [...state.log, ...resolution.logEntries],
+      log: [...state.log, ...resolution.logEntries, ...extraLog],
     }));
+
+    //set((state) => ({
+    //  investigator: resolution.investigator,
+    //  locations: resolution.locations,
+    //  enemies: resolution.enemies,
+    //  campaignState: resolution.campaignState,
+    //  pendingInteractiveTargetSelection: null,
+    //  log: [...state.log, ...resolution.logEntries],
+    //}));
 
     const updatedState = get();
     savePersistedCampaignSetup({
@@ -1519,9 +1548,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return movedEnemy;
     });
 
-    set({
-      enemies: updatedEnemies,
+    const newlyEngagedHunter = updatedEnemies.some((enemy) => {
+      const originalEnemy = enemies.find((entry) => entry.id === enemy.id);
+
+      return (
+        enemy.engagedInvestigatorId === investigator.id &&
+        originalEnemy?.engagedInvestigatorId !== investigator.id
+      );
     });
+
+    let updatedInvestigator = investigator;
+    let updatedLocations = locations;
+    let finalEnemies = updatedEnemies;
+    let updatedCampaignState = get().campaignState;
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+
+    if (newlyEngagedHunter) {
+      const forcedResolution = applyEnemyEngagedForcedAbilities({
+        locationId: investigatorLocation.id,
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: finalEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = forcedResolution.investigator;
+      updatedLocations = forcedResolution.locations;
+      finalEnemies = forcedResolution.enemies;
+      updatedCampaignState = forcedResolution.campaignState;
+      extraLog.push(...forcedResolution.logEntries);
+    }
+
+    set((state) => ({
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: finalEnemies,
+      campaignState: updatedCampaignState,
+      log: [...state.log, ...extraLog],
+    }));
 
     if (!movedAny) {
       return;
@@ -4143,7 +4207,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   engageEnemiesAtLocation: () => {
-    const { investigator, locations, enemies, selectedEnemyTargetId } = get();
+    const { investigator, locations, enemies, campaignState, selectedEnemyTargetId } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
     if (!currentLocation) {
@@ -4153,13 +4217,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let didEngage = false;
 
     const updatedEnemies = enemies.map((enemy) => {
-      if (enemyHasAloof(enemy)) {
-        return enemy;
-      }
       if (
         enemy.locationId === currentLocation.id &&
         enemy.engagedInvestigatorId === null &&
-        !enemy.exhausted
+        !enemy.exhausted &&
+        !enemyHasAloof(enemy)
       ) {
         didEngage = true;
         return {
@@ -4172,36 +4234,47 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     if (!didEngage) {
-      const preferredTargetId = getPreferredEnemyTargetId(
-        enemies,
-        currentLocation.id,
-        investigator.id,
-        selectedEnemyTargetId,
-      );
-
-      if (preferredTargetId !== selectedEnemyTargetId) {
-        set({ selectedEnemyTargetId: preferredTargetId });
-      }
-
       return;
     }
 
-    const preferredTargetId = getPreferredEnemyTargetId(
-      updatedEnemies,
-      currentLocation.id,
-      investigator.id,
-      selectedEnemyTargetId,
-    );
+    let updatedInvestigator = investigator;
+    let updatedLocations = locations;
+    let finalEnemies = updatedEnemies;
+    let updatedCampaignState = campaignState;
+    const engagementLog: ReturnType<typeof createLogEntry>[] = [
+      createLogEntry(
+        "enemy",
+        `Enemies at ${currentLocation.name} engaged ${investigator.name}.`,
+      ),
+    ];
 
-    set({
-      enemies: updatedEnemies,
-      selectedEnemyTargetId: preferredTargetId,
+    const forcedResolution = applyEnemyEngagedForcedAbilities({
+      locationId: currentLocation.id,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: finalEnemies,
+      campaignState: updatedCampaignState,
     });
 
-    get().pushLog(
-      "enemy",
-      `Enemies at ${currentLocation.name} engaged ${investigator.name}.`,
-    );
+    updatedInvestigator = forcedResolution.investigator;
+    updatedLocations = forcedResolution.locations;
+    finalEnemies = forcedResolution.enemies;
+    updatedCampaignState = forcedResolution.campaignState;
+    engagementLog.push(...forcedResolution.logEntries);
+
+    set((state) => ({
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: finalEnemies,
+      campaignState: updatedCampaignState,
+      selectedEnemyTargetId: getPreferredEnemyTargetId(
+        finalEnemies,
+        currentLocation.id,
+        investigator.id,
+        selectedEnemyTargetId,
+      ),
+      log: [...state.log, ...engagementLog],
+    }));
   },
 
   readyAllEnemies: () => {

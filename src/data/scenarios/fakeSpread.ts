@@ -42,15 +42,15 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       abilities: [
         {
-          label: "Blood in the Air",
+          label: "Close Quarters",
           trigger: "forced",
           event: "enemyEngaged",
-          text: "After an enemy is engaged at this location, gain 1 resource.",
+          text: "After an enemy engages you at this location, take 1 horror.",
           effect: {
-            kind: "gainResources",
+            kind: "takeHorror",
             amount: 1,
           },
-        },
+        }
       ],
       text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
 
