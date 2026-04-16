@@ -246,7 +246,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       sequence: "1a",
       title: "Past Curfew",
       text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
-      threshold: 3,
+      threshold: 2,
       thresholdLabel: "Doom",
     },
     {
