@@ -5109,6 +5109,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
           updatedInvestigator = defeatResolution.investigator;
           resolutionLog.push(...defeatResolution.logEntries);
+
+          const enemyLocation = updatedLocations.find(
+            (entry) => entry.id === enemy.locationId,
+          );
+
+          if (enemyLocation) {
+            const forcedResolution = executeForcedLocationAbilities({
+              location: enemyLocation,
+              event: "enemyDefeated",
+              investigator: updatedInvestigator,
+              locations: updatedLocations,
+              enemies: updatedEnemies,
+              campaignState: updatedCampaignState,
+            });
+
+            updatedInvestigator = forcedResolution.investigator;
+            updatedLocations = forcedResolution.locations;
+            updatedEnemies = forcedResolution.enemies;
+            updatedCampaignState = forcedResolution.campaignState;
+
+            resolutionLog.push(...forcedResolution.logEntries);
+          }
+
         }
 
         resolutionLog.push(

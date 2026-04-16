@@ -42,12 +42,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       abilities: [
         {
-          label: "Campus Whispers",
+          label: "Blood in the Air",
           trigger: "forced",
-          event: "discoverClues",
-          text: "After you discover 1 or more clues at this location, take 1 horror.",
+          event: "enemyDefeated",
+          text: "After an enemy is defeated at this location, gain 1 resource.",
           effect: {
-            kind: "takeHorror",
+            kind: "gainResources",
             amount: 1,
           },
         },

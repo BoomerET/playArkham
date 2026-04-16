@@ -264,7 +264,8 @@ export type CardAbilitySkillTest = {
 
 export type CardAbilityEvent =
   | "enterLocation"
-  | "discoverClues";
+  | "discoverClues"
+  | "enemyDefeated";
 
 export type CardAbilityDefinition = {
   label: string;
