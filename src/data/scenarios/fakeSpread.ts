@@ -44,8 +44,8 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         {
           label: "Blood in the Air",
           trigger: "forced",
-          event: "enemyDefeated",
-          text: "After an enemy is defeated at this location, gain 1 resource.",
+          event: "enemyEngaged",
+          text: "After an enemy is engaged at this location, gain 1 resource.",
           effect: {
             kind: "gainResources",
             amount: 1,
