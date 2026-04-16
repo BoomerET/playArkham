@@ -515,7 +515,9 @@ export default function InvestigatorPanel() {
           <hr />
 
           <div className="engaged-enemies-section">
-            <div className="engaged-enemies-header">Engaged Enemies</div>
+            <div className="engaged-enemies-header">
+              Engaged Enemies ({engagedEnemies.length})
+            </div>
 
             {engagedEnemies.length > 1 && activeTargetEnemy && (
               <p className="engaged-enemies-targeting-note">
