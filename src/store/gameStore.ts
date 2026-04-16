@@ -2616,7 +2616,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (thresholdReached) {
       get().pushLog(
         "scenario",
-        `Agenda ${agenda.sequence} reached its threshold and advances.`,
+        `${agenda.thresholdLabel} reached ${agenda.threshold}. Agenda ${agenda.sequence} advances.`,
       );
       get().advanceAgenda();
     }
