@@ -866,9 +866,9 @@ export const encounterCards: EncounterCard[] = [
         name: "Dave's Test Encounter",
         type: "enemy",
 
-        fight: 2,
+        fight: 1,
         health: 1,
-        evade: 4,
+        evade: 1,
         damage: 1,
         horror: 1,
         traits: [
