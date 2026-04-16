@@ -1587,11 +1587,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log: [...state.log, ...extraLog],
     }));
 
-    if (!movedAny) {
+    if (!movedAny && !newlyEngagedHunter) {
       return;
     }
 
-    for (const enemy of updatedEnemies) {
+    for (const enemy of finalEnemies) {
       if (!enemyHasHunter(enemy)) {
         continue;
       }
