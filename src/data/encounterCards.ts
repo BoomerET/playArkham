@@ -861,7 +861,7 @@ export const encounterCards: EncounterCard[] = [
       This is my test card
     */
     {
-        id: "davesaloof",
+        id: "davestestencounter",
         code: "14001",
         name: "Dave's Test Encounter",
         type: "enemy",
@@ -876,8 +876,8 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         ability: [
-            "Hunter",
-            "Parley",
+            //"Hunter",
+            //"Parley",
         ],
 
         text: [
