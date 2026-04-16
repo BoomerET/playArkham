@@ -536,56 +536,82 @@ export default function InvestigatorPanel() {
                 const isSelectable = engagedEnemies.length > 1;
 
                 return (
-                  <button
-                    key={enemy.id}
-                    type="button"
-                    className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
-                      } ${isSelectable ? "engaged-enemy-card-selectable" : ""
-                      }`}
-                    onClick={() => setSelectedEnemyTarget(enemy.id)}
-                    disabled={!isSelectable}
-                    aria-pressed={isSelectedTarget}
-                    title={
-                      isSelectable
-                        ? `Select ${enemy.name} as the current target`
-                        : undefined
-                    }
-                  >
-                    <div className="engaged-enemy-main">
-                      <div className="engaged-enemy-name-row">
-                        <div className="engaged-enemy-name-stack">
-                          <span className="engaged-enemy-name">
-                            {enemy.name}
-                          </span>
+                  <div key={enemy.id} className="engaged-enemy-entry">
+                    <button
+                      type="button"
+                      className={`engaged-enemy-card ${isSelectedTarget ? "engaged-enemy-card-primary" : ""
+                        } ${isSelectable ? "engaged-enemy-card-selectable" : ""}`}
+                      onClick={() => setSelectedEnemyTarget(enemy.id)}
+                      disabled={!isSelectable}
+                      aria-pressed={isSelectedTarget}
+                      title={
+                        isSelectable
+                          ? `Select ${enemy.name} as the current target`
+                          : undefined
+                      }
+                    >
+                      <div className="engaged-enemy-main">
+                        <div className="engaged-enemy-name-row">
+                          <div className="engaged-enemy-name-stack">
+                            <span className="engaged-enemy-name">{enemy.name}</span>
 
-                          <div className="engaged-enemy-badges">
-                            {isSelectedTarget && (
-                              <span className="engaged-enemy-tag engaged-enemy-tag-primary">
-                                Current Target
-                              </span>
-                            )}
+                            <div className="engaged-enemy-badges">
+                              {isSelectedTarget && (
+                                <span className="engaged-enemy-tag engaged-enemy-tag-primary">
+                                  Current Target
+                                </span>
+                              )}
 
-                            {enemy.exhausted && (
-                              <span className="engaged-enemy-tag">
-                                Exhausted
-                              </span>
-                            )}
+                              {enemy.exhausted && (
+                                <span className="engaged-enemy-tag">Exhausted</span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="engaged-enemy-meta">
-                        <span className="token-chip danger">
-                          Damage {enemy.damageOnEnemy}/{enemy.health}
-                        </span>
-                        <span className="token-chip">
-                          HP Left {remainingHealth}
-                        </span>
-                        <span className="token-chip">Fight {enemy.fight}</span>
-                        <span className="token-chip">Evade {enemy.evade}</span>
+                        <div className="engaged-enemy-meta">
+                          <span className="token-chip danger">
+                            Damage {enemy.damageOnEnemy}/{enemy.health}
+                          </span>
+                          <span className="token-chip">HP Left {remainingHealth}</span>
+                          <span className="token-chip">Fight {enemy.fight}</span>
+                          <span className="token-chip">Evade {enemy.evade}</span>
+                          <span className="token-chip">Damage {enemy.damage}</span>
+                          <span className="token-chip">Horror {enemy.horror}</span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+
+                    {isSelectedTarget && canTakeAction && (
+                      <div className="engaged-enemy-actions">
+                        <button
+                          type="button"
+                          className="engaged-enemy-action-button"
+                          onClick={fightAction}
+                        >
+                          Fight
+                        </button>
+
+                        <button
+                          type="button"
+                          className="engaged-enemy-action-button"
+                          onClick={evadeAction}
+                        >
+                          Evade
+                        </button>
+
+                        {enemy.parley && (
+                          <button
+                            type="button"
+                            className="engaged-enemy-action-button"
+                            onClick={() => parleyAction(enemy.id)}
+                          >
+                            Parley
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </div>
