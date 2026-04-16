@@ -30,6 +30,8 @@ describe("locationAbility action costs", () => {
                     id: "student-union",
                     name: "Student Union",
                     clues: 0,
+                    code: "8675309f",
+                    shroud: 1,
                     revealed: true,
                     connections: [],
                     investigatorsHere: ["investigator-1"],

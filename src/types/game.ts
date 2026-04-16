@@ -263,7 +263,8 @@ export type CardAbilitySkillTest = {
 };
 
 export type CardAbilityEvent =
-  | "enterLocation";
+  | "enterLocation"
+  | "discoverClues";
 
 export type CardAbilityDefinition = {
   label: string;
