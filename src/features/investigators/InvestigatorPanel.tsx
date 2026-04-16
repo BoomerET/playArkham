@@ -442,7 +442,7 @@ export default function InvestigatorPanel() {
             <div className="engaged-enemies-header">Choose Target</div>
 
             <p className="engaged-enemies-targeting-note">
-              Select an enemy for {pendingInteractiveTargetSelection.sourceName}.
+              Select an engaged enemy, then use Fight, Evade, or Parley below.
             </p>
 
             <div className="engaged-enemies-list">
