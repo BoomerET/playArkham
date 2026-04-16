@@ -244,6 +244,8 @@ type GameStore = GameState & CampaignStoreActions & {
   setActProgress: (progress: number) => void;
   advanceAgenda: () => void;
   advanceAct: () => void;
+  addAgendaProgress: (amount?: number) => void;
+  removeAgendaProgress: (amount?: number) => void;
   pushLog: (kind: GameLogKind, text: string) => void;
   setDraggedCardId: (cardId: string | null) => void;
   startGame: () => Promise<void>;
@@ -2569,6 +2571,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
   parleyEnemy: () => {
   },
 
+  addAgendaProgress: (amount = 1) => {
+    const { agenda } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    get().setAgendaProgress(agenda.progress + amount);
+  },
+
+  removeAgendaProgress: (amount = 1) => {
+    const { agenda } = get();
+
+    if (!agenda) {
+      return;
+    }
+
+    get().setAgendaProgress(Math.max(0, agenda.progress - amount));
+  },
+
   setAgendaProgress: (progress) => {
     const { agenda } = get();
 
@@ -2577,6 +2599,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const nextProgress = Math.max(0, progress);
+    const thresholdReached = nextProgress >= agenda.threshold;
 
     set({
       agenda: {
@@ -2589,6 +2612,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       "scenario",
       `${agenda.thresholdLabel} on agenda set to ${nextProgress}/${agenda.threshold}.`,
     );
+
+    if (thresholdReached) {
+      get().pushLog(
+        "scenario",
+        `Agenda ${agenda.sequence} reached its threshold and advances.`,
+      );
+      get().advanceAgenda();
+    }
   },
 
   setActProgress: (progress) => {
@@ -3009,6 +3040,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       agenda,
       pendingChoice,
     } = get();
+
+    get().addAgendaProgress(1);
 
     if (pendingChoice) {
       get().pushLog(
