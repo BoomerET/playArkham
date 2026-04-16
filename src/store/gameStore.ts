@@ -5025,6 +5025,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ),
           );
         }
+
+        if (totalCluesDiscovered > 0) {
+          const updatedLocation = updatedLocations.find(
+            (entry) => entry.id === pendingTestResolution.locationId,
+          );
+
+          if (updatedLocation) {
+            const forcedResolution = executeForcedLocationAbilities({
+              location: updatedLocation,
+              event: "discoverClues",
+              investigator: updatedInvestigator,
+              locations: updatedLocations,
+              enemies: updatedEnemies,
+              campaignState: updatedCampaignState,
+            });
+
+            updatedInvestigator = forcedResolution.investigator;
+            updatedLocations = forcedResolution.locations;
+            updatedEnemies = forcedResolution.enemies;
+            updatedCampaignState = forcedResolution.campaignState;
+
+            resolutionLog.push(...forcedResolution.logEntries);
+          }
+        }
       }
     }
 

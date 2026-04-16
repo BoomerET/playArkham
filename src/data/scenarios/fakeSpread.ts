@@ -42,24 +42,23 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       abilities: [
         {
-          label: "Campus Dread",
+          label: "Campus Whispers",
           trigger: "forced",
-          event: "enterLocation",
-          text: "After you enter this location, take 1 horror.",
+          event: "discoverClues",
+          text: "After you discover 1 or more clues at this location, take 1 horror.",
           effect: {
             kind: "takeHorror",
             amount: 1,
           },
-        }
-
+        },
       ],
       text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
 
-      revealed: false,
-      isVisible: false,
+      revealed: true,
+      isVisible: true,
       investigatorsHere: [],
       revealCondition: {
         key: "testFlag",
