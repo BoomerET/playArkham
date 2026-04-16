@@ -26,6 +26,8 @@ describe("interactive target selection", () => {
                 {
                     id: "student-union",
                     name: "Student Union",
+                    shroud: 0,
+                    code: "8675309g",
                     clues: 0,
                     revealed: true,
                     connections: ["dormitories"],
@@ -49,6 +51,8 @@ describe("interactive target selection", () => {
                 {
                     id: "dormitories",
                     name: "Dormitories",
+                    shroud: 0,
+                    code: "8675309h",
                     clues: 0,
                     revealed: true,
                     connections: ["student-union"],
@@ -61,6 +65,8 @@ describe("interactive target selection", () => {
                 {
                     id: "quad",
                     name: "Quad",
+                    shroud: 0,
+                    code: "8675309i",
                     clues: 0,
                     revealed: true,
                     connections: [],
