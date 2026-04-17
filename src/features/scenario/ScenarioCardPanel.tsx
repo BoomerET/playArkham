@@ -72,6 +72,8 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
         );
     }
 
+    const advanceActByClues = useGameStore((state) => state.advanceActByClues);
+
     return (
         <section className={`scenario-card-panel scenario-card-panel-${kind}`}>
             <div className="scenario-card-panel__header">
@@ -125,6 +127,9 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                             Advance
                         </button>
                     ) : null}
+                    <button onClick={advanceActByClues}>
+                        Advance Act with Clues
+                    </button>
                 </div>
             </div>
         </section>

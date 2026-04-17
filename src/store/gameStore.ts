@@ -220,6 +220,7 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
+  advanceActByClues: () => void;
   locationAbility: (abilityIndex: number) => void;
   chooseInteractiveEnemyTarget: (enemyId: string) => void;
   cancelInteractiveTargetSelection: () => void;
@@ -1398,6 +1399,49 @@ function applyEnemyEngagedForcedAbilities(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  advanceActByClues: () => {
+    const { act, investigator, scenarioStatus } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    if (!act) {
+      get().pushLog("system", "There is no current act.");
+      return;
+    }
+
+    const cluesNeeded = Math.max(0, act.threshold - act.progress);
+
+    if (cluesNeeded <= 0) {
+      get().pushLog("system", `Act ${act.sequence} is already ready to advance.`);
+      get().advanceAct();
+      return;
+    }
+
+    if (investigator.clues < cluesNeeded) {
+      get().pushLog(
+        "system",
+        `You need ${cluesNeeded} clue${cluesNeeded === 1 ? "" : "s"} to advance Act ${act.sequence}.`,
+      );
+      return;
+    }
+
+    set({
+      investigator: {
+        ...investigator,
+        clues: investigator.clues - cluesNeeded,
+      },
+    });
+
+    get().pushLog(
+      "scenario",
+      `Spent ${cluesNeeded} clue${cluesNeeded === 1 ? "" : "s"} to advance Act ${act.sequence}.`,
+    );
+
+    get().setActProgress(act.progress + cluesNeeded);
+  },
   cancelInteractiveTargetSelection: () => {
     const { pendingInteractiveTargetSelection } = get();
 
@@ -1468,15 +1512,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingInteractiveTargetSelection: null,
       log: [...state.log, ...resolution.logEntries, ...extraLog],
     }));
-
-    //set((state) => ({
-    //  investigator: resolution.investigator,
-    //  locations: resolution.locations,
-    //  enemies: resolution.enemies,
-    //  campaignState: resolution.campaignState,
-    //  pendingInteractiveTargetSelection: null,
-    //  log: [...state.log, ...resolution.logEntries],
-    //}));
 
     const updatedState = get();
     savePersistedCampaignSetup({
