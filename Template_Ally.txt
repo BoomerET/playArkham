@@ -1,0 +1,12 @@
+{
+    id: "dr-henry-armitage",
+    code: "12115",
+    name: "Dr. Henry Armitage",
+    subname: "Head Librarian",
+    type: "ally",
+    traits: ["Ally",],
+    text: [
+        "You get +1 WIL and +1 INT",
+    ],
+    set: "fix-me",
+},

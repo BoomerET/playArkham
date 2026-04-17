@@ -929,6 +929,20 @@ export const encounterCards: EncounterCard[] = [
 
         set: "cultists",
     },
+    {
+        id: "collector",
+        code: "12181",
+        name: "Collector",
+        type: "ally",
+        traits: ["Talent",],
+        text: [
+            "Permanent. Reward. Limit 1 per deck. Purchase at deck creation.",
+            "You get +5 deck size.",
+            "Your investigator's Deckbuilding Options gains: \"one other Relic or Charm asset of any class\"",
+            "(Guardian, Seeker, Rogue, Mystic, Survivor) level 0-3",
+        ],
+        set: "fix-me",
+    },
     /*
       This is my test card
     */
