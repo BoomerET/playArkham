@@ -266,7 +266,9 @@ export type CardAbilityEvent =
   | "enterLocation"
   | "discoverClues"
   | "enemyDefeated"
-  | "enemyEngaged";
+  | "enemyEngaged"
+  | "turnBegins"
+  | "turnEnds";
 
 export type CardAbilityDefinition = {
   label: string;
