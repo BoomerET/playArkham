@@ -857,6 +857,78 @@ export const encounterCards: EncounterCard[] = [
 
         set: "queen-of-ash",
     },
+    {
+        id: "zealot",
+        code: "12188",
+        name: "Zealot",
+        type: "enemy",
+
+        fight: 2,
+        health: 1,
+        evade: 2,
+        damage: 1,
+        horror: 0,
+
+        traits: [
+            "Humanoid",
+            "Cultist",
+        ],
+        ability: [
+            "Aloof",
+        ],
+        text: [
+            "Forced - After this enemy enters play: Place 1 doom on it.",
+        ],
+
+        set: "cultists",
+    },
+    {
+        id: "languor",
+        code: "12193",
+        name: "Languor",
+        type: "treachery",
+
+        traits: [
+            "Hex",
+            "Bane",
+        ],
+
+        text: [
+            "Revelation - Put Languor into play in your threat area. Limit 1 per investigator.",
+            "Forced - After your turn begins: Discard the top card of your deck. If it is a weakness, draw it. Otherwise, you cannot play or commit cards of that type (asset, even, or skill) this round.",
+            "Spend 2 actions to Discard",
+        ],
+
+        set: "torment",
+    },
+    {
+        id: "dark-magician",
+        code: "12189",
+        name: "Dark Magician",
+        subname: "Raging Fury",
+        type: "enemy",
+
+        fight: 4,
+        health: 4,
+        evade: 2,
+        damage: 1,
+        horror: 1,
+        victoryPoints: 2,
+
+        traits: [
+            "Humanoid",
+            "Cultist",
+        ],
+        ability: [
+            "Hunter",
+            "Retaliate.",
+        ],
+        text: [
+            "Forced - When the round ends: Place 1 doom on the enemy with no doom on it nearest to Dark Magician.",
+        ],
+
+        set: "cultists",
+    },
     /*
       This is my test card
     */
