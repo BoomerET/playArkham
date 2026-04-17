@@ -893,6 +893,7 @@ export const encounterCards: EncounterCard[] = [
         type: "treachery",
         traits: [
             "Omen",
+            "Cultist",
         ],
         ability: [
             "Peril",
@@ -900,6 +901,33 @@ export const encounterCards: EncounterCard[] = [
         text: [
             "Revelation - You must either (choose one): Place 1 doom on the current agenda. This effect can cause the agenta to advance. OR Take 1 direct damage and 1 direct horror. Cosmic Evils gains surge",
         ],
+        set: "daves-tests",
+    },
+    {
+        id: "davestestspawn",
+        code: "14003",
+        name: "Dave's Test Spawn",
+        type: "enemy",
+
+        fight: 1,
+        health: 1,
+        evade: 1,
+        damage: 1,
+        horror: 1,
+        traits: [
+            "Humanoid",
+            "Cultist",
+        ],
+
+        ability: [
+            //"Hunter",
+            //"Parley",
+        ],
+
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
+
         set: "daves-tests",
     },
 ];
