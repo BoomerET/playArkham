@@ -1015,6 +1015,20 @@ export const encounterCards: EncounterCard[] = [
         ],
         set: "torment",
     },
+    {
+        id: "blasphemous-invocation",
+        code: "12190",
+        name: "Blasphemous Invocation",
+        type: "treachery",
+        traits: [
+            "Hex",
+        ],
+
+        text: [
+            "Revelation - Test WIL (3). For each point you fail by, place 1 doom on a Cultist enemy with no doom on it. If you fail and no doom was placed, search the encounter deck and discard pile for a Cultist enemy and draw it. (Shuffle the encounter deck if it was searched)",
+        ],
+        set: "cultist",
+    },
     /*
       This is my test card
     */
