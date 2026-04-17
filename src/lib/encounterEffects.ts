@@ -147,10 +147,21 @@ export function resolveEncounterCardImmediate(args: {
 
     case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
       return {
-        kind: "doomOnAgenda",
-        amount: 1,
-        logText:
-          "Dave's Test Treachery: place 1 doom on the current agenda.",
+        kind: "spawnAcolyte",
+        enemy: {
+          id: `14003-${Date.now()}`,
+          name: "Test Acolyte",
+          fight: 2,
+          evade: 2,
+          health: 2,
+          damage: 1,
+          horror: 1,
+          exhausted: false,
+          damageOnEnemy: 0,
+          ability: [],
+        },
+        doomOnAgenda: 1,
+        logText: "Dave's Test Treachery: place 1 doom on the current agenda.",
       };
     default:
       return {
