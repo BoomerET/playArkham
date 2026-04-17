@@ -899,7 +899,7 @@ export const encounterCards: EncounterCard[] = [
             "Peril",
         ],
         text: [
-            "Revelation - You must either (choose one): Place 1 doom on the current agenda. This effect can cause the agenta to advance. OR Take 1 direct damage and 1 direct horror. Cosmic Evils gains surge",
+            "Revelation - Flavor text.",
         ],
         set: "daves-tests",
     },
