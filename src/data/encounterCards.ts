@@ -957,6 +957,64 @@ export const encounterCards: EncounterCard[] = [
         ],
         set: "queen-of-ash",
     },
+    {
+        id: "putrid-vapors",
+        code: "12192",
+        name: "Putrid Vapors",
+        type: "treachery",
+        traits: [
+            "Hazard",
+        ],
+        text: [
+            "Revelation - Test SPD (3). If you fail, take 1 horror and discard a non-story asset you control.",
+        ],
+        set: "reeking-decay",
+    },
+    {
+        id: "unnatural-decay",
+        code: "12191",
+        name: "Unnatural Decay",
+        type: "treachery",
+        traits: [
+            "Curse",
+        ],
+
+        text: [
+            "Revelation - Test WIL (4). If you fail, you must either place 1 doom on an asset you control, or take 2 damage.",
+        ],
+        set: "reeking-decay",
+    },
+    {
+        id: "torment",
+        code: "12195",
+        name: "Torment",
+        type: "treachery",
+        traits: [
+            "Power",
+            "Bane",
+        ],
+        ability: [
+            "Peril",
+        ],
+        text: [
+            "Revelation - Test WIL (3). If you fail, name a cardtype (asset, event, or skill). Each invetigator discards 1 card of the named type from their hand.",
+        ],
+        set: "torment",
+    },
+    {
+        id: "dissonance",
+        code: "12194",
+        name: "Dissonance",
+        type: "treachery",
+        traits: [
+            "Curse",
+            "Bane",
+        ],
+        text: [
+            "Revelation - Test WIL (3). If you fail, lose 1 action and choose a cardtype (asset, event, or skill). Discard all non-weakness cards of the chosen type from your hand.",
+        ],
+        set: "torment",
+    },
     /*
       This is my test card
     */
