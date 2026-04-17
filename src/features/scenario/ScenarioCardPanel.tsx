@@ -127,9 +127,13 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                             Advance
                         </button>
                     ) : null}
-                    <button onClick={advanceActByClues}>
-                        Advance Act with Clues
-                    </button>
+                    {kind === "act" ? (
+                        <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={advanceActByClues}>
+                            Advance Act with Clues
+                        </button>) : null}
                 </div>
             </div>
         </section>
