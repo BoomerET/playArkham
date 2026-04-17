@@ -1398,6 +1398,44 @@ function applyEnemyEngagedForcedAbilities(args: {
   });
 }
 
+function emitLocationEvent(args: {
+  event: CardAbilityEvent;
+  locationId: string;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const { event, locationId, investigator, locations, enemies, campaignState } = args;
+
+  const location = locations.find((entry) => entry.id === locationId);
+
+  if (!location) {
+    return {
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+      logEntries: [],
+    };
+  }
+
+  return executeForcedLocationAbilities({
+    location,
+    event,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  });
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   advanceActByClues: () => {
     const { act, investigator, scenarioStatus } = get();
@@ -4245,8 +4283,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     if (destinationLocation) {
-      const forcedResolution = executeForcedLocationAbilities({
-        location: destinationLocation,
+      const forcedResolution = emitLocationEvent({
+        locationId: destinationLocation.id,
         event: "enterLocation",
         investigator: updatedInvestigator,
         locations: finalLocations,
@@ -5046,8 +5084,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           );
 
           if (updatedLocation) {
-            const forcedResolution = executeForcedLocationAbilities({
-              location: updatedLocation,
+            const forcedResolution = emitLocationEvent({
+              locationId: updatedLocation.id,
               event: "discoverClues",
               investigator: updatedInvestigator,
               locations: updatedLocations,
@@ -5129,9 +5167,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           );
 
           if (enemyLocation) {
-            const forcedResolution = executeForcedLocationAbilities({
-              location: enemyLocation,
+            const forcedResolution = emitLocationEvent({
               event: "enemyDefeated",
+              locationId: enemyLocation.id,
               investigator: updatedInvestigator,
               locations: updatedLocations,
               enemies: updatedEnemies,
