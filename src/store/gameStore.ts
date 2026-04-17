@@ -2631,6 +2631,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const nextProgress = Math.max(0, progress);
+    const thresholdReached = nextProgress >= act.threshold;
 
     set({
       act: {
@@ -2643,6 +2644,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
       "scenario",
       `${act.thresholdLabel} on act set to ${nextProgress}/${act.threshold}.`,
     );
+
+    if (thresholdReached) {
+      get().pushLog(
+        "scenario",
+        `Act ${act.sequence} reached its threshold and advances.`,
+      );
+      get().advanceAct();
+    }
+  },
+
+  addActProgress: (amount = 1) => {
+    const { act } = get();
+
+    if (!act) {
+      return;
+    }
+
+    get().setActProgress(act.progress + amount);
+  },
+
+  removeActProgress: (amount = 1) => {
+    const { act } = get();
+
+    if (!act) {
+      return;
+    }
+
+    get().setActProgress(Math.max(0, act.progress - amount));
   },
 
   advanceAgenda: () => {
