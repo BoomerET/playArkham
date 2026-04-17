@@ -4318,7 +4318,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setPhase: (phase) => {
     const { turn } = get();
-    console.log("Did you get into here");
 
     set({
       turn: {
