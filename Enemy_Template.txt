@@ -1,0 +1,30 @@
+Enemy Template
+{
+  id: "servant-of-flame",
+  code: "12114",
+  name: "Servant of Flame",
+  subname: "Raging Fury",
+  type: "enemy",
+
+  fight: 4,
+  health: 5,
+  evade: 4,
+  damage: 2,
+  horror: 2,
+  victoryPoints: 2,
+
+  traits: [
+    "Humanoid",
+    "Elite",
+  ],
+  ability: [
+    "Hunter",
+    "Prey (lowest SPD)",
+    "Retaliate.",
+  ],
+  text: [
+    "Forced - When Servant of Flame is defeated: (Codex Theta)",
+  ],
+
+  set: "spreading-flames",
+},

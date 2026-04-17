@@ -1,0 +1,17 @@
+Treachery Template
+{
+  id: "cosmic-evils",
+  code: "12124",
+  name: "Cosmic Evils",
+  type: "treachery",  
+  traits: [
+      "Omen",
+  ],  
+  ability: [
+      "Peril",
+  ],  
+  text: [
+      "Revelation - ",
+  ],  
+  set: "arkham-set",
+},

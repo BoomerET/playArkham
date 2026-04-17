@@ -1,0 +1,32 @@
+Location Template:
+{
+  id: "fake-friends-room",
+  code: "12113",
+  name: "Your Friend's Room", 
+  subname: "Messy Tom",
+
+  shroud: 2,
+  clues: 2,
+  victoryPoints: 1,
+  traits: [
+    "Miskatonic"
+  ],
+  actions: [
+  ],
+
+  text: ["Action: ",],
+  parley: {
+    },
+  },
+  revealCondition: {
+    key: "testFlag",
+    equals: true,
+  },
+
+  connections: ["conn-room"],
+  mapPosition: { x: 8, y: 16 }, 
+
+  revealed: true,
+  isVisible: true,
+  investigatorsHere: [],
+},

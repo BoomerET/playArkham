@@ -61,24 +61,10 @@ Location Template:
     "Miskatonic"
   ],
   actions: [
-    {
-      label: "Set Test Flag",
-      text: "You flip a mysterious switch.",
-      effect: {
-        kind: "setScenarioFlag",
-        key: "testFlag",
-        value: true,
-      },
-    },
   ],
 
   text: ["Action: ",],
   parley: {
-    label: "Parley",
-    text: "You parley with a Frat Bro.",
-    effect: {
-      kind: "gainResources",
-      amount: 1,
     },
   },
   revealCondition: {
@@ -86,7 +72,7 @@ Location Template:
     equals: true,
   },
 
-  connections: ["fake-dormitories"],
+  connections: ["conn-room"],
   mapPosition: { x: 8, y: 16 }, 
 
   revealed: true,
