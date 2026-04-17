@@ -7,7 +7,7 @@
  * Available kinds:
  * - "none"
  * - "doomOnAgenda"
- * - "spawnAcolyte"
+ * - "spawnEnemy"
  * - "skillTest"
  * - "choice"
  * - "attachToThreatArea"
