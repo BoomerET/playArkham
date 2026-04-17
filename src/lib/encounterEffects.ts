@@ -150,6 +150,8 @@ export function resolveEncounterCardImmediate(args: {
         kind: "spawnAcolyte",
         enemy: {
           id: `14003-${Date.now()}`,
+          locationId: currentLocationId,
+          engagedInvestigatorId: null,
           name: "Test Acolyte",
           fight: 2,
           evade: 2,
