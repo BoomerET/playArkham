@@ -4318,7 +4318,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setPhase: (phase) => {
     const { turn, investigator, locations, enemies, campaignState } = get();
-
+    console.log(phase);
     let updatedInvestigator = investigator;
     let updatedLocations = locations;
     let updatedEnemies = enemies;
