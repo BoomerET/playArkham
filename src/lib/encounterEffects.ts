@@ -191,10 +191,10 @@ export function resolveEncounterCardImmediate(args: {
         logText: "Dave's Test Treachery: place 1 doom on the current agenda.",
       };
 
-    case ENCOUNTER_CARD_CODES.MUTATED_EXPERIMENT:
-      return {
-
-      }
+    //case ENCOUNTER_CARD_CODES.MUTATED_EXPERIMENT:
+    //  return {
+    //
+    //  }
     default:
       return {
         kind: "genericTreachery",
