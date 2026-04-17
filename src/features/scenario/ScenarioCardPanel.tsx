@@ -43,6 +43,9 @@ function getScenarioCardImage(
 export default function ScenarioCardPanel({ kind, card }: Props) {
     const advanceAgenda = useGameStore((state) => state.advanceAgenda);
     const advanceAct = useGameStore((state) => state.advanceAct);
+    const investigator = useGameStore((state) => state.investigator);
+    const advanceActByClues = useGameStore((state) => state.advanceActByClues);
+
     const [flippedCardKey, setFlippedCardKey] = useState<string | null>(null);
 
     const cardKey = card ? `${card.id}-${card.sequence}` : null;
@@ -61,6 +64,15 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
         [card, previewFlipped],
     );
 
+    const actCluesNeeded =
+        kind === "act" && card ? Math.max(0, card.threshold - card.progress) : 0;
+
+    const canAdvanceActByClues =
+        kind === "act" &&
+        card !== null &&
+        actCluesNeeded > 0 &&
+        investigator.clues >= actCluesNeeded;
+
     if (!card) {
         return (
             <section className="scenario-card-panel scenario-card-panel-empty">
@@ -71,8 +83,6 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
             </section>
         );
     }
-
-    const advanceActByClues = useGameStore((state) => state.advanceActByClues);
 
     return (
         <section className={`scenario-card-panel scenario-card-panel-${kind}`}>
@@ -94,7 +104,11 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                 <>
                     <h3 className="scenario-card-panel__title">{card.title}</h3>
 
-                    <div className="scenario-card-panel__text">{card.text}</div>
+                    <div className="scenario-card-panel__text">
+                        {card.text.map((line, index) => (
+                            <p key={`${card.id}-text-${index}`}>{line}</p>
+                        ))}
+                    </div>
                 </>
             )}
 
@@ -127,12 +141,17 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                             Advance
                         </button>
                     ) : null}
-                    {kind === "act" ? (
+
+                    {kind === "act" && !canAdvance ? (
                         <button
                             type="button"
                             className="secondary-button"
-                            onClick={advanceActByClues}>
-                            Advance Act with Clues
+                            onClick={advanceActByClues}
+                            disabled={!canAdvanceActByClues}
+                        >
+                            {canAdvanceActByClues
+                                ? `Advance with ${actCluesNeeded} clue${actCluesNeeded === 1 ? "" : "s"}`
+                                : `Need ${actCluesNeeded} clue${actCluesNeeded === 1 ? "" : "s"}`}
                         </button>
                     ) : null}
                 </div>
