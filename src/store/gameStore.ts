@@ -1361,43 +1361,6 @@ function getMatchingForcedLocationAbilities(args: {
   });
 }
 
-function applyEnemyEngagedForcedAbilities(args: {
-  locationId: string;
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-}): {
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-  logEntries: ReturnType<typeof createLogEntry>[];
-} {
-  const { locationId, investigator, locations, enemies, campaignState } = args;
-
-  const location = locations.find((entry) => entry.id === locationId);
-
-  if (!location) {
-    return {
-      investigator,
-      locations,
-      enemies,
-      campaignState,
-      logEntries: [],
-    };
-  }
-
-  return executeForcedLocationAbilities({
-    location,
-    event: "enemyEngaged",
-    investigator,
-    locations,
-    enemies,
-    campaignState,
-  });
-}
-
 function emitLocationEvent(args: {
   event: CardAbilityEvent;
   locationId: string;
@@ -1528,7 +1491,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedCampaignState = resolution.campaignState;
     const extraLog: ReturnType<typeof createLogEntry>[] = [];
 
-    const forcedResolution = applyEnemyEngagedForcedAbilities({
+    const forcedResolution = emitLocationEvent({
+      event: "enemyEngaged",
       locationId: pendingInteractiveTargetSelection.currentLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
@@ -1640,7 +1604,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const extraLog: ReturnType<typeof createLogEntry>[] = [];
 
     if (newlyEngagedHunter) {
-      const forcedResolution = applyEnemyEngagedForcedAbilities({
+      const forcedResolution = emitLocationEvent({
+        event: "enemyEngaged",
         locationId: investigatorLocation.id,
         investigator: updatedInvestigator,
         locations: updatedLocations,
@@ -2502,7 +2467,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       createLogEntry("enemy", `Engaged ${enemy.name}.`),
     ];
 
-    const forcedResolution = applyEnemyEngagedForcedAbilities({
+    const forcedResolution = emitLocationEvent({
+      event: "enemyEngaged",
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
@@ -4377,7 +4343,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ),
     ];
 
-    const forcedResolution = applyEnemyEngagedForcedAbilities({
+    const forcedResolution = emitLocationEvent({
+      event: "enemyEngaged",
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
