@@ -170,7 +170,7 @@ type EncounterSkillTestOutcome =
 
 type ChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
-  | { kind: "spawnAcolyte"; enemy: Enemy }
+  | { kind: "spawnEnemy"; enemy: Enemy }
   | { kind: "surge" };
 
 function getConnectedEnemyTargets(args: {

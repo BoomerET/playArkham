@@ -172,12 +172,12 @@ export function resolveEncounterCardImmediate(args: {
 
     case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
       return {
-        kind: "spawnAcolyte",
+        kind: "spawnEnemy",
         enemy: {
           id: `14003-${Date.now()}`,
           locationId: currentLocationId,
           engagedInvestigatorId: null,
-          name: "Test Acolyte",
+          name: "Test Enemy",
           fight: 2,
           evade: 2,
           health: 2,
