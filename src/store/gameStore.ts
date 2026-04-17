@@ -4466,6 +4466,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log,
     } = get();
 
+    console.log("Advancing Phase");
+
     if (activeSkillTest) {
       get().pushLog(
         "system",
