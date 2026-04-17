@@ -105,9 +105,11 @@ export default function ScenarioCardPanel({ kind, card }: Props) {
                     <h3 className="scenario-card-panel__title">{card.title}</h3>
 
                     <div className="scenario-card-panel__text">
-                        {card.text.map((line, index) => (
-                            <p key={`${card.id}-text-${index}`}>{line}</p>
-                        ))}
+                        {(Array.isArray(card.text) ? card.text : [card.text]).map(
+                            (line: string, index: number) => (
+                                <p key={`${card.id}-text-${index}`}>{line}</p>
+                            ),
+                        )}
                     </div>
                 </>
             )}
