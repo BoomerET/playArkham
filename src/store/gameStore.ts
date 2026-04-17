@@ -3197,7 +3197,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (immediate.kind === "spawnAcolyte") {
+    if (immediate.kind === "spawnEnemy") {
       set({
         enemies: [...enemies, immediate.enemy],
         encounterDiscard: [...encounterDiscard, card],

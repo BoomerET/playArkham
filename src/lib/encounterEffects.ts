@@ -1,3 +1,28 @@
+/**
+ * Encounter immediate resolution contract
+ *
+ * resolveEncounterCardImmediate() does not mutate store state directly.
+ * It returns an instruction object that resolveMythosPhase() interprets.
+ *
+ * Available kinds:
+ * - "none"
+ * - "doomOnAgenda"
+ * - "spawnAcolyte"
+ * - "skillTest"
+ * - "choice"
+ * - "attachToThreatArea"
+ * - "attachToLocation"
+ * - "genericTreachery"
+ *
+ * Use "pending" when the card needs later follow-up resolution
+ * (usually after a skill test).
+ *
+ * Use "options" when the card requires player input before it can resolve.
+ *
+ * Use attach kinds for persistent cards that remain in play.
+ * Use immediate kinds for one-shot effects.
+ */
+
 import type { EncounterCard, Enemy, Investigator, SkillType } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 
@@ -36,7 +61,7 @@ export type EncounterImmediateResolution =
     logText: string;
   }
   | {
-    kind: "spawnAcolyte";
+    kind: "spawnEnemy";
     enemy: Enemy;
     doomOnAgenda: number;
     logText: string;
@@ -165,6 +190,11 @@ export function resolveEncounterCardImmediate(args: {
         doomOnAgenda: 1,
         logText: "Dave's Test Treachery: place 1 doom on the current agenda.",
       };
+
+    case ENCOUNTER_CARD_CODES.MUTATED_EXPERIMENT:
+      return {
+
+      }
     default:
       return {
         kind: "genericTreachery",
