@@ -1399,38 +1399,6 @@ function emitLocationEvent(args: {
   });
 }
 
-function emitCurrentLocationEvent(args: {
-  event: CardAbilityEvent;
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-}): {
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-  logEntries: ReturnType<typeof createLogEntry>[];
-} {
-  const { investigator, locations } = args;
-  const currentLocation = findCurrentLocation(locations, investigator.id);
-
-  if (!currentLocation) {
-    return {
-      investigator: args.investigator,
-      locations: args.locations,
-      enemies: args.enemies,
-      campaignState: args.campaignState,
-      logEntries: [],
-    };
-  }
-
-  return emitLocationEvent({
-    ...args,
-    locationId: currentLocation.id,
-  });
-}
-
 export const useGameStore = create<GameStore>((set, get) => ({
   advanceActByClues: () => {
     const { act, investigator, scenarioStatus } = get();
@@ -4464,8 +4432,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       log,
     } = get();
-
-    console.log("Advancing Phase");
 
     if (activeSkillTest) {
       get().pushLog(
