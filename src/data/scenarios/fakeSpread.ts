@@ -84,7 +84,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           text: "When your turn begins at this location, gain 1 resource.",
           effect: {
             kind: "gainResources",
-            amount: 1,
+            amount: 10,
           },
         }
       ],
