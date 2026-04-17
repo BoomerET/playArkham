@@ -75,7 +75,7 @@ export function resolveEncounterCardImmediate(args: {
   investigator: Investigator;
   currentLocationId: string;
 }): EncounterImmediateResolution {
-  const { card } = args;
+  const { card, currentLocationId } = args;
 
   switch (card.code) {
 
