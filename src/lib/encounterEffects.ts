@@ -106,6 +106,7 @@ export function resolveEncounterCardImmediate(args: {
 
   switch (card.code) {
 
+    // skilltest
     case ENCOUNTER_CARD_CODES.NOXIOUS_SMOKE:
       return {
         kind: "skillTest",
@@ -119,6 +120,7 @@ export function resolveEncounterCardImmediate(args: {
         logText: "Noxious Smoke: test Willpower (3).",
       };
 
+    // choice
     case ENCOUNTER_CARD_CODES.COSMIC_EVILS:
       return {
         kind: "choice",
@@ -140,6 +142,7 @@ export function resolveEncounterCardImmediate(args: {
           "Cosmic Evils: choose one - place 1 doom on the current agenda, or Cosmic Evils gains surge.",
       };
 
+    // skilltest
     case ENCOUNTER_CARD_CODES.CANTOR_OF_FLAME:
       return {
         kind: "skillTest",
@@ -153,6 +156,7 @@ export function resolveEncounterCardImmediate(args: {
         logText: "Cantor of Flame encounter.",
       };
 
+    // attachToThreatArea
     case ENCOUNTER_CARD_CODES.UNSPEAKABLE_TRUTHS:
       return {
         kind: "attachToThreatArea",
@@ -162,6 +166,7 @@ export function resolveEncounterCardImmediate(args: {
           "Unspeakable Truths was drawn, but a copy is already in your threat area. It was discarded.",
       };
 
+    // attachToLocation
     case ENCOUNTER_CARD_CODES.FIRE:
       return {
         kind: "attachToLocation",
@@ -171,6 +176,7 @@ export function resolveEncounterCardImmediate(args: {
           "Fire! was drawn, but your location already has Fire! attached. It was discarded.",
       };
 
+    // spawnEnemy
     case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
       return {
         kind: "spawnEnemy",
