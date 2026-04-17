@@ -4317,20 +4317,67 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setPhase: (phase) => {
-    const { turn } = get();
+    const { turn, investigator, locations, enemies, campaignState } = get();
 
-    set({
-      turn: {
-        ...turn,
-        phase,
-        actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
-      },
-    });
+    let updatedInvestigator = investigator;
+    let updatedLocations = locations;
+    let updatedEnemies = enemies;
+    let updatedCampaignState = campaignState;
+    const phaseLog: ReturnType<typeof createLogEntry>[] = [];
 
-    get().pushLog(
-      "system",
-      `Phase: ${phase.charAt(0).toUpperCase()}${phase.slice(1)}`,
-    );
+    if (turn.phase === "investigation" && phase !== "investigation") {
+      const turnEndResolution = emitCurrentLocationEvent({
+        event: "turnEnds",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = turnEndResolution.investigator;
+      updatedLocations = turnEndResolution.locations;
+      updatedEnemies = turnEndResolution.enemies;
+      updatedCampaignState = turnEndResolution.campaignState;
+      phaseLog.push(...turnEndResolution.logEntries);
+    }
+
+    const nextTurn = {
+      ...turn,
+      phase,
+      actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
+    };
+
+    if (turn.phase !== "investigation" && phase === "investigation") {
+      const turnBeginResolution = emitCurrentLocationEvent({
+        event: "turnBegins",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = turnBeginResolution.investigator;
+      updatedLocations = turnBeginResolution.locations;
+      updatedEnemies = turnBeginResolution.enemies;
+      updatedCampaignState = turnBeginResolution.campaignState;
+      phaseLog.push(...turnBeginResolution.logEntries);
+    }
+
+    set((state) => ({
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
+      turn: nextTurn,
+      log: [
+        ...state.log,
+        createLogEntry(
+          "system",
+          `Phase: ${phase.charAt(0).toUpperCase()}${phase.slice(1)}`,
+        ),
+        ...phaseLog,
+      ],
+    }));
   },
 
   engageEnemiesAtLocation: () => {

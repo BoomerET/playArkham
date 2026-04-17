@@ -42,10 +42,10 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       abilities: [
         {
-          label: "Close Quarters",
+          label: "Lingering Dread",
           trigger: "forced",
-          event: "enemyEngaged",
-          text: "After an enemy engages you at this location, take 1 horror.",
+          event: "turnEnds",
+          text: "When your turn ends at this location, take 1 horror.",
           effect: {
             kind: "takeHorror",
             amount: 1,
@@ -75,6 +75,18 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
         "Central",
+      ],
+      abilities: [
+        {
+          label: "Moment of Clarity",
+          trigger: "forced",
+          event: "turnBegins",
+          text: "When your turn begins at this location, gain 1 resource.",
+          effect: {
+            kind: "gainResources",
+            amount: 1,
+          },
+        }
       ],
 
       text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
