@@ -26,11 +26,11 @@
 import type { EncounterCard, Enemy, Investigator, SkillType } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 
-type EncounterChoiceEffect =
+export type EncounterChoiceEffect =
   | { kind: "doomOnAgenda"; amount: number }
   | { kind: "surge" };
 
-type EncounterChoiceOption = {
+export type EncounterChoiceOption = {
   id: string;
   label: string;
   effect: EncounterChoiceEffect;
@@ -42,6 +42,12 @@ export type EncounterSkillTestOutcome =
   | { kind: "horror"; amount: number }
   | { kind: "damageByFailure" }
   | { kind: "horrorByFailure" };
+
+export type EncounterSkillTestPending = {
+  cardName: string;
+  onPass?: EncounterSkillTestOutcome;
+  onFail?: EncounterSkillTestOutcome;
+};
 
 export type EncounterImmediateResolution =
   | {
@@ -70,22 +76,18 @@ export type EncounterImmediateResolution =
     kind: "skillTest";
     skill: SkillType;
     difficulty: number;
-    pending: {
-      cardName: string;
-      onPass?: EncounterSkillTestOutcome;
-      onFail?: EncounterSkillTestOutcome;
-    };
+    pending: EncounterSkillTestPending;
     logText: string;
   }
   | {
     kind: "attachToThreatArea";
-    uniqueByName: boolean;
+    uniqueByName?: boolean;
     logText: string;
     duplicateLogText?: string;
   }
   | {
     kind: "attachToLocation";
-    uniqueByNameAtLocation: boolean;
+    uniqueByNameAtLocation?: boolean;
     logText: string;
     duplicateLogText?: string;
   }
@@ -116,7 +118,6 @@ export function resolveEncounterCardImmediate(args: {
         },
         logText: "Noxious Smoke: test Willpower (3).",
       };
-
 
     case ENCOUNTER_CARD_CODES.COSMIC_EVILS:
       return {
@@ -149,7 +150,7 @@ export function resolveEncounterCardImmediate(args: {
           onPass: { kind: "none" },
           onFail: { kind: "damage", amount: 1 },
         },
-        logText: "Grasping Hands: test Agility (3).",
+        logText: "Cantor of Flame encounter.",
       };
 
     case ENCOUNTER_CARD_CODES.UNSPEAKABLE_TRUTHS:
@@ -188,13 +189,8 @@ export function resolveEncounterCardImmediate(args: {
           ability: [],
         },
         doomOnAgenda: 1,
-        logText: "Dave's Test Treachery: place 1 doom on the current agenda.",
+        logText: "Dave's Test Treachery: Test Enemy spawned and 1 doom was placed on the current agenda.",
       };
-
-    //case ENCOUNTER_CARD_CODES.MUTATED_EXPERIMENT:
-    //  return {
-    //
-    //  }
     default:
       return {
         kind: "genericTreachery",
