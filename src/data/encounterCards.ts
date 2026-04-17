@@ -943,6 +943,20 @@ export const encounterCards: EncounterCard[] = [
         ],
         set: "fix-me",
     },
+    {
+        id: "ashen-rebirth",
+        code: "12176",
+        name: "Ashen Rebirth",
+        type: "treachery",
+        traits: [
+            "Power",
+        ],
+
+        text: [
+            "Revelation - Test WIL (4). If you fail, you must either take 2 direct damage or 2 direct horror (whichever you have more of).",
+        ],
+        set: "queen-of-ash",
+    },
     /*
       This is my test card
     */
