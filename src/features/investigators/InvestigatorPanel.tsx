@@ -181,6 +181,15 @@ export default function InvestigatorPanel() {
         campaignState.scenarioFlags[ability.requiresFlag.key] ===
         ability.requiresFlag.equals),
   );
+  const locationAction = useGameStore((state) => state.locationAction);
+
+  const availableLocationActions = (currentLocation?.actions ?? []).filter(
+    (action) =>
+      (action.trigger === "action" || action.trigger === "doubleAction") &&
+      (!action.requiresFlag ||
+        campaignState.scenarioFlags[action.requiresFlag.key] ===
+        action.requiresFlag.equals),
+  );
   const engageableEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
@@ -249,6 +258,13 @@ export default function InvestigatorPanel() {
         if (selectedAbility.startsWith("parley-enemy:")) {
           const enemyId = selectedAbility.slice("parley-enemy:".length);
           parleyAction(enemyId);
+        } else if (selectedAbility.startsWith("location-action:")) {
+          const indexText = selectedAbility.slice("location-action:".length);
+          const index = Number(indexText);
+
+          if (!Number.isNaN(index)) {
+            locationAction(index);
+          }
         } else if (selectedAbility.startsWith("location-ability:")) {
           const indexText = selectedAbility.slice("location-ability:".length);
           const index = Number(indexText);
@@ -442,7 +458,7 @@ export default function InvestigatorPanel() {
             <div className="engaged-enemies-header">Choose Target</div>
 
             <p className="engaged-enemies-targeting-note">
-              Select an engaged enemy, then use Fight, Evade, or Parley below.
+              Select an enemy at a connecting location to engage it.
             </p>
 
             <div className="engaged-enemies-list">
@@ -660,6 +676,11 @@ export default function InvestigatorPanel() {
               <option value="engage" disabled={!activeEngageTarget}>
                 {engageLabel}
               </option>
+              {availableLocationActions.map((action, index) => (
+                <option key={`location-action-${index}`} value={`location-action:${index}`}>
+                  {action.label ?? action.text}
+                </option>
+              ))}
 
               {availableLocationAbilities.map((ability, index) => (
                 <option key={`location-ability-${index}`} value={`location-ability:${index}`}>
