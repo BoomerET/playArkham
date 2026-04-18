@@ -371,6 +371,7 @@ export interface EncounterCard {
   subname?: string;
   type: "enemy" | "treachery" | "ally" | "weakness";
   ability?: string[];
+  abilities?: CardAbilityDefinition[];
   text?: string[];
   damage?: number;
   horror?: number;

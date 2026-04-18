@@ -59,7 +59,7 @@ import type {
   CardAbilityEffect,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
-import type { GameLocation } from "../types/game";
+//import type { GameLocation } from "../types/game";
 import { applyConditionalLocationVisibility } from "./locationVisibility";
 import { resolveLocationAbilityEffect } from "./locationAbilities";
 
@@ -4464,7 +4464,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setPhase: (phase) => {
-    const { turn, investigator, locations, enemies, campaignState } = get();
+    const {
+      turn,
+      investigator,
+      locations,
+      enemies,
+      threatArea,
+      campaignState,
+    } = get();
+
     let updatedInvestigator = investigator;
     let updatedLocations = locations;
     let updatedEnemies = enemies;
@@ -4472,7 +4480,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const phaseLog: ReturnType<typeof createLogEntry>[] = [];
 
     if (turn.phase === "investigation" && phase !== "investigation") {
-      const turnEndResolution = emitCurrentLocationEvent({
+      const locationResolution = emitCurrentLocationEvent({
         event: "turnEnds",
         investigator: updatedInvestigator,
         locations: updatedLocations,
@@ -4480,11 +4488,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
         campaignState: updatedCampaignState,
       });
 
-      updatedInvestigator = turnEndResolution.investigator;
-      updatedLocations = turnEndResolution.locations;
-      updatedEnemies = turnEndResolution.enemies;
-      updatedCampaignState = turnEndResolution.campaignState;
-      phaseLog.push(...turnEndResolution.logEntries);
+      updatedInvestigator = locationResolution.investigator;
+      updatedLocations = locationResolution.locations;
+      updatedEnemies = locationResolution.enemies;
+      updatedCampaignState = locationResolution.campaignState;
+      phaseLog.push(...locationResolution.logEntries);
+
+      const threatResolution = emitThreatAreaEvent({
+        event: "turnEnds",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        threatArea,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = threatResolution.investigator;
+      updatedLocations = threatResolution.locations;
+      updatedEnemies = threatResolution.enemies;
+      updatedCampaignState = threatResolution.campaignState;
+      phaseLog.push(...threatResolution.logEntries);
     }
 
     const nextTurn = {
@@ -4492,10 +4515,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       phase,
       actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
     };
-    //console.log("turn.phase", turn.phase);
-    //console.log("phase", phase);
+
     if (turn.phase !== "investigation" && phase === "investigation") {
-      const turnBeginResolution = emitCurrentLocationEvent({
+      const locationResolution = emitCurrentLocationEvent({
         event: "turnBegins",
         investigator: updatedInvestigator,
         locations: updatedLocations,
@@ -4503,45 +4525,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
         campaignState: updatedCampaignState,
       });
 
-      const locationResolution = emitCurrentLocationEvent({
-        event: "turnBegins",
-        investigator,
-        locations,
-        enemies,
-        campaignState,
-      });
+      updatedInvestigator = locationResolution.investigator;
+      updatedLocations = locationResolution.locations;
+      updatedEnemies = locationResolution.enemies;
+      updatedCampaignState = locationResolution.campaignState;
+      phaseLog.push(...locationResolution.logEntries);
 
       const threatResolution = emitThreatAreaEvent({
         event: "turnBegins",
-        investigator: locationResolution.investigator,
-        locations: locationResolution.locations,
-        enemies: locationResolution.enemies,
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
         threatArea,
-        campaignState: locationResolution.campaignState,
+        campaignState: updatedCampaignState,
       });
 
-      updatedInvestigator = turnBeginResolution.investigator;
-      updatedLocations = turnBeginResolution.locations;
-      updatedEnemies = turnBeginResolution.enemies;
-      updatedCampaignState = turnBeginResolution.campaignState;
-      phaseLog.push(...turnBeginResolution.logEntries);
+      updatedInvestigator = threatResolution.investigator;
+      updatedLocations = threatResolution.locations;
+      updatedEnemies = threatResolution.enemies;
+      updatedCampaignState = threatResolution.campaignState;
+      phaseLog.push(...threatResolution.logEntries);
     }
 
     set((state) => ({
+      ...state,
+      turn: nextTurn,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
       campaignState: updatedCampaignState,
-      turn: nextTurn,
-      log: [
-        ...state.log,
-        createLogEntry(
-          "system",
-          `Phase: ${phase.charAt(0).toUpperCase()}${phase.slice(1)}`,
-        ),
-        ...phaseLog,
-      ],
+      log: [...state.log, ...phaseLog],
     }));
+
+    const updatedState = get();
+    savePersistedCampaignSetup({
+      selectedDeckId: updatedState.selectedDeckId,
+      selectedScenarioId: updatedState.selectedScenarioId,
+      campaignState: updatedState.campaignState,
+    });
   },
 
   engageEnemiesAtLocation: () => {
