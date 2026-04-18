@@ -1057,7 +1057,7 @@ export const encounterCards: EncounterCard[] = [
                 trigger: "forced",
                 event: "enemyEngaged",
                 text: "Forced — When this enemy engages you, take 1 horror.",
-                effect: { kind: "takeHorror", amount: 1 },
+                effect: { kind: "takeHorror", amount: 10 },
             },
         ],
 
