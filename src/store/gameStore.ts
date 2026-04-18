@@ -3417,6 +3417,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (card.type === "enemy") {
+      const enemyCard = card;
+      const spawnLocation = currentLocation;
+      const spawnedAloof = enemyCard.ability?.includes("Aloof") ?? false;
       const spawnedEnemy: Enemy = {
         id: `${card.code}-${Date.now()}`,
         name: card.name,
@@ -3472,9 +3475,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...state.log,
           createLogEntry(
             "enemy",
-            card.ability?.includes("Aloof")
-              ? `${card.name} was drawn from the encounter deck and spawned at ${currentLocation.name} aloof.`
-              : `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
+            spawnedAloof
+              ? `${enemyCard.name} was drawn from the encounter deck and spawned at ${spawnLocation.name} aloof.`
+              : `${enemyCard.name} was drawn from the encounter deck, spawned at ${spawnLocation.name}, and engaged ${investigator.name}.`,
           ),
           ...extraLog,
         ],
