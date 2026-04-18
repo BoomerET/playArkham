@@ -1273,9 +1273,39 @@ function resolveImmediateAbilityEffect(args: {
   });
 }
 
-function executeForcedLocationAbilities(args: {
-  location: GameLocation;
+function getMatchingForcedAbilities(args: {
+  abilities: CardAbilityDefinition[] | undefined;
   event: CardAbilityEvent;
+  campaignState: CampaignState;
+}): CardAbilityDefinition[] {
+  const { abilities, event, campaignState } = args;
+
+  return (abilities ?? []).filter((ability) => {
+    if (ability.trigger !== "forced") {
+      return false;
+    }
+
+    if (ability.event !== event) {
+      return false;
+    }
+
+    if (
+      ability.requiresFlag &&
+      campaignState.scenarioFlags[ability.requiresFlag.key] !==
+      ability.requiresFlag.equals
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function executeForcedCardAbilities(args: {
+  sourceName: string;
+  sourceAbilities: CardAbilityDefinition[] | undefined;
+  event: CardAbilityEvent;
+  currentLocationId: string;
   investigator: Investigator;
   locations: GameState["locations"];
   enemies: Enemy[];
@@ -1287,10 +1317,19 @@ function executeForcedLocationAbilities(args: {
   campaignState: CampaignState;
   logEntries: ReturnType<typeof createLogEntry>[];
 } {
-  const { location, event, investigator, locations, enemies, campaignState } = args;
+  const {
+    sourceName,
+    sourceAbilities,
+    event,
+    currentLocationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
 
-  const abilities = getMatchingForcedLocationAbilities({
-    location,
+  const abilities = getMatchingForcedAbilities({
+    abilities: sourceAbilities,
     event,
     campaignState,
   });
@@ -1302,7 +1341,9 @@ function executeForcedLocationAbilities(args: {
   const logEntries: ReturnType<typeof createLogEntry>[] = [];
 
   for (const ability of abilities) {
-    logEntries.push(createLogEntry("scenario", `${location.name}: ${ability.text}`));
+    logEntries.push(
+      createLogEntry("scenario", `${sourceName}: ${ability.text}`),
+    );
 
     if (!ability.effect) {
       continue;
@@ -1311,7 +1352,7 @@ function executeForcedLocationAbilities(args: {
     const resolution = resolveImmediateAbilityEffect({
       effect: ability.effect,
       investigator: updatedInvestigator,
-      currentLocationId: location.id,
+      currentLocationId,
       locations: updatedLocations,
       enemies: updatedEnemies,
       campaignState: updatedCampaignState,
@@ -1333,34 +1374,6 @@ function executeForcedLocationAbilities(args: {
   };
 }
 
-function getMatchingForcedLocationAbilities(args: {
-  location: GameLocation;
-  event: CardAbilityEvent;
-  campaignState: CampaignState;
-}): CardAbilityDefinition[] {
-  const { location, event, campaignState } = args;
-
-  return (location.abilities ?? []).filter((ability) => {
-    if (ability.trigger !== "forced") {
-      return false;
-    }
-
-    if (ability.event !== event) {
-      return false;
-    }
-
-    if (
-      ability.requiresFlag &&
-      campaignState.scenarioFlags[ability.requiresFlag.key] !==
-      ability.requiresFlag.equals
-    ) {
-      return false;
-    }
-
-    return true;
-  });
-}
-
 function emitLocationEvent(args: {
   event: CardAbilityEvent;
   locationId: string;
@@ -1368,13 +1381,7 @@ function emitLocationEvent(args: {
   locations: GameState["locations"];
   enemies: Enemy[];
   campaignState: CampaignState;
-}): {
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-  logEntries: ReturnType<typeof createLogEntry>[];
-} {
+}) {
   const { event, locationId, investigator, locations, enemies, campaignState } = args;
 
   const location = locations.find((entry) => entry.id === locationId);
@@ -1389,9 +1396,11 @@ function emitLocationEvent(args: {
     };
   }
 
-  return executeForcedLocationAbilities({
-    location,
+  return executeForcedCardAbilities({
+    sourceName: location.name,
+    sourceAbilities: location.abilities,
     event,
+    currentLocationId: location.id,
     investigator,
     locations,
     enemies,

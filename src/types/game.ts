@@ -381,6 +381,26 @@ export interface EncounterCard {
   parley?: ParleyActionDefinition;
 }
 
+export interface EncounterCard {
+  id: string;
+  code: string;
+  name: string;
+  subname?: string;
+  type: "enemy" | "treachery" | "ally" | "weakness";
+  ability?: string[];
+  abilities?: CardAbilityDefinition[];
+  text?: string[];
+  damage?: number;
+  horror?: number;
+  fight?: number;
+  evade?: number;
+  health?: number;
+  set?: string;
+  traits?: string[];
+  victoryPoints?: number;
+  parley?: ParleyActionDefinition;
+}
+
 
 // ============================================================
 // Scenario / log / turn state
