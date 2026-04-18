@@ -3295,7 +3295,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       currentLocationId: currentLocation.id,
     });
-
+    console.log("encounter immediate", card.name, immediate);
     if (immediate.kind === "choice") {
       set({
         pendingChoice: {
