@@ -4318,8 +4318,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setPhase: (phase) => {
     const { turn, investigator, locations, enemies, campaignState } = get();
-    console.log("Got to phase", phase);
-
     let updatedInvestigator = investigator;
     let updatedLocations = locations;
     let updatedEnemies = enemies;
@@ -4629,17 +4627,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (turn.phase === "mythos") {
       get().resolveMythosPhase();
-      set({
-        turn: {
-          ...turn,
-          phase: "investigation",
-          actionsRemaining: 3,
-        },
-      });
-      get().pushLog("system", "Phase: Investigation");
-      get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
-
+      //set({
+      //  turn: {
+      //    ...turn,
+      //    phase: "investigation",
+      //    actionsRemaining: 3,
+      //  },
+      //});
       get().setPhase("investigation");
+      get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
       return;
     }
   },
