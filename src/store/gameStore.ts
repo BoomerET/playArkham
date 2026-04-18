@@ -1788,7 +1788,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ? {
             ...enemy,
             locationId: nextLocationId,
-            engagedInvestigatorId: investigator.id,
+            engagedInvestigatorId: enemyHasAloof(enemy) ? null : investigator.id,
           }
           : {
             ...enemy,
