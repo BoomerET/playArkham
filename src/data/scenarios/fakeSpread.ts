@@ -40,18 +40,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
-      abilities: [
-        {
-          label: "Lingering Dread",
-          trigger: "forced",
-          event: "turnEnds",
-          text: "When your turn ends at this location, take 1 horror.",
-          effect: {
-            kind: "takeHorror",
-            amount: 10,
-          },
-        }
-      ],
+
       text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
@@ -75,18 +64,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
         "Central",
-      ],
-      abilities: [
-        {
-          label: "Moment of Clarity",
-          trigger: "forced",
-          event: "turnBegins",
-          text: "When your turn begins at this location, gain 1 resource.",
-          effect: {
-            kind: "gainResources",
-            amount: 10,
-          },
-        }
       ],
 
       text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
