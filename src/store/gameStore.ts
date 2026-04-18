@@ -4599,28 +4599,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
             "Tried to draw a card during upkeep, but the deck was empty.",
           ),
         createLogEntry("system", `Round ${nextRound} begins.`),
-        createLogEntry("system", "Phase: Mythos"),
       ];
 
-      //set({
-      //  investigator: {
-      //    ...investigator,
-      //    resources: investigator.resources + 1,
-      //  },
-      //  deck: updatedDeck,
-      //  hand: updatedHand,
-      //  selectedEnemyTargetId: preferredTargetId,
-      //  turn: {
-      //    round: nextRound,
-      //    phase: "mythos",
-      //    actionsRemaining: 3,
-      //  },
-      //  log: upkeepLog,
-      //});
+      set({
+        investigator: {
+          ...investigator,
+          resources: investigator.resources + 1,
+        },
+        deck: updatedDeck,
+        hand: updatedHand,
+        selectedEnemyTargetId: preferredTargetId,
+        turn: {
+          ...turn,
+          round: nextRound,
+          actionsRemaining: 3,
+        },
+        log: upkeepLog,
+      });
 
-      get().setPhase("mythos");
       get().readyAllEnemies();
       get().engageEnemiesAtLocation();
+      get().setPhase("mythos");
       return;
     }
 
