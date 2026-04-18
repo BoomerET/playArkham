@@ -1433,16 +1433,6 @@ function emitThreatAreaEvent(args: {
 
   const currentLocation = findCurrentLocation(locations, investigator.id);
 
-  console.log(
-    "threat area cards",
-    threatArea.map((card) => ({
-      name: card.name,
-      abilities: card.abilities,
-      text: card.text,
-      ability: card.ability,
-    })),
-  );
-
   if (!currentLocation) {
     return {
       investigator,
@@ -1452,8 +1442,6 @@ function emitThreatAreaEvent(args: {
       logEntries: [],
     };
   }
-
-
 
   let updatedInvestigator = investigator;
   let updatedLocations = locations;
@@ -1479,6 +1467,16 @@ function emitThreatAreaEvent(args: {
     updatedCampaignState = resolution.campaignState;
     logEntries.push(...resolution.logEntries);
   }
+
+  console.log(
+    "threat area cards",
+    threatArea.map((card) => ({
+      name: card.name,
+      abilities: card.abilities,
+      text: card.text,
+      ability: card.ability,
+    })),
+  );
 
   return {
     investigator: updatedInvestigator,
