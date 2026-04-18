@@ -1524,63 +1524,6 @@ function emitEnemyEvent(args: {
   });
 }
 
-//function emitEngagedEnemyEvent(args: {
-//  event: CardAbilityEvent;
-//  investigator: Investigator;
-//  locations: GameState["locations"];
-//  enemies: Enemy[];
-//  campaignState: CampaignState;
-//}): {
-//  investigator: Investigator;
-//  locations: GameState["locations"];
-//  enemies: Enemy[];
-//  campaignState: CampaignState;
-//  logEntries: ReturnType<typeof createLogEntry>[];
-//} {
-//  const {
-//    event,
-//    investigator,
-//    locations,
-//    enemies,
-//    campaignState,
-//  } = args;
-//
-//  let updatedInvestigator = investigator;
-//  let updatedLocations = locations;
-//  let updatedEnemies = enemies;
-//  let updatedCampaignState = campaignState;
-//  const logEntries: ReturnType<typeof createLogEntry>[] = [];
-//
-//  const engagedEnemies = enemies.filter(
-//    (enemy) => enemy.engagedInvestigatorId === investigator.id,
-//  );
-//
-//  for (const enemy of engagedEnemies) {
-//    const resolution = emitEnemyEvent({
-//      event,
-//      enemyId: enemy.id,
-//      investigator: updatedInvestigator,
-//      locations: updatedLocations,
-//      enemies: updatedEnemies,
-//      campaignState: updatedCampaignState,
-//    });
-//
-//    updatedInvestigator = resolution.investigator;
-//    updatedLocations = resolution.locations;
-//    updatedEnemies = resolution.enemies;
-//    updatedCampaignState = resolution.campaignState;
-//    logEntries.push(...resolution.logEntries);
-//  }
-//
-//  return {
-//    investigator: updatedInvestigator,
-//    locations: updatedLocations,
-//    enemies: updatedEnemies,
-//    campaignState: updatedCampaignState,
-//    logEntries,
-//  };
-//}
-
 function emitCurrentLocationEvent(args: {
   event: CardAbilityEvent;
   investigator: Investigator;
