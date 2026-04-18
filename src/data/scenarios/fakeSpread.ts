@@ -48,7 +48,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           text: "When your turn ends at this location, take 1 horror.",
           effect: {
             kind: "takeHorror",
-            amount: 1,
+            amount: 10,
           },
         }
       ],

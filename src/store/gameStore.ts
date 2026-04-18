@@ -4521,17 +4521,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    //if (turn.phase === "setup") {
-    //  set({
-    //    turn: {
-    //      ...turn,
-    //      phase: "mythos",
-    //    },
-    //  });
-    //  get().pushLog("system", "Phase: Mythos");
-    //  return;
-    //}
-
     if (turn.phase === "setup") {
       get().setPhase("mythos");
       return;
@@ -4564,11 +4553,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigator: updatedInvestigator,
       });
 
-      get().setPhase("enemy");
       get().enemyPhaseAttack();
+      get().setPhase("enemy");
       return;
     }
-    // get().setPhase("enemy");
 
     if (turn.phase === "enemy") {
       get().pushLog("system", "Enemy phase: Hunter enemies move.");
