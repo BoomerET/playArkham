@@ -4633,6 +4633,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       get().readyAllEnemies();
       get().engageEnemiesAtLocation();
+      get().setPhase("mythos");
       return;
     }
 
@@ -4647,6 +4648,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
       get().pushLog("system", "Phase: Investigation");
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
+
+      get().setPhase("investigation");
       return;
     }
   },
