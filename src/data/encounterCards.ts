@@ -1070,6 +1070,22 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Peril",
         ],
+        abilities: [
+            {
+                label: "Lingering Pain",
+                trigger: "forced",
+                event: "turnEnds",
+                text: "Forced — When your turn ends, take 1 damage.",
+                effect: { kind: "takeDamage", amount: 10 },
+            },
+            {
+                label: "Draining Burden",
+                trigger: "forced",
+                event: "turnBegins",
+                text: "Forced — When your turn begins, gain 1 resource.",
+                effect: { kind: "gainResources", amount: 10 },
+            },
+        ],
         text: [
             "Revelation - Flavor text.",
         ],
