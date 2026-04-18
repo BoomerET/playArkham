@@ -1468,15 +1468,15 @@ function emitThreatAreaEvent(args: {
     logEntries.push(...resolution.logEntries);
   }
 
-  console.log(
-    "threat area cards",
-    threatArea.map((card) => ({
-      name: card.name,
-      abilities: card.abilities,
-      text: card.text,
-      ability: card.ability,
-    })),
-  );
+  //console.log(
+  //  "threat area cards",
+  //  threatArea.map((card) => ({
+  //    name: card.name,
+  //    abilities: card.abilities,
+  //    text: card.text,
+  //    ability: card.ability,
+  //  })),
+  //);
 
   return {
     investigator: updatedInvestigator,
@@ -3295,7 +3295,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       currentLocationId: currentLocation.id,
     });
-    console.log("encounter immediate", card.name, immediate);
+    //console.log("encounter immediate", card.name, immediate);
 
     if (immediate.kind === "choice") {
       set({
@@ -3350,7 +3350,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (immediate.kind === "attachToThreatArea") {
       const { threatArea } = get();
-      console.log("ATTACHING TO THREAT AREA", card.name, threatArea);
+      //console.log("ATTACHING TO THREAT AREA", card.name, threatArea);
 
       const alreadyInThreatArea =
         immediate.uniqueByName &&
