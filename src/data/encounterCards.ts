@@ -1048,8 +1048,17 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         ability: [
-            //"Hunter",
-            //"Parley",
+            "Hunter",
+            "Aloof",
+        ],
+        abilities: [
+            {
+                label: "Terrifying Presence",
+                trigger: "forced",
+                event: "enemyEngaged",
+                text: "Forced — When this enemy engages you, take 1 horror.",
+                effect: { kind: "takeHorror", amount: 1 },
+            },
         ],
 
         text: [
