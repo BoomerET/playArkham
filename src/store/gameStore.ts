@@ -3296,6 +3296,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentLocationId: currentLocation.id,
     });
     console.log("encounter immediate", card.name, immediate);
+
     if (immediate.kind === "choice") {
       set({
         pendingChoice: {
@@ -3349,6 +3350,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (immediate.kind === "attachToThreatArea") {
       const { threatArea } = get();
+      console.log("ATTACHING TO THREAT AREA", card.name, threatArea);
 
       const alreadyInThreatArea =
         immediate.uniqueByName &&
