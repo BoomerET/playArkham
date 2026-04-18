@@ -1396,13 +1396,6 @@ function emitLocationEvent(args: {
     };
   }
 
-  console.log("emitLocationEvent", {
-    event,
-    locationId,
-    locationName: location.name,
-    abilities: location.abilities,
-  });
-
   return executeForcedCardAbilities({
     sourceName: location.name,
     sourceAbilities: location.abilities,
@@ -1439,6 +1432,16 @@ function emitThreatAreaEvent(args: {
   } = args;
 
   const currentLocation = findCurrentLocation(locations, investigator.id);
+
+  console.log(
+    "threat area cards",
+    threatArea.map((card) => ({
+      name: card.name,
+      abilities: card.abilities,
+      text: card.text,
+      ability: card.ability,
+    })),
+  );
 
   if (!currentLocation) {
     return {
