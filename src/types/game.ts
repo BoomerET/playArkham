@@ -184,6 +184,7 @@ export type LocationAbilityEffect =
   | { kind: "none" }
   | { kind: "engageEnemyFromConnectedLocation" }
   | { kind: "gainResources"; amount: number }
+  | { kind: "loseResources"; amount: number }
   | { kind: "gainClues"; amount: number }
   | { kind: "takeHorror"; amount: number }
   | { kind: "takeDamage"; amount: number }
@@ -249,6 +250,7 @@ export type CardAbilityEffect =
   | { kind: "none" }
   | { kind: "engageEnemyFromConnectedLocation" }
   | { kind: "gainResources"; amount: number }
+  | { kind: "loseResources"; amount: number }
   | { kind: "gainClues"; amount: number }
   | { kind: "takeHorror"; amount: number }
   | { kind: "takeDamage"; amount: number }
