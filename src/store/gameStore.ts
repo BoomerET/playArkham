@@ -4345,10 +4345,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       phase,
       actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
     };
-    console.log("turn.phase", turn.phase);
-    console.log("phase", phase);
+    //console.log("turn.phase", turn.phase);
+    //console.log("phase", phase);
     if (turn.phase !== "investigation" && phase === "investigation") {
-      console.log("turnBegins");
       const turnBeginResolution = emitCurrentLocationEvent({
         event: "turnBegins",
         investigator: updatedInvestigator,
