@@ -1396,6 +1396,13 @@ function emitLocationEvent(args: {
     };
   }
 
+  console.log("emitLocationEvent", {
+    event,
+    locationId,
+    locationName: location.name,
+    abilities: location.abilities,
+  });
+
   return executeForcedCardAbilities({
     sourceName: location.name,
     sourceAbilities: location.abilities,
