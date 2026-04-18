@@ -1889,7 +1889,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (newlyEngagedHunter) {
       const forcedResolution = resolveEnemyEngagedTriggers({
-        enemyId,
+        enemyId: updatedEnemies[0].id,
         locationId: investigatorLocation.id,
         investigator: updatedInvestigator,
         locations: updatedLocations,
@@ -4749,7 +4749,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyId,
+      enemyId: updatedEnemies[0].id,
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
