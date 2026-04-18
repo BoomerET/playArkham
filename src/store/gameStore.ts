@@ -4619,9 +4619,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         log: upkeepLog,
       });
 
+      get().setPhase("mythos");
       get().readyAllEnemies();
       get().engageEnemiesAtLocation();
-      //get().setPhase("mythos");
       return;
     }
 
