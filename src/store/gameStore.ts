@@ -4360,6 +4360,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       (location) => location.id === locationId,
     );
 
+    const movementLog: ReturnType<typeof createLogEntry>[] = [
+      //createLogEntry("player", `Moved to ${destination.name}.`),
+      //console.log(movementLog created),
+    ];
+
     let updatedInvestigator = investigator;
     let finalLocations = updatedLocations;
     let finalEnemies = get().enemies;
