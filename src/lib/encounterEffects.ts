@@ -177,7 +177,13 @@ export function resolveEncounterCardImmediate(args: {
       };
 
     // spawnEnemy
-    //case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
+    case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
+      return {
+        kind: "attachToThreatArea",
+        logText: `${card.name} entered your threat area.`,
+        uniqueByName: true,
+        duplicateLogText: `${card.name} was discarded because a copy is already in the threat area.`,
+      };
     //  return {
     //    kind: "spawnEnemy",
     //    enemy: {
@@ -196,12 +202,12 @@ export function resolveEncounterCardImmediate(args: {
     //    },
     //    doomOnAgenda: 1,
     //    logText: "Dave's Test Treachery: Test Enemy spawned and 1 doom was placed on the current agenda.",
-    //  };
+  };
     default:
-      return {
-        kind: "genericTreachery",
-        horror: 1,
-        logText: `${card.name}: generic treachery resolution for now (1 horror).`,
-      };
-  }
+  return {
+    kind: "genericTreachery",
+    horror: 1,
+    logText: `${card.name}: generic treachery resolution for now (1 horror).`,
+  };
+}
 }
