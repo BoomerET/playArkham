@@ -3417,29 +3417,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (card.type === "enemy") {
+      const currentLocation = findCurrentLocation(locations, investigator.id);
+
+      if (!currentLocation) {
+        get().pushLog("system", "Cannot resolve enemy draw because your location is unknown.");
+        return;
+      }
+
       const enemyCard = card;
       const spawnLocation = currentLocation;
       const spawnedAloof = enemyCard.ability?.includes("Aloof") ?? false;
+
       const spawnedEnemy: Enemy = {
-        id: `${card.code}-${Date.now()}`,
-        name: card.name,
-        fight: card.fight ?? 0,
-        evade: card.evade ?? 0,
-        health: card.health ?? 0,
-        damage: card.damage ?? 0,
-        horror: card.horror ?? 0,
-        locationId: currentLocation.id,
-        engagedInvestigatorId:
-          card.ability?.includes("Aloof") ? null : investigator.id,
+        id: `${enemyCard.code}-${Date.now()}`,
+        name: enemyCard.name,
+        fight: enemyCard.fight ?? 0,
+        evade: enemyCard.evade ?? 0,
+        health: enemyCard.health ?? 0,
+        damage: enemyCard.damage ?? 0,
+        horror: enemyCard.horror ?? 0,
+        locationId: spawnLocation.id,
+        engagedInvestigatorId: spawnedAloof ? null : investigator.id,
         exhausted: false,
         damageOnEnemy: 0,
-        ability: card.ability,
-        abilities: card.abilities,
+        ability: enemyCard.ability,
+        abilities: enemyCard.abilities,
         onDefeat:
-          card.code === "12132"
+          enemyCard.code === "12132"
             ? { kind: "horrorToInvestigatorsAtLocation", amount: 1 }
             : undefined,
-        parley: card.parley,
+        parley: enemyCard.parley,
       };
 
       let updatedInvestigator = investigator;
@@ -3451,7 +3458,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (spawnedEnemy.engagedInvestigatorId === investigator.id) {
         const forcedResolution = resolveEnemyEngagedTriggers({
           enemyId: spawnedEnemy.id,
-          locationId: currentLocation.id,
+          locationId: spawnLocation.id,
           investigator: updatedInvestigator,
           locations: updatedLocations,
           enemies: updatedEnemies,
@@ -3483,14 +3490,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ],
       }));
 
-      return;
-
-      get().pushLog(
-        "enemy",
-        card.ability?.includes("Aloof")
-          ? `${card.name} was drawn from the encounter deck and spawned at ${currentLocation.name} aloof.`
-          : `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
-      );
       return;
     }
 
