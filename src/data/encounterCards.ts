@@ -1049,6 +1049,7 @@ export const encounterCards: EncounterCard[] = [
 
         ability: [
             "Hunter",
+            "Aloof",
         ],
         abilities: [
             {
