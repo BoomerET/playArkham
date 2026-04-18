@@ -177,26 +177,26 @@ export function resolveEncounterCardImmediate(args: {
       };
 
     // spawnEnemy
-    case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
-      return {
-        kind: "spawnEnemy",
-        enemy: {
-          id: `14003-${Date.now()}`,
-          locationId: currentLocationId,
-          engagedInvestigatorId: null,
-          name: "Dave's Test Spawn",
-          fight: 2,
-          evade: 2,
-          health: 2,
-          damage: 1,
-          horror: 1,
-          exhausted: false,
-          damageOnEnemy: 0,
-          ability: [],
-        },
-        doomOnAgenda: 1,
-        logText: "Dave's Test Treachery: Test Enemy spawned and 1 doom was placed on the current agenda.",
-      };
+    //case ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY:
+    //  return {
+    //    kind: "spawnEnemy",
+    //    enemy: {
+    //      id: `14003-${Date.now()}`,
+    //      locationId: currentLocationId,
+    //      engagedInvestigatorId: null,
+    //      name: "Dave's Test Spawn",
+    //      fight: 2,
+    //      evade: 2,
+    //      health: 2,
+    //      damage: 1,
+    //      horror: 1,
+    //      exhausted: false,
+    //      damageOnEnemy: 0,
+    //      ability: [],
+    //    },
+    //    doomOnAgenda: 1,
+    //    logText: "Dave's Test Treachery: Test Enemy spawned and 1 doom was placed on the current agenda.",
+    //  };
     default:
       return {
         kind: "genericTreachery",
