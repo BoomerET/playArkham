@@ -4603,25 +4603,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
         createLogEntry("system", "Phase: Mythos"),
       ];
 
-      //set({
-      //  investigator: {
-      //    ...investigator,
-      //    resources: investigator.resources + 1,
-      //  },
-      //  deck: updatedDeck,
-      //  hand: updatedHand,
-      //  selectedEnemyTargetId: preferredTargetId,
-      //  turn: {
-      //    round: nextRound,
-      //    phase: "mythos",
-      //    actionsRemaining: 3,
-      //  },
-      //  log: upkeepLog,
-      //});
+      set({
+        investigator: {
+          ...investigator,
+          resources: investigator.resources + 1,
+        },
+        deck: updatedDeck,
+        hand: updatedHand,
+        selectedEnemyTargetId: preferredTargetId,
+        turn: {
+          round: nextRound,
+          phase: "mythos",
+          actionsRemaining: 3,
+        },
+        log: upkeepLog,
+      });
 
       get().readyAllEnemies();
       get().engageEnemiesAtLocation();
-      get().setPhase("mythos");
+      //get().setPhase("mythos");
       return;
     }
 
