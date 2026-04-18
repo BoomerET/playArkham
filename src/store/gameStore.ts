@@ -1760,7 +1760,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const forcedResolution = resolveEnemyEngagedTriggers({
       enemyId,
-      locationId: someLocationId,
+      locationId: pendingInteractiveTargetSelection.currentLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
@@ -1890,7 +1890,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (newlyEngagedHunter) {
       const forcedResolution = resolveEnemyEngagedTriggers({
         enemyId,
-        locationId: someLocationId,
+        locationId: investigatorLocation.id,
         investigator: updatedInvestigator,
         locations: updatedLocations,
         enemies: finalEnemies,
@@ -2769,7 +2769,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const forcedResolution = resolveEnemyEngagedTriggers({
       enemyId,
-      locationId: someLocationId,
+      locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
@@ -4750,7 +4750,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const forcedResolution = resolveEnemyEngagedTriggers({
       enemyId,
-      locationId: someLocationId,
+      locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
