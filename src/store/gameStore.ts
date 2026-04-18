@@ -1443,72 +1443,13 @@ function emitThreatAreaEvent(args: {
     };
   }
 
-  function emitThreatAreaEvent(args: {
-    event: CardAbilityEvent;
-    investigator: Investigator;
-    locations: GameState["locations"];
-    enemies: Enemy[];
-    threatArea: GameState["threatArea"];
-    campaignState: CampaignState;
-  }): {
-    investigator: Investigator;
-    locations: GameState["locations"];
-    enemies: Enemy[];
-    campaignState: CampaignState;
-    logEntries: ReturnType<typeof createLogEntry>[];
-  } {
-    const {
-      event,
+  if (!currentLocation) {
+    return {
       investigator,
       locations,
       enemies,
-      threatArea,
       campaignState,
-    } = args;
-
-    const currentLocation = findCurrentLocation(locations, investigator.id);
-
-    if (!currentLocation) {
-      return {
-        investigator,
-        locations,
-        enemies,
-        campaignState,
-        logEntries: [],
-      };
-    }
-
-    let updatedInvestigator = investigator;
-    let updatedLocations = locations;
-    let updatedEnemies = enemies;
-    let updatedCampaignState = campaignState;
-    const logEntries: ReturnType<typeof createLogEntry>[] = [];
-
-    for (const card of threatArea) {
-      const resolution = executeForcedCardAbilities({
-        sourceName: card.name,
-        sourceAbilities: card.abilities,
-        event,
-        currentLocationId: currentLocation.id,
-        investigator: updatedInvestigator,
-        locations: updatedLocations,
-        enemies: updatedEnemies,
-        campaignState: updatedCampaignState,
-      });
-
-      updatedInvestigator = resolution.investigator;
-      updatedLocations = resolution.locations;
-      updatedEnemies = resolution.enemies;
-      updatedCampaignState = resolution.campaignState;
-      logEntries.push(...resolution.logEntries);
-    }
-
-    return {
-      investigator: updatedInvestigator,
-      locations: updatedLocations,
-      enemies: updatedEnemies,
-      campaignState: updatedCampaignState,
-      logEntries,
+      logEntries: [],
     };
   }
 
@@ -1544,6 +1485,40 @@ function emitThreatAreaEvent(args: {
     campaignState: updatedCampaignState,
     logEntries,
   };
+}
+
+let updatedInvestigator = investigator;
+let updatedLocations = locations;
+let updatedEnemies = enemies;
+let updatedCampaignState = campaignState;
+const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+for (const card of threatArea) {
+  const resolution = executeForcedCardAbilities({
+    sourceName: card.name,
+    sourceAbilities: card.abilities,
+    event,
+    currentLocationId: currentLocation.id,
+    investigator: updatedInvestigator,
+    locations: updatedLocations,
+    enemies: updatedEnemies,
+    campaignState: updatedCampaignState,
+  });
+
+  updatedInvestigator = resolution.investigator;
+  updatedLocations = resolution.locations;
+  updatedEnemies = resolution.enemies;
+  updatedCampaignState = resolution.campaignState;
+  logEntries.push(...resolution.logEntries);
+}
+
+return {
+  investigator: updatedInvestigator,
+  locations: updatedLocations,
+  enemies: updatedEnemies,
+  campaignState: updatedCampaignState,
+  logEntries,
+};
 }
 
 function emitCurrentLocationEvent(args: {
