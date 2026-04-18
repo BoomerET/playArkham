@@ -1468,15 +1468,109 @@ function emitThreatAreaEvent(args: {
     logEntries.push(...resolution.logEntries);
   }
 
-  //console.log(
-  //  "threat area cards",
-  //  threatArea.map((card) => ({
-  //    name: card.name,
-  //    abilities: card.abilities,
-  //    text: card.text,
-  //    ability: card.ability,
-  //  })),
-  //);
+  return {
+    investigator: updatedInvestigator,
+    locations: updatedLocations,
+    enemies: updatedEnemies,
+    campaignState: updatedCampaignState,
+    logEntries,
+  };
+}
+
+function emitEnemyEvent(args: {
+  event: CardAbilityEvent;
+  enemyId: string;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    event,
+    enemyId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  const enemy = enemies.find((entry) => entry.id === enemyId);
+
+  if (!enemy) {
+    return {
+      investigator,
+      locations,
+      enemies,
+      campaignState,
+      logEntries: [],
+    };
+  }
+
+  return executeForcedCardAbilities({
+    sourceName: enemy.name,
+    sourceAbilities: enemy.abilities,
+    event,
+    currentLocationId: enemy.locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  });
+}
+
+function emitEngagedEnemyEvent(args: {
+  event: CardAbilityEvent;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    event,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  let updatedInvestigator = investigator;
+  let updatedLocations = locations;
+  let updatedEnemies = enemies;
+  let updatedCampaignState = campaignState;
+  const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+  const engagedEnemies = enemies.filter(
+    (enemy) => enemy.engagedInvestigatorId === investigator.id,
+  );
+
+  for (const enemy of engagedEnemies) {
+    const resolution = emitEnemyEvent({
+      event,
+      enemyId: enemy.id,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
+    });
+
+    updatedInvestigator = resolution.investigator;
+    updatedLocations = resolution.locations;
+    updatedEnemies = resolution.enemies;
+    updatedCampaignState = resolution.campaignState;
+    logEntries.push(...resolution.logEntries);
+  }
 
   return {
     investigator: updatedInvestigator,
@@ -1517,6 +1611,59 @@ function emitCurrentLocationEvent(args: {
     ...args,
     locationId: currentLocation.id,
   });
+}
+
+function resolveEnemyEngagedTriggers(args: {
+  enemyId: string;
+  locationId: string;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    enemyId,
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  const locationResolution = emitLocationEvent({
+    event: "enemyEngaged",
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  });
+
+  const enemyResolution = emitEnemyEvent({
+    event: "enemyEngaged",
+    enemyId,
+    investigator: locationResolution.investigator,
+    locations: locationResolution.locations,
+    enemies: locationResolution.enemies,
+    campaignState: locationResolution.campaignState,
+  });
+
+  return {
+    investigator: enemyResolution.investigator,
+    locations: enemyResolution.locations,
+    enemies: enemyResolution.enemies,
+    campaignState: enemyResolution.campaignState,
+    logEntries: [
+      ...locationResolution.logEntries,
+      ...enemyResolution.logEntries,
+    ],
+  };
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -1611,9 +1758,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedCampaignState = resolution.campaignState;
     const extraLog: ReturnType<typeof createLogEntry>[] = [];
 
-    const forcedResolution = emitLocationEvent({
-      event: "enemyEngaged",
-      locationId: pendingInteractiveTargetSelection.currentLocationId,
+    const forcedResolution = resolveEnemyEngagedTriggers({
+      enemyId,
+      locationId: someLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
@@ -1625,6 +1772,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     finalEnemies = forcedResolution.enemies;
     updatedCampaignState = forcedResolution.campaignState;
     extraLog.push(...forcedResolution.logEntries);
+
+    //const forcedResolution = emitLocationEvent({
+    //  event: "enemyEngaged",
+    //  locationId: pendingInteractiveTargetSelection.currentLocationId,
+    //  investigator: updatedInvestigator,
+    //  locations: updatedLocations,
+    //  enemies: finalEnemies,
+    //  campaignState: updatedCampaignState,
+    //});
+
+    //updatedInvestigator = forcedResolution.investigator;
+    //updatedLocations = forcedResolution.locations;
+    //finalEnemies = forcedResolution.enemies;
+    //updatedCampaignState = forcedResolution.campaignState;
+    //extraLog.push(...forcedResolution.logEntries);
+
+
 
     set((state) => ({
       investigator: updatedInvestigator,
@@ -1724,9 +1888,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const extraLog: ReturnType<typeof createLogEntry>[] = [];
 
     if (newlyEngagedHunter) {
-      const forcedResolution = emitLocationEvent({
-        event: "enemyEngaged",
-        locationId: investigatorLocation.id,
+      const forcedResolution = resolveEnemyEngagedTriggers({
+        enemyId,
+        locationId: someLocationId,
         investigator: updatedInvestigator,
         locations: updatedLocations,
         enemies: finalEnemies,
@@ -1738,6 +1902,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       finalEnemies = forcedResolution.enemies;
       updatedCampaignState = forcedResolution.campaignState;
       extraLog.push(...forcedResolution.logEntries);
+      //const forcedResolution = emitLocationEvent({
+      //  event: "enemyEngaged",
+      //  locationId: investigatorLocation.id,
+      //  investigator: updatedInvestigator,
+      //  locations: updatedLocations,
+      //  enemies: finalEnemies,
+      //  campaignState: updatedCampaignState,
+      //});
+      //
+      //updatedInvestigator = forcedResolution.investigator;
+      //updatedLocations = forcedResolution.locations;
+      //finalEnemies = forcedResolution.enemies;
+      //updatedCampaignState = forcedResolution.campaignState;
+      //extraLog.push(...forcedResolution.logEntries);
+
+
     }
 
     set((state) => ({
@@ -2587,9 +2767,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       createLogEntry("enemy", `Engaged ${enemy.name}.`),
     ];
 
-    const forcedResolution = emitLocationEvent({
-      event: "enemyEngaged",
-      locationId: currentLocation.id,
+    const forcedResolution = resolveEnemyEngagedTriggers({
+      enemyId,
+      locationId: someLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
@@ -2600,7 +2780,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     updatedLocations = forcedResolution.locations;
     finalEnemies = forcedResolution.enemies;
     updatedCampaignState = forcedResolution.campaignState;
-    engagementLog.push(...forcedResolution.logEntries);
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+    extraLog.push(...forcedResolution.logEntries);
+
+    //const forcedResolution = emitLocationEvent({
+    //  event: "enemyEngaged",
+    //  locationId: currentLocation.id,
+    //  investigator: updatedInvestigator,
+    //  locations: updatedLocations,
+    //  enemies: finalEnemies,
+    //  campaignState: updatedCampaignState,
+    //});
+
+    //updatedInvestigator = forcedResolution.investigator;
+    //updatedLocations = forcedResolution.locations;
+    //finalEnemies = forcedResolution.enemies;
+    //updatedCampaignState = forcedResolution.campaignState;
+    //engagementLog.push(...forcedResolution.logEntries);
 
     set((state) => ({
       investigator: updatedInvestigator,
@@ -4552,9 +4748,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ),
     ];
 
-    const forcedResolution = emitLocationEvent({
-      event: "enemyEngaged",
-      locationId: currentLocation.id,
+    const forcedResolution = resolveEnemyEngagedTriggers({
+      enemyId,
+      locationId: someLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: finalEnemies,
@@ -4565,7 +4761,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     updatedLocations = forcedResolution.locations;
     finalEnemies = forcedResolution.enemies;
     updatedCampaignState = forcedResolution.campaignState;
-    engagementLog.push(...forcedResolution.logEntries);
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+    extraLog.push(...forcedResolution.logEntries);
+
+    //const forcedResolution = emitLocationEvent({
+    //  event: "enemyEngaged",
+    //  locationId: currentLocation.id,
+    //  investigator: updatedInvestigator,
+    //  locations: updatedLocations,
+    //  enemies: finalEnemies,
+    //  campaignState: updatedCampaignState,
+    //});
+    //
+    //updatedInvestigator = forcedResolution.investigator;
+    //updatedLocations = forcedResolution.locations;
+    //finalEnemies = forcedResolution.enemies;
+    //updatedCampaignState = forcedResolution.campaignState;
+    //engagementLog.push(...forcedResolution.logEntries);
 
     set((state) => ({
       investigator: updatedInvestigator,

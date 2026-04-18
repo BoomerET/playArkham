@@ -351,6 +351,7 @@ export interface Enemy {
   exhausted: boolean;
   damageOnEnemy: number;
   ability?: string[];
+  abilities?: CardAbilityDefinition[];
   onDefeat?: EnemyDefeatEffect;
   parley?: ParleyActionDefinition;
 }
