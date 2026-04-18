@@ -3431,6 +3431,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         exhausted: false,
         damageOnEnemy: 0,
         ability: card.ability,
+        abilities: card.abilities,
         onDefeat:
           card.code === "12132"
             ? { kind: "horrorToInvestigatorsAtLocation", amount: 1 }
@@ -3438,9 +3439,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
         parley: card.parley,
       };
 
-      set({
-        enemies: [...enemies, spawnedEnemy],
-      });
+      let updatedInvestigator = investigator;
+      let updatedLocations = locations;
+      let updatedEnemies = [...enemies, spawnedEnemy];
+      let updatedCampaignState = get().campaignState;
+      const extraLog: ReturnType<typeof createLogEntry>[] = [];
+
+      if (spawnedEnemy.engagedInvestigatorId === investigator.id) {
+        const forcedResolution = resolveEnemyEngagedTriggers({
+          enemyId: spawnedEnemy.id,
+          locationId: currentLocation.id,
+          investigator: updatedInvestigator,
+          locations: updatedLocations,
+          enemies: updatedEnemies,
+          campaignState: updatedCampaignState,
+        });
+
+        updatedInvestigator = forcedResolution.investigator;
+        updatedLocations = forcedResolution.locations;
+        updatedEnemies = forcedResolution.enemies;
+        updatedCampaignState = forcedResolution.campaignState;
+        extraLog.push(...forcedResolution.logEntries);
+      }
+
+      set((state) => ({
+        ...state,
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+        log: [
+          ...state.log,
+          createLogEntry(
+            "enemy",
+            card.ability?.includes("Aloof")
+              ? `${card.name} was drawn from the encounter deck and spawned at ${currentLocation.name} aloof.`
+              : `${card.name} was drawn from the encounter deck, spawned at ${currentLocation.name}, and engaged ${investigator.name}.`,
+          ),
+          ...extraLog,
+        ],
+      }));
+
+      return;
 
       get().pushLog(
         "enemy",
@@ -3456,7 +3496,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       currentLocationId: currentLocation.id,
     });
-    //console.log("encounter immediate", card.name, immediate);
 
     if (immediate.kind === "choice") {
       set({
