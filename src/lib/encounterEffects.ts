@@ -184,7 +184,7 @@ export function resolveEncounterCardImmediate(args: {
           id: `14003-${Date.now()}`,
           locationId: currentLocationId,
           engagedInvestigatorId: null,
-          name: "Test Enemy",
+          name: "Dave's Test Spawn",
           fight: 2,
           evade: 2,
           health: 2,

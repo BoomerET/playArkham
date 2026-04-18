@@ -4356,9 +4356,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let finalLocations = updatedLocations;
     let finalEnemies = get().enemies;
     let finalCampaignState = get().campaignState;
-    const movementLog: ReturnType<typeof createLogEntry>[] = [
-      createLogEntry("player", `Moved to ${destination.name}.`),
-    ];
 
     if (destinationLocation) {
       const forcedResolution = emitLocationEvent({
