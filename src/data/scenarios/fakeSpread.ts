@@ -65,6 +65,22 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
         "Central",
       ],
+      abilities: [
+        {
+          label: "Test turn begin",
+          trigger: "forced",
+          event: "turnBegins",
+          text: "Forced — When your turn begins, gain 1 resource.",
+          effect: { kind: "gainResources", amount: 1 },
+        },
+        {
+          label: "Test turn end",
+          trigger: "forced",
+          event: "turnEnds",
+          text: "Forced — When your turn ends, take 1 horror.",
+          effect: { kind: "takeHorror", amount: 1 },
+        },
+      ],
 
       text: ["Free: During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connection location. (Group limit once per round.)",],
 
