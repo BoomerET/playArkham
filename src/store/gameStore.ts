@@ -465,20 +465,20 @@ function getEncounterCardByCode(
 function spawnEnemyAtLocation(args: {
   enemyId: string;
   locationId: string;
-  investigator: Investigator;
   enemies: Enemy[];
+  encounterCards: EncounterCard[];
 }): Enemy[] {
-  const { enemyId, locationId, investigator, enemies } = args;
+  const { enemyId, locationId, enemies, encounterCards } = args;
 
-  const enemyCard = getEncounterCardByCode(enemyId); // <-- you already have something like this
+  const enemyCard = getEncounterCardByCode(encounterCards, enemyId);
 
   if (!enemyCard) {
-    console.warn("Enemy not found:", enemyId);
+    console.warn("Enemy not found for setup spawn:", enemyId);
     return enemies;
   }
 
   const spawnedEnemy: Enemy = {
-    id: `${enemyCard.code}-${Date.now()}`,
+    id: `${enemyCard.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     code: enemyCard.code,
     name: enemyCard.name,
     fight: enemyCard.fight ?? 0,
