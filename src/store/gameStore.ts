@@ -5776,6 +5776,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       : null;
 
     set({
+      clearedVictoryLocations: updatedClearedVictoryLocations,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
