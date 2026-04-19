@@ -4717,10 +4717,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       (location) => location.id === locationId,
     );
 
-    const movementLog: ReturnType<typeof createLogEntry>[] = [
-      //createLogEntry("player", `Moved to ${destination.name}.`),
-      //console.log(movementLog created),
-    ];
+    const movementLog: ReturnType<typeof createLogEntry>[] = [];
 
     let updatedInvestigator = investigator;
     let finalLocations = updatedLocations;
@@ -4774,8 +4771,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       agenda,
       act,
     } = get();
-
-    console.log(`Phase: ${phase}.`);
 
     let updatedInvestigator = investigator;
     let updatedLocations = locations;
@@ -5056,67 +5051,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         "system",
         "Resolve or cancel the active skill test before advancing the phase.",
       );
-      return;
-    }
-
-    console.log("About to enter Setup phase");
-    if (turn.phase === "setup") {
-      const {
-        availableScenarios,
-        selectedScenarioId,
-        campaignState,
-        encounterDeck,
-        enemies,
-      } = get();
-
-      const scenario = getSelectedScenario({
-        availableScenarios,
-        selectedScenarioId,
-        campaignState,
-      });
-
-      console.log(
-        "setup encounter deck codes",
-        encounterDeck.map((card) => card.code),
-      );
-
-      let updatedEnemies = enemies;
-      const setupLog: ReturnType<typeof createLogEntry>[] = [];
-
-      for (const spawn of scenario.enemySpawns ?? []) {
-        const beforeCount = updatedEnemies.length;
-
-        updatedEnemies = spawnEnemyAtLocation({
-          enemyId: spawn.enemyId,
-          locationId: spawn.locationId,
-          enemies: updatedEnemies,
-          encounterCards: encounterDeck,
-        });
-
-        if (updatedEnemies.length > beforeCount) {
-          setupLog.push(
-            createLogEntry(
-              "scenario",
-              `Spawned ${spawn.enemyId} at ${spawn.locationId} during setup.`,
-            ),
-          );
-        } else {
-          setupLog.push(
-            createLogEntry(
-              "system",
-              `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
-            ),
-          );
-        }
-      }
-
-      set((state) => ({
-        ...state,
-        enemies: updatedEnemies,
-        log: [...state.log, ...setupLog],
-      }));
-
-      get().setPhase("mythos");
       return;
     }
 
@@ -6235,14 +6169,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator.id,
       selectedEnemyTargetId,
     );
-    console.log("fightAction target check", {
-      currentLocationId: currentLocation?.id,
-      enemies: enemies.map((enemy) => ({
-        name: enemy.name,
-        locationId: enemy.locationId,
-        engagedInvestigatorId: enemy.engagedInvestigatorId,
-      })),
-    });
+
     if (!enemy) {
       set({
         turn: {
