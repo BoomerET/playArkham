@@ -174,24 +174,7 @@ export default function InvestigatorPanel() {
 
   const locations = useGameStore((state) => state.locations);
   const currentLocation = findCurrentLocation(locations, investigator.id);
-  const campaignState = useGameStore((state) => state.campaignState);
 
-  //const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
-  //  (ability) =>
-  //    (ability.trigger === "action" || ability.trigger === "doubleAction") &&
-  //    (!ability.requiresFlag ||
-  //      campaignState.scenarioFlags[ability.requiresFlag.key] ===
-  //      ability.requiresFlag.equals),
-  //);
-  const locationAction = useGameStore((state) => state.locationAction);
-
-  const availableLocationActions = (currentLocation?.actions ?? []).filter(
-    (action) =>
-      (action.trigger === "action" || action.trigger === "doubleAction") &&
-      (!action.requiresFlag ||
-        campaignState.scenarioFlags[action.requiresFlag.key] ===
-        action.requiresFlag.equals),
-  );
   const engageableEnemies = currentLocation
     ? enemies.filter(
       (enemy) =>
@@ -200,6 +183,7 @@ export default function InvestigatorPanel() {
         !enemy.exhausted,
     )
     : [];
+
   const activeEngageTarget = engageableEnemies[0] ?? null;
 
   const parleyEnemies = currentLocation
@@ -241,10 +225,14 @@ export default function InvestigatorPanel() {
         investigateAction();
         break;
       case "fight":
-        fightAction();
+        if (canFight) {
+          fightAction();
+        }
         break;
       case "evade":
-        evadeAction();
+        if (canEvade) {
+          evadeAction();
+        }
         break;
       case "engage":
         if (activeEngageTarget) {
@@ -261,13 +249,6 @@ export default function InvestigatorPanel() {
         if (selectedAbility.startsWith("parley-enemy:")) {
           const enemyId = selectedAbility.slice("parley-enemy:".length);
           parleyAction(enemyId);
-        } else if (selectedAbility.startsWith("location-action:")) {
-          const indexText = selectedAbility.slice("location-action:".length);
-          const index = Number(indexText);
-
-          if (!Number.isNaN(index)) {
-            locationAction(index);
-          }
         }
         break;
     }
@@ -454,7 +435,7 @@ export default function InvestigatorPanel() {
             <div className="engaged-enemies-header">Choose Target</div>
 
             <p className="engaged-enemies-targeting-note">
-              Select an enemy at a connecting location to engage it.
+              Select a target to continue.
             </p>
 
             <div className="engaged-enemies-list">
@@ -681,11 +662,6 @@ export default function InvestigatorPanel() {
               )}
 
               <option value="resign">{resignLabel}</option>
-              {availableLocationActions.map((action, index) => (
-                <option key={`location-action-${index}`} value={`location-action:${index}`}>
-                  {action.label ?? action.text}
-                </option>
-              ))}
             </select>
 
             <button
