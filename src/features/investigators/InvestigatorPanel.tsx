@@ -66,12 +66,6 @@ const investigatorHeadImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const victoryDisplay = useGameStore((state) => state.victoryDisplay);
-const totalVictoryPoints = victoryDisplay.reduce(
-  (sum, card) => sum + (card.victoryPoints ?? 0),
-  0,
-);
-
 function getInvestigatorHeadUrl(imageName?: string): string | null {
   if (!imageName) {
     return null;
@@ -100,6 +94,11 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
 }
 
 export default function InvestigatorPanel() {
+  const victoryDisplay = useGameStore((state) => state.victoryDisplay);
+  const totalVictoryPoints = victoryDisplay.reduce(
+    (sum, card) => sum + (card.victoryPoints ?? 0),
+    0,
+  );
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,
