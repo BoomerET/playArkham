@@ -168,15 +168,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
       },
-      abilities: [
-        {
-          label: "Hope Rekindled",
-          trigger: "forced",
-          event: "turnEnds",
-          text: "Forced — When your turn ends, gain 1 resource.",
-          effect: { kind: "gainResources", amount: 10 },
-        },
-      ],
     },
     {
       id: "fake-spreading-flames-act-2b",
@@ -275,16 +266,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       threshold: 5,
       thresholdLabel: "Doom",
       code: "12107",
-
-      abilities: [
-        {
-          label: "Oppressive Countdown",
-          trigger: "forced",
-          event: "turnBegins",
-          text: "Forced — When your turn begins, take 10 horror.",
-          effect: { kind: "takeHorror", amount: 10 },
-        },
-      ],
     },
     {
       id: "fake-spreading-flames-agenda-2b",

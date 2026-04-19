@@ -1119,7 +1119,7 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         ability: [
-            //"Hunter",
+            "Hunter",
             //"Parley",
         ],
 
@@ -1146,7 +1146,6 @@ export const encounterCards: EncounterCard[] = [
 
         ability: [
             "Hunter",
-            "Aloof",
         ],
 
         text: [
