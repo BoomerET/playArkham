@@ -1775,6 +1775,7 @@ function emitScenarioEvent(args: {
   const scenarioCards = [agenda, act].filter(
     (card): card is ScenarioCardState => card !== null,
   );
+  console.log("emitScenarioEvent scenarioCards", scenarioCards);
 
   for (const card of scenarioCards) {
     const sourceName =
@@ -4674,7 +4675,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = enemyResolution.enemies;
       updatedCampaignState = enemyResolution.campaignState;
       phaseLog.push(...enemyResolution.logEntries);
-
+      console.log("ABOUT TO CALL emitScenarioEvent", {
+        phase,
+        turnPhase: turn.phase,
+        agenda,
+        act,
+      });
       const scenarioResolution = emitScenarioEvent({
         event: "turnEnds",
         investigator: updatedInvestigator,
@@ -4741,7 +4747,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = enemyResolution.enemies;
       updatedCampaignState = enemyResolution.campaignState;
       phaseLog.push(...enemyResolution.logEntries);
-
+      console.log("ABOUT TO CALL emitScenarioEvent", {
+        phase,
+        turnPhase: turn.phase,
+        agenda,
+        act,
+      });
       const scenarioResolution = emitScenarioEvent({
         event: "turnBegins",
         investigator: updatedInvestigator,
