@@ -1057,7 +1057,7 @@ export const encounterCards: EncounterCard[] = [
                 trigger: "forced",
                 event: "turnEnds",
                 text: "Forced — When your turn ends, take 1 damage.",
-                effect: { kind: "takeDamage", amount: 1 },
+                effect: { kind: "takeDamage", amount: 5 },
             },
         ],
 
