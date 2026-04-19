@@ -4920,11 +4920,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       0,
     );
 
+    const attackResolution = resolveEnemyAttacks({
+      investigator: updatedInvestigator,
+      enemies: updatedEnemies,
+    });
+
+    updatedInvestigator = attackResolution.investigator;
+    updatedEnemies = attackResolution.enemies;
+    phaseLog.push(...attackResolution.logEntries);
+
     set({
       investigator: {
         ...investigator,
         damage: investigator.damage + totalDamage,
         horror: investigator.horror + totalHorror,
+        enemies: attackResolution.enemies,
       },
     });
 
