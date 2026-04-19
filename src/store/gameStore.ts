@@ -1684,6 +1684,8 @@ function emitEngagedEnemyEvent(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  victoryDisplay: [],
+  clearedVictoryLocations: [],
   advanceActByClues: () => {
     const { act, investigator, scenarioStatus } = get();
 
