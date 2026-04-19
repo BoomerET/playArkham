@@ -153,14 +153,6 @@ type PendingChoice = {
   }[];
 } | null;
 
-type PendingInteractiveTargetSelection = {
-  sourceName: string;
-  sourceKind: "locationAction";
-  currentLocationId: string;
-  effect: LocationAbilityEffect;
-  validEnemyIds: string[];
-} | null;
-
 type EncounterSkillTestOutcome =
   | { kind: "none" }
   | { kind: "damage"; amount: number }
@@ -173,27 +165,6 @@ type ChoiceEffect =
   | { kind: "spawnEnemy"; enemy: Enemy }
   | { kind: "surge" };
 
-function getConnectedEnemyTargets(args: {
-  currentLocationId: string;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-}): Enemy[] {
-  const { currentLocationId, locations, enemies } = args;
-
-  const currentLocation = locations.find(
-    (location) => location.id === currentLocationId,
-  );
-
-  if (!currentLocation) {
-    return [];
-  }
-
-  return enemies.filter(
-    (enemy) =>
-      enemy.engagedInvestigatorId === null &&
-      currentLocation.connections.includes(enemy.locationId),
-  );
-}
 
 type GameStore = GameState & CampaignStoreActions & {
   screen: Screen;
@@ -205,7 +176,6 @@ type GameStore = GameState & CampaignStoreActions & {
   selectedEnemyTargetId: string | null;
   pendingTestResolution: PendingTestResolution;
   pendingAssetPlay: PendingAssetPlay;
-  pendingInteractiveTargetSelection: PendingInteractiveTargetSelection;
   showDeckInspector: boolean;
   showEncounterInspector: boolean;
   encounterDeck: EncounterCard[];
@@ -222,8 +192,6 @@ type GameStore = GameState & CampaignStoreActions & {
   pendingChoice: PendingChoice;
   advanceActByClues: () => void;
   locationAbility: (abilityIndex: number) => void;
-  chooseInteractiveEnemyTarget: (enemyId: string) => void;
-  cancelInteractiveTargetSelection: () => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
   setCampaignRandomizedSelection: (
     campaignKey: string,
@@ -1653,85 +1621,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     get().setActProgress(act.progress + cluesNeeded);
   },
-  cancelInteractiveTargetSelection: () => {
-    const { pendingInteractiveTargetSelection } = get();
-
-    if (!pendingInteractiveTargetSelection) {
-      return;
-    }
-
-    set({
-      pendingInteractiveTargetSelection: null,
-    });
-
-    get().pushLog("system", "Cancelled target selection.");
-  },
-  chooseInteractiveEnemyTarget: (enemyId) => {
-    const {
-      investigator,
-      locations,
-      enemies,
-      campaignState,
-      pendingInteractiveTargetSelection,
-    } = get();
-
-    if (!pendingInteractiveTargetSelection) {
-      get().pushLog("system", "There is no pending interactive target selection.");
-      return;
-    }
-
-    if (!pendingInteractiveTargetSelection.validEnemyIds.includes(enemyId)) {
-      get().pushLog("system", "That enemy is not a valid target.");
-      return;
-    }
-
-    const resolution = resolveLocationAbilityEffect({
-      effect: pendingInteractiveTargetSelection.effect,
-      investigator,
-      currentLocationId: pendingInteractiveTargetSelection.currentLocationId,
-      locations,
-      enemies,
-      campaignState,
-      targetEnemyId: enemyId,
-    });
-
-    let updatedInvestigator = resolution.investigator;
-    let updatedLocations = resolution.locations;
-    let finalEnemies = resolution.enemies;
-    let updatedCampaignState = resolution.campaignState;
-    const extraLog: ReturnType<typeof createLogEntry>[] = [];
-
-    const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyId,
-      locationId: pendingInteractiveTargetSelection.currentLocationId,
-      investigator: updatedInvestigator,
-      locations: updatedLocations,
-      enemies: finalEnemies,
-      campaignState: updatedCampaignState,
-    });
-
-    updatedInvestigator = forcedResolution.investigator;
-    updatedLocations = forcedResolution.locations;
-    finalEnemies = forcedResolution.enemies;
-    updatedCampaignState = forcedResolution.campaignState;
-    extraLog.push(...forcedResolution.logEntries);
-
-    set((state) => ({
-      investigator: updatedInvestigator,
-      locations: updatedLocations,
-      enemies: finalEnemies,
-      campaignState: updatedCampaignState,
-      pendingInteractiveTargetSelection: null,
-      log: [...state.log, ...resolution.logEntries, ...extraLog],
-    }));
-
-    const updatedState = get();
-    savePersistedCampaignSetup({
-      selectedDeckId: updatedState.selectedDeckId,
-      selectedScenarioId: updatedState.selectedScenarioId,
-      campaignState: updatedState.campaignState,
-    });
-  },
   moveHunterEnemies: () => {
     const { enemies, locations, investigator, scenarioStatus } = get();
 
@@ -1897,7 +1786,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   pendingChoice: null,
   pendingEncounterResolution: null,
   pendingInteractiveResolution: null,
-  pendingInteractiveTargetSelection: null,
   investigator: createGameInvestigator(investigators[0]),
   deck: [],
   hand: [],
@@ -2010,39 +1898,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (actionEffect?.kind === "engageEnemyFromConnectedLocation") {
-      const validTargets = getConnectedEnemyTargets({
-        currentLocationId: currentLocation.id,
-        locations,
-        enemies,
-      });
 
-      if (validTargets.length === 0) {
-        get().pushLog("system", "There is no valid enemy at a connecting location.");
-        return;
-      }
-
-      set((state) => ({
-        pendingInteractiveTargetSelection: {
-          sourceName: ability.label ?? currentLocation.name,
-          sourceKind: "locationAction",
-          currentLocationId: currentLocation.id,
-          effect: actionEffect,
-          validEnemyIds: validTargets.map((enemy) => enemy.id),
-        },
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - actionCost,
-        },
-        log: [
-          ...state.log,
-          createLogEntry("scenario", ability.text),
-          createLogEntry("system", "Choose an enemy at a connecting location."),
-        ],
-      }));
-
-      return;
-    }
 
     if (!actionEffect) {
       get().pushLog("system", "This location ability has no effect configured.");
@@ -2320,40 +2176,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (!actionEffect && !ability.skillTest) {
       get().pushLog("system", "This location action has no effect configured.");
-      return;
-    }
-
-    if (actionEffect?.kind === "engageEnemyFromConnectedLocation") {
-      const validTargets = getConnectedEnemyTargets({
-        currentLocationId: currentLocation.id,
-        locations,
-        enemies,
-      });
-
-      if (validTargets.length === 0) {
-        get().pushLog("system", "There is no valid enemy at a connecting location.");
-        return;
-      }
-
-      set((state) => ({
-        pendingInteractiveTargetSelection: {
-          sourceName: ability.label ?? currentLocation.name,
-          sourceKind: "locationAction",
-          currentLocationId: currentLocation.id,
-          effect: actionEffect,
-          validEnemyIds: validTargets.map((enemy) => enemy.id),
-        },
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
-        log: [
-          ...state.log,
-          createLogEntry("scenario", ability.text),
-          createLogEntry("system", "Choose an enemy at a connecting location."),
-        ],
-      }));
-
       return;
     }
 
@@ -5736,7 +5558,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingTestResolution: null,
       pendingEncounterResolution: null,
       pendingInteractiveResolution: null,
-      pendingInteractiveTargetSelection: null,
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,

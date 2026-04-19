@@ -94,16 +94,6 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
 }
 
 export default function InvestigatorPanel() {
-  const pendingInteractiveTargetSelection = useGameStore(
-    (state) => state.pendingInteractiveTargetSelection,
-  );
-  const chooseInteractiveEnemyTarget = useGameStore(
-    (state) => state.chooseInteractiveEnemyTarget,
-  );
-  const cancelInteractiveTargetSelection = useGameStore(
-    (state) => state.cancelInteractiveTargetSelection,
-  );
-
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,
@@ -206,12 +196,6 @@ export default function InvestigatorPanel() {
   const [selectedAbility, setSelectedAbility] = useState("");
   const [selectedAdjustment, setSelectedAdjustment] = useState("");
   const engageEnemy = useGameStore((state) => state.engageEnemy);
-
-  const interactiveTargetEnemies = pendingInteractiveTargetSelection
-    ? enemies.filter((enemy) =>
-      pendingInteractiveTargetSelection.validEnemyIds.includes(enemy.id),
-    )
-    : [];
 
   function handleExecuteAction() {
     switch (selectedAbility) {
@@ -426,56 +410,7 @@ export default function InvestigatorPanel() {
           </div>
         </section>
       )}
-
-      {pendingInteractiveTargetSelection && (
-        <>
-          <hr />
-
-          <div className="engaged-enemies-section">
-            <div className="engaged-enemies-header">Choose Target</div>
-
-            <p className="engaged-enemies-targeting-note">
-              Select a target to continue.
-            </p>
-
-            <div className="engaged-enemies-list">
-              {interactiveTargetEnemies.map((enemy) => (
-                <button
-                  key={enemy.id}
-                  type="button"
-                  className="engaged-enemy-card engaged-enemy-card-selectable"
-                  onClick={() => chooseInteractiveEnemyTarget(enemy.id)}
-                >
-                  <div className="engaged-enemy-main">
-                    <div className="engaged-enemy-name-row">
-                      <div className="engaged-enemy-name-stack">
-                        <span className="engaged-enemy-name">{enemy.name}</span>
-                      </div>
-                    </div>
-
-                    <div className="engaged-enemy-meta">
-                      <span className="token-chip">Fight {enemy.fight}</span>
-                      <span className="token-chip">Evade {enemy.evade}</span>
-                      <span className="token-chip">
-                        Damage {enemy.damageOnEnemy}/{enemy.health}
-                      </span>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="button-row">
-              <button type="button" onClick={cancelInteractiveTargetSelection}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
       <hr />
-
       <div className="stat-grid">
         <div className="stat-box">
           <span className="stat-label">Health: </span>
