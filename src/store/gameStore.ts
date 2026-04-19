@@ -1893,34 +1893,34 @@ function emitScenarioEvent(args: {
   };
 }
 
-function buildEnemyFromEncounterCard(args: {
-  card: EncounterCard;
-  locationId: string;
-}): Enemy {
-  const { card, locationId } = args;
-
-  return {
-    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    code: card.code,
-    name: card.name,
-    fight: card.fight ?? 0,
-    evade: card.evade ?? 0,
-    health: card.health ?? 0,
-    damage: card.damage ?? 0,
-    horror: card.horror ?? 0,
-    locationId,
-    engagedInvestigatorId: null,
-    exhausted: false,
-    damageOnEnemy: 0,
-    ability: card.ability,
-    abilities: card.abilities,
-    text: card.text,
-    traits: card.traits,
-    set: card.set,
-    victoryPoints: card.victoryPoints,
-    parley: card.parley,
-  };
-}
+//function buildEnemyFromEncounterCard(args: {
+//  card: EncounterCard;
+//  locationId: string;
+//}): Enemy {
+//  const { card, locationId } = args;
+//
+//  return {
+//    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+//    code: card.code,
+//    name: card.name,
+//    fight: card.fight ?? 0,
+//    evade: card.evade ?? 0,
+//    health: card.health ?? 0,
+//    damage: card.damage ?? 0,
+//    horror: card.horror ?? 0,
+//    locationId,
+//    engagedInvestigatorId: null,
+//    exhausted: false,
+//    damageOnEnemy: 0,
+//    ability: card.ability,
+//    abilities: card.abilities,
+//    text: card.text,
+//    traits: card.traits,
+//    set: card.set,
+//    victoryPoints: card.victoryPoints,
+//    parley: card.parley,
+//  };
+//}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   victoryDisplay: [],
@@ -2309,8 +2309,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   activeSkillTest: null,
   turn: {
     round: 1,
-    phase: "setup",
-    actionsRemaining: 3,
+    phase: "mythos",
+    actionsRemaining: 0,
   },
 
   pushLog: (kind, text) => {
@@ -3875,7 +3875,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingTestResolution: null,
       selectedEnemyTargetId: null,
       draggedCardId: null,
-      turn: { round: 1, phase: "setup", actionsRemaining: 3 },
+      turn: { round: 1, phase: "mythos", actionsRemaining: 0 },
       isMulliganActive: false,
       selectedMulliganCardIds: [],
       pendingInvestigateDifficultyModifier: 0,
@@ -4023,7 +4023,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedEnemyTargetId: null,
       draggedCardId: null,
       lastEncounterCard: null,
-      turn: { round: 1, phase: "setup", actionsRemaining: 3 },
+      turn: { round: 1, phase: "mythos", actionsRemaining: 0 },
     });
     get().drawStartingHand(5);
     get().pushLog(
@@ -5153,7 +5153,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "mythos") {
-      get().resolveMythosPhase();
+      createLogEntry("system", "Mythos phase begins."),
+        get().resolveMythosPhase();
       get().setPhase("investigation");
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
       return;
