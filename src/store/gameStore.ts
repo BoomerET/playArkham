@@ -5020,6 +5020,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    console.log("About to enter Setup phase");
     if (turn.phase === "setup") {
       const {
         availableScenarios,
