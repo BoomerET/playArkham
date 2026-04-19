@@ -5039,30 +5039,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const setupLog: ReturnType<typeof createLogEntry>[] = [];
 
       for (const spawn of scenario.enemySpawns ?? []) {
-        const card = getEncounterCardByCode(encounterDeck, spawn.enemyId);
+        const beforeCount = updatedEnemies.length;
 
-        if (!card) {
+        updatedEnemies = spawnEnemyAtLocation({
+          enemyId: spawn.enemyId,
+          locationId: spawn.locationId,
+          enemies: updatedEnemies,
+          encounterCards: encounterDeck,
+        });
+
+        if (updatedEnemies.length > beforeCount) {
+          setupLog.push(
+            createLogEntry(
+              "scenario",
+              `Spawned ${spawn.enemyId} at ${spawn.locationId} during setup.`,
+            ),
+          );
+        } else {
           setupLog.push(
             createLogEntry(
               "system",
-              `Setup could not find encounter enemy ${spawn.enemyId} for spawn at ${spawn.locationId}.`,
+              `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
             ),
           );
-          continue;
         }
-
-        const spawnedEnemy = buildEnemyFromEncounterCard({
-          card,
-          locationId: spawn.locationId,
-        });
-
-        updatedEnemies = [...updatedEnemies, spawnedEnemy];
-        setupLog.push(
-          createLogEntry(
-            "scenario",
-            `${spawnedEnemy.name} spawned at ${spawn.locationId} during setup.`,
-          ),
-        );
       }
 
       set((state) => ({
