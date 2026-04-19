@@ -455,6 +455,13 @@ function getNextScenarioCardDefinition(
   );
 }
 
+function getEncounterCardByCode(
+  encounterDeck: EncounterCard[],
+  code: string,
+): EncounterCard | null {
+  return encounterDeck.find((card) => card.code === code) ?? null;
+}
+
 function spawnEnemyAtLocation(args: {
   enemyId: string;
   locationId: string;
@@ -1883,6 +1890,35 @@ function emitScenarioEvent(args: {
     enemies: updatedEnemies,
     campaignState: updatedCampaignState,
     logEntries,
+  };
+}
+
+function buildEnemyFromEncounterCard(args: {
+  card: EncounterCard;
+  locationId: string;
+}): Enemy {
+  const { card, locationId } = args;
+
+  return {
+    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    code: card.code,
+    name: card.name,
+    fight: card.fight ?? 0,
+    evade: card.evade ?? 0,
+    health: card.health ?? 0,
+    damage: card.damage ?? 0,
+    horror: card.horror ?? 0,
+    locationId,
+    engagedInvestigatorId: null,
+    exhausted: false,
+    damageOnEnemy: 0,
+    ability: card.ability,
+    abilities: card.abilities,
+    text: card.text,
+    traits: card.traits,
+    set: card.set,
+    victoryPoints: card.victoryPoints,
+    parley: card.parley,
   };
 }
 
@@ -4986,38 +5022,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (turn.phase === "setup") {
       const {
-        investigator,
-        locations,
-        enemies,
-        campaignState,
+        availableScenarios,
         selectedScenarioId,
+        campaignState,
+        encounterDeck,
+        enemies,
       } = get();
+
+      const scenario = getSelectedScenario({
+        availableScenarios,
+        selectedScenarioId,
+        campaignState,
+      });
 
       let updatedEnemies = enemies;
       const setupLog: ReturnType<typeof createLogEntry>[] = [];
 
-      const scenario = getScenarioDefinition(selectedScenarioId); // however you already fetch it
+      for (const spawn of scenario.enemySpawns ?? []) {
+        const card = getEncounterCardByCode(encounterDeck, spawn.enemyId);
 
-      // 🔥 Apply enemySpawns here
-      if (scenario.enemySpawns?.length) {
-        for (const spawn of scenario.enemySpawns) {
-          updatedEnemies = spawnEnemyAtLocation({
-            enemyId: spawn.enemyId,
-            locationId: spawn.locationId,
-            investigator,
-            enemies: updatedEnemies,
-          });
-
+        if (!card) {
           setupLog.push(
             createLogEntry(
-              "scenario",
-              `Spawned enemy ${spawn.enemyId} at ${spawn.locationId}.`,
+              "system",
+              `Setup could not find encounter enemy ${spawn.enemyId} for spawn at ${spawn.locationId}.`,
             ),
           );
+          continue;
         }
+
+        const spawnedEnemy = buildEnemyFromEncounterCard({
+          card,
+          locationId: spawn.locationId,
+        });
+
+        updatedEnemies = [...updatedEnemies, spawnedEnemy];
+        setupLog.push(
+          createLogEntry(
+            "scenario",
+            `${spawnedEnemy.name} spawned at ${spawn.locationId} during setup.`,
+          ),
+        );
       }
 
-      // 🔁 Commit state BEFORE moving to next phase
       set((state) => ({
         ...state,
         enemies: updatedEnemies,
