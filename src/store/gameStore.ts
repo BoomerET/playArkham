@@ -1338,6 +1338,59 @@ function executeForcedCardAbilities(args: {
   };
 }
 
+function resolveEnemyEngagedTriggers(args: {
+  enemyId: string;
+  locationId: string;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    enemyId,
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  const locationResolution = emitLocationEvent({
+    event: "enemyEngaged",
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  });
+
+  const enemyResolution = emitEnemyEvent({
+    event: "enemyEngaged",
+    enemyId,
+    investigator: locationResolution.investigator,
+    locations: locationResolution.locations,
+    enemies: locationResolution.enemies,
+    campaignState: locationResolution.campaignState,
+  });
+
+  return {
+    investigator: enemyResolution.investigator,
+    locations: enemyResolution.locations,
+    enemies: enemyResolution.enemies,
+    campaignState: enemyResolution.campaignState,
+    logEntries: [
+      ...locationResolution.logEntries,
+      ...enemyResolution.logEntries,
+    ],
+  };
+}
+
 function emitLocationEvent(args: {
   event: CardAbilityEvent;
   locationId: string;
@@ -1520,9 +1573,8 @@ function emitCurrentLocationEvent(args: {
   });
 }
 
-function resolveEnemyEngagedTriggers(args: {
-  enemyId: string;
-  locationId: string;
+function emitEngagedEnemyEvent(args: {
+  event: CardAbilityEvent;
   investigator: Investigator;
   locations: GameState["locations"];
   enemies: Enemy[];
@@ -1535,41 +1587,46 @@ function resolveEnemyEngagedTriggers(args: {
   logEntries: ReturnType<typeof createLogEntry>[];
 } {
   const {
-    enemyId,
-    locationId,
+    event,
     investigator,
     locations,
     enemies,
     campaignState,
   } = args;
 
-  const locationResolution = emitLocationEvent({
-    event: "enemyEngaged",
-    locationId,
-    investigator,
-    locations,
-    enemies,
-    campaignState,
-  });
+  let updatedInvestigator = investigator;
+  let updatedLocations = locations;
+  let updatedEnemies = enemies;
+  let updatedCampaignState = campaignState;
+  const logEntries: ReturnType<typeof createLogEntry>[] = [];
 
-  const enemyResolution = emitEnemyEvent({
-    event: "enemyEngaged",
-    enemyId,
-    investigator: locationResolution.investigator,
-    locations: locationResolution.locations,
-    enemies: locationResolution.enemies,
-    campaignState: locationResolution.campaignState,
-  });
+  const engagedEnemies = enemies.filter(
+    (enemy) => enemy.engagedInvestigatorId === investigator.id,
+  );
+
+  for (const enemy of engagedEnemies) {
+    const resolution = emitEnemyEvent({
+      event,
+      enemyId: enemy.id,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
+    });
+
+    updatedInvestigator = resolution.investigator;
+    updatedLocations = resolution.locations;
+    updatedEnemies = resolution.enemies;
+    updatedCampaignState = resolution.campaignState;
+    logEntries.push(...resolution.logEntries);
+  }
 
   return {
-    investigator: enemyResolution.investigator,
-    locations: enemyResolution.locations,
-    enemies: enemyResolution.enemies,
-    campaignState: enemyResolution.campaignState,
-    logEntries: [
-      ...locationResolution.logEntries,
-      ...enemyResolution.logEntries,
-    ],
+    investigator: updatedInvestigator,
+    locations: updatedLocations,
+    enemies: updatedEnemies,
+    campaignState: updatedCampaignState,
+    logEntries,
   };
 }
 
@@ -4370,6 +4427,107 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().engageEnemiesAtLocation();
   },
 
+  //tPhase: (phase) => {
+  //const {
+  //  turn,
+  //  investigator,
+  //  locations,
+  //  enemies,
+  //  threatArea,
+  //  campaignState,
+  //} = get();
+
+  //let updatedInvestigator = investigator;
+  //let updatedLocations = locations;
+  //let updatedEnemies = enemies;
+  //let updatedCampaignState = campaignState;
+  //const phaseLog: ReturnType<typeof createLogEntry>[] = [];
+
+  //if (turn.phase === "investigation" && phase !== "investigation") {
+  //  const locationResolution = emitCurrentLocationEvent({
+  //    event: "turnEnds",
+  //    investigator: updatedInvestigator,
+  //    locations: updatedLocations,
+  //    enemies: updatedEnemies,
+  //    campaignState: updatedCampaignState,
+  //  });
+
+  //  updatedInvestigator = locationResolution.investigator;
+  //  updatedLocations = locationResolution.locations;
+  //  updatedEnemies = locationResolution.enemies;
+  //  updatedCampaignState = locationResolution.campaignState;
+  //  phaseLog.push(...locationResolution.logEntries);
+
+  //  const threatResolution = emitThreatAreaEvent({
+  //    event: "turnEnds",
+  //    investigator: updatedInvestigator,
+  //    locations: updatedLocations,
+  //    enemies: updatedEnemies,
+  //    threatArea,
+  //    campaignState: updatedCampaignState,
+  //  });
+
+  //  updatedInvestigator = threatResolution.investigator;
+  //  updatedLocations = threatResolution.locations;
+  //  updatedEnemies = threatResolution.enemies;
+  //  updatedCampaignState = threatResolution.campaignState;
+  //  phaseLog.push(...threatResolution.logEntries);
+  //}
+
+  //const nextTurn = {
+  //  ...turn,
+  //  phase,
+  //  actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
+  //};
+
+  //if (turn.phase !== "investigation" && phase === "investigation") {
+  //  const locationResolution = emitCurrentLocationEvent({
+  //    event: "turnBegins",
+  //    investigator: updatedInvestigator,
+  //    locations: updatedLocations,
+  //    enemies: updatedEnemies,
+  //    campaignState: updatedCampaignState,
+  //  });
+
+  //  updatedInvestigator = locationResolution.investigator;
+  //  updatedLocations = locationResolution.locations;
+  //  updatedEnemies = locationResolution.enemies;
+  //  updatedCampaignState = locationResolution.campaignState;
+  //  phaseLog.push(...locationResolution.logEntries);
+
+  //  const threatResolution = emitThreatAreaEvent({
+  //    event: "turnBegins",
+  //    investigator: updatedInvestigator,
+  //    locations: updatedLocations,
+  //    enemies: updatedEnemies,
+  //    threatArea,
+  //    campaignState: updatedCampaignState,
+  //  });
+
+  //  updatedInvestigator = threatResolution.investigator;
+  //  updatedLocations = threatResolution.locations;
+  //  updatedEnemies = threatResolution.enemies;
+  //  updatedCampaignState = threatResolution.campaignState;
+  //  phaseLog.push(...threatResolution.logEntries);
+  //}
+
+  //set((state) => ({
+  //  ...state,
+  //  turn: nextTurn,
+  //  investigator: updatedInvestigator,
+  //  locations: updatedLocations,
+  //  enemies: updatedEnemies,
+  //  campaignState: updatedCampaignState,
+  //  log: [...state.log, ...phaseLog],
+  //}));
+
+  //const updatedState = get();
+  //savePersistedCampaignSetup({
+  //  selectedDeckId: updatedState.selectedDeckId,
+  //  selectedScenarioId: updatedState.selectedScenarioId,
+  //  campaignState: updatedState.campaignState,
+  //});
+
   setPhase: (phase) => {
     const {
       turn,
@@ -4415,6 +4573,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = threatResolution.enemies;
       updatedCampaignState = threatResolution.campaignState;
       phaseLog.push(...threatResolution.logEntries);
+
+      const enemyResolution = emitEngagedEnemyEvent({
+        event: "turnEnds",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = enemyResolution.investigator;
+      updatedLocations = enemyResolution.locations;
+      updatedEnemies = enemyResolution.enemies;
+      updatedCampaignState = enemyResolution.campaignState;
+      phaseLog.push(...enemyResolution.logEntries);
     }
 
     const nextTurn = {
@@ -4452,6 +4624,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = threatResolution.enemies;
       updatedCampaignState = threatResolution.campaignState;
       phaseLog.push(...threatResolution.logEntries);
+
+      const enemyResolution = emitEngagedEnemyEvent({
+        event: "turnBegins",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = enemyResolution.investigator;
+      updatedLocations = enemyResolution.locations;
+      updatedEnemies = enemyResolution.enemies;
+      updatedCampaignState = enemyResolution.campaignState;
+      phaseLog.push(...enemyResolution.logEntries);
     }
 
     set((state) => ({

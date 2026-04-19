@@ -1053,11 +1053,11 @@ export const encounterCards: EncounterCard[] = [
         ],
         abilities: [
             {
-                label: "Terrifying Presence",
+                label: "Crushing Weight",
                 trigger: "forced",
-                event: "enemyEngaged",
-                text: "Forced — When this enemy engages you, take 1 horror.",
-                effect: { kind: "takeHorror", amount: 10 },
+                event: "turnEnds",
+                text: "Forced — When your turn ends, take 1 damage.",
+                effect: { kind: "takeDamage", amount: 1 },
             },
         ],
 
