@@ -1197,8 +1197,6 @@ function beginInteractiveAction(args: {
     };
   }
 
-  //const actionEffect = action.effect;
-
   if (action.effect) {
     return {
       kind: "immediate",
