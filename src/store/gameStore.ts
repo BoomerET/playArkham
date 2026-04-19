@@ -59,7 +59,6 @@ import type {
   CardAbilityEffect,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
-//import type { GameLocation } from "../types/game";
 import { applyConditionalLocationVisibility } from "./locationVisibility";
 import { resolveLocationAbilityEffect } from "./locationAbilities";
 
@@ -3315,7 +3314,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (immediate.kind === "attachToThreatArea") {
       const { threatArea } = get();
-      //console.log("ATTACHING TO THREAT AREA", card.name, threatArea);
 
       const alreadyInThreatArea =
         immediate.uniqueByName &&
@@ -4721,13 +4719,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (turn.phase === "mythos") {
       get().resolveMythosPhase();
-      //set({
-      //  turn: {
-      //    ...turn,
-      //    phase: "investigation",
-      //    actionsRemaining: 3,
-      //  },
-      //});
       get().setPhase("investigation");
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
       return;
