@@ -5035,6 +5035,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
         campaignState,
       });
 
+      console.log(
+        "setup encounter deck codes",
+        encounterDeck.map((card) => card.code),
+      );
+
       let updatedEnemies = enemies;
       const setupLog: ReturnType<typeof createLogEntry>[] = [];
 
