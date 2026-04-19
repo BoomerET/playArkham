@@ -94,10 +94,10 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
 }
 
 export default function InvestigatorPanel() {
+  const victoryDisplay = useGameStore((state) => state.victoryDisplay);
   const clearedVictoryLocations = useGameStore(
     (state) => state.clearedVictoryLocations,
   );
-  const victoryDisplay = useGameStore((state) => state.victoryDisplay);
   const totalVictoryPoints =
     victoryDisplay.reduce((sum, card) => sum + (card.victoryPoints ?? 0), 0) +
     clearedVictoryLocations.reduce(
