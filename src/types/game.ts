@@ -338,6 +338,7 @@ export type EnemyDefeatEffect =
 
 export interface Enemy {
   id: string;
+  code: string;
   name: string;
   fight: number;
   evade: number;
