@@ -66,6 +66,12 @@ const investigatorHeadImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const victoryDisplay = useGameStore((state) => state.victoryDisplay);
+const totalVictoryPoints = victoryDisplay.reduce(
+  (sum, card) => sum + (card.victoryPoints ?? 0),
+  0,
+);
+
 function getInvestigatorHeadUrl(imageName?: string): string | null {
   if (!imageName) {
     return null;
@@ -437,7 +443,46 @@ export default function InvestigatorPanel() {
           <span className="stat-value">{investigator.clues}</span>
         </div>
       </div>
+      {victoryDisplay.length > 0 && (
+        <>
+          <hr />
 
+          <section className="investigator-panel__section">
+            <h3 className="investigator-panel__section-title">
+              Victory Display ({totalVictoryPoints} VP)
+            </h3>
+
+            <div className="engaged-enemies-list">
+              {victoryDisplay.map((card) => (
+                <div key={card.id} className="engaged-enemy-card">
+                  <div className="engaged-enemy-main">
+                    <div className="engaged-enemy-name-row">
+                      <div className="engaged-enemy-name-stack">
+                        <span className="engaged-enemy-name">{card.name}</span>
+                      </div>
+                    </div>
+
+                    <div className="engaged-enemy-meta">
+                      <span className="token-chip">
+                        VP {card.victoryPoints ?? 0}
+                      </span>
+                      {card.fight != null && (
+                        <span className="token-chip">Fight {card.fight}</span>
+                      )}
+                      {card.evade != null && (
+                        <span className="token-chip">Evade {card.evade}</span>
+                      )}
+                      {card.health != null && (
+                        <span className="token-chip">Health {card.health}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
       {engagedEnemies.length > 0 && (
         <>
           <hr />
