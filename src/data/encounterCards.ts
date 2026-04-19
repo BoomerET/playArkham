@@ -1056,8 +1056,8 @@ export const encounterCards: EncounterCard[] = [
                 label: "Death Rattle",
                 trigger: "forced",
                 event: "enemyDefeated",
-                text: "Forced — When this enemy is defeated, take 8 horror.",
-                effect: { kind: "takeHorror", amount: 8 },
+                text: "Forced — When this enemy is defeated, take 7 horror.",
+                effect: { kind: "takeHorror", amount: 7 },
             },
         ],
 
