@@ -6143,7 +6143,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator.id,
       selectedEnemyTargetId,
     );
-
+    console.log("fightAction target check", {
+      currentLocationId: currentLocation?.id,
+      enemies: enemies.map((enemy) => ({
+        name: enemy.name,
+        locationId: enemy.locationId,
+        engagedInvestigatorId: enemy.engagedInvestigatorId,
+      })),
+    });
     if (!enemy) {
       set({
         turn: {
