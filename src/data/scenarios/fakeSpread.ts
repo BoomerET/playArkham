@@ -131,7 +131,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
     },
   ],
-  enemySpawns: [],
+  enemySpawns: [
+    {
+      locationId: "fake-miskatonic-quad",
+      enemyId: "14004",
+    },
+  ],
   acts: [
     {
       id: "fake-spreading-flames-act-1a",
