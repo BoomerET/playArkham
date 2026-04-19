@@ -5118,6 +5118,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log,
       campaignState,
       encounterDiscard,
+      victoryDisplay,
     } = get();
 
     if (!activeSkillTest) {
@@ -5235,6 +5236,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedInvestigator = investigator;
     let updatedCampaignState = campaignState;
     let updatedEncounterDiscard = encounterDiscard;
+    let updatedVictoryDisplay = victoryDisplay;
 
     let cardsToDrawOnSuccess = 0;
     let bonusCluesOnSuccess = 0;
@@ -5440,27 +5442,60 @@ export const useGameStore = create<GameStore>((set, get) => ({
             updatedEnemies = forcedResolution.enemies;
             updatedCampaignState = forcedResolution.campaignState;
 
-            updatedEncounterDiscard = [
-              ...updatedEncounterDiscard,
-              {
-                id: enemy.id,
-                code: enemy.code,
-                name: enemy.name,
-                type: "enemy",
-                ability: enemy.ability,
-                abilities: enemy.abilities,
-                text: enemy.text,
-                damage: enemy.damage,
-                horror: enemy.horror,
-                fight: enemy.fight,
-                evade: enemy.evade,
-                health: enemy.health,
-                set: enemy.set,
-                traits: enemy.traits,
-                victoryPoints: enemy.victoryPoints,
-                parley: enemy.parley,
-              },
-            ];
+
+
+            //updatedEncounterDiscard = [
+            //  ...updatedEncounterDiscard,
+            //  {
+            //    id: enemy.id,
+            //    code: enemy.code,
+            //    name: enemy.name,
+            //    type: "enemy",
+            //    ability: enemy.ability,
+            //    abilities: enemy.abilities,
+            //    text: enemy.text,
+            //    damage: enemy.damage,
+            //    horror: enemy.horror,
+            //    fight: enemy.fight,
+            //    evade: enemy.evade,
+            //    health: enemy.health,
+            //    set: enemy.set,
+            //    traits: enemy.traits,
+            //    victoryPoints: enemy.victoryPoints,
+            //    parley: enemy.parley,
+            //  },
+            //];
+
+            const enemyCard: EncounterCard = {
+              id: enemy.id,
+              code: enemy.code,
+              name: enemy.name,
+              type: "enemy",
+              ability: enemy.ability,
+              abilities: enemy.abilities,
+              text: enemy.text,
+              damage: enemy.damage,
+              horror: enemy.horror,
+              fight: enemy.fight,
+              evade: enemy.evade,
+              health: enemy.health,
+              set: enemy.set,
+              traits: enemy.traits,
+              victoryPoints: enemy.victoryPoints,
+              parley: enemy.parley,
+            };
+
+            if ((enemy.victoryPoints ?? 0) > 0) {
+              updatedVictoryDisplay = [...updatedVictoryDisplay, enemyCard];
+              resolutionLog.push(
+                createLogEntry(
+                  "scenario",
+                  `${enemy.name} was added to the victory display worth ${enemy.victoryPoints} victory point${enemy.victoryPoints === 1 ? "" : "s"}.`,
+                ),
+              );
+            } else {
+              updatedEncounterDiscard = [...updatedEncounterDiscard, enemyCard];
+            }
 
             updatedEnemies = updatedEnemies.filter((entry) => entry.id !== enemy.id);
 
@@ -5708,6 +5743,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: updatedCampaignState,
       deck: updatedDeck,
       encounterDiscard: updatedEncounterDiscard,
+      victoryDisplay: updatedVictoryDisplay,
       hand: updatedHand,
       discard: [...discard, ...committedCards],
       lastSkillTest: result,

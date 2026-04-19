@@ -478,6 +478,8 @@ export interface GameState {
   threatArea: EncounterCard[];
   lastEncounterCard: EncounterCard | null;
   locationAttachments: LocationAttachment[];
+  victoryDisplay: EncounterCard[];
+  clearedVictoryLocations: GameLocation[];
 }
 
 
