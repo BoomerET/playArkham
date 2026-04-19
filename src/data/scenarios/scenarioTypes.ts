@@ -3,9 +3,10 @@ import type {
   EnemySpawn,
   GameLocation,
   ScenarioCardKind,
+  EncounterCard,
+  ScenarioStatus,
+  CardAbilityDefinition,
 } from "../../types/game";
-
-import type { EncounterCard, ScenarioStatus } from "../../types/game";
 
 export interface ScenarioAdvanceEffects {
   showLocationIds?: string[];
@@ -42,6 +43,7 @@ export interface ScenarioCardDefinition {
   thresholdLabel: string;
   startingProgress?: number;
   onAdvance?: ScenarioAdvanceEffects;
+  abilities?: CardAbilityDefinition[];
 }
 
 export type ScenarioResolutionEffects = {
@@ -77,6 +79,7 @@ export interface ScenarioDefinition {
   encounterCardCodes?: string[];
   encounterDeck?: EncounterCard[];
   resign?: ScenarioResignResolution;
+  abilities?: CardAbilityDefinition[];
 }
 
 export interface ScenarioRandomizedLocationOption {

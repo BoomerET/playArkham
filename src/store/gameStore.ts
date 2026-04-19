@@ -2,10 +2,7 @@ import { create } from "zustand";
 import { investigators } from "../data/investigators";
 import type { GameLocation } from "../types/game";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
-import type {
-  ScenarioCardDefinition,
-  ScenarioDefinition,
-} from "../data/scenarios/scenarioTypes";
+import type { ScenarioCardDefinition, ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
 import {
   canSpendInvestigationAction,
@@ -1713,6 +1710,77 @@ function emitEngagedEnemyEvent(args: {
     const resolution = emitEnemyEvent({
       event,
       enemyId: enemy.id,
+      investigator: updatedInvestigator,
+      locations: updatedLocations,
+      enemies: updatedEnemies,
+      campaignState: updatedCampaignState,
+    });
+
+    updatedInvestigator = resolution.investigator;
+    updatedLocations = resolution.locations;
+    updatedEnemies = resolution.enemies;
+    updatedCampaignState = resolution.campaignState;
+    logEntries.push(...resolution.logEntries);
+  }
+
+  return {
+    investigator: updatedInvestigator,
+    locations: updatedLocations,
+    enemies: updatedEnemies,
+    campaignState: updatedCampaignState,
+    logEntries,
+  };
+}
+
+function emitScenarioEvent(args: {
+  event: CardAbilityEvent;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  agenda: ScenarioCardState | null;
+  act: ScenarioCardState | null;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    event,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+    agenda,
+    act,
+  } = args;
+
+  let updatedInvestigator = investigator;
+  let updatedLocations = locations;
+  let updatedEnemies = enemies;
+  let updatedCampaignState = campaignState;
+  const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+  const currentLocationId =
+    findCurrentLocation(updatedLocations, updatedInvestigator.id)?.id ?? "";
+
+  const scenarioCards = [agenda, act].filter(
+    (card): card is ScenarioCardState => card !== null,
+  );
+
+  for (const card of scenarioCards) {
+    const sourceName =
+      card.kind === "agenda"
+        ? `Agenda ${card.sequence}: ${card.title}`
+        : `Act ${card.sequence}: ${card.title}`;
+
+    const resolution = executeForcedCardAbilities({
+      sourceName,
+      sourceAbilities: card.abilities,
+      event,
+      currentLocationId,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
@@ -4547,6 +4615,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies,
       threatArea,
       campaignState,
+      agenda,
+      act,
     } = get();
 
     let updatedInvestigator = investigator;
@@ -4598,6 +4668,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = enemyResolution.enemies;
       updatedCampaignState = enemyResolution.campaignState;
       phaseLog.push(...enemyResolution.logEntries);
+
+      const scenarioResolution = emitScenarioEvent({
+        event: "turnEnds",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+        agenda,
+        act,
+      });
+
+      updatedInvestigator = scenarioResolution.investigator;
+      updatedLocations = scenarioResolution.locations;
+      updatedEnemies = scenarioResolution.enemies;
+      updatedCampaignState = scenarioResolution.campaignState;
+      phaseLog.push(...scenarioResolution.logEntries);
     }
 
     const nextTurn = {
@@ -4649,6 +4735,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = enemyResolution.enemies;
       updatedCampaignState = enemyResolution.campaignState;
       phaseLog.push(...enemyResolution.logEntries);
+
+      const scenarioResolution = emitScenarioEvent({
+        event: "turnBegins",
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: updatedEnemies,
+        campaignState: updatedCampaignState,
+        agenda,
+        act,
+      });
+
+      updatedInvestigator = scenarioResolution.investigator;
+      updatedLocations = scenarioResolution.locations;
+      updatedEnemies = scenarioResolution.enemies;
+      updatedCampaignState = scenarioResolution.campaignState;
+      phaseLog.push(...scenarioResolution.logEntries);
     }
 
     set((state) => ({

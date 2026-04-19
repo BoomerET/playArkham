@@ -246,6 +246,16 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
       threshold: 2,
       thresholdLabel: "Doom",
+
+      abilities: [
+        {
+          label: "Oppressive Countdown",
+          trigger: "forced",
+          event: "turnBegins",
+          text: "Forced — When your turn begins, take 1 horror.",
+          effect: { kind: "takeHorror", amount: 10 },
+        },
+      ],
     },
     {
       id: "fake-spreading-flames-agenda-1b",
