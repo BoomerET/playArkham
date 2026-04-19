@@ -3301,6 +3301,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       const spawnedEnemy: Enemy = {
         id: `${enemyCard.code}-${Date.now()}`,
+        code: enemyCard.code,
         name: enemyCard.name,
         fight: enemyCard.fight ?? 0,
         evade: enemyCard.evade ?? 0,
@@ -3318,6 +3319,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
             ? { kind: "horrorToInvestigatorsAtLocation", amount: 1 }
             : undefined,
         parley: enemyCard.parley,
+        text: enemyCard.text,
+        traits: enemyCard.traits,
+        set: enemyCard.set,
+        victoryPoints: enemyCard.victoryPoints,
       };
 
       let updatedInvestigator = investigator;
@@ -4479,107 +4484,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("player", `Moved to ${destination.name}. 1 action spent.`);
     get().engageEnemiesAtLocation();
   },
-
-  //tPhase: (phase) => {
-  //const {
-  //  turn,
-  //  investigator,
-  //  locations,
-  //  enemies,
-  //  threatArea,
-  //  campaignState,
-  //} = get();
-
-  //let updatedInvestigator = investigator;
-  //let updatedLocations = locations;
-  //let updatedEnemies = enemies;
-  //let updatedCampaignState = campaignState;
-  //const phaseLog: ReturnType<typeof createLogEntry>[] = [];
-
-  //if (turn.phase === "investigation" && phase !== "investigation") {
-  //  const locationResolution = emitCurrentLocationEvent({
-  //    event: "turnEnds",
-  //    investigator: updatedInvestigator,
-  //    locations: updatedLocations,
-  //    enemies: updatedEnemies,
-  //    campaignState: updatedCampaignState,
-  //  });
-
-  //  updatedInvestigator = locationResolution.investigator;
-  //  updatedLocations = locationResolution.locations;
-  //  updatedEnemies = locationResolution.enemies;
-  //  updatedCampaignState = locationResolution.campaignState;
-  //  phaseLog.push(...locationResolution.logEntries);
-
-  //  const threatResolution = emitThreatAreaEvent({
-  //    event: "turnEnds",
-  //    investigator: updatedInvestigator,
-  //    locations: updatedLocations,
-  //    enemies: updatedEnemies,
-  //    threatArea,
-  //    campaignState: updatedCampaignState,
-  //  });
-
-  //  updatedInvestigator = threatResolution.investigator;
-  //  updatedLocations = threatResolution.locations;
-  //  updatedEnemies = threatResolution.enemies;
-  //  updatedCampaignState = threatResolution.campaignState;
-  //  phaseLog.push(...threatResolution.logEntries);
-  //}
-
-  //const nextTurn = {
-  //  ...turn,
-  //  phase,
-  //  actionsRemaining: phase === "investigation" ? 3 : turn.actionsRemaining,
-  //};
-
-  //if (turn.phase !== "investigation" && phase === "investigation") {
-  //  const locationResolution = emitCurrentLocationEvent({
-  //    event: "turnBegins",
-  //    investigator: updatedInvestigator,
-  //    locations: updatedLocations,
-  //    enemies: updatedEnemies,
-  //    campaignState: updatedCampaignState,
-  //  });
-
-  //  updatedInvestigator = locationResolution.investigator;
-  //  updatedLocations = locationResolution.locations;
-  //  updatedEnemies = locationResolution.enemies;
-  //  updatedCampaignState = locationResolution.campaignState;
-  //  phaseLog.push(...locationResolution.logEntries);
-
-  //  const threatResolution = emitThreatAreaEvent({
-  //    event: "turnBegins",
-  //    investigator: updatedInvestigator,
-  //    locations: updatedLocations,
-  //    enemies: updatedEnemies,
-  //    threatArea,
-  //    campaignState: updatedCampaignState,
-  //  });
-
-  //  updatedInvestigator = threatResolution.investigator;
-  //  updatedLocations = threatResolution.locations;
-  //  updatedEnemies = threatResolution.enemies;
-  //  updatedCampaignState = threatResolution.campaignState;
-  //  phaseLog.push(...threatResolution.logEntries);
-  //}
-
-  //set((state) => ({
-  //  ...state,
-  //  turn: nextTurn,
-  //  investigator: updatedInvestigator,
-  //  locations: updatedLocations,
-  //  enemies: updatedEnemies,
-  //  campaignState: updatedCampaignState,
-  //  log: [...state.log, ...phaseLog],
-  //}));
-
-  //const updatedState = get();
-  //savePersistedCampaignSetup({
-  //  selectedDeckId: updatedState.selectedDeckId,
-  //  selectedScenarioId: updatedState.selectedScenarioId,
-  //  campaignState: updatedState.campaignState,
-  //});
 
   setPhase: (phase) => {
     const {
