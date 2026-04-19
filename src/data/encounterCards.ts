@@ -1050,7 +1050,8 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Hunter",
             "Aloof",
-        ], abilities: [
+        ],
+        abilities: [
             {
                 label: "Death Rattle",
                 trigger: "forced",
@@ -1058,7 +1059,7 @@ export const encounterCards: EncounterCard[] = [
                 text: "Forced — When this enemy is defeated, take 8 horror.",
                 effect: { kind: "takeHorror", amount: 8 },
             },
-        ]
+        ],
 
 
         text: [
