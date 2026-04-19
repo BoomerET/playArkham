@@ -455,6 +455,46 @@ function getNextScenarioCardDefinition(
   );
 }
 
+function spawnEnemyAtLocation(args: {
+  enemyId: string;
+  locationId: string;
+  investigator: Investigator;
+  enemies: Enemy[];
+}): Enemy[] {
+  const { enemyId, locationId, investigator, enemies } = args;
+
+  const enemyCard = getEncounterCardByCode(enemyId); // <-- you already have something like this
+
+  if (!enemyCard) {
+    console.warn("Enemy not found:", enemyId);
+    return enemies;
+  }
+
+  const spawnedEnemy: Enemy = {
+    id: `${enemyCard.code}-${Date.now()}`,
+    code: enemyCard.code,
+    name: enemyCard.name,
+    fight: enemyCard.fight ?? 0,
+    evade: enemyCard.evade ?? 0,
+    health: enemyCard.health ?? 0,
+    damage: enemyCard.damage ?? 0,
+    horror: enemyCard.horror ?? 0,
+    locationId,
+    engagedInvestigatorId: null,
+    exhausted: false,
+    damageOnEnemy: 0,
+    ability: enemyCard.ability,
+    abilities: enemyCard.abilities,
+    text: enemyCard.text,
+    traits: enemyCard.traits,
+    set: enemyCard.set,
+    victoryPoints: enemyCard.victoryPoints,
+    parley: enemyCard.parley,
+  };
+
+  return [...enemies, spawnedEnemy];
+}
+
 type AdvanceStoreSlice = Pick<
   GameStore,
   | "agenda"
@@ -4945,6 +4985,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "setup") {
+      const {
+        investigator,
+        locations,
+        enemies,
+        campaignState,
+        selectedScenarioId,
+      } = get();
+
+      let updatedEnemies = enemies;
+      const setupLog: ReturnType<typeof createLogEntry>[] = [];
+
+      const scenario = getScenarioDefinition(selectedScenarioId); // however you already fetch it
+
+      // 🔥 Apply enemySpawns here
+      if (scenario.enemySpawns?.length) {
+        for (const spawn of scenario.enemySpawns) {
+          updatedEnemies = spawnEnemyAtLocation({
+            enemyId: spawn.enemyId,
+            locationId: spawn.locationId,
+            investigator,
+            enemies: updatedEnemies,
+          });
+
+          setupLog.push(
+            createLogEntry(
+              "scenario",
+              `Spawned enemy ${spawn.enemyId} at ${spawn.locationId}.`,
+            ),
+          );
+        }
+      }
+
+      // 🔁 Commit state BEFORE moving to next phase
+      set((state) => ({
+        ...state,
+        enemies: updatedEnemies,
+        log: [...state.log, ...setupLog],
+      }));
+
       get().setPhase("mythos");
       return;
     }
