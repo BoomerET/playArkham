@@ -5437,6 +5437,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
             updatedLocations = forcedResolution.locations;
             updatedEnemies = forcedResolution.enemies;
             updatedCampaignState = forcedResolution.campaignState;
+            let updatedEncounterDiscard = encounterDiscard;
+
+            updatedEncounterDiscard = [
+              ...updatedEncounterDiscard,
+              {
+                id: enemy.id,
+                code: enemy.code,
+                name: enemy.name,
+                type: "enemy",
+                ability: enemy.ability,
+                abilities: enemy.abilities,
+                text: enemy.text,
+                damage: enemy.damage,
+                horror: enemy.horror,
+                fight: enemy.fight,
+                evade: enemy.evade,
+                health: enemy.health,
+                set: enemy.set,
+                traits: enemy.traits,
+                victoryPoints: enemy.victoryPoints,
+                parley: enemy.parley,
+              },
+            ];
+
+            updatedEnemies = updatedEnemies.filter((entry) => entry.id !== enemy.id);
 
             resolutionLog.push(...forcedResolution.logEntries);
           }
@@ -5681,6 +5706,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies: updatedEnemies,
       campaignState: updatedCampaignState,
       deck: updatedDeck,
+      encounterDiscard: updatedEncounterDiscard,
       hand: updatedHand,
       discard: [...discard, ...committedCards],
       lastSkillTest: result,
