@@ -5117,6 +5117,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedEnemyTargetId,
       log,
       campaignState,
+      encounterDiscard,
     } = get();
 
     if (!activeSkillTest) {
