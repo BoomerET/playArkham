@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { investigators } from "../data/investigators";
+import type { GameLocation } from "../types/game";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type {
   ScenarioCardDefinition,
