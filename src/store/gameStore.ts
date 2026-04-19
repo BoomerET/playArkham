@@ -5233,6 +5233,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const resolutionLog: GameState["log"] = [];
     let updatedInvestigator = investigator;
     let updatedCampaignState = campaignState;
+    let updatedEncounterDiscard = encounterDiscard;
 
     let cardsToDrawOnSuccess = 0;
     let bonusCluesOnSuccess = 0;
@@ -5437,7 +5438,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
             updatedLocations = forcedResolution.locations;
             updatedEnemies = forcedResolution.enemies;
             updatedCampaignState = forcedResolution.campaignState;
-            let updatedEncounterDiscard = encounterDiscard;
 
             updatedEncounterDiscard = [
               ...updatedEncounterDiscard,
