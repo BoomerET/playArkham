@@ -174,7 +174,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           trigger: "forced",
           event: "turnEnds",
           text: "Forced — When your turn ends, gain 1 resource.",
-          effect: { kind: "gainResources", amount: 1 },
+          effect: { kind: "gainResources", amount: 10 },
         },
       ],
     },
