@@ -1051,15 +1051,17 @@ export const encounterCards: EncounterCard[] = [
             "Hunter",
             "Aloof",
         ],
-        abilities: [
-            {
-                label: "Death Rattle",
-                trigger: "forced",
-                event: "enemyDefeated",
-                text: "Forced — When this enemy is defeated, take 7 horror.",
-                effect: { kind: "takeHorror", amount: 7 },
-            },
-        ],
+        //abilities: [
+        //    {
+        //        label: "Death Rattle",
+        //        trigger: "forced",
+        //        event: "enemyDefeated",
+        //        text: "Forced — When this enemy is defeated, take 7 horror.",
+        //        effect: { kind: "takeHorror", amount: 7 },
+        //    },
+        //],
+
+        victoryPoints: 2,
 
         text: [
             "This is an ememy that I use for testing.",
