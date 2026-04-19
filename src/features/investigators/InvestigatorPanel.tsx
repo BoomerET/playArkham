@@ -94,11 +94,16 @@ function getInvestigatorPortraitUrl(investigator: Investigator): string | null {
 }
 
 export default function InvestigatorPanel() {
-  const victoryDisplay = useGameStore((state) => state.victoryDisplay);
-  const totalVictoryPoints = victoryDisplay.reduce(
-    (sum, card) => sum + (card.victoryPoints ?? 0),
-    0,
+  const clearedVictoryLocations = useGameStore(
+    (state) => state.clearedVictoryLocations,
   );
+  const victoryDisplay = useGameStore((state) => state.victoryDisplay);
+  const totalVictoryPoints =
+    victoryDisplay.reduce((sum, card) => sum + (card.victoryPoints ?? 0), 0) +
+    clearedVictoryLocations.reduce(
+      (sum, location) => sum + (location.victoryPoints ?? 0),
+      0,
+    );
   const pendingAssetPlay = useGameStore((state) => state.pendingAssetPlay);
   const togglePendingAssetReplacementChoice = useGameStore(
     (state) => state.togglePendingAssetReplacementChoice,
@@ -475,6 +480,25 @@ export default function InvestigatorPanel() {
                       {card.health != null && (
                         <span className="token-chip">Health {card.health}</span>
                       )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {clearedVictoryLocations.map((location) => (
+                <div key={location.id} className="engaged-enemy-card">
+                  <div className="engaged-enemy-main">
+                    <div className="engaged-enemy-name-row">
+                      <div className="engaged-enemy-name-stack">
+                        <span className="engaged-enemy-name">{location.name}</span>
+                      </div>
+                    </div>
+
+                    <div className="engaged-enemy-meta">
+                      <span className="token-chip">
+                        VP {location.victoryPoints ?? 0}
+                      </span>
+                      <span className="token-chip">Location</span>
+                      <span className="token-chip">Clues {location.clues}</span>
                     </div>
                   </div>
                 </div>
