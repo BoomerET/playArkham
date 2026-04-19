@@ -1391,6 +1391,59 @@ function resolveEnemyEngagedTriggers(args: {
   };
 }
 
+function resolveEnemyDefeatedTriggers(args: {
+  enemyId: string;
+  locationId: string;
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+}): {
+  investigator: Investigator;
+  locations: GameState["locations"];
+  enemies: Enemy[];
+  campaignState: CampaignState;
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const {
+    enemyId,
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  } = args;
+
+  const locationResolution = emitLocationEvent({
+    event: "enemyDefeated",
+    locationId,
+    investigator,
+    locations,
+    enemies,
+    campaignState,
+  });
+
+  const enemyResolution = emitEnemyEvent({
+    event: "enemyDefeated",
+    enemyId,
+    investigator: locationResolution.investigator,
+    locations: locationResolution.locations,
+    enemies: locationResolution.enemies,
+    campaignState: locationResolution.campaignState,
+  });
+
+  return {
+    investigator: enemyResolution.investigator,
+    locations: enemyResolution.locations,
+    enemies: enemyResolution.enemies,
+    campaignState: enemyResolution.campaignState,
+    logEntries: [
+      ...locationResolution.logEntries,
+      ...enemyResolution.logEntries,
+    ],
+  };
+}
+
 function emitLocationEvent(args: {
   event: CardAbilityEvent;
   locationId: string;
@@ -5469,8 +5522,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           );
 
           if (enemyLocation) {
-            const forcedResolution = emitLocationEvent({
-              event: "enemyDefeated",
+            const forcedResolution = resolveEnemyDefeatedTriggers({
+              enemyId: enemy.id,
               locationId: enemyLocation.id,
               investigator: updatedInvestigator,
               locations: updatedLocations,
@@ -5485,7 +5538,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
             resolutionLog.push(...forcedResolution.logEntries);
           }
-
         }
 
         resolutionLog.push(
