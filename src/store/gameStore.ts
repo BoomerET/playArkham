@@ -433,7 +433,6 @@ function resolveInteractiveEffect(args: {
   });
 }
 
-
 function getNextScenarioCardDefinition(
   cards: ScenarioCardDefinition[],
   currentCard: ScenarioCardState,
