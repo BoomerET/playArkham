@@ -1061,7 +1061,6 @@ export const encounterCards: EncounterCard[] = [
             },
         ],
 
-
         text: [
             "This is an ememy that I use for testing.",
         ],
