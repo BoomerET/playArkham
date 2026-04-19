@@ -1493,6 +1493,49 @@ function resolveEnemyDefeatedTriggers(args: {
   };
 }
 
+function resolveEnemyAttacks(args: {
+  investigator: Investigator;
+  enemies: Enemy[];
+}): {
+  investigator: Investigator;
+  enemies: Enemy[];
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const { investigator, enemies } = args;
+
+  let updatedInvestigator = investigator;
+  const updatedEnemies = enemies.map((enemy) => {
+    const isEngaged = enemy.engagedInvestigatorId === investigator.id;
+
+    if (!isEngaged) return enemy;
+    if (enemy.exhausted) return enemy;
+    if (enemyHasAloof(enemy) && !isEngaged) return enemy;
+
+    updatedInvestigator = {
+      ...updatedInvestigator,
+      damage: updatedInvestigator.damage + enemy.damage,
+      horror: updatedInvestigator.horror + enemy.horror,
+    };
+
+    return enemy;
+  });
+
+  const logEntries = enemies
+    .filter((enemy) => enemy.engagedInvestigatorId === investigator.id)
+    .map((enemy) =>
+      createLogEntry(
+        "enemy",
+        `${enemy.name} attacks! You take ${enemy.damage} damage and ${enemy.horror} horror.`,
+      ),
+    );
+
+  return {
+    investigator: updatedInvestigator,
+    enemies: updatedEnemies,
+    logEntries,
+  };
+}
+
 function emitLocationEvent(args: {
   event: CardAbilityEvent;
   locationId: string;
@@ -4735,6 +4778,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       updatedEnemies = enemyResolution.enemies;
       updatedCampaignState = enemyResolution.campaignState;
       phaseLog.push(...enemyResolution.logEntries);
+
       const scenarioResolution = emitScenarioEvent({
         event: "turnBegins",
         investigator: updatedInvestigator,
