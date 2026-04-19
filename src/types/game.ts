@@ -353,6 +353,10 @@ export interface Enemy {
   abilities?: CardAbilityDefinition[];
   onDefeat?: EnemyDefeatEffect;
   parley?: ParleyActionDefinition;
+  text?: string[];
+  traits?: string[];
+  set?: string;
+  victoryPoints?: number;
 }
 
 export interface EnemySpawn {
