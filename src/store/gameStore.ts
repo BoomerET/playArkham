@@ -5496,17 +5496,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       } else {
         const totalDamage = 1 + bonusDamageOnSuccess;
 
-        updatedEnemies = enemies
-          .map((entry) =>
-            entry.id === enemy.id
-              ? { ...entry, damageOnEnemy: entry.damageOnEnemy + totalDamage }
-              : entry,
-          )
-          .filter((entry) =>
-            entry.id === enemy.id ? entry.damageOnEnemy < entry.health : true,
-          );
+        const damagedEnemies = enemies.map((entry) =>
+          entry.id === enemy.id
+            ? { ...entry, damageOnEnemy: entry.damageOnEnemy + totalDamage }
+            : entry,
+        );
 
         const defeated = enemy.damageOnEnemy + totalDamage >= enemy.health;
+
+        updatedEnemies = damagedEnemies;
 
         if (defeated) {
           const defeatResolution = resolveEnemyDefeatEffect({
@@ -5538,6 +5536,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
             resolutionLog.push(...forcedResolution.logEntries);
           }
+
+          updatedEnemies = updatedEnemies.filter((entry) => entry.id !== enemy.id);
         }
 
         resolutionLog.push(
