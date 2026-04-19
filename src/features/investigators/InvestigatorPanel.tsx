@@ -448,7 +448,7 @@ export default function InvestigatorPanel() {
         </div>
       </div>
 
-      {victoryDisplay.length > 0 && (
+      {(victoryDisplay.length > 0 || clearedVictoryLocations.length > 0) && (
         <>
           <hr />
 
