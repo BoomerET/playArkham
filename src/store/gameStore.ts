@@ -4738,6 +4738,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       act,
     } = get();
 
+    console.log(`Phase: ${phase}.`);
+
     let updatedInvestigator = investigator;
     let updatedLocations = locations;
     let updatedEnemies = enemies;
