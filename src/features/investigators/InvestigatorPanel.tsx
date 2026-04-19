@@ -449,14 +449,14 @@ export default function InvestigatorPanel() {
       </div>
 
       {/*{(victoryDisplay.length > 0 || clearedVictoryLocations.length > 0) && ( */}
-      <>
-        <hr />
-        <section className="investigator-panel__section">
-          <h3 className="investigator-panel__section-title">
-            Victory Display ({totalVictoryPoints} VP)
-          </h3>
-        </section>
-      </>
+
+      <hr />
+      <section className="investigator-panel__section">
+        <h3 className="investigator-panel__section-title">
+          Victory Display ({totalVictoryPoints} VP)
+        </h3>
+      </section>
+
       {/*)}*/}
 
       {engagedEnemies.length > 0 && (
