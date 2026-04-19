@@ -5443,65 +5443,38 @@ export const useGameStore = create<GameStore>((set, get) => ({
             updatedLocations = forcedResolution.locations;
             updatedEnemies = forcedResolution.enemies;
             updatedCampaignState = forcedResolution.campaignState;
-
-
-
-            //updatedEncounterDiscard = [
-            //  ...updatedEncounterDiscard,
-            //  {
-            //    id: enemy.id,
-            //    code: enemy.code,
-            //    name: enemy.name,
-            //    type: "enemy",
-            //    ability: enemy.ability,
-            //    abilities: enemy.abilities,
-            //    text: enemy.text,
-            //    damage: enemy.damage,
-            //    horror: enemy.horror,
-            //    fight: enemy.fight,
-            //    evade: enemy.evade,
-            //    health: enemy.health,
-            //    set: enemy.set,
-            //    traits: enemy.traits,
-            //    victoryPoints: enemy.victoryPoints,
-            //    parley: enemy.parley,
-            //  },
-            //];
-
-            const enemyCard: EncounterCard = {
-              id: enemy.id,
-              code: enemy.code,
-              name: enemy.name,
-              type: "enemy",
-              ability: enemy.ability,
-              abilities: enemy.abilities,
-              text: enemy.text,
-              damage: enemy.damage,
-              horror: enemy.horror,
-              fight: enemy.fight,
-              evade: enemy.evade,
-              health: enemy.health,
-              set: enemy.set,
-              traits: enemy.traits,
-              victoryPoints: enemy.victoryPoints,
-              parley: enemy.parley,
-            };
-
-            if ((enemy.victoryPoints ?? 0) > 0) {
-              updatedVictoryDisplay = [...updatedVictoryDisplay, enemyCard];
-              resolutionLog.push(
-                createLogEntry(
-                  "scenario",
-                  `${enemy.name} was added to the victory display worth ${enemy.victoryPoints} victory point${enemy.victoryPoints === 1 ? "" : "s"}.`,
-                ),
-              );
-            } else {
-              updatedEncounterDiscard = [...updatedEncounterDiscard, enemyCard];
-            }
-
-            updatedEnemies = updatedEnemies.filter((entry) => entry.id !== enemy.id);
-
             resolutionLog.push(...forcedResolution.logEntries);
+          }
+
+          const enemyCard: EncounterCard = {
+            id: enemy.id,
+            code: enemy.code,
+            name: enemy.name,
+            type: "enemy",
+            ability: enemy.ability,
+            abilities: enemy.abilities,
+            text: enemy.text,
+            damage: enemy.damage,
+            horror: enemy.horror,
+            fight: enemy.fight,
+            evade: enemy.evade,
+            health: enemy.health,
+            set: enemy.set,
+            traits: enemy.traits,
+            victoryPoints: enemy.victoryPoints,
+            parley: enemy.parley,
+          };
+
+          if ((enemy.victoryPoints ?? 0) > 0) {
+            updatedVictoryDisplay = [...updatedVictoryDisplay, enemyCard];
+            resolutionLog.push(
+              createLogEntry(
+                "scenario",
+                `${enemy.name} was added to the victory display worth ${enemy.victoryPoints} victory point${enemy.victoryPoints === 1 ? "" : "s"}.`,
+              ),
+            );
+          } else {
+            updatedEncounterDiscard = [...updatedEncounterDiscard, enemyCard];
           }
 
           updatedEnemies = updatedEnemies.filter((entry) => entry.id !== enemy.id);
