@@ -429,6 +429,7 @@ export interface ScenarioCardState {
   threshold: number;
   thresholdLabel: string;
   code?: string;
+  abilities?: CardAbilityDefinition[];
 }
 
 export type GameLogKind =

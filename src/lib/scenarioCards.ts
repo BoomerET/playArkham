@@ -17,6 +17,7 @@ export function buildScenarioCardState(
     threshold: definition.threshold,
     thresholdLabel: definition.thresholdLabel,
     code: definition.code,
+    abilities: definition.abilities,
   };
 }
 
