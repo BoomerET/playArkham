@@ -5334,6 +5334,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    const { clearedVictoryLocations } = get();
+    let updatedClearedVictoryLocations = clearedVictoryLocations;
+
     if (pendingTestResolution?.kind === "investigate") {
       const location = locations.find(
         (entry) => entry.id === pendingTestResolution.locationId,
@@ -5416,6 +5419,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
             resolutionLog.push(...forcedResolution.logEntries);
           }
+
+          const victoryResolution = addLocationToVictoryDisplayIfCleared({
+            locationId: pendingTestResolution.locationId,
+            locations: updatedLocations,
+            clearedVictoryLocations: updatedClearedVictoryLocations,
+          });
+
+          updatedClearedVictoryLocations = victoryResolution.clearedVictoryLocations;
+          resolutionLog.push(...victoryResolution.logEntries);
         }
       }
     }
