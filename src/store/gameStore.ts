@@ -3928,14 +3928,50 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const shuffledDeck = shuffle(deckCards);
+    const initialEncounterDeck = buildInitialEncounterDeck(
+      selectedScenario.encounterCardCodes,
+    );
+
+    let setupEnemies: Enemy[] = [];
+    const setupLogEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    for (const spawn of selectedScenario.enemySpawns ?? []) {
+      const beforeCount = setupEnemies.length;
+
+      setupEnemies = spawnEnemyAtLocation({
+        enemyId: spawn.enemyId,
+        locationId: spawn.locationId,
+        enemies: setupEnemies,
+        encounterCards: initialEncounterDeck,
+      });
+
+      if (setupEnemies.length > beforeCount) {
+        const spawnedEnemy = setupEnemies[setupEnemies.length - 1];
+
+        setupLogEntries.push(
+          createLogEntry(
+            "scenario",
+            `${spawnedEnemy.name} spawned at ${spawn.locationId} during setup.`,
+          ),
+        );
+      } else {
+        setupLogEntries.push(
+          createLogEntry(
+            "system",
+            `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
+          ),
+        );
+      }
+    }
     set({
       investigator: chosenInvestigator,
       deck: shuffledDeck,
       hand: [],
       discard: [],
       playArea: [],
-      encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterCardCodes),
+      encounterDeck: initialEncounterDeck,
       encounterDiscard: [],
+      enemies: setupEnemies,
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
@@ -3978,6 +4014,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           "system",
           `Deck source: ArkhamDB deck ${selectedDeckId}.`,
         ),
+        ...setupLogEntries,
         createLogEntry("system", "Game setup complete."),
       ],
       lastSkillTest: null,
