@@ -161,6 +161,9 @@ export default function InvestigatorPanel() {
   const activeTargetEnemy =
     engagedEnemies.find((enemy) => enemy.id === activeTargetId) ?? null;
 
+  const canFight = Boolean(activeTargetEnemy);
+  const canEvade = Boolean(activeTargetEnemy);
+
   const fightLabel = activeTargetEnemy
     ? `Fight ${activeTargetEnemy.name}`
     : "Fight";
@@ -170,17 +173,16 @@ export default function InvestigatorPanel() {
     : "Evade";
 
   const locations = useGameStore((state) => state.locations);
-  const locationAbility = useGameStore((state) => state.locationAbility);
   const currentLocation = findCurrentLocation(locations, investigator.id);
   const campaignState = useGameStore((state) => state.campaignState);
 
-  const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
-    (ability) =>
-      (ability.trigger === "action" || ability.trigger === "doubleAction") &&
-      (!ability.requiresFlag ||
-        campaignState.scenarioFlags[ability.requiresFlag.key] ===
-        ability.requiresFlag.equals),
-  );
+  //const availableLocationAbilities = (currentLocation?.abilities ?? []).filter(
+  //  (ability) =>
+  //    (ability.trigger === "action" || ability.trigger === "doubleAction") &&
+  //    (!ability.requiresFlag ||
+  //      campaignState.scenarioFlags[ability.requiresFlag.key] ===
+  //      ability.requiresFlag.equals),
+  //);
   const locationAction = useGameStore((state) => state.locationAction);
 
   const availableLocationActions = (currentLocation?.actions ?? []).filter(
@@ -194,7 +196,8 @@ export default function InvestigatorPanel() {
     ? enemies.filter(
       (enemy) =>
         enemy.locationId === currentLocation.id &&
-        enemy.engagedInvestigatorId === null,
+        enemy.engagedInvestigatorId === null &&
+        !enemy.exhausted,
     )
     : [];
   const activeEngageTarget = engageableEnemies[0] ?? null;
@@ -264,13 +267,6 @@ export default function InvestigatorPanel() {
 
           if (!Number.isNaN(index)) {
             locationAction(index);
-          }
-        } else if (selectedAbility.startsWith("location-ability:")) {
-          const indexText = selectedAbility.slice("location-ability:".length);
-          const index = Number(indexText);
-
-          if (!Number.isNaN(index)) {
-            locationAbility(index);
           }
         }
         break;
@@ -659,8 +655,19 @@ export default function InvestigatorPanel() {
               <option value="resource">Resource</option>
               <option value="draw">Draw</option>
               <option value="investigate">Investigate</option>
-              <option value="fight">{fightLabel}</option>
-              <option value="evade">{evadeLabel}</option>
+
+              {canFight && (
+                <option value="fight">{fightLabel}</option>
+              )}
+
+              {canEvade && (
+                <option value="evade">{evadeLabel}</option>
+              )}
+
+              {activeEngageTarget && (
+                <option value="engage">{engageLabel}</option>
+              )}
+
               {parleyEnemies.map((enemy) => (
                 <option key={`parley-enemy-${enemy.id}`} value={`parley-enemy:${enemy.id}`}>
                   Parley {enemy.name}
@@ -672,19 +679,11 @@ export default function InvestigatorPanel() {
                   {currentLocation.parley?.label ?? `Parley at ${currentLocation.name}`}
                 </option>
               )}
+
               <option value="resign">{resignLabel}</option>
-              <option value="engage" disabled={!activeEngageTarget}>
-                {engageLabel}
-              </option>
               {availableLocationActions.map((action, index) => (
                 <option key={`location-action-${index}`} value={`location-action:${index}`}>
                   {action.label ?? action.text}
-                </option>
-              ))}
-
-              {availableLocationAbilities.map((ability, index) => (
-                <option key={`location-ability-${index}`} value={`location-ability:${index}`}>
-                  {ability.label}
                 </option>
               ))}
             </select>
