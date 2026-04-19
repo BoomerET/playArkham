@@ -459,7 +459,7 @@ export default function InvestigatorPanel() {
 
             <div className="engaged-enemies-list">
               {victoryDisplay.map((card) => (
-                <div key={card.id} className="engaged-enemy-card">
+                <div key={`victory-card-${card.id}`} className="engaged-enemy-card">
                   <div className="engaged-enemy-main">
                     <div className="engaged-enemy-name-row">
                       <div className="engaged-enemy-name-stack">
@@ -468,15 +468,27 @@ export default function InvestigatorPanel() {
                     </div>
 
                     <div className="engaged-enemy-meta">
-                      <span className="token-chip">
-                        VP {card.victoryPoints ?? 0}
-                      </span>
+                      <span className="token-chip">VP {card.victoryPoints ?? 0}</span>
+                      <span className="token-chip">Encounter</span>
+                      {card.fight != null && (
+                        <span className="token-chip">Fight {card.fight}</span>
+                      )}
+                      {card.evade != null && (
+                        <span className="token-chip">Evade {card.evade}</span>
+                      )}
+                      {card.health != null && (
+                        <span className="token-chip">Health {card.health}</span>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
+
               {clearedVictoryLocations.map((location) => (
-                <div key={location.id} className="engaged-enemy-card">
+                <div
+                  key={`victory-location-${location.id}`}
+                  className="engaged-enemy-card"
+                >
                   <div className="engaged-enemy-main">
                     <div className="engaged-enemy-name-row">
                       <div className="engaged-enemy-name-stack">
