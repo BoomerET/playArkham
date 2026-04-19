@@ -972,6 +972,57 @@ function getNextLocationTowardTarget(
   return null;
 }
 
+function addLocationToVictoryDisplayIfCleared(args: {
+  locationId: string;
+  locations: GameState["locations"];
+  clearedVictoryLocations: GameLocation[];
+}): {
+  clearedVictoryLocations: GameLocation[];
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const { locationId, locations, clearedVictoryLocations } = args;
+
+  const location = locations.find((entry) => entry.id === locationId);
+
+  if (!location) {
+    return {
+      clearedVictoryLocations,
+      logEntries: [],
+    };
+  }
+
+  if ((location.victoryPoints ?? 0) <= 0) {
+    return {
+      clearedVictoryLocations,
+      logEntries: [],
+    };
+  }
+
+  if (location.clues > 0) {
+    return {
+      clearedVictoryLocations,
+      logEntries: [],
+    };
+  }
+
+  if (clearedVictoryLocations.some((entry) => entry.id === location.id)) {
+    return {
+      clearedVictoryLocations,
+      logEntries: [],
+    };
+  }
+
+  return {
+    clearedVictoryLocations: [...clearedVictoryLocations, location],
+    logEntries: [
+      createLogEntry(
+        "scenario",
+        `${location.name} was added to the victory display worth ${location.victoryPoints} victory point${location.victoryPoints === 1 ? "" : "s"}.`,
+      ),
+    ],
+  };
+}
+
 function resolveEnemyDefeatEffect(args: {
   enemy: Enemy;
   investigator: Investigator;
