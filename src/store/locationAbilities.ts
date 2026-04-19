@@ -26,7 +26,6 @@ export function resolveLocationAbilityEffect(args: {
         locations,
         enemies,
         campaignState,
-        targetEnemyId,
     } = args;
 
     if (effect.kind === "none") {
