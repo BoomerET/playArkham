@@ -4899,7 +4899,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   enemyPhaseAttack: () => {
-    const { investigator, enemies } = get();
+    const { investigator, enemies, log } = get();
 
     const engagedEnemies = enemies.filter(
       (enemy) =>
@@ -4911,37 +4911,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const totalDamage = engagedEnemies.reduce(
-      (sum, enemy) => sum + enemy.damage,
-      0,
-    );
-    const totalHorror = engagedEnemies.reduce(
-      (sum, enemy) => sum + enemy.horror,
-      0,
-    );
-
     const attackResolution = resolveEnemyAttacks({
-      investigator: updatedInvestigator,
-      enemies: updatedEnemies,
+      investigator,
+      enemies,
     });
-
-    updatedInvestigator = attackResolution.investigator;
-    updatedEnemies = attackResolution.enemies;
-    phaseLog.push(...attackResolution.logEntries);
 
     set({
-      investigator: {
-        ...investigator,
-        damage: investigator.damage + totalDamage,
-        horror: investigator.horror + totalHorror,
-        enemies: attackResolution.enemies,
-      },
+      investigator: attackResolution.investigator,
+      enemies: attackResolution.enemies,
+      log: [...log, ...attackResolution.logEntries]
     });
-
-    get().pushLog(
-      "enemy",
-      `Enemy phase: engaged enemies attacked for ${totalDamage} damage and ${totalHorror} horror.`,
-    );
   },
 
   advancePhase: () => {
