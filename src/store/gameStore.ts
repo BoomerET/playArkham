@@ -1757,6 +1757,12 @@ function emitScenarioEvent(args: {
     act,
   } = args;
 
+  console.log("SCENARIO EVENT", {
+    event,
+    agendaAbilities: agenda?.abilities,
+    actAbilities: act?.abilities,
+  });
+
   let updatedInvestigator = investigator;
   let updatedLocations = locations;
   let updatedEnemies = enemies;
