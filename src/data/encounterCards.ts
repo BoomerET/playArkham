@@ -1051,15 +1051,7 @@ export const encounterCards: EncounterCard[] = [
             "Hunter",
             "Aloof",
         ],
-        abilities: [
-            {
-                label: "Crushing Weight",
-                trigger: "forced",
-                event: "turnEnds",
-                text: "Forced — When your turn ends, take 1 damage.",
-                effect: { kind: "takeDamage", amount: 5 },
-            },
-        ],
+
 
         text: [
             "This is an ememy that I use for testing.",
