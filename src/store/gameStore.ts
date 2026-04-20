@@ -4217,6 +4217,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       discard,
       playArea,
       investigator,
+      enemies,
       turn,
       activeSkillTest,
       scenarioStatus,
@@ -4314,18 +4315,61 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    const updatedHand = hand.filter((currentCard) => currentCard.instanceId !== cardId);
-    const updatedInvestigator = {
-      ...investigator,
-      resources: investigator.resources - cost,
+    if (card.type === "skill") {
+      set({ draggedCardId: null, pendingAssetPlay: null });
+      get().pushLog(
+        "system",
+        `Cannot play ${card.name} as a normal action. Commit it during a skill test instead.`,
+      );
+      return;
+    }
+
+    if (card.type !== "asset" && card.type !== "event") {
+      set({ draggedCardId: null, pendingAssetPlay: null });
+      get().pushLog(
+        "system",
+        `Playing ${card.name} is not implemented for card type ${card.type}.`,
+      );
+      return;
+    }
+
+    let updatedInvestigator = investigator;
+    const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: `playing ${card.name}`,
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      logEntries.push(...aooResolution.logEntries);
+    }
+
+    const updatedHand = hand.filter(
+      (currentCard) => currentCard.instanceId !== cardId,
+    );
+
+    updatedInvestigator = {
+      ...updatedInvestigator,
+      resources: updatedInvestigator.resources - cost,
     };
+
     const updatedTurn = {
       ...turn,
       actionsRemaining: turn.actionsRemaining - 1,
     };
 
     if (card.type === "asset") {
-      set({
+      logEntries.push(
+        createLogEntry(
+          "player",
+          `Played asset ${card.name} for ${cost} resource(s). 1 action spent.`,
+        ),
+      );
+
+      set((state) => ({
         investigator: updatedInvestigator,
         hand: updatedHand,
         playArea: [
@@ -4339,48 +4383,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
         turn: updatedTurn,
         draggedCardId: null,
         pendingAssetPlay: null,
-      });
-
-      get().pushLog(
-        "player",
-        `Played asset ${card.name} for ${cost} resource(s). 1 action spent.`,
-      );
+        log: [...state.log, ...logEntries],
+      }));
       return;
     }
 
-    if (card.type === "event") {
-      const resolvedEvent = resolvePlayedEvent(card, updatedInvestigator);
+    const resolvedEvent = resolvePlayedEvent(card, updatedInvestigator);
 
-      set({
-        investigator: resolvedEvent.investigator,
-        hand: updatedHand,
-        discard: [...discard, card],
-        turn: updatedTurn,
-        draggedCardId: null,
-        pendingAssetPlay: null,
-      });
-
-      get().pushLog(
+    logEntries.push(
+      createLogEntry(
         "player",
         `${resolvedEvent.logText} Paid ${cost} resource(s). 1 action spent.`,
-      );
-      return;
-    }
-
-    if (card.type === "skill") {
-      set({ draggedCardId: null, pendingAssetPlay: null });
-      get().pushLog(
-        "system",
-        `Cannot play ${card.name} as a normal action. Commit it during a skill test instead.`,
-      );
-      return;
-    }
-
-    set({ draggedCardId: null, pendingAssetPlay: null });
-    get().pushLog(
-      "system",
-      `Playing ${card.name} is not implemented for card type ${card.type}.`,
+      ),
     );
+
+    set((state) => ({
+      investigator: resolvedEvent.investigator,
+      hand: updatedHand,
+      discard: [...discard, card],
+      turn: updatedTurn,
+      draggedCardId: null,
+      pendingAssetPlay: null,
+      log: [...state.log, ...logEntries],
+    }));
   },
 
   confirmAssetReplacement: () => {
