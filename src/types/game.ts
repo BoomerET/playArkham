@@ -361,7 +361,7 @@ export interface Enemy {
 }
 
 export interface EnemySpawn {
-  enemyId: string;
+  enemyCode: string;
   instanceId?: string;
   locationId: string;
   engagedInvestigatorId?: string | null;

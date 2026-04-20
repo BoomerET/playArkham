@@ -114,8 +114,8 @@ type CampaignStoreActions = {
 
 type PendingTestResolution =
   | { kind: "investigate"; locationId: string }
-  | { kind: "fight"; enemyId: string }
-  | { kind: "evade"; enemyId: string }
+  | { kind: "fight"; enemyCode: string }
+  | { kind: "evade"; enemyCode: string }
   | null;
 
 type PendingAssetPlay = {
@@ -205,7 +205,7 @@ type GameStore = GameState & CampaignStoreActions & {
   setSelectedInvestigator: (investigatorId: string) => void;
   setSelectedScenario: (scenarioId: string) => void;
   setSelectedDeckId: (deckId: string) => void;
-  setSelectedEnemyTarget: (enemyId: string | null) => void;
+  setSelectedEnemyTarget: (enemyCode: string | null) => void;
   setLocationVisible: (locationId: string, visible?: boolean) => void;
   revealLocation: (locationId: string) => void;
   setAgendaProgress: (progress: number) => void;
@@ -273,8 +273,8 @@ type GameStore = GameState & CampaignStoreActions & {
   discardLocationAttachment: (attachmentId: string) => void;
   randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
   moveHunterEnemies: () => void;
-  engageEnemy: (enemyId: string) => void;
-  parleyAction: (enemyId?: string) => void;
+  engageEnemy: (enemyCode: string) => void;
+  parleyAction: (enemyCode?: string) => void;
   resignAction: () => void;
   locationAction: (actionIndex: number) => void;
 };
@@ -467,16 +467,16 @@ export function getEncounterCardByCode(code: string): EncounterCard | null {
 }
 
 function spawnEnemyAtLocation(args: {
-  enemyId: string;
+  enemyCode: string;
   locationId: string;
   enemies: Enemy[];
 }): Enemy[] {
-  const { enemyId, locationId, enemies } = args;
+  const { enemyCode, locationId, enemies } = args;
 
-  const enemyCard = getEncounterCardByCode(enemyId);
+  const enemyCard = getEncounterCardByCode(enemyCode);
 
   if (!enemyCard) {
-    console.warn("Enemy not found for setup spawn:", enemyId);
+    console.warn("Enemy not found for setup spawn:", enemyCode);
     return enemies;
   }
 
@@ -1438,7 +1438,7 @@ function executeForcedCardAbilities(args: {
 }
 
 function resolveEnemyEngagedTriggers(args: {
-  enemyId: string;
+  enemyCode: string;
   locationId: string;
   investigator: Investigator;
   locations: GameState["locations"];
@@ -1452,7 +1452,7 @@ function resolveEnemyEngagedTriggers(args: {
   logEntries: ReturnType<typeof createLogEntry>[];
 } {
   const {
-    enemyId,
+    enemyCode,
     locationId,
     investigator,
     locations,
@@ -1471,7 +1471,7 @@ function resolveEnemyEngagedTriggers(args: {
 
   const enemyResolution = emitEnemyEvent({
     event: "enemyEngaged",
-    enemyId,
+    enemyCode,
     investigator: locationResolution.investigator,
     locations: locationResolution.locations,
     enemies: locationResolution.enemies,
@@ -1491,7 +1491,7 @@ function resolveEnemyEngagedTriggers(args: {
 }
 
 function resolveEnemyDefeatedTriggers(args: {
-  enemyId: string;
+  enemyCode: string;
   locationId: string;
   investigator: Investigator;
   locations: GameState["locations"];
@@ -1505,7 +1505,7 @@ function resolveEnemyDefeatedTriggers(args: {
   logEntries: ReturnType<typeof createLogEntry>[];
 } {
   const {
-    enemyId,
+    enemyCode,
     locationId,
     investigator,
     locations,
@@ -1524,7 +1524,7 @@ function resolveEnemyDefeatedTriggers(args: {
 
   const enemyResolution = emitEnemyEvent({
     event: "enemyDefeated",
-    enemyId,
+    enemyCode,
     investigator: locationResolution.investigator,
     locations: locationResolution.locations,
     enemies: locationResolution.enemies,
@@ -1691,7 +1691,7 @@ function emitThreatAreaEvent(args: {
 
 function emitEnemyEvent(args: {
   event: CardAbilityEvent;
-  enemyId: string;
+  enemyCode: string;
   investigator: Investigator;
   locations: GameState["locations"];
   enemies: Enemy[];
@@ -1705,14 +1705,14 @@ function emitEnemyEvent(args: {
 } {
   const {
     event,
-    enemyId,
+    enemyCode,
     investigator,
     locations,
     enemies,
     campaignState,
   } = args;
 
-  const enemy = enemies.find((entry) => entry.id === enemyId);
+  const enemy = enemies.find((entry) => entry.id === enemyCode);
 
   if (!enemy) {
     return {
@@ -1802,7 +1802,7 @@ function emitEngagedEnemyEvent(args: {
   for (const enemy of engagedEnemies) {
     const resolution = emitEnemyEvent({
       event,
-      enemyId: enemy.id,
+      enemyCode: enemy.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
       enemies: updatedEnemies,
@@ -2123,7 +2123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       for (const engagedEnemyId of newlyEngagedHunterIds) {
         const forcedResolution = resolveEnemyEngagedTriggers({
-          enemyId: engagedEnemyId,
+          enemyCode: engagedEnemyId,
           locationId: investigatorLocation.id,
           investigator: updatedInvestigator,
           locations: updatedLocations,
@@ -2817,7 +2817,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  setSelectedEnemyTarget: (enemyId) => {
+  setSelectedEnemyTarget: (enemyCode) => {
     const { investigator, locations, enemies, selectedEnemyTargetId } = get();
     const currentLocation = findCurrentLocation(locations, investigator.id);
 
@@ -2826,7 +2826,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (enemyId === null) {
+    if (enemyCode === null) {
       const preferredTargetId = getPreferredEnemyTargetId(
         enemies,
         currentLocation.id,
@@ -2842,7 +2842,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const selectedEnemy = enemies.find(
       (enemy) =>
-        enemy.id === enemyId &&
+        enemy.id === enemyCode &&
         enemy.locationId === currentLocation.id &&
         enemy.engagedInvestigatorId === investigator.id,
     );
@@ -2913,7 +2913,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("scenario", `${location.name} was revealed.`);
   },
 
-  engageEnemy: (enemyId) => {
+  engageEnemy: (enemyCode) => {
     const { enemies, investigator, locations, turn, campaignState } = get();
 
     if (turn.phase !== "investigation" || turn.actionsRemaining < 1) {
@@ -2925,7 +2925,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const enemy = enemies.find(
       (e) =>
-        e.id === enemyId &&
+        e.id === enemyCode &&
         e.locationId === currentLocation.id &&
         e.engagedInvestigatorId === null,
     );
@@ -2936,7 +2936,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const updatedEnemies = enemies.map((e) =>
-      e.id === enemyId
+      e.id === enemyCode
         ? { ...e, engagedInvestigatorId: investigator.id }
         : e,
     );
@@ -2950,7 +2950,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyId,
+      enemyCode,
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
@@ -2978,7 +2978,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
-  parleyAction: (enemyId) => {
+  parleyAction: (enemyCode) => {
     const {
       turn,
       scenarioStatus,
@@ -3017,10 +3017,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const parleyEnemy =
-      enemyId != null
+      enemyCode != null
         ? enemies.find(
           (enemy) =>
-            enemy.id === enemyId &&
+            enemy.id === enemyCode &&
             enemy.locationId === currentLocation.id &&
             enemy.parley,
         ) ?? null
@@ -3664,7 +3664,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       if (spawnedEnemy.engagedInvestigatorId === investigator.id) {
         const forcedResolution = resolveEnemyEngagedTriggers({
-          enemyId: spawnedEnemy.id,
+          enemyCode: spawnedEnemy.id,
           locationId: spawnLocation.id,
           investigator: updatedInvestigator,
           locations: updatedLocations,
@@ -4029,7 +4029,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const beforeCount = setupEnemies.length;
 
       setupEnemies = spawnEnemyAtLocation({
-        enemyId: spawn.enemyId,
+        enemyCode: spawn.enemyCode,
         locationId: spawn.locationId,
         enemies: setupEnemies,
       });
@@ -4047,7 +4047,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         setupLogEntries.push(
           createLogEntry(
             "system",
-            `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
+            `Could not spawn encounter enemy ${spawn.enemyCode} at ${spawn.locationId} during setup.`,
           ),
         );
       }
@@ -5097,7 +5097,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyId: updatedEnemies[0].id,
+      enemyCode: updatedEnemies[0].id,
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
@@ -5861,7 +5861,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (pendingTestResolution?.kind === "fight") {
       const enemy = enemies.find(
-        (entry) => entry.id === pendingTestResolution.enemyId,
+        (entry) => entry.id === pendingTestResolution.enemyCode,
       );
 
       if (!success) {
@@ -5921,7 +5921,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
           if (enemyLocation) {
             const forcedResolution = resolveEnemyDefeatedTriggers({
-              enemyId: enemy.id,
+              enemyCode: enemy.id,
               locationId: enemyLocation.id,
               investigator: updatedInvestigator,
               locations: updatedLocations,
@@ -5993,7 +5993,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (pendingTestResolution?.kind === "evade") {
       const enemy = enemies.find(
-        (entry) => entry.id === pendingTestResolution.enemyId,
+        (entry) => entry.id === pendingTestResolution.enemyCode,
       );
 
       if (!success) {
@@ -6405,7 +6405,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("combat", `Fight action targeting ${enemy.name}.`);
     get().beginSkillTest("combat", enemy.fight, `Fight ${enemy.name}`);
     set({
-      pendingTestResolution: { kind: "fight", enemyId: enemy.id },
+      pendingTestResolution: { kind: "fight", enemyCode: enemy.id },
     });
   },
 
@@ -6477,7 +6477,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("combat", `Evade action targeting ${enemy.name}.`);
     get().beginSkillTest("agility", enemy.evade, `Evade ${enemy.name}`);
     set({
-      pendingTestResolution: { kind: "evade", enemyId: enemy.id },
+      pendingTestResolution: { kind: "evade", enemyCode: enemy.id },
     });
   },
 }));

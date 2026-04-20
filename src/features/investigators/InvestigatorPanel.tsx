@@ -241,8 +241,8 @@ export default function InvestigatorPanel() {
         break;
       default:
         if (selectedAbility.startsWith("parley-enemy:")) {
-          const enemyId = selectedAbility.slice("parley-enemy:".length);
-          parleyAction(enemyId);
+          const enemyCode = selectedAbility.slice("parley-enemy:".length);
+          parleyAction(enemyCode);
         }
         break;
     }
