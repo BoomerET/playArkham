@@ -80,6 +80,10 @@ export interface ScenarioDefinition {
   encounterDeck?: EncounterCard[];
   resign?: ScenarioResignResolution;
   abilities?: CardAbilityDefinition[];
+  locationAttachments?: {
+    locationId: string;
+    cardCode: string;
+  }
 }
 
 export interface ScenarioRandomizedLocationOption {

@@ -456,12 +456,47 @@ function getNextScenarioCardDefinition(
   );
 }
 
-//function getEncounterCardByCode(
-//  encounterDeck: EncounterCard[],
-//  code: string,
-//): EncounterCard | null {
-//  return encounterDeck.find((card) => card.code === code) ?? null;
-//}
+function buildLocationAttachmentFromEncounterCard(args: {
+  card: EncounterCard;
+  locationId: string;
+}): LocationAttachment {
+  const { card, locationId } = args;
+
+  return {
+    id: `${card.code}-${locationId}-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`,
+    cardCode: card.code,
+    code: card.code,
+    name: card.name,
+    attachedLocationId: locationId,
+    text: card.text,
+    traits: card.traits,
+  };
+}
+
+function attachEncounterCardToLocation(args: {
+  cardCode: string;
+  locationId: string;
+  locationAttachments: LocationAttachment[];
+}): LocationAttachment[] {
+  const { cardCode, locationId, locationAttachments } = args;
+
+  const card = getEncounterCardByCode(cardCode);
+
+  if (!card) {
+    console.warn("Encounter card not found for location attachment:", cardCode);
+    return locationAttachments;
+  }
+
+  const attachment = buildLocationAttachmentFromEncounterCard({
+    card,
+    locationId,
+  });
+
+  return [...locationAttachments, attachment];
+}
+
 export function getEncounterCardByCode(code: string): EncounterCard | null {
   return encounterCards.find((card) => card.code === code) ?? null;
 }
@@ -1895,35 +1930,6 @@ function emitScenarioEvent(args: {
     logEntries,
   };
 }
-
-//function buildEnemyFromEncounterCard(args: {
-//  card: EncounterCard;
-//  locationId: string;
-//}): Enemy {
-//  const { card, locationId } = args;
-//
-//  return {
-//    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-//    code: card.code,
-//    name: card.name,
-//    fight: card.fight ?? 0,
-//    evade: card.evade ?? 0,
-//    health: card.health ?? 0,
-//    damage: card.damage ?? 0,
-//    horror: card.horror ?? 0,
-//    locationId,
-//    engagedInvestigatorId: null,
-//    exhausted: false,
-//    damageOnEnemy: 0,
-//    ability: card.ability,
-//    abilities: card.abilities,
-//    text: card.text,
-//    traits: card.traits,
-//    set: card.set,
-//    victoryPoints: card.victoryPoints,
-//    parley: card.parley,
-//  };
-//}
 
 function resolveAttackOfOpportunity(args: {
   investigator: Investigator;
@@ -4023,7 +4029,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
 
     let setupEnemies: Enemy[] = [];
+    let setupLocationAttachments: LocationAttachment[] = [];
     const setupLogEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    for (const attachment of selectedScenario.locationAttachments ?? []) {
+      const beforeCount = setupLocationAttachments.length;
+
+      setupLocationAttachments = attachEncounterCardToLocation({
+        cardCode: attachment.cardCode,
+        locationId: attachment.locationId,
+        locationAttachments: setupLocationAttachments,
+      });
+
+      if (setupLocationAttachments.length > beforeCount) {
+        const addedAttachment =
+          setupLocationAttachments[setupLocationAttachments.length - 1];
+
+        setupLogEntries.push(
+          createLogEntry(
+            "scenario",
+            `${addedAttachment.name} was attached to ${attachment.locationId} during setup.`,
+          ),
+        );
+      } else {
+        setupLogEntries.push(
+          createLogEntry(
+            "system",
+            `Could not attach encounter card ${attachment.cardCode} to ${attachment.locationId} during setup.`,
+          ),
+        );
+      }
+    }
 
     for (const spawn of selectedScenario.enemySpawns ?? []) {
       const beforeCount = setupEnemies.length;
@@ -4084,7 +4120,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingChoice: null,
       isMulliganActive: true,
       threatArea: [],
-      locationAttachments: [],
+      locationAttachments: setupLocationAttachments,
       selectedMulliganCardIds: [],
       pendingInvestigateDifficultyModifier: 0,
       pendingFightCombatModifier: 0,
