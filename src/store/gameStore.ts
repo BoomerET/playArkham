@@ -2058,16 +2058,16 @@ function takeSetAsideEncounterCardByCode(args: {
   };
 }
 
-function getSetAsideEncounterCardByCode(args: {
-  setAsideEncounterCards: EncounterCard[];
-  cardCode: string;
-}): EncounterCard | null {
-  const { setAsideEncounterCards, cardCode } = args;
-
-  return (
-    setAsideEncounterCards.find((card) => card.code === cardCode) ?? null
-  );
-}
+//function getSetAsideEncounterCardByCode(args: {
+//  setAsideEncounterCards: EncounterCard[];
+//  cardCode: string;
+//}): EncounterCard | null {
+//  const { setAsideEncounterCards, cardCode } = args;
+//
+//  return (
+//    setAsideEncounterCards.find((card) => card.code === cardCode) ?? null
+//  );
+//}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
