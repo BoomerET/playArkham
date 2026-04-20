@@ -2108,7 +2108,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    let updatedEnemies = spawnEnemyAtLocation({
+    const updatedEnemies = spawnEnemyAtLocation({
       enemyCode,
       locationId,
       enemies,
