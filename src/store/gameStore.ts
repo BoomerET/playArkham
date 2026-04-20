@@ -2070,6 +2070,67 @@ function getSetAsideEncounterCardByCode(args: {
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
+    const {
+      setAsideEncounterCards,
+      enemies,
+      investigator,
+      locations,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    const {
+      card,
+      remainingSetAsideEncounterCards,
+    } = takeSetAsideEncounterCardByCode({
+      setAsideEncounterCards,
+      cardCode: enemyCode,
+    });
+
+    if (!card) {
+      get().pushLog(
+        "system",
+        `Could not find set-aside encounter card ${enemyCode}.`,
+      );
+      return;
+    }
+
+    if (card.type !== "enemy") {
+      get().pushLog(
+        "system",
+        `${card.name} is not an enemy and cannot be spawned.`,
+      );
+      return;
+    }
+
+    let updatedEnemies = spawnEnemyAtLocation({
+      enemyCode,
+      locationId,
+      enemies,
+      investigator,
+      locations,
+    });
+
+    const spawnedEnemy = updatedEnemies[updatedEnemies.length - 1];
+
+    set((state) => ({
+      ...state,
+      enemies: updatedEnemies,
+      setAsideEncounterCards: remainingSetAsideEncounterCards,
+      log: [
+        ...state.log,
+        createLogEntry(
+          "scenario",
+          `${spawnedEnemy.name} spawned at ${locationId} from the set-aside cards.`,
+        ),
+      ],
+    }));
+  },
   setAsideEncounterCards: [],
   victoryDisplay: [],
   clearedVictoryLocations: [],
