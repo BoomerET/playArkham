@@ -1922,6 +1922,63 @@ function emitScenarioEvent(args: {
 //  };
 //}
 
+function resolveAttackOfOpportunity(args: {
+  investigator: Investigator;
+  enemies: Enemy[];
+  logPrefix?: string;
+}): {
+  investigator: Investigator;
+  enemies: Enemy[];
+  logEntries: ReturnType<typeof createLogEntry>[];
+} {
+  const { investigator, enemies, logPrefix } = args;
+
+  let updatedInvestigator = investigator;
+  const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+  const attackingEnemies = enemies.filter(
+    (enemy) =>
+      enemy.engagedInvestigatorId === investigator.id &&
+      !enemy.exhausted,
+  );
+
+  for (const enemy of attackingEnemies) {
+    updatedInvestigator = {
+      ...updatedInvestigator,
+      damage: updatedInvestigator.damage + enemy.damage,
+      horror: updatedInvestigator.horror + enemy.horror,
+    };
+
+    logEntries.push(
+      createLogEntry(
+        "enemy",
+        logPrefix
+          ? `${enemy.name} makes an attack of opportunity after ${logPrefix}. You take ${enemy.damage} damage and ${enemy.horror} horror.`
+          : `${enemy.name} makes an attack of opportunity. You take ${enemy.damage} damage and ${enemy.horror} horror.`,
+      ),
+    );
+  }
+
+  return {
+    investigator: updatedInvestigator,
+    enemies,
+    logEntries,
+  };
+}
+
+function hasReadyEngagedEnemy(args: {
+  investigator: Investigator;
+  enemies: Enemy[];
+}): boolean {
+  const { investigator, enemies } = args;
+
+  return enemies.some(
+    (enemy) =>
+      enemy.engagedInvestigatorId === investigator.id &&
+      !enemy.exhausted,
+  );
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   victoryDisplay: [],
   clearedVictoryLocations: [],
@@ -5162,7 +5219,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeResourceAction: () => {
-    const { investigator, turn, activeSkillTest, scenarioStatus } = get();
+    const {
+      investigator,
+      enemies,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -5187,21 +5250,40 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    set({
-      investigator: {
-        ...investigator,
-        resources: investigator.resources + 1,
-      },
-      turn: {
-        ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
-      },
-    });
+    let updatedInvestigator = investigator;
+    const logEntries: ReturnType<typeof createLogEntry>[] = [];
 
-    get().pushLog(
-      "player",
-      "Took a resource action. Gained 1 resource and spent 1 action.",
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: "taking a resource",
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      logEntries.push(...aooResolution.logEntries);
+    }
+
+    updatedInvestigator = {
+      ...updatedInvestigator,
+      resources: updatedInvestigator.resources + 1,
+    };
+
+    logEntries.push(
+      createLogEntry(
+        "player",
+        "Took a resource action. Gained 1 resource and spent 1 action.",
+      ),
     );
+
+    set((state) => ({
+      investigator: updatedInvestigator,
+      turn: {
+        ...state.turn,
+        actionsRemaining: state.turn.actionsRemaining - 1,
+      },
+      log: [...state.log, ...logEntries],
+    }));
   },
 
   takeDrawAction: () => {
