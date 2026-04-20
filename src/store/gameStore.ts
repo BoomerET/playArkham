@@ -502,16 +502,16 @@ export function getEncounterCardByCode(code: string): EncounterCard | null {
 }
 
 function spawnEnemyAtLocation(args: {
-  enemyId: string;
+  enemyCode: string;
   locationId: string;
   enemies: Enemy[];
 }): Enemy[] {
-  const { enemyId, locationId, enemies } = args;
+  const { enemyCode, locationId, enemies } = args;
 
-  const enemyCard = getEncounterCardByCode(enemyId);
+  const enemyCard = getEncounterCardByCode(enemyCode);
 
   if (!enemyCard) {
-    console.warn("Enemy not found for setup spawn:", enemyId);
+    console.warn("Enemy not found for setup spawn:", enemyCode);
     return enemies;
   }
 
