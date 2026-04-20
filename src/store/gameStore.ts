@@ -5012,12 +5012,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const movementLog: ReturnType<typeof createLogEntry>[] = [];
-
     let updatedInvestigator = investigator;
     let finalEnemies = enemies;
     let finalCampaignState = get().campaignState;
 
-    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies: finalEnemies })) {
+    if (
+      hasReadyEngagedEnemy({
+        investigator: updatedInvestigator,
+        enemies: finalEnemies,
+      })
+    ) {
       const aooResolution = resolveAttackOfOpportunity({
         investigator: updatedInvestigator,
         enemies: finalEnemies,
@@ -5086,23 +5090,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       createLogEntry("player", `Moved to ${destination.name}. 1 action spent.`),
     );
 
+    const nextSelectedEnemyTargetId =
+      selectedEnemyTargetId &&
+        finalEnemies.some(
+          (enemy) =>
+            enemy.id === selectedEnemyTargetId &&
+            enemy.engagedInvestigatorId === investigator.id &&
+            enemy.locationId === locationId,
+        )
+        ? selectedEnemyTargetId
+        : null;
+
     set((state) => ({
       investigator: updatedInvestigator,
       locations: finalLocations,
       enemies: finalEnemies,
       campaignState: finalCampaignState,
-      //selectedEnemyTargetId:
-      //  currentLocation?.id === locationId ? selectedEnemyTargetId : null,
-      selectedEnemyTargetId:
-        selectedEnemyTargetId &&
-          finalEnemies.some(
-            (enemy) =>
-              enemy.id === selectedEnemyTargetId &&
-              enemy.engagedInvestigatorId === investigator.id &&
-              enemy.locationId === locationId,
-          )
-          ? selectedEnemyTargetId
-          : null,
+      selectedEnemyTargetId: nextSelectedEnemyTargetId,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
