@@ -502,43 +502,56 @@ export function getEncounterCardByCode(code: string): EncounterCard | null {
 }
 
 function spawnEnemyAtLocation(args: {
-  enemyCode: string;
+  enemyId: string;
   locationId: string;
   enemies: Enemy[];
 }): Enemy[] {
-  const { enemyCode, locationId, enemies } = args;
+  const { enemyId, locationId, enemies } = args;
 
-  const enemyCard = getEncounterCardByCode(enemyCode);
+  const enemyCard = getEncounterCardByCode(enemyId);
 
   if (!enemyCard) {
-    console.warn("Enemy not found for setup spawn:", enemyCode);
+    console.warn("Enemy not found for setup spawn:", enemyId);
     return enemies;
   }
 
-  const spawnedEnemy: Enemy = {
-    id: `${enemyCard.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    code: enemyCard.code,
-    name: enemyCard.name,
-    fight: enemyCard.fight ?? 0,
-    evade: enemyCard.evade ?? 0,
-    health: enemyCard.health ?? 0,
-    damage: enemyCard.damage ?? 0,
-    horror: enemyCard.horror ?? 0,
+  const spawnedEnemy = buildEnemyFromEncounterCard({
+    card: enemyCard,
+    locationId,
+  });
+
+  return [...enemies, spawnedEnemy];
+}
+
+function buildEnemyFromEncounterCard(args: {
+  card: EncounterCard;
+  locationId: string;
+}): Enemy {
+  const { card, locationId } = args;
+
+  return {
+    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    code: card.code,
+    name: card.name,
+    fight: card.fight ?? 0,
+    evade: card.evade ?? 0,
+    health: card.health ?? 0,
+    damage: card.damage ?? 0,
+    horror: card.horror ?? 0,
     locationId,
     engagedInvestigatorId: null,
     exhausted: false,
     damageOnEnemy: 0,
-    ability: enemyCard.ability,
-    abilities: enemyCard.abilities,
-    text: enemyCard.text,
-    traits: enemyCard.traits,
-    set: enemyCard.set,
-    victoryPoints: enemyCard.victoryPoints,
-    parley: enemyCard.parley,
+    ability: card.ability,
+    abilities: card.abilities,
+    text: card.text,
+    traits: card.traits,
+    set: card.set,
+    victoryPoints: card.victoryPoints,
+    parley: card.parley,
   };
-
-  return [...enemies, spawnedEnemy];
 }
+
 
 type AdvanceStoreSlice = Pick<
   GameStore,
@@ -4024,6 +4037,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const shuffledDeck = shuffle(deckCards);
+
     const initialEncounterDeck = buildInitialEncounterDeck(
       selectedScenario.encounterCardCodes,
     );
@@ -4031,6 +4045,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let setupEnemies: Enemy[] = [];
     let setupLocationAttachments: LocationAttachment[] = [];
     const setupLogEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    for (const spawn of selectedScenario.enemySpawns ?? []) {
+      const beforeCount = setupEnemies.length;
+
+      setupEnemies = spawnEnemyAtLocation({
+        enemyId: spawn.enemyId,
+        locationId: spawn.locationId,
+        enemies: setupEnemies,
+      });
+
+      if (setupEnemies.length > beforeCount) {
+        const spawnedEnemy = setupEnemies[setupEnemies.length - 1];
+
+        setupLogEntries.push(
+          createLogEntry(
+            "scenario",
+            `${spawnedEnemy.name} spawned at ${spawn.locationId} during setup.`,
+          ),
+        );
+      } else {
+        setupLogEntries.push(
+          createLogEntry(
+            "system",
+            `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
+          ),
+        );
+      }
+    }
 
     for (const attachment of selectedScenario.locationAttachments ?? []) {
       const beforeCount = setupLocationAttachments.length;
@@ -4061,33 +4103,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    for (const spawn of selectedScenario.enemySpawns ?? []) {
-      const beforeCount = setupEnemies.length;
-
-      setupEnemies = spawnEnemyAtLocation({
-        enemyCode: spawn.enemyCode,
-        locationId: spawn.locationId,
-        enemies: setupEnemies,
-      });
-
-      if (setupEnemies.length > beforeCount) {
-        const spawnedEnemy = setupEnemies[setupEnemies.length - 1];
-
-        setupLogEntries.push(
-          createLogEntry(
-            "scenario",
-            `${spawnedEnemy.name} spawned at ${spawn.locationId} during setup.`,
-          ),
-        );
-      } else {
-        setupLogEntries.push(
-          createLogEntry(
-            "system",
-            `Could not spawn encounter enemy ${spawn.enemyCode} at ${spawn.locationId} during setup.`,
-          ),
-        );
-      }
-    }
     set({
       investigator: chosenInvestigator,
       deck: shuffledDeck,
@@ -4150,6 +4165,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastEncounterCard: null,
       turn: { round: 1, phase: "mythos", actionsRemaining: 0 },
     });
+
     get().drawStartingHand(5);
     get().pushLog(
       "system",
