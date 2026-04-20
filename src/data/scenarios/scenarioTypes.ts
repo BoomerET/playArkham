@@ -84,6 +84,7 @@ export interface ScenarioDefinition {
     locationId: string;
     cardCode: string;
   }[];
+  setAsideEncounterCardCodes?: string[];
 }
 
 export interface ScenarioRandomizedLocationOption {

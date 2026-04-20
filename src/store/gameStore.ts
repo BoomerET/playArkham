@@ -188,6 +188,7 @@ type GameStore = GameState & CampaignStoreActions & {
   locationAttachments: LocationAttachment[];
   campaignState: CampaignState;
   pendingChoice: PendingChoice;
+  setAsideEncounterCards: EncounterCard[];
   advanceActByClues: () => void;
   locationAbility: (abilityIndex: number) => void;
   setPreviousScenarioOutcome: (outcome: string | null) => void;
