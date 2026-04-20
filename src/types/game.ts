@@ -214,6 +214,7 @@ export type InteractiveActionDefinition<TActionEffect> = {
   skillTest?: InteractionSkillTestDefinition<TActionEffect>;
   requiresFlag?: ScenarioFlagCondition;
   trigger?: CardAbilityTrigger;
+  costsActions?: number;
 };
 
 export type LocationActionDefinition =
