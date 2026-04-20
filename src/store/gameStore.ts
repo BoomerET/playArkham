@@ -5012,6 +5012,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const movementLog: ReturnType<typeof createLogEntry>[] = [];
+
     let updatedInvestigator = investigator;
     let finalEnemies = enemies;
     let finalCampaignState = get().campaignState;
@@ -5027,6 +5028,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       finalEnemies = aooResolution.enemies;
       movementLog.push(...aooResolution.logEntries);
     }
+
+    finalEnemies = finalEnemies.map((enemy) =>
+      enemy.engagedInvestigatorId === investigator.id
+        ? {
+          ...enemy,
+          locationId,
+        }
+        : enemy,
+    );
 
     const updatedLocations = locations.map((location) => {
       const withoutInvestigator = location.investigatorsHere.filter(
@@ -5081,8 +5091,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations: finalLocations,
       enemies: finalEnemies,
       campaignState: finalCampaignState,
+      //selectedEnemyTargetId:
+      //  currentLocation?.id === locationId ? selectedEnemyTargetId : null,
       selectedEnemyTargetId:
-        currentLocation?.id === locationId ? selectedEnemyTargetId : null,
+        selectedEnemyTargetId &&
+          finalEnemies.some(
+            (enemy) =>
+              enemy.id === selectedEnemyTargetId &&
+              enemy.engagedInvestigatorId === investigator.id &&
+              enemy.locationId === locationId,
+          )
+          ? selectedEnemyTargetId
+          : null,
       turn: {
         ...turn,
         actionsRemaining: turn.actionsRemaining - 1,
