@@ -2029,7 +2029,48 @@ function removeOneEncounterCardByCode(
   ];
 }
 
+function takeSetAsideEncounterCardByCode(args: {
+  setAsideEncounterCards: EncounterCard[];
+  cardCode: string;
+}): {
+  card: EncounterCard | null;
+  remainingSetAsideEncounterCards: EncounterCard[];
+} {
+  const { setAsideEncounterCards, cardCode } = args;
+
+  const index = setAsideEncounterCards.findIndex(
+    (card) => card.code === cardCode,
+  );
+
+  if (index === -1) {
+    return {
+      card: null,
+      remainingSetAsideEncounterCards: setAsideEncounterCards,
+    };
+  }
+
+  return {
+    card: setAsideEncounterCards[index],
+    remainingSetAsideEncounterCards: [
+      ...setAsideEncounterCards.slice(0, index),
+      ...setAsideEncounterCards.slice(index + 1),
+    ],
+  };
+}
+
+function getSetAsideEncounterCardByCode(args: {
+  setAsideEncounterCards: EncounterCard[];
+  cardCode: string;
+}): EncounterCard | null {
+  const { setAsideEncounterCards, cardCode } = args;
+
+  return (
+    setAsideEncounterCards.find((card) => card.code === cardCode) ?? null
+  );
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
+  setAsideEncounterCards: [],
   victoryDisplay: [],
   clearedVictoryLocations: [],
   advanceActByClues: () => {
