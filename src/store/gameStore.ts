@@ -57,6 +57,7 @@ import type {
   CardAbilityEffect,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
+import { encounterCards } from "../data/encounterCards";
 import { applyConditionalLocationVisibility } from "./locationVisibility";
 import { resolveLocationAbilityEffect } from "./locationAbilities";
 
@@ -455,22 +456,24 @@ function getNextScenarioCardDefinition(
   );
 }
 
-function getEncounterCardByCode(
-  encounterDeck: EncounterCard[],
-  code: string,
-): EncounterCard | null {
-  return encounterDeck.find((card) => card.code === code) ?? null;
+//function getEncounterCardByCode(
+//  encounterDeck: EncounterCard[],
+//  code: string,
+//): EncounterCard | null {
+//  return encounterDeck.find((card) => card.code === code) ?? null;
+//}
+export function getEncounterCardByCode(code: string): EncounterCard | null {
+  return encounterCards.find((card) => card.code === code) ?? null;
 }
 
 function spawnEnemyAtLocation(args: {
   enemyId: string;
   locationId: string;
   enemies: Enemy[];
-  encounterCards: EncounterCard[];
 }): Enemy[] {
-  const { enemyId, locationId, enemies, encounterCards } = args;
+  const { enemyId, locationId, enemies } = args;
 
-  const enemyCard = getEncounterCardByCode(encounterCards, enemyId);
+  const enemyCard = getEncounterCardByCode(enemyId);
 
   if (!enemyCard) {
     console.warn("Enemy not found for setup spawn:", enemyId);
@@ -4029,7 +4032,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         enemyId: spawn.enemyId,
         locationId: spawn.locationId,
         enemies: setupEnemies,
-        encounterCards: initialEncounterDeck,
       });
 
       if (setupEnemies.length > beforeCount) {
