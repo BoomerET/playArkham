@@ -4050,7 +4050,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const beforeCount = setupEnemies.length;
 
       setupEnemies = spawnEnemyAtLocation({
-        enemyId: spawn.enemyId,
+        enemyId: spawn.enemyCode,
         locationId: spawn.locationId,
         enemies: setupEnemies,
       });
@@ -4068,7 +4068,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         setupLogEntries.push(
           createLogEntry(
             "system",
-            `Could not spawn encounter enemy ${spawn.enemyId} at ${spawn.locationId} during setup.`,
+            `Could not spawn encounter enemy ${spawn.enemyCode} at ${spawn.locationId} during setup.`,
           ),
         );
       }
