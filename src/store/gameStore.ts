@@ -6683,4 +6683,70 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingTestResolution: { kind: "evade", enemyCode: enemy.id },
     });
   },
+  attachSetAsideCardToLocation: (cardCode: string, locationId: string) => {
+    const {
+      setAsideEncounterCards,
+      locationAttachments,
+      scenarioStatus,
+    } = get();
+
+    if (isScenarioResolved(scenarioStatus)) {
+      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
+      return;
+    }
+
+    const {
+      card,
+      remainingSetAsideEncounterCards,
+    } = takeSetAsideEncounterCardByCode({
+      setAsideEncounterCards,
+      cardCode,
+    });
+
+    if (!card) {
+      get().pushLog(
+        "system",
+        `Could not find set-aside encounter card ${cardCode}.`,
+      );
+      return;
+    }
+
+    if (card.type === "enemy") {
+      get().pushLog(
+        "system",
+        `${card.name} is an enemy and cannot be attached as a location attachment.`,
+      );
+      return;
+    }
+
+    const updatedLocationAttachments = attachEncounterCardToLocation({
+      cardCode,
+      locationId,
+      locationAttachments,
+    });
+
+    if (updatedLocationAttachments.length === locationAttachments.length) {
+      get().pushLog(
+        "system",
+        `Could not attach ${card.name} to ${locationId}.`,
+      );
+      return;
+    }
+
+    const addedAttachment =
+      updatedLocationAttachments[updatedLocationAttachments.length - 1];
+
+    set((state) => ({
+      ...state,
+      locationAttachments: updatedLocationAttachments,
+      setAsideEncounterCards: remainingSetAsideEncounterCards,
+      log: [
+        ...state.log,
+        createLogEntry(
+          "scenario",
+          `${addedAttachment.name} was attached to ${locationId} from the set-aside cards.`,
+        ),
+      ],
+    }));
+  },
 }));
