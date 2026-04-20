@@ -2523,7 +2523,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.actionsRemaining < 1) {
-      get().pushLog("system", "Cannot use a location action. No actions remaining.");
+      get().pushLog(
+        "system",
+        "Cannot use a location action. No actions remaining.",
+      );
       return;
     }
 
@@ -2549,30 +2552,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (ability.skillTest) {
-      set((state) => ({
-        pendingLocationActionResolution: {
-          sourceName: currentLocation.name,
-          currentLocationId: currentLocation.id,
-          onSuccess: ability.skillTest!.onSuccess,
-          onFail: ability.skillTest!.onFail,
-        },
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
-        log: [
-          ...state.log,
-          createLogEntry("scenario", ability.text),
-        ],
-      }));
+    const actionCost = ability.costsActions ?? 1;
 
-      get().beginSkillTest(
-        ability.skillTest.skill,
-        ability.skillTest.difficulty,
-        ability.label ?? currentLocation.name
+    if (turn.actionsRemaining < actionCost) {
+      get().pushLog(
+        "system",
+        `Cannot use this location action. You need ${actionCost} action${actionCost === 1 ? "" : "s"}.`,
       );
-
       return;
     }
 
@@ -2583,6 +2569,49 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    let updatedInvestigator = investigator;
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: `using ${ability.label ?? currentLocation.name}`,
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      extraLog.push(...aooResolution.logEntries);
+    }
+
+    if (ability.skillTest) {
+      set((state) => ({
+        investigator: updatedInvestigator,
+        pendingLocationActionResolution: {
+          sourceName: currentLocation.name,
+          currentLocationId: currentLocation.id,
+          onSuccess: ability.skillTest!.onSuccess,
+          onFail: ability.skillTest!.onFail,
+        },
+        turn: {
+          ...turn,
+          actionsRemaining: turn.actionsRemaining - actionCost,
+        },
+        log: [
+          ...state.log,
+          ...extraLog,
+          createLogEntry("scenario", ability.text),
+        ],
+      }));
+
+      get().beginSkillTest(
+        ability.skillTest.skill,
+        ability.skillTest.difficulty,
+        ability.label ?? currentLocation.name,
+      );
+
+      return;
+    }
+
     if (!actionEffect) {
       get().pushLog("system", "This location action has no effect configured.");
       return;
@@ -2590,7 +2619,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const resolution = resolveLocationAbilityEffect({
       effect: actionEffect,
-      investigator,
+      investigator: updatedInvestigator,
       currentLocationId: currentLocation.id,
       locations,
       enemies,
@@ -2604,10 +2633,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: resolution.campaignState,
       turn: {
         ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
+        actionsRemaining: turn.actionsRemaining - actionCost,
       },
       log: [
         ...state.log,
+        ...extraLog,
         createLogEntry("scenario", ability.text),
         ...resolution.logEntries,
       ],
