@@ -5361,8 +5361,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "mythos") {
-      createLogEntry("system", "Mythos phase begins."),
-        get().resolveMythosPhase();
+      get().pushLog("system", "Mythos phase begins.");
+      get().resolveMythosPhase();
       get().setPhase("investigation");
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
       return;
