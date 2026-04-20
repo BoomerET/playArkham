@@ -295,7 +295,7 @@ export type LocationDifficultyModifier = {
 
 export interface LocationAttachment {
   id: string;
-  cardId: string;
+  cardCode: string;
   code?: string;
   name: string;
   text?: string | string[];

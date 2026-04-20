@@ -119,7 +119,7 @@ type PendingTestResolution =
   | null;
 
 type PendingAssetPlay = {
-  cardId: string;
+  cardCode: string;
   replacedSlot: string;
   replacementChoices: PlayerCard[];
   selectedReplacementIds: string[];
@@ -197,7 +197,7 @@ type GameStore = GameState & CampaignStoreActions & {
     optionId: string,
   ) => void;
   toggleEncounterInspector: () => void;
-  togglePendingAssetReplacementChoice: (cardId: string) => void;
+  togglePendingAssetReplacementChoice: (cardCode: string) => void;
   confirmAssetReplacement: () => void;
   cancelPendingAssetPlay: () => void;
   toggleDeckInspector: () => void;
@@ -215,17 +215,17 @@ type GameStore = GameState & CampaignStoreActions & {
   addAgendaProgress: (amount?: number) => void;
   removeAgendaProgress: (amount?: number) => void;
   pushLog: (kind: GameLogKind, text: string) => void;
-  setDraggedCardId: (cardId: string | null) => void;
+  setDraggedCardId: (cardCode: string | null) => void;
   startGame: () => Promise<void>;
   returnToHome: () => void;
   setupGame: () => Promise<void>;
   drawCard: () => void;
   drawStartingHand: (count?: number) => void;
   shuffleDeck: () => void;
-  discardCard: (cardId: string) => void;
-  playCard: (cardId: string) => void;
-  canPlayCardInSlots: (cardId: string) => boolean;
-  togglePlayAreaCardExhausted: (cardId: string) => void;
+  discardCard: (cardCode: string) => void;
+  playCard: (cardCode: string) => void;
+  canPlayCardInSlots: (cardCode: string) => boolean;
+  togglePlayAreaCardExhausted: (cardCode: string) => void;
   drawChaosToken: () => ChaosToken | null;
   gainResource: (amount?: number) => void;
   spendResource: (amount?: number) => void;
@@ -248,28 +248,28 @@ type GameStore = GameState & CampaignStoreActions & {
     difficulty: number,
     source: string,
   ) => void;
-  commitSkillCard: (cardId: string) => void;
+  commitSkillCard: (cardCode: string) => void;
   cancelActiveSkillTest: () => void;
   resolveActiveSkillTest: () => SkillTestResult | null;
   incrementPlayAreaCardCounter: (
-    cardId: string,
+    cardCode: string,
     counterType: CardCounterType,
   ) => void;
   decrementPlayAreaCardCounter: (
-    cardId: string,
+    cardCode: string,
     counterType: CardCounterType,
   ) => void;
   drawEncounterCard: () => EncounterCard | null;
   resolveMythosPhase: () => void;
   resolvePendingChoice: (optionId: string) => void;
-  toggleMulliganCardSelection: (cardId: string) => void;
+  toggleMulliganCardSelection: (cardCode: string) => void;
   confirmMulligan: () => void;
   skipMulligan: () => void;
-  discardCardFromHand: (cardId: string) => void;
-  triggerPlayAreaCardAbility: (cardId: string) => void;
+  discardCardFromHand: (cardCode: string) => void;
+  triggerPlayAreaCardAbility: (cardCode: string) => void;
   clearPendingCardAbilityBonuses: () => void;
   shuffleEncounterDeck: () => void;
-  discardThreatAreaCard: (cardId: string) => void;
+  discardThreatAreaCard: (cardCode: string) => void;
   discardLocationAttachment: (attachmentId: string) => void;
   randomizeCampaignSelectionsForScenario: (scenarioId: string) => void;
   moveHunterEnemies: () => void;
@@ -2498,8 +2498,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ showDeckInspector: false });
   },
 
-  discardCardFromHand: (cardId) => {
-    get().discardCard(cardId);
+  discardCardFromHand: (cardCode) => {
+    get().discardCard(cardCode);
   },
 
   locationAction: (actionIndex) => {
@@ -2654,7 +2654,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  discardThreatAreaCard: (cardId) => {
+  discardThreatAreaCard: (cardCode) => {
     const {
       threatArea,
       encounterDiscard,
@@ -2676,7 +2676,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = threatArea.find((entry) => entry.id === cardId);
+    const card = threatArea.find((entry) => entry.id === cardCode);
 
     if (!card) {
       return;
@@ -2707,7 +2707,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     set({
-      threatArea: threatArea.filter((entry) => entry.id !== cardId),
+      threatArea: threatArea.filter((entry) => entry.id !== cardCode),
       encounterDiscard: [...encounterDiscard, card],
       turn: {
         ...turn,
@@ -2782,8 +2782,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       encounterDiscard: [
         ...encounterDiscard,
         {
-          id: attachment.cardId,
-          code: attachment.code ?? attachment.cardId,
+          id: attachment.cardCode,
+          code: attachment.code ?? attachment.cardCode,
           name: attachment.name,
           type: "treachery",
           text: Array.isArray(attachment.text)
@@ -3288,8 +3288,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  setDraggedCardId: (cardId) => {
-    set({ draggedCardId: cardId });
+  setDraggedCardId: (cardCode) => {
+    set({ draggedCardId: cardCode });
   },
 
   clearPendingCardAbilityBonuses: () => {
@@ -3300,7 +3300,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  triggerPlayAreaCardAbility: (cardId) => {
+  triggerPlayAreaCardAbility: (cardCode) => {
     const {
       playArea,
       activeSkillTest,
@@ -3320,7 +3320,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
       return;
     }
-    const card = playArea.find((entry) => entry.instanceId === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardCode);
     if (!card) return;
     if (!canActivatePlayAreaCardAbility(card)) {
       get().pushLog(
@@ -3338,7 +3338,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
     set({
       playArea: playArea.map((entry) =>
-        entry.instanceId !== cardId
+        entry.instanceId !== cardCode
           ? entry
           : {
             ...entry,
@@ -3363,19 +3363,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("player", effect.logText);
   },
 
-  togglePendingAssetReplacementChoice: (cardId) => {
+  togglePendingAssetReplacementChoice: (cardCode) => {
     const { pendingAssetPlay } = get();
     if (!pendingAssetPlay) return;
-    const exists = pendingAssetPlay.selectedReplacementIds.includes(cardId);
+    const exists = pendingAssetPlay.selectedReplacementIds.includes(cardCode);
     if (pendingAssetPlay.requiredHandSlotsToFree) {
       set({
         pendingAssetPlay: {
           ...pendingAssetPlay,
           selectedReplacementIds: exists
             ? pendingAssetPlay.selectedReplacementIds.filter(
-              (entry) => entry !== cardId,
+              (entry) => entry !== cardCode,
             )
-            : [...pendingAssetPlay.selectedReplacementIds, cardId],
+            : [...pendingAssetPlay.selectedReplacementIds, cardCode],
         },
       });
       return;
@@ -3383,19 +3383,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       pendingAssetPlay: {
         ...pendingAssetPlay,
-        selectedReplacementIds: exists ? [] : [cardId],
+        selectedReplacementIds: exists ? [] : [cardCode],
       },
     });
   },
 
-  toggleMulliganCardSelection: (cardId) => {
+  toggleMulliganCardSelection: (cardCode) => {
     const { isMulliganActive, selectedMulliganCardIds } = get();
     if (!isMulliganActive) return;
-    const alreadySelected = selectedMulliganCardIds.includes(cardId);
+    const alreadySelected = selectedMulliganCardIds.includes(cardCode);
     set({
       selectedMulliganCardIds: alreadySelected
-        ? selectedMulliganCardIds.filter((entry) => entry !== cardId)
-        : [...selectedMulliganCardIds, cardId],
+        ? selectedMulliganCardIds.filter((entry) => entry !== cardCode)
+        : [...selectedMulliganCardIds, cardCode],
     });
   },
 
@@ -3810,7 +3810,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...locationAttachments,
           {
             id: `${card.id}-attachment-${Date.now()}`,
-            cardId: card.id,
+            cardCode: card.id,
             code: card.code,
             name: card.name,
             text: card.text,
@@ -4213,7 +4213,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  discardCard: (cardId: string) => {
+  discardCard: (cardCode: string) => {
     const { hand, discard, activeSkillTest, scenarioStatus } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
@@ -4229,21 +4229,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((c) => c.instanceId === cardId);
+    const card = hand.find((c) => c.instanceId === cardCode);
 
     if (!card) {
       return;
     }
 
     set({
-      hand: hand.filter((c) => c.instanceId !== cardId),
+      hand: hand.filter((c) => c.instanceId !== cardCode),
       discard: [...discard, card],
     });
 
     get().pushLog("player", `Discarded card: ${card.name}`);
   },
 
-  playCard: (cardId: string) => {
+  playCard: (cardCode: string) => {
     const {
       hand,
       discard,
@@ -4281,7 +4281,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((currentCard) => currentCard.instanceId === cardId);
+    const card = hand.find((currentCard) => currentCard.instanceId === cardCode);
 
     if (!card) {
       set({ draggedCardId: null, pendingAssetPlay: null });
@@ -4321,7 +4321,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           set({
             draggedCardId: null,
             pendingAssetPlay: {
-              cardId: card.instanceId,
+              cardCode: card.instanceId,
               replacedSlot: replacementPlan.blockedSlot,
               replacementChoices: replacementPlan.replacementChoices,
               selectedReplacementIds: [],
@@ -4380,7 +4380,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     const updatedHand = hand.filter(
-      (currentCard) => currentCard.instanceId !== cardId,
+      (currentCard) => currentCard.instanceId !== cardCode,
     );
 
     updatedInvestigator = {
@@ -4466,7 +4466,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     if (!pendingAssetPlay) return;
     const cardToPlay = hand.find(
-      (entry) => entry.instanceId === pendingAssetPlay.cardId,
+      (entry) => entry.instanceId === pendingAssetPlay.cardCode,
     );
     const selectedReplacementCards = playArea.filter((entry) =>
       pendingAssetPlay.selectedReplacementIds.includes(entry.instanceId),
@@ -4559,9 +4559,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("system", "Cancelled asset replacement.");
   },
 
-  canPlayCardInSlots: (cardId: string) => {
+  canPlayCardInSlots: (cardCode: string) => {
     const { hand, playArea, investigator } = get();
-    const card = hand.find((entry) => entry.instanceId === cardId);
+    const card = hand.find((entry) => entry.instanceId === cardCode);
 
     if (!card) {
       return false;
@@ -4570,10 +4570,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return canPlayInAvailableSlots(card, playArea, investigator);
   },
 
-  togglePlayAreaCardExhausted: (cardId: string) => {
+  togglePlayAreaCardExhausted: (cardCode: string) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.instanceId === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardCode);
 
     if (!card) {
       return;
@@ -4583,7 +4583,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) =>
-        entry.instanceId === cardId ? { ...entry, exhausted: nextExhausted } : entry,
+        entry.instanceId === cardCode ? { ...entry, exhausted: nextExhausted } : entry,
       ),
       log: [
         ...log,
@@ -4594,10 +4594,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  incrementPlayAreaCardCounter: (cardId, counterType) => {
+  incrementPlayAreaCardCounter: (cardCode, counterType) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.instanceId === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardCode);
     if (!card) {
       return;
     }
@@ -4607,7 +4607,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) =>
-        entry.instanceId === cardId
+        entry.instanceId === cardCode
           ? {
             ...entry,
             counters: {
@@ -4621,10 +4621,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  decrementPlayAreaCardCounter: (cardId, counterType) => {
+  decrementPlayAreaCardCounter: (cardCode, counterType) => {
     const { playArea, log } = get();
 
-    const card = playArea.find((entry) => entry.instanceId === cardId);
+    const card = playArea.find((entry) => entry.instanceId === cardCode);
     if (!card) {
       return;
     }
@@ -4634,7 +4634,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playArea: playArea.map((entry) => {
-        if (entry.instanceId !== cardId) {
+        if (entry.instanceId !== cardCode) {
           return entry;
         }
 
@@ -5478,7 +5478,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
 
-  commitSkillCard: (cardId) => {
+  commitSkillCard: (cardCode) => {
     const { activeSkillTest, hand } = get();
 
     if (!activeSkillTest) {
@@ -5489,7 +5489,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const card = hand.find((currentCard) => currentCard.instanceId === cardId);
+    const card = hand.find((currentCard) => currentCard.instanceId === cardCode);
 
     if (!card) {
       set({
@@ -5530,7 +5530,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const updatedHand = hand.filter((currentCard) => currentCard.instanceId !== cardId);
+    const updatedHand = hand.filter((currentCard) => currentCard.instanceId !== cardCode);
     const committedCard: CommittedSkillCard = {
       card,
       matchingIcons,
