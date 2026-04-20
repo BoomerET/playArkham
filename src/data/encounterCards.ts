@@ -1157,7 +1157,7 @@ export const encounterCards: EncounterCard[] = [
     {
         id: "davestestenemy3",
         code: "14005",
-        name: "Dave's Test Enemy 3",
+        name: "D 3 (Retaliate)",
         type: "enemy",
         fight: 1,
         health: 1,
@@ -1178,7 +1178,7 @@ export const encounterCards: EncounterCard[] = [
     {
         id: "davestestenemy4",
         code: "14006",
-        name: "Dave's Test Enemy 4",
+        name: "D 4 (Hunter/Aloof)",
         type: "enemy",
         fight: 1,
         health: 1,
@@ -1199,7 +1199,7 @@ export const encounterCards: EncounterCard[] = [
     {
         id: "davestestenemy5",
         code: "14007",
-        name: "Dave's Test Enemy 5",
+        name: "D 5 (Hunter)",
         type: "enemy",
         fight: 1,
         health: 1,
@@ -1210,7 +1210,7 @@ export const encounterCards: EncounterCard[] = [
             "Creature",
         ],
         ability: [
-            "Aloof",
+            "Hunter",
         ],
         text: [
             "This is an ememy that I use for testing.",
@@ -1220,7 +1220,7 @@ export const encounterCards: EncounterCard[] = [
     {
         id: "davestestenemy6",
         code: "14008",
-        name: "Dave's Test Enemy 6",
+        name: "D 6 (Aloof)",
         type: "enemy",
         fight: 1,
         health: 1,

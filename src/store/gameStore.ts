@@ -4,6 +4,9 @@ import type { GameLocation } from "../types/game";
 import { defaultScenarioId, scenarios } from "../data/scenarios";
 import type { ScenarioCardDefinition, ScenarioDefinition } from "../data/scenarios/scenarioTypes";
 import { getChaosTokenModifier } from "../lib/chaosToken";
+
+import { readyEnemies } from "./gsFunctions";
+
 import {
   canSpendInvestigationAction,
   cloneScenarioLocations,
@@ -242,7 +245,7 @@ type GameStore = GameState & CampaignStoreActions & {
   fightAction: () => void;
   evadeAction: () => void;
   engageEnemiesAtLocation: () => void;
-  readyAllEnemies: () => void;
+  //readyAllEnemies: () => void;
   enemyPhaseAttack: () => void;
   beginSkillTest: (
     skill: SkillType,
@@ -2068,14 +2071,6 @@ function takeSetAsideEncounterCardByCode(args: {
 //    setAsideEncounterCards.find((card) => card.code === cardCode) ?? null
 //  );
 //}
-
-function readyEnemies(enemies: Enemy[]): Enemy[] {
-  return enemies.map((enemy) =>
-    enemy.exhausted
-      ? { ...enemy, exhausted: false }
-      : enemy,
-  );
-}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
@@ -5382,16 +5377,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
-  readyAllEnemies: () => {
-    const { enemies } = get();
+  //readyAllEnemies: () => {
+  //  const { enemies } = get();
 
-    set({
-      enemies: enemies.map((enemy) => ({
-        ...enemy,
-        exhausted: false,
-      })),
-    });
-  },
+  //  set({
+  //    enemies: enemies.map((enemy) => ({
+  //      ...enemy,
+  //      exhausted: false,
+  //    })),
+  //  });
+  //},
 
   enemyPhaseAttack: () => {
     const { investigator, enemies, log } = get();
@@ -5487,6 +5482,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
       const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
       const updatedEnemies = readyEnemies(enemies);
+      const readyCount = enemies.filter((enemy) => enemy.exhausted).length;
 
       const currentLocation = findCurrentLocation(locations, investigator.id);
       const preferredTargetId = currentLocation
@@ -5498,9 +5494,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         )
         : null;
 
-      const readyCount = enemies.filter((enemy) => enemy.exhausted).length;
-
-      const upkeepLog = [
+      const upkeepLog: ReturnType<typeof createLogEntry>[] = [
         ...log,
         createLogEntry(
           "player",
@@ -5516,7 +5510,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
             "Tried to draw a card during upkeep, but the deck was empty.",
           ),
         ...(readyCount > 0
-          ? [createLogEntry("system", `${readyCount} exhausted enem${readyCount === 1 ? "y readies" : "ies ready"} during upkeep.`)]
+          ? [
+            createLogEntry(
+              "system",
+              readyCount === 1
+                ? "1 exhausted enemy readied during upkeep."
+                : `${readyCount} exhausted enemies readied during upkeep.`,
+            ),
+          ]
           : []),
         createLogEntry("system", `Round ${nextRound} begins.`),
       ];
