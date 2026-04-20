@@ -2369,6 +2369,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ),
     campaignState: initialCampaignState,
   }),
+
   locationAbility: (abilityIndex) => {
     const {
       turn,
@@ -2429,8 +2430,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    let updatedInvestigator = investigator;
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: `using ${ability.label ?? currentLocation.name}`,
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      extraLog.push(...aooResolution.logEntries);
+    }
+
     if (ability.skillTest) {
       set((state) => ({
+        investigator: updatedInvestigator,
         pendingInteractiveResolution: {
           sourceName: ability.label ?? currentLocation.name,
           sourceKind: "locationAction",
@@ -2442,7 +2458,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...turn,
           actionsRemaining: turn.actionsRemaining - actionCost,
         },
-        log: [...state.log, createLogEntry("scenario", ability.text)],
+        log: [
+          ...state.log,
+          ...extraLog,
+          createLogEntry("scenario", ability.text),
+        ],
       }));
 
       get().beginSkillTest(
@@ -2454,8 +2474,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-
-
     if (!actionEffect) {
       get().pushLog("system", "This location ability has no effect configured.");
       return;
@@ -2463,7 +2481,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const resolution = resolveLocationAbilityEffect({
       effect: actionEffect,
-      investigator,
+      investigator: updatedInvestigator,
       currentLocationId: currentLocation.id,
       locations,
       enemies,
@@ -2481,6 +2499,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
       log: [
         ...state.log,
+        ...extraLog,
         createLogEntry("scenario", ability.text),
         ...resolution.logEntries,
       ],
@@ -2493,6 +2512,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: updatedState.campaignState,
     });
   },
+
   campaignState: initialCampaignState,
   enemies: [],
   agenda: getInitialAgendaState(
