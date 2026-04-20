@@ -2001,6 +2001,22 @@ function hasReadyEngagedEnemy(args: {
   );
 }
 
+function removeOneEncounterCardByCode(
+  encounterDeck: EncounterCard[],
+  code: string,
+): EncounterCard[] {
+  const index = encounterDeck.findIndex((card) => card.code === code);
+
+  if (index === -1) {
+    return encounterDeck;
+  }
+
+  return [
+    ...encounterDeck.slice(0, index),
+    ...encounterDeck.slice(index + 1),
+  ];
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   victoryDisplay: [],
   clearedVictoryLocations: [],
@@ -4038,7 +4054,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const shuffledDeck = shuffle(deckCards);
 
-    const initialEncounterDeck = buildInitialEncounterDeck(
+    let initialEncounterDeck = buildInitialEncounterDeck(
       selectedScenario.encounterCardCodes,
     );
 
@@ -4050,13 +4066,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const beforeCount = setupEnemies.length;
 
       setupEnemies = spawnEnemyAtLocation({
-        enemyId: spawn.enemyCode,
+        enemyCode: spawn.enemyCode,
         locationId: spawn.locationId,
         enemies: setupEnemies,
       });
 
       if (setupEnemies.length > beforeCount) {
         const spawnedEnemy = setupEnemies[setupEnemies.length - 1];
+
+        initialEncounterDeck = removeOneEncounterCardByCode(
+          initialEncounterDeck,
+          spawn.enemyCode,
+        );
 
         setupLogEntries.push(
           createLogEntry(
@@ -4086,6 +4107,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (setupLocationAttachments.length > beforeCount) {
         const addedAttachment =
           setupLocationAttachments[setupLocationAttachments.length - 1];
+
+        initialEncounterDeck = removeOneEncounterCardByCode(
+          initialEncounterDeck,
+          attachment.cardCode,
+        );
 
         setupLogEntries.push(
           createLogEntry(
