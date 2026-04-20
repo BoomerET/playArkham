@@ -58,6 +58,7 @@ import type {
   InteractiveActionDefinition,
   CardAbilityDefinition,
   CardAbilityEffect,
+  GameLogItem,
 } from "../types/game";
 import { ENCOUNTER_CARD_CODES } from "../types/game";
 import { encounterCards } from "../data/encounterCards";
@@ -5494,7 +5495,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         )
         : null;
 
-      const upkeepLog: ReturnType<typeof createLogEntry>[] = [
+      const upkeepLog: GameLogItem[] = [
         ...log,
         createLogEntry(
           "player",
