@@ -2069,6 +2069,14 @@ function takeSetAsideEncounterCardByCode(args: {
 //  );
 //}
 
+function readyEnemies(enemies: Enemy[]): Enemy[] {
+  return enemies.map((enemy) =>
+    enemy.exhausted
+      ? { ...enemy, exhausted: false }
+      : enemy,
+  );
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
     const {
@@ -5478,16 +5486,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const drawnCardName = deck.length > 0 ? deck[0].name : null;
       const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
       const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
+      const updatedEnemies = readyEnemies(enemies);
 
       const currentLocation = findCurrentLocation(locations, investigator.id);
       const preferredTargetId = currentLocation
         ? getPreferredEnemyTargetId(
-          enemies,
+          updatedEnemies,
           currentLocation.id,
           investigator.id,
           selectedEnemyTargetId,
         )
         : null;
+
+      const readyCount = enemies.filter((enemy) => enemy.exhausted).length;
 
       const upkeepLog = [
         ...log,
@@ -5504,6 +5515,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
             "system",
             "Tried to draw a card during upkeep, but the deck was empty.",
           ),
+        ...(readyCount > 0
+          ? [createLogEntry("system", `${readyCount} exhausted enem${readyCount === 1 ? "y readies" : "ies ready"} during upkeep.`)]
+          : []),
         createLogEntry("system", `Round ${nextRound} begins.`),
       ];
 
@@ -5514,6 +5528,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         },
         deck: updatedDeck,
         hand: updatedHand,
+        enemies: updatedEnemies,
         selectedEnemyTargetId: preferredTargetId,
         turn: {
           ...turn,
@@ -5523,7 +5538,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         log: upkeepLog,
       });
 
-      get().readyAllEnemies();
       get().engageEnemiesAtLocation();
       get().setPhase("mythos");
       return;
