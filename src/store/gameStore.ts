@@ -4694,6 +4694,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   moveInvestigator: (locationId: string) => {
     const {
       investigator,
+      enemies,
       locations,
       turn,
       activeSkillTest,
@@ -4750,6 +4751,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const movementLog: ReturnType<typeof createLogEntry>[] = [];
+    let updatedInvestigator = investigator;
+    let finalEnemies = enemies;
+    let finalCampaignState = get().campaignState;
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies: finalEnemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies: finalEnemies,
+        logPrefix: `moving to ${destination.name}`,
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      finalEnemies = aooResolution.enemies;
+      movementLog.push(...aooResolution.logEntries);
+    }
+
     const updatedLocations = locations.map((location) => {
       const withoutInvestigator = location.investigatorsHere.filter(
         (id) => id !== investigator.id,
@@ -4774,12 +4792,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       (location) => location.id === locationId,
     );
 
-    const movementLog: ReturnType<typeof createLogEntry>[] = [];
-
-    let updatedInvestigator = investigator;
     let finalLocations = updatedLocations;
-    let finalEnemies = get().enemies;
-    let finalCampaignState = get().campaignState;
 
     if (destinationLocation) {
       const forcedResolution = emitLocationEvent({
@@ -4799,6 +4812,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       movementLog.push(...forcedResolution.logEntries);
     }
 
+    movementLog.push(
+      createLogEntry("player", `Moved to ${destination.name}. 1 action spent.`),
+    );
+
     set((state) => ({
       investigator: updatedInvestigator,
       locations: finalLocations,
@@ -4813,7 +4830,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log: [...state.log, ...movementLog],
     }));
 
-    get().pushLog("player", `Moved to ${destination.name}. 1 action spent.`);
     get().engageEnemiesAtLocation();
   },
 
@@ -5287,7 +5303,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeDrawAction: () => {
-    const { deck, hand, turn, activeSkillTest, scenarioStatus } = get();
+    const {
+      investigator,
+      enemies,
+      deck,
+      hand,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -5312,35 +5336,58 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    if (deck.length === 0) {
-      set({
-        turn: {
-          ...turn,
-          actionsRemaining: turn.actionsRemaining - 1,
-        },
+    let updatedInvestigator = investigator;
+    const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: "drawing a card",
       });
-      get().pushLog(
-        "system",
-        "Took a draw action, but the deck was empty. 1 action spent.",
+
+      updatedInvestigator = aooResolution.investigator;
+      logEntries.push(...aooResolution.logEntries);
+    }
+
+    if (deck.length === 0) {
+      logEntries.push(
+        createLogEntry(
+          "system",
+          "Took a draw action, but the deck was empty. 1 action spent.",
+        ),
       );
+
+      set((state) => ({
+        investigator: updatedInvestigator,
+        turn: {
+          ...state.turn,
+          actionsRemaining: state.turn.actionsRemaining - 1,
+        },
+        log: [...state.log, ...logEntries],
+      }));
       return;
     }
 
     const [topCard, ...remainingDeck] = deck;
 
-    set({
+    logEntries.push(
+      createLogEntry(
+        "player",
+        `Took a draw action. Drew ${topCard.name} and spent 1 action.`,
+      ),
+    );
+
+    set((state) => ({
+      investigator: updatedInvestigator,
       deck: remainingDeck,
       hand: [...hand, topCard],
       turn: {
-        ...turn,
-        actionsRemaining: turn.actionsRemaining - 1,
+        ...state.turn,
+        actionsRemaining: state.turn.actionsRemaining - 1,
       },
-    });
-
-    get().pushLog(
-      "player",
-      `Took a draw action. Drew ${topCard.name} and spent 1 action.`,
-    );
+      log: [...state.log, ...logEntries],
+    }));
   },
 
   beginSkillTest: (skill, difficulty, source) => {
@@ -6147,8 +6194,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   investigateAction: () => {
-    const { investigator, locations, turn, activeSkillTest, scenarioStatus } =
-      get();
+    const {
+      investigator,
+      enemies,
+      locations,
+      turn,
+      activeSkillTest,
+      scenarioStatus,
+    } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
       get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
@@ -6183,10 +6236,35 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    let updatedInvestigator = investigator;
+    const logEntries: ReturnType<typeof createLogEntry>[] = [];
+
+    if (hasReadyEngagedEnemy({ investigator: updatedInvestigator, enemies })) {
+      const aooResolution = resolveAttackOfOpportunity({
+        investigator: updatedInvestigator,
+        enemies,
+        logPrefix: "investigating",
+      });
+
+      updatedInvestigator = aooResolution.investigator;
+      logEntries.push(...aooResolution.logEntries);
+    }
+
     const modifiedDifficulty = Math.max(
       0,
       currentLocation.shroud - get().pendingInvestigateDifficultyModifier,
     );
+
+    if (logEntries.length > 0) {
+      set((state) => ({
+        investigator: updatedInvestigator,
+        log: [...state.log, ...logEntries],
+      }));
+    } else {
+      set({
+        investigator: updatedInvestigator,
+      });
+    }
 
     get().beginSkillTest(
       "intellect",
