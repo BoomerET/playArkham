@@ -1145,13 +1145,97 @@ export const encounterCards: EncounterCard[] = [
         ],
 
         ability: [
-            "Hunter",
+            "Aloof",
         ],
 
         text: [
             "This is an ememy that I use for testing.",
         ],
 
+        set: "daves-tests",
+    },
+    {
+        id: "davestestenemy3",
+        code: "14005",
+        name: "Dave's Test Enemy 3",
+        type: "enemy",
+        fight: 1,
+        health: 1,
+        evade: 1,
+        damage: 1,
+        horror: 1,
+        traits: [
+            "Creature",
+        ],
+        ability: [
+            "Aloof",
+        ],
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
+        set: "daves-tests",
+    },
+    {
+        id: "davestestenemy4",
+        code: "14006",
+        name: "Dave's Test Enemy 4",
+        type: "enemy",
+        fight: 1,
+        health: 1,
+        evade: 1,
+        damage: 1,
+        horror: 1,
+        traits: [
+            "Creature",
+        ],
+        ability: [
+            "Aloof",
+        ],
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
+        set: "daves-tests",
+    },
+    {
+        id: "davestestenemy5",
+        code: "14007",
+        name: "Dave's Test Enemy 5",
+        type: "enemy",
+        fight: 1,
+        health: 1,
+        evade: 1,
+        damage: 1,
+        horror: 1,
+        traits: [
+            "Creature",
+        ],
+        ability: [
+            "Aloof",
+        ],
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
+        set: "daves-tests",
+    },
+    {
+        id: "davestestenemy6",
+        code: "14008",
+        name: "Dave's Test Enemy 6",
+        type: "enemy",
+        fight: 1,
+        health: 1,
+        evade: 1,
+        damage: 1,
+        horror: 1,
+        traits: [
+            "Creature",
+        ],
+        ability: [
+            "Aloof",
+        ],
+        text: [
+            "This is an ememy that I use for testing.",
+        ],
         set: "daves-tests",
     },
 ];
