@@ -83,7 +83,7 @@ export interface ScenarioDefinition {
   locationAttachments?: {
     locationId: string;
     cardCode: string;
-  }
+  }[];
 }
 
 export interface ScenarioRandomizedLocationOption {

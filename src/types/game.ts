@@ -302,6 +302,10 @@ export interface LocationAttachment {
   traits?: string[];
   attachedLocationId: string;
   difficultyModifiers?: LocationDifficultyModifier[];
+  locationAttachments?: {
+    locationId: string;
+    cardCode: string;
+  }[];
 }
 
 export interface GameLocation {
