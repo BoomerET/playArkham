@@ -505,8 +505,10 @@ function spawnEnemyAtLocation(args: {
   enemyCode: string;
   locationId: string;
   enemies: Enemy[];
+  investigator: Investigator;
+  locations: GameState["locations"];
 }): Enemy[] {
-  const { enemyCode, locationId, enemies } = args;
+  const { enemyCode, locationId, enemies, investigator, locations } = args;
 
   const enemyCard = getEncounterCardByCode(enemyCode);
 
@@ -519,6 +521,16 @@ function spawnEnemyAtLocation(args: {
     card: enemyCard,
     locationId,
   });
+
+  const investigatorLocation = findCurrentLocation(locations, investigator.id);
+
+  if (
+    investigatorLocation &&
+    investigatorLocation.id === locationId &&
+    !enemyHasAloof(spawnedEnemy)
+  ) {
+    spawnedEnemy.engagedInvestigatorId = investigator.id;
+  }
 
   return [...enemies, spawnedEnemy];
 }
@@ -551,7 +563,6 @@ function buildEnemyFromEncounterCard(args: {
     parley: card.parley,
   };
 }
-
 
 type AdvanceStoreSlice = Pick<
   GameStore,
@@ -4062,6 +4073,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let setupLocationAttachments: LocationAttachment[] = [];
     const setupLogEntries: ReturnType<typeof createLogEntry>[] = [];
 
+    const normalizedLocations = applyConditionalLocationVisibility({
+      locations: normalizeScenarioLocations(
+        selectedScenario.locations,
+        chosenInvestigator.id,
+        selectedScenario.startingLocationId,
+      ),
+      campaignState: get().campaignState,
+    });
+
     for (const spawn of selectedScenario.enemySpawns ?? []) {
       const beforeCount = setupEnemies.length;
 
@@ -4069,6 +4089,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         enemyCode: spawn.enemyCode,
         locationId: spawn.locationId,
         enemies: setupEnemies,
+        investigator: chosenInvestigator,
+        locations: normalizedLocations,
       });
 
       if (setupEnemies.length > beforeCount) {
