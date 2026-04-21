@@ -9,6 +9,7 @@ import type {
   PlayerCard,
   ScenarioCardState,
   LocationAttachment,
+  EncounterCard,
 } from "../types/game";
 
 import { findCurrentLocation } from "./gameStateHelpers";
@@ -33,6 +34,7 @@ export type ScenarioEffectState = {
 type ScenarioEffectResult = ScenarioEffectState & {
   advanceAgendaRequested?: boolean;
   advanceActRequested?: boolean;
+  setAsideEncounterCards?: EncounterCard[];
 };
 
 function convertEncounterStoryCardToPlayerCard(
