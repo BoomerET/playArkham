@@ -10,6 +10,10 @@ import type {
     CardAbilityDefinition,
     CardAbilityEffect,
     LocationAbilityEffect,
+    GameLocation,
+    ParleyEffect,
+    InteractiveActionDefinition,
+    SkillType,
 } from "../types/game";
 
 import {
@@ -21,8 +25,12 @@ import type {
 } from "../lib/campaignSetup";
 
 import {
-    resolveLocationAbilityEffect
+    resolveLocationAbilityEffect,
 } from "./locationAbilities";
+
+import {
+    applyConditionalLocationVisibility,
+} from "./locationVisibility";
 
 export function readyEnemies(enemies: Enemy[]): Enemy[] {
     return enemies.map((enemy) =>
@@ -737,4 +745,296 @@ export function resolveImmediateAbilityEffect(args: {
         enemies: args.enemies,
         campaignState: args.campaignState,
     });
+}
+
+export function addLocationToVictoryDisplayIfCleared(args: {
+    locationId: string;
+    locations: GameState["locations"];
+    clearedVictoryLocations: GameLocation[];
+}): {
+    clearedVictoryLocations: GameLocation[];
+    logEntries: ReturnType<typeof createLogEntry>[];
+} {
+    const { locationId, locations, clearedVictoryLocations } = args;
+
+    const location = locations.find((entry) => entry.id === locationId);
+
+    if (!location) {
+        return {
+            clearedVictoryLocations,
+            logEntries: [],
+        };
+    }
+
+    if ((location.victoryPoints ?? 0) <= 0) {
+        return {
+            clearedVictoryLocations,
+            logEntries: [],
+        };
+    }
+
+    if (location.clues > 0) {
+        return {
+            clearedVictoryLocations,
+            logEntries: [],
+        };
+    }
+
+    if (clearedVictoryLocations.some((entry) => entry.id === location.id)) {
+        return {
+            clearedVictoryLocations,
+            logEntries: [],
+        };
+    }
+
+    return {
+        clearedVictoryLocations: [...clearedVictoryLocations, location],
+        logEntries: [
+            createLogEntry(
+                "scenario",
+                `${location.name} was added to the victory display worth ${location.victoryPoints} victory point${location.victoryPoints === 1 ? "" : "s"}.`,
+            ),
+        ],
+    };
+}
+
+export function resolveEnemyDefeatEffect(args: {
+    enemy: Enemy;
+    investigator: Investigator;
+}): {
+    investigator: Investigator;
+    logEntries: GameState["log"];
+} {
+    const { enemy, investigator } = args;
+
+    if (!enemy.onDefeat || enemy.onDefeat.kind === "none") {
+        return {
+            investigator,
+            logEntries: [],
+        };
+    }
+
+    if (enemy.onDefeat.kind === "horrorToInvestigatorsAtLocation") {
+        return {
+            investigator: {
+                ...investigator,
+                horror: investigator.horror + enemy.onDefeat.amount,
+            },
+            logEntries: [
+                createLogEntry(
+                    "enemy",
+                    `${enemy.name}: when defeated, took ${enemy.onDefeat.amount} horror.`,
+                ),
+            ],
+        };
+    }
+
+    return {
+        investigator,
+        logEntries: [],
+    };
+}
+
+export function resolveParleyEffect(args: {
+    effect: ParleyEffect;
+    investigator: Investigator;
+    currentLocationId: string;
+    locations: GameState["locations"];
+    campaignState: CampaignState;
+}): {
+    investigator: Investigator;
+    locations: GameState["locations"];
+    campaignState: CampaignState;
+    logEntries: ReturnType<typeof createLogEntry>[];
+} {
+    const { effect, investigator, currentLocationId, locations, campaignState } = args;
+
+    if (effect.kind === "none") {
+        return {
+            investigator,
+            locations,
+            campaignState,
+            logEntries: [],
+        };
+    }
+
+    if (effect.kind === "gainClues") {
+        return {
+            investigator: {
+                ...investigator,
+                clues: investigator.clues + effect.amount,
+            },
+            locations,
+            campaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Parley succeeded. Gained ${effect.amount} clue${effect.amount === 1 ? "" : "s"}.`,
+                ),
+            ],
+        };
+    }
+
+    if (effect.kind === "gainResources") {
+        return {
+            investigator: {
+                ...investigator,
+                resources: investigator.resources + effect.amount,
+            },
+            locations,
+            campaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Parley succeeded. Gained ${effect.amount} resource${effect.amount === 1 ? "" : "s"}.`,
+                ),
+            ],
+        };
+    }
+
+    if (effect.kind === "discoverLocationClue") {
+        const location = locations.find((entry) => entry.id === currentLocationId);
+        const cluesToDiscover = Math.min(effect.amount, location?.clues ?? 0);
+
+        return {
+            investigator: {
+                ...investigator,
+                clues: investigator.clues + cluesToDiscover,
+            },
+            locations: locations.map((entry) =>
+                entry.id === currentLocationId
+                    ? { ...entry, clues: Math.max(0, entry.clues - cluesToDiscover) }
+                    : entry,
+            ),
+            campaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Parley succeeded. Discovered ${cluesToDiscover} clue${cluesToDiscover === 1 ? "" : "s"} at this location.`,
+                ),
+            ],
+        };
+    }
+    if (effect.kind === "setScenarioFlag") {
+        const nextCampaignState = {
+            ...campaignState,
+            scenarioFlags: {
+                ...campaignState.scenarioFlags,
+                [effect.key]: effect.value,
+            },
+        };
+
+        return {
+            investigator,
+            locations: applyConditionalLocationVisibility({
+                locations,
+                campaignState: nextCampaignState,
+            }),
+            campaignState: nextCampaignState,
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Set scenario flag "${effect.key}" to ${String(effect.value)}.`,
+                ),
+            ],
+        };
+    }
+
+    if (effect.kind === "setPreviousScenarioOutcome") {
+        return {
+            investigator,
+            locations,
+            campaignState: {
+                ...campaignState,
+                previousScenarioOutcome: effect.outcome,
+            },
+            logEntries: [
+                createLogEntry(
+                    "scenario",
+                    `Parley changed the campaign outcome to "${effect.outcome}".`,
+                ),
+            ],
+        };
+    }
+
+    return {
+        investigator,
+        locations,
+        campaignState,
+        logEntries: [],
+    };
+}
+
+export function beginInteractiveAction(args: {
+    action: InteractiveActionDefinition<ParleyEffect | LocationAbilityEffect>;
+    sourceName: string;
+    sourceKind: "parley" | "locationAction";
+    currentLocationId: string;
+    turn: GameState["turn"];
+    log: GameState["log"];
+}):
+    | {
+        kind: "skillTest";
+        pending: {
+            sourceName: string;
+            sourceKind: "parley" | "locationAction";
+            currentLocationId: string;
+            onSuccess: ParleyEffect | LocationAbilityEffect;
+            onFail?: ParleyEffect | LocationAbilityEffect;
+        };
+        turn: GameState["turn"];
+        log: GameState["log"];
+        skill: SkillType;
+        difficulty: number;
+        skillTestSource: string;
+    }
+    | {
+        kind: "immediate";
+        effect: ParleyEffect | LocationAbilityEffect;
+        turn: GameState["turn"];
+        log: GameState["log"];
+    }
+    | {
+        kind: "invalid";
+        message: string;
+    } {
+    const { action, sourceName, sourceKind, currentLocationId, turn, log } = args;
+
+    if (action.skillTest) {
+        return {
+            kind: "skillTest",
+            pending: {
+                sourceName,
+                sourceKind,
+                currentLocationId,
+                onSuccess: action.skillTest.onSuccess,
+                onFail: action.skillTest.onFail,
+            },
+            turn: {
+                ...turn,
+                actionsRemaining: turn.actionsRemaining - 1,
+            },
+            log: [...log, createLogEntry("scenario", action.text)],
+            skill: action.skillTest.skill,
+            difficulty: action.skillTest.difficulty,
+            skillTestSource: action.label ?? sourceName,
+        };
+    }
+
+    if (action.effect) {
+        return {
+            kind: "immediate",
+            effect: action.effect,
+            turn: {
+                ...turn,
+                actionsRemaining: turn.actionsRemaining - 1,
+            },
+            log: [...log, createLogEntry("scenario", action.text)],
+        };
+    }
+
+    return {
+        kind: "invalid",
+        message: "This action has no effect configured.",
+    };
 }
