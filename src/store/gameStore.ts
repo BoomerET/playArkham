@@ -24,6 +24,8 @@ import {
   resolveEnemyDefeatedTriggers,
   resolveParleyEffect,
   beginInteractiveAction,
+  addLocationToVictoryDisplayIfCleared,
+  resolveEnemyDefeatEffect,
 } from "./gsFunctions";
 
 import {
