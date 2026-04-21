@@ -95,6 +95,7 @@ export interface ScenarioDefinition {
     cardCode: string;
   }[];
   setAsideEncounterCards?: EncounterCard[];
+  setAsideEncounterCardCodes?: string[];
 }
 
 export interface ScenarioRandomizedLocationOption {

@@ -4198,6 +4198,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenario.encounterCardCodes,
     );
 
+    const initialSetAsideEncounterCards = buildEncounterDeckFromCodes(
+      selectedScenario.setAsideEncounterCardCodes ?? [],
+    );
+
     let setupEnemies: Enemy[] = [];
     let setupLocationAttachments: LocationAttachment[] = [];
     const setupLogEntries: ReturnType<typeof createLogEntry>[] = [];
@@ -4287,6 +4291,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       discard: [],
       playArea: [],
       encounterDeck: initialEncounterDeck,
+      setAsideEncounterCards: initialSetAsideEncounterCards,
       encounterDiscard: [],
       enemies: setupEnemies,
       chaosBag: selectedScenario.chaosBag

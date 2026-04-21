@@ -133,6 +133,9 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   //    enemyCode: "14004",
   //  },
   //],
+  setAsideEncounterCardCodes: [
+    ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_2,
+  ],
   acts: [
     {
       id: "fake-spreading-flames-act-1a",
@@ -154,10 +157,10 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       thresholdLabel: "Done",
       code: "12109",
       onAdvance: {
-        showLocationIds: ["dormitories", "miskatonic-quad"],
+        showLocationIds: ["fake-dormitories", "fake-miskatonic-quad"],
         spawnSetAsideEnemy: {
           enemyCode: "14004",
-          locationId: "miskatonic-quad",
+          locationId: "fake-miskatonic-quad",
         },
       },
     },
@@ -311,7 +314,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   ],
   encounterCardCodes: [
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_1,
-    ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_2,
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_3,
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_4,
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_5,
