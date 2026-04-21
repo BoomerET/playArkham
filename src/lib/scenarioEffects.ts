@@ -29,7 +29,7 @@ export type ScenarioEffectState = {
   grantedPlayerCards?: PlayerCard[];
   campaignOutcomeToSet?: string | null;
   locationAttachments: LocationAttachment[];
-  setAsideEncounterCards: EncounterCard[];
+  setAsideEncounterCards?: EncounterCard[];
 };
 
 type ScenarioEffectResult = ScenarioEffectState & {
