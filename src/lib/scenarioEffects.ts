@@ -10,6 +10,10 @@ import type {
   ScenarioCardState,
 } from "../types/game";
 
+import { findCurrentLocation } from "./gameStateHelpers";
+import { buildEnemyFromEncounterCard, enemyHasAloof } from "../store/gameStore";
+import { takeSetAsideEncounterCardByCode } from "../store/gsFunctions";
+
 export type ScenarioEffectState = {
   agenda: ScenarioCardState | null;
   act: ScenarioCardState | null;
@@ -74,6 +78,8 @@ function applyCardAdvanceEffects(
     advanceAct = false,
     grantEncounterCardToInvestigator,
     setPreviousScenarioOutcome,
+    spawnSetAsideEnemy,
+    attachSetAsideCardToLocation,
   } = card.onAdvance;
 
   const effectLogEntries = [...logEntries];
@@ -117,6 +123,90 @@ function applyCardAdvanceEffects(
     return location;
   });
 
+  let updatedEnemies = state.enemies;
+  let updatedLocationAttachments = state.locationAttachments;
+  let updatedSetAsideEncounterCards = state.setAsideEncounterCards;
+
+  if (spawnSetAsideEnemy) {
+    const {
+      card,
+      remainingSetAsideEncounterCards,
+    } = takeSetAsideEncounterCardByCode({
+      setAsideEncounterCards: updatedSetAsideEncounterCards,
+      cardCode: spawnSetAsideEnemy.enemyCode,
+    });
+
+    if (!card) {
+      effectLogEntries.push(
+        `Could not find set-aside encounter card ${spawnSetAsideEnemy.enemyCode}.`,
+      );
+    } else if (card.type !== "enemy") {
+      effectLogEntries.push(
+        `${card.name} is not an enemy and could not be spawned.`,
+      );
+    } else {
+      const spawnedEnemy = buildEnemyFromEncounterCard({
+        card,
+        locationId: spawnSetAsideEnemy.locationId,
+      });
+
+      const investigatorLocation = findCurrentLocation(
+        updatedLocations,
+        state.investigator.id,
+      );
+
+      if (
+        investigatorLocation &&
+        investigatorLocation.id === spawnSetAsideEnemy.locationId &&
+        !enemyHasAloof(spawnedEnemy)
+      ) {
+        spawnedEnemy.engagedInvestigatorId = state.investigator.id;
+      }
+
+      updatedEnemies = [...updatedEnemies, spawnedEnemy];
+      updatedSetAsideEncounterCards = remainingSetAsideEncounterCards;
+
+      effectLogEntries.push(
+        `${spawnedEnemy.name} spawned at ${spawnSetAsideEnemy.locationId} from the set-aside cards.`,
+      );
+    }
+  }
+
+  if (attachSetAsideCardToLocation) {
+    const {
+      card,
+      remainingSetAsideEncounterCards,
+    } = takeSetAsideEncounterCardByCode({
+      setAsideEncounterCards: updatedSetAsideEncounterCards,
+      cardCode: attachSetAsideCardToLocation.cardCode,
+    });
+
+    if (!card) {
+      effectLogEntries.push(
+        `Could not find set-aside encounter card ${attachSetAsideCardToLocation.cardCode}.`,
+      );
+    } else if (card.type === "enemy") {
+      effectLogEntries.push(
+        `${card.name} is an enemy and could not be attached to a location.`,
+      );
+    } else {
+      const attachment = buildLocationAttachmentFromEncounterCard({
+        card,
+        locationId: attachSetAsideCardToLocation.locationId,
+      });
+
+      updatedLocationAttachments = [
+        ...updatedLocationAttachments,
+        attachment,
+      ];
+      updatedSetAsideEncounterCards = remainingSetAsideEncounterCards;
+
+      effectLogEntries.push(
+        `${attachment.name} was attached to ${attachSetAsideCardToLocation.locationId} from the set-aside cards.`,
+      );
+    }
+  }
+
   const grantedPlayerCards = [...(state.grantedPlayerCards ?? [])];
 
   if (grantEncounterCardToInvestigator) {
@@ -136,6 +226,9 @@ function applyCardAdvanceEffects(
   return {
     ...state,
     locations: updatedLocations,
+    enemies: updatedEnemies,
+    locationAttachments: updatedLocationAttachments,
+    setAsideEncounterCards: updatedSetAsideEncounterCards,
     log: [...state.log, ...effectLogEntries],
     grantedPlayerCards,
     advanceAgendaRequested: advanceAgenda,

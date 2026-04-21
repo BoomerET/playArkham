@@ -543,7 +543,7 @@ function spawnEnemyAtLocation(args: {
   return [...enemies, spawnedEnemy];
 }
 
-function buildEnemyFromEncounterCard(args: {
+export function buildEnemyFromEncounterCard(args: {
   card: EncounterCard;
   locationId: string;
 }): Enemy {
@@ -1036,7 +1036,7 @@ function enemyHasHunter(enemy: Enemy | undefined): boolean {
   return enemy?.ability?.includes("Hunter") ?? false;
 }
 
-function enemyHasAloof(enemy: Enemy | undefined): boolean {
+export function enemyHasAloof(enemy: Enemy | undefined): boolean {
   return enemy?.ability?.includes("Aloof") ?? false;
 }
 
