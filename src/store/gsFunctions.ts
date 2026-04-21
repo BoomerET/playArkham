@@ -1038,3 +1038,36 @@ export function beginInteractiveAction(args: {
         message: "This action has no effect configured.",
     };
 }
+
+export function discardThreatAreaCardByCode(args: {
+    threatArea: EncounterCard[];
+    cardCode: string;
+    encounterDiscard: EncounterCard[];
+}): {
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
+    discardedCard: EncounterCard | null;
+} {
+    const { threatArea, cardCode, encounterDiscard } = args;
+
+    const index = threatArea.findIndex((card) => card.code === cardCode);
+
+    if (index === -1) {
+        return {
+            threatArea,
+            encounterDiscard,
+            discardedCard: null,
+        };
+    }
+
+    const discardedCard = threatArea[index];
+
+    return {
+        threatArea: [
+            ...threatArea.slice(0, index),
+            ...threatArea.slice(index + 1),
+        ],
+        encounterDiscard: [...encounterDiscard, discardedCard],
+        discardedCard,
+    };
+}

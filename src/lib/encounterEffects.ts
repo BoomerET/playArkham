@@ -95,6 +95,22 @@ export type EncounterImmediateResolution =
     kind: "genericTreachery";
     horror: number;
     logText: string;
+  }
+  | {
+    kind: "discardThreatAreaCard";
+    cardCode: string;
+  }
+  | {
+    kind: "discardLocationAttachment";
+    cardCode: string;
+    locationId?: string;
+  }
+  | {
+    kind: "discardEnemy";
+    enemyCode?: string;
+    enemyId?: string;
+    onlyIfEngaged?: boolean;
+    locationId?: string;
   };
 
 export function resolveEncounterCardImmediate(args: {

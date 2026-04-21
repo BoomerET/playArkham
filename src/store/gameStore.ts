@@ -1,9 +1,23 @@
-import { create } from "zustand";
-import { investigators } from "../data/investigators";
-//import type { GameLocation } from "../types/game";
-import { defaultScenarioId, scenarios } from "../data/scenarios";
-import type { ScenarioCardDefinition, ScenarioDefinition } from "../data/scenarios/scenarioTypes";
-import { getChaosTokenModifier } from "../lib/chaosToken";
+import {
+  create,
+} from "zustand";
+import {
+  investigators,
+} from "../data/investigators";
+
+import {
+  defaultScenarioId,
+  scenarios,
+} from "../data/scenarios";
+
+import type {
+  ScenarioCardDefinition,
+  ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
+
+import {
+  getChaosTokenModifier,
+} from "../lib/chaosToken";
 
 import {
   readyEnemies,
@@ -39,23 +53,36 @@ import {
   getPreferredEnemyTargetId,
   normalizeScenarioLocations,
 } from "../lib/gameStateHelpers";
+
 import {
   applyScenarioActAdvanceEffects,
   applyScenarioAgendaAdvanceEffects,
   type ScenarioEffectState,
 } from "../lib/scenarioEffects";
+
 import {
   buildScenarioCardState,
   getInitialActState,
   getInitialAgendaState,
 } from "../lib/scenarioCards";
-import { shuffle } from "../lib/shuffle";
+
+import {
+  shuffle
+} from "../lib/shuffle";
+
 import {
   countMatchingIcons,
   hasCommittedCardByName,
 } from "../lib/skillTestHelpers";
-import { getSkillModifiersFromPlayArea } from "../lib/skillModifiers";
-import { getDifficultyModifiersFromLocationAttachments } from "../lib/locationModifiers";
+
+import {
+  getSkillModifiersFromPlayArea,
+} from "../lib/skillModifiers";
+
+import {
+  getDifficultyModifiersFromLocationAttachments,
+} from "../lib/locationModifiers";
+
 import type {
   ActiveSkillTest,
   CardCounterType,
@@ -75,13 +102,24 @@ import type {
   SkillTestResult,
   SkillType,
   ParleyEffect,
-  //InteractiveActionDefinition,
   GameLogItem,
 } from "../types/game";
-import { ENCOUNTER_CARD_CODES } from "../types/game";
-import { encounterCards } from "../data/encounterCards";
-import { applyConditionalLocationVisibility } from "./locationVisibility";
-import { resolveLocationAbilityEffect } from "./locationAbilities";
+
+import {
+  ENCOUNTER_CARD_CODES,
+} from "../types/game";
+
+import {
+  encounterCards,
+} from "../data/encounterCards";
+
+import {
+  applyConditionalLocationVisibility,
+} from "./locationVisibility";
+
+import {
+  resolveLocationAbilityEffect,
+} from "./locationAbilities";
 
 import {
   canPlayInAvailableSlots,
@@ -89,21 +127,31 @@ import {
   getReplacementPlan,
 } from "../features/playerCards/slots";
 
-import { loadArkhamDeck } from "../lib/loadArkhamDeck";
-import { resolvePlayedEvent } from "../lib/playerCardEffects";
+import {
+  loadArkhamDeck,
+} from "../lib/loadArkhamDeck";
+
+import {
+  resolvePlayedEvent,
+} from "../lib/playerCardEffects";
+
 import {
   canActivatePlayAreaCardAbility,
   getActivatedCardAbilityEffect,
 } from "../lib/playerCardAbilities";
 
-import { resolveEncounterCardImmediate } from "../lib/encounterEffects";
+import {
+  resolveEncounterCardImmediate,
+} from "../lib/encounterEffects";
 
 import {
   resolveScenarioForCampaign,
   type CampaignState,
 } from "../lib/campaignSetup";
 
-import { buildEncounterDeckFromCodes } from "../lib/buildEncounterDeck";
+import {
+  buildEncounterDeckFromCodes,
+} from "../lib/buildEncounterDeck";
 
 type Screen = "home" | "game";
 
@@ -264,7 +312,6 @@ type GameStore = GameState & CampaignStoreActions & {
   fightAction: () => void;
   evadeAction: () => void;
   engageEnemiesAtLocation: () => void;
-  //readyAllEnemies: () => void;
   enemyPhaseAttack: () => void;
   beginSkillTest: (
     skill: SkillType,
