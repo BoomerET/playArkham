@@ -777,6 +777,8 @@ function advanceAgendaState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
@@ -805,6 +807,8 @@ function advanceAgendaState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
