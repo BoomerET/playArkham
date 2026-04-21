@@ -3379,6 +3379,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         campaignState: get().campaignState,
         campaignOutcomeToSet: null,
         locationAttachments: get().locationAttachments,
+        setAsideEncounterCards: get().setAsideEncounterCards,
       },
       true,
     );
@@ -3426,6 +3427,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         campaignState: get().campaignState,
         campaignOutcomeToSet: null,
         locationAttachments: get().locationAttachments,
+        setAsideEncounterCards: get().setAsideEncounterCards,
       },
       true,
     );
