@@ -8,6 +8,7 @@ import type {
   GameLogItem,
   PlayerCard,
   ScenarioCardState,
+  LocationAttachment,
 } from "../types/game";
 
 import { findCurrentLocation } from "./gameStateHelpers";
@@ -26,6 +27,7 @@ export type ScenarioEffectState = {
   selectedEnemyTargetId: string | null;
   grantedPlayerCards?: PlayerCard[];
   campaignOutcomeToSet?: string | null;
+  locationAttachments: LocationAttachment[];
 };
 
 type ScenarioEffectResult = ScenarioEffectState & {
