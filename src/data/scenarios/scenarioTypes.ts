@@ -77,7 +77,7 @@ export interface ScenarioDefinition {
   description: string;
   startingLocationId: string;
   locations: GameLocation[];
-  enemySpawns: EnemySpawn[];
+  enemySpawns?: EnemySpawn[];
   chaosBag?: ChaosToken[];
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
