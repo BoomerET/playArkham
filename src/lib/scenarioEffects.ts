@@ -29,13 +29,14 @@ export type ScenarioEffectState = {
   grantedPlayerCards?: PlayerCard[];
   campaignOutcomeToSet?: string | null;
   locationAttachments: LocationAttachment[];
-  setAsideEncounterCards?: EncounterCard[];
+  setAsideEncounterCards: EncounterCard[];
 };
 
 type ScenarioEffectResult = ScenarioEffectState & {
   advanceAgendaRequested?: boolean;
   advanceActRequested?: boolean;
-  setAsideEncounterCards?: EncounterCard[];
+  setAsideEncounterCards: EncounterCard[];
+  locationAttachments: LocationAttachment[];
 };
 
 function convertEncounterStoryCardToPlayerCard(
