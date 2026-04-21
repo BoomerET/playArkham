@@ -154,7 +154,7 @@ function applyCardAdvanceEffects(
 
       const investigatorLocation = findCurrentLocation(
         updatedLocations,
-        state.investigator.id,
+        state.investigatorId,
       );
 
       if (
@@ -162,7 +162,7 @@ function applyCardAdvanceEffects(
         investigatorLocation.id === spawnSetAsideEnemy.locationId &&
         !enemyHasAloof(spawnedEnemy)
       ) {
-        spawnedEnemy.engagedInvestigatorId = state.investigator.id;
+        spawnedEnemy.engagedInvestigatorId = state.investigatorId;
       }
 
       updatedEnemies = [...updatedEnemies, spawnedEnemy];
