@@ -21,6 +21,7 @@ import {
   emitThreatAreaEvent,
   enemyHasRetaliate,
   resolveEnemyAttacks,
+  resolveEnemyDefeatedTriggers,
 } from "./gsFunctions";
 
 import {
