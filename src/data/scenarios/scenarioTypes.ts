@@ -30,6 +30,16 @@ export interface ScenarioAdvanceEffects {
   resolutionSubtitle?: string;
   grantEncounterCardToInvestigator?: string;
   setPreviousScenarioOutcome?: string;
+
+  spawnSetAsideEnemy?: {
+    enemyCode: string;
+    locationId: string;
+  };
+
+  attachSetAsideCardToLocation?: {
+    cardCode: string;
+    locationId: string;
+  };
 }
 
 export interface ScenarioCardDefinition {

@@ -131,12 +131,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
     },
   ],
-  enemySpawns: [
-    {
-      locationId: "fake-miskatonic-quad",
-      enemyCode: "14004",
-    },
-  ],
+  //enemySpawns: [
+  //  {
+  //    locationId: "fake-miskatonic-quad",
+  //    enemyCode: "14004",
+  //  },
+  //],
   acts: [
     {
       id: "fake-spreading-flames-act-1a",
@@ -159,6 +159,10 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       code: "12109",
       onAdvance: {
         showLocationIds: ["dormitories", "miskatonic-quad"],
+        spawnSetAsideEnemy: {
+          enemyCode: "14004",
+          locationId: "miskatonic-quad",
+        },
       },
     },
     {
