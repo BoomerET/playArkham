@@ -3378,6 +3378,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
         campaignState: get().campaignState,
         campaignOutcomeToSet: null,
+        locationAttachments: get().locationAttachments,
       },
       true,
     );
@@ -3424,6 +3425,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         scenarioResolutionSubtitle: get().scenarioResolutionSubtitle,
         campaignState: get().campaignState,
         campaignOutcomeToSet: null,
+        locationAttachments: get().locationAttachments,
       },
       true,
     );
