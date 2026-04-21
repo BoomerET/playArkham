@@ -99,11 +99,13 @@ export type EncounterImmediateResolution =
   | {
     kind: "discardThreatAreaCard";
     cardCode: string;
+    logText: string;
   }
   | {
     kind: "discardLocationAttachment";
     cardCode: string;
     locationId?: string;
+    logText: string;
   }
   | {
     kind: "discardEnemy";
@@ -111,6 +113,7 @@ export type EncounterImmediateResolution =
     enemyId?: string;
     onlyIfEngaged?: boolean;
     locationId?: string;
+    logText: string;
   };
 
 export function resolveEncounterCardImmediate(args: {
