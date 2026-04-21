@@ -2,7 +2,6 @@
 import type {
     Enemy,
     EncounterCard,
-
 } from "../types/game";
 
 export function readyEnemies(enemies: Enemy[]): Enemy[] {

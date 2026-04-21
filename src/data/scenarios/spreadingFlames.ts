@@ -134,6 +134,15 @@ hooded figures patrolling the campus want?",
     },
   ],
   enemySpawns: [],
+  setAsideEncounterCardCodes: [
+    ENCOUNTER_CARD_CODES.FIRE,
+    ENCOUNTER_CARD_CODES.FIRE,
+    ENCOUNTER_CARD_CODES.FIRE,
+    ENCOUNTER_CARD_CODES.FIRE,
+    ENCOUNTER_CARD_CODES.FIRE,
+    ENCOUNTER_CARD_CODES.SERVANT_OF_FLAME,
+    ENCOUNTER_CARD_CODES.DR_HENRY_ARMITAGE,
+  ],
   acts: [
     {
       id: "spreading-flames-act-1a",
