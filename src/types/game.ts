@@ -190,7 +190,10 @@ export type LocationAbilityEffect =
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-  | { kind: "trigger"; key: string; value: boolean | string | number };
+  | { kind: "trigger"; key: string; value: boolean | string | number }
+  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
+  | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
+  | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };
 
 export type ParleyEffect =
   | { kind: "gainClues"; amount: number }
@@ -198,7 +201,10 @@ export type ParleyEffect =
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-  | { kind: "none" };
+  | { kind: "none" }
+  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
+  | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
+  | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };;
 
 export type InteractionSkillTestDefinition<TActionEffect> = {
   skill: SkillType;
@@ -254,7 +260,10 @@ export type CardAbilityEffect =
   | { kind: "takeHorror"; amount: number }
   | { kind: "takeDamage"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number };
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
+  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
+  | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
+  | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };;
 
 export type CardAbilitySkillTest = {
   skill: SkillType;

@@ -1071,3 +1071,132 @@ export function discardThreatAreaCardByCode(args: {
         discardedCard,
     };
 }
+
+function discardLocationAttachmentByCode(args: {
+    locationAttachments: LocationAttachment[];
+    cardCode: string;
+    encounterDiscard: EncounterCard[];
+    locationId?: string;
+}): {
+    locationAttachments: LocationAttachment[];
+    encounterDiscard: EncounterCard[];
+    discardedAttachment: LocationAttachment | null;
+} {
+    const { locationAttachments, cardCode, encounterDiscard, locationId } = args;
+
+    const index = locationAttachments.findIndex(
+        (attachment) =>
+            attachment.code === cardCode &&
+            (locationId == null || attachment.attachedLocationId === locationId),
+    );
+
+    if (index === -1) {
+        return {
+            locationAttachments,
+            encounterDiscard,
+            discardedAttachment: null,
+        };
+    }
+
+    const discardedAttachment = locationAttachments[index];
+
+    const discardedCard: EncounterCard = {
+        id: discardedAttachment.id,
+        code: discardedAttachment.code,
+        name: discardedAttachment.name,
+        type: "treachery",
+        text: discardedAttachment.text,
+        traits: discardedAttachment.traits,
+    };
+
+    return {
+        locationAttachments: [
+            ...locationAttachments.slice(0, index),
+            ...locationAttachments.slice(index + 1),
+        ],
+        encounterDiscard: [...encounterDiscard, discardedCard],
+        discardedAttachment,
+    };
+}
+
+export function discardEnemyFromPlay(args: {
+    enemies: Enemy[];
+    encounterDiscard: EncounterCard[];
+    investigatorId: string;
+    enemyCode?: string;
+    enemyId?: string;
+    onlyIfEngaged?: boolean;
+    locationId?: string;
+}): {
+    enemies: Enemy[];
+    encounterDiscard: EncounterCard[];
+    discardedEnemy: Enemy | null;
+} {
+    const {
+        enemies,
+        encounterDiscard,
+        investigatorId,
+        enemyCode,
+        enemyId,
+        onlyIfEngaged,
+        locationId,
+    } = args;
+
+    const index = enemies.findIndex((enemy) => {
+        if (enemyId && enemy.id !== enemyId) {
+            return false;
+        }
+
+        if (enemyCode && enemy.code !== enemyCode) {
+            return false;
+        }
+
+        if (onlyIfEngaged && enemy.engagedInvestigatorId !== investigatorId) {
+            return false;
+        }
+
+        if (locationId && enemy.locationId !== locationId) {
+            return false;
+        }
+
+        return true;
+    });
+
+    if (index === -1) {
+        return {
+            enemies,
+            encounterDiscard,
+            discardedEnemy: null,
+        };
+    }
+
+    const discardedEnemy = enemies[index];
+
+    const discardedCard: EncounterCard = {
+        id: discardedEnemy.id,
+        code: discardedEnemy.code,
+        name: discardedEnemy.name,
+        type: "enemy",
+        ability: discardedEnemy.ability,
+        abilities: discardedEnemy.abilities,
+        text: discardedEnemy.text,
+        damage: discardedEnemy.damage,
+        horror: discardedEnemy.horror,
+        fight: discardedEnemy.fight,
+        evade: discardedEnemy.evade,
+        health: discardedEnemy.health,
+        set: discardedEnemy.set,
+        traits: discardedEnemy.traits,
+        victoryPoints: discardedEnemy.victoryPoints,
+        parley: discardedEnemy.parley,
+    };
+
+    return {
+        enemies: [
+            ...enemies.slice(0, index),
+            ...enemies.slice(index + 1),
+        ],
+        encounterDiscard: [...encounterDiscard, discardedCard],
+        discardedEnemy,
+    };
+}
