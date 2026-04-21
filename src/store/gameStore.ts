@@ -586,6 +586,8 @@ type AdvanceStoreSlice = Pick<
   | "scenarioResolutionTitle"
   | "scenarioResolutionSubtitle"
   | "campaignState"
+  | "locationAttachments"
+  | "setAsideEncounterCards"
 >;
 
 type AdvanceState = ScenarioEffectState & {
@@ -742,6 +744,8 @@ function advanceAgendaState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
@@ -846,6 +850,8 @@ function advanceAgendaState(
     scenarioResolutionTitle: state.scenarioResolutionTitle,
     scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     campaignState: updatedCampaignState,
+    locationAttachments: effectResult.locationAttachments,
+    setAsideEncounterCards: effectResult.setAsideEncounterCards,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);
@@ -868,6 +874,8 @@ function advanceAgendaState(
         scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
         campaignState: result.campaignState,
         campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+        locationAttachments: result.locationAttachments,
+        setAsideEncounterCards: result.setAsideEncounterCards,
       },
       false,
     );
@@ -897,6 +905,8 @@ function advanceActState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
@@ -926,6 +936,8 @@ function advanceActState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
@@ -954,6 +966,8 @@ function advanceActState(
       scenarioResolutionTitle: state.scenarioResolutionTitle,
       scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
       campaignState: state.campaignState,
+      locationAttachments: state.locationAttachments,
+      setAsideEncounterCards: state.setAsideEncounterCards,
     };
   }
 
@@ -999,6 +1013,8 @@ function advanceActState(
     scenarioResolutionTitle: state.scenarioResolutionTitle,
     scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
     campaignState: updatedCampaignState,
+    locationAttachments: effectResult.locationAttachments,
+    setAsideEncounterCards: effectResult.setAsideEncounterCards,
   };
 
   result = applyAdvanceOutcome(nextDefinition, result);
@@ -1020,6 +1036,8 @@ function advanceActState(
         scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
         campaignState: result.campaignState,
         campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+        locationAttachments: result.locationAttachments,
+        setAsideEncounterCards: result.setAsideEncounterCards,
       },
       false,
     );
