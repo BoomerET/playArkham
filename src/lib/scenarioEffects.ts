@@ -11,7 +11,7 @@ import type {
 } from "../types/game";
 
 import { findCurrentLocation } from "./gameStateHelpers";
-import { buildEnemyFromEncounterCard, enemyHasAloof } from "../store/gameStore";
+import { buildEnemyFromEncounterCard, enemyHasAloof, buildLocationAttachmentFromEncounterCard } from "../store/gameStore";
 import { takeSetAsideEncounterCardByCode } from "../store/gsFunctions";
 
 export type ScenarioEffectState = {

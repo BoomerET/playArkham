@@ -464,7 +464,7 @@ function getNextScenarioCardDefinition(
   );
 }
 
-function buildLocationAttachmentFromEncounterCard(args: {
+export function buildLocationAttachmentFromEncounterCard(args: {
   card: EncounterCard;
   locationId: string;
 }): LocationAttachment {
