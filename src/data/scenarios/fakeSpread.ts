@@ -55,13 +55,9 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
 
-      revealed: true,
-      isVisible: true,
+      revealed: false,
+      isVisible: false,
       investigatorsHere: [],
-      revealCondition: {
-        key: "testFlag",
-        equals: true,
-      },
     },
     {
       id: "fake-miskatonic-quad",
@@ -83,8 +79,8 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       mapPosition: { x: 51, y: 16 },
 
-      revealed: true,
-      isVisible: true,
+      revealed: false,
+      isVisible: false,
       investigatorsHere: [],
     },
     {
@@ -106,8 +102,8 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
 
       investigatorsHere: [],
 
-      revealed: true,
-      isVisible: true,
+      revealed: false,
+      isVisible: false,
     },
     {
       id: "fake-orne-library",
@@ -126,8 +122,8 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       connections: ["fake-science-hall"],
       mapPosition: { x: 93, y: 16 },
 
-      revealed: true,
-      isVisible: true,
+      revealed: false,
+      isVisible: false,
       investigatorsHere: [],
     },
   ],
