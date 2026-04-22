@@ -23,7 +23,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                         <select
                             value={debugMode ? debugPreset : "none"}
                             onChange={(event) => {
-                                const value = event.target.value;
+                                const value = event.target.value as "none" | "threatAreaDiscard";
 
                                 if (value === "none") {
                                     setDebugMode(false);

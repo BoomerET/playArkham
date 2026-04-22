@@ -176,7 +176,9 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 export const useGameStore = create<GameStore>((set, get) => ({
   debugMode: false,
   debugPreset: "none",
-
+  setDebugMode: (enabled: boolean) => {
+    set({ debugMode: enabled });
+  },
   setDebugPreset: (preset) => {
     set({ debugPreset: preset });
   },
