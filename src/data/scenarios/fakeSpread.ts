@@ -52,16 +52,16 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       actions: [
         {
           label: "Clear Your Mind",
+          trigger: "action",
           text: "Action: Discard Dave's Test Treachery from your threat area.",
           effect: {
             kind: "discardThreatAreaCard",
             cardCode: ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
           },
-          trigger: "action",
         }
       ],
 
-      text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
+      text: ["You're in the dorms",],
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },

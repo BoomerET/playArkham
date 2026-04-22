@@ -936,6 +936,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         createLogEntry("scenario", ability.text),
         ...resolution.logEntries,
       ],
+      threatArea: resolution.threatArea,
+      encounterDiscard: resolution.encounterDiscard,
     }));
 
     const updatedState = get();
