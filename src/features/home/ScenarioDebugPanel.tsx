@@ -14,7 +14,17 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
     return (
         <section className="panel scenario-debug-panel">
             <div className="scenario-debug-panel__header">
-                <p className="eyebrow">Debug</p>
+                <p className="eyebrow">
+                    Debug
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={debugMode}
+                            onChange={(event) => setDebugMode(event.target.checked)}
+                        />
+                        Debug Mode
+                    </label>
+                </p>
                 <h2 className="section-title">Scenario Setup</h2>
             </div>
 
@@ -72,14 +82,6 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                     </ul>
                 )}
             </div>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={debugMode}
-                    onChange={(event) => setDebugMode(event.target.checked)}
-                />
-                Debug Mode
-            </label>
         </section>
     );
 }
