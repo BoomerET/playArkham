@@ -20,32 +20,32 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
         <section className="panel scenario-debug-panel">
             <div className="scenario-debug-panel__header">
                 <p className="eyebrow">
-                    Debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <div className="scenario-debug-toolbar">
-                        <label className="scenario-debug-control">
-                            <span className="scenario-debug-control-label">Debug Preset</span>
-                            <select
-                                className="scenario-debug-select"
-                                value={debugMode ? debugPreset : "none"}
-                                onChange={(event) => {
-                                    const value = event.target.value as DebugPreset;
-
-                                    if (value === "none") {
-                                        setDebugMode(false);
-                                        setDebugPreset("none");
-                                    } else {
-                                        setDebugMode(true);
-                                        setDebugPreset(value);
-                                    }
-                                }}
-                            >
-                                <option value="none">None</option>
-                                <option value="threatAreaDiscard">Threat Area Discard</option>
-                                <option value="enemyFollowAndFight">Enemy Follow and Fight</option>
-                            </select>
-                        </label>
-                    </div>
+                    Debug
                 </p>
+                <div className="scenario-debug-toolbar">
+                    <label className="scenario-debug-control">
+                        <span className="scenario-debug-control-label">Debug Preset</span>
+                        <select
+                            className="scenario-debug-select"
+                            value={debugMode ? debugPreset : "none"}
+                            onChange={(event) => {
+                                const value = event.target.value as DebugPreset;
+
+                                if (value === "none") {
+                                    setDebugMode(false);
+                                    setDebugPreset("none");
+                                } else {
+                                    setDebugMode(true);
+                                    setDebugPreset(value);
+                                }
+                            }}
+                        >
+                            <option value="none">None</option>
+                            <option value="threatAreaDiscard">Threat Area Discard</option>
+                            <option value="enemyFollowAndFight">Enemy Follow and Fight</option>
+                        </select>
+                    </label>
+                </div>
                 <h2 className="section-title">Scenario Setup</h2>
             </div>
 
