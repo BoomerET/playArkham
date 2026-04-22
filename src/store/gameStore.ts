@@ -4117,7 +4117,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedCampaignState = campaignState;
     let updatedEncounterDiscard = encounterDiscard;
     let updatedVictoryDisplay = victoryDisplay;
-    let updatedThreatArea = threatArea;
+    const updatedThreatArea = threatArea;
 
     let cardsToDrawOnSuccess = 0;
     let bonusCluesOnSuccess = 0;
