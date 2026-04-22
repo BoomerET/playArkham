@@ -60,18 +60,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
           },
         }
       ],
-      abilities: [
-        {
-          label: "Clear Your Mind",
-          trigger: "action",
-          text: "Action: Discard Dave's Test Treachery from your threat area.",
-          effect: {
-            kind: "discardThreatAreaCard",
-            cardCode: ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
-          },
-        }
-      ],
-
       text: ["You're in the dorms",],
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
