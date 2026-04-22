@@ -13,8 +13,8 @@ import type {
 } from "../types/game";
 
 import { findCurrentLocation } from "./gameStateHelpers";
-import { buildEnemyFromEncounterCard, buildLocationAttachmentFromEncounterCard } from "../store/gameStore";
-import { takeSetAsideEncounterCardByCode, enemyHasAloof } from "../store/gsFunctions";
+import { buildLocationAttachmentFromEncounterCard } from "../store/gameStore";
+import { takeSetAsideEncounterCardByCode, enemyHasAloof, buildEnemyFromEncounterCard } from "../store/gsFunctions";
 
 export type ScenarioEffectState = {
   agenda: ScenarioCardState | null;
