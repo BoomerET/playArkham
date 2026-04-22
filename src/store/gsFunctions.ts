@@ -1831,3 +1831,44 @@ export function spawnEnemyAtLocation(args: {
 export function getEncounterCardByCode(code: string): EncounterCard | null {
     return encounterCards.find((card) => card.code === code) ?? null;
 }
+
+export function attachEncounterCardToLocation(args: {
+    cardCode: string;
+    locationId: string;
+    locationAttachments: LocationAttachment[];
+}): LocationAttachment[] {
+    const { cardCode, locationId, locationAttachments } = args;
+
+    const card = getEncounterCardByCode(cardCode);
+
+    if (!card) {
+        console.warn("Encounter card not found for location attachment:", cardCode);
+        return locationAttachments;
+    }
+
+    const attachment = buildLocationAttachmentFromEncounterCard({
+        card,
+        locationId,
+    });
+
+    return [...locationAttachments, attachment];
+}
+
+export function buildLocationAttachmentFromEncounterCard(args: {
+    card: EncounterCard;
+    locationId: string;
+}): LocationAttachment {
+    const { card, locationId } = args;
+
+    return {
+        id: `${card.code}-${locationId}-${Date.now()}-${Math.random()
+            .toString(36)
+            .slice(2, 8)}`,
+        cardCode: card.code,
+        code: card.code,
+        name: card.name,
+        attachedLocationId: locationId,
+        text: card.text,
+        traits: card.traits,
+    };
+}
