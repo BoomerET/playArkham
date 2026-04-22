@@ -184,6 +184,8 @@ export function emitEnemyEvent(args: {
         locations,
         enemies,
         campaignState,
+        threatArea: [],
+        encounterDiscard: [],
     });
 }
 
@@ -329,6 +331,8 @@ export function emitScenarioEvent(args: {
             locations: updatedLocations,
             enemies: updatedEnemies,
             campaignState: updatedCampaignState,
+            threatArea: [],
+            encounterDiscard: [],
         });
 
         updatedInvestigator = resolution.investigator;
