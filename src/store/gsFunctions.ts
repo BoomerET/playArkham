@@ -16,6 +16,7 @@ import type {
     SkillType,
     LocationAttachment,
     ScenarioStatus,
+    PlayerCard,
 } from "../types/game";
 
 import type {
@@ -383,14 +384,7 @@ export function resolveAttackOfOpportunity(args: {
     };
 }
 
-export function createLogEntry(kind: GameLogKind, text: string) {
-    return {
-        id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        kind,
-        text,
-        createdAt: Date.now(),
-    } as const;
-}
+
 
 export function resolveEnemyDefeatedTriggers(args: {
     enemyCode: string;
@@ -1924,4 +1918,29 @@ export function resolveInteractiveEffect(args: {
         enemies,
         campaignState,
     });
+}
+
+export function isOpeningHandWeakness(card: PlayerCard): boolean {
+    return card.isWeakness === true;
+}
+
+export function createLogEntry(kind: GameLogKind, text: string) {
+    return {
+        id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        kind,
+        text,
+        createdAt: Date.now(),
+    } as const;
+}
+
+export function hasLocationAttachment(
+    attachments: { attachedLocationId: string; name: string }[],
+    locationId: string,
+    name: string,
+): boolean {
+    return attachments.some(
+        (attachment) =>
+            attachment.attachedLocationId === locationId &&
+            attachment.name === name,
+    );
 }

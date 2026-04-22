@@ -51,6 +51,9 @@ import {
   spawnEnemyAtLocation,
   attachEncounterCardToLocation,
   resolveInteractiveEffect,
+  createLogEntry,
+  isOpeningHandWeakness,
+  hasLocationAttachment,
 } from "./gsFunctions";
 
 import {
@@ -94,7 +97,6 @@ import type {
   CommittedSkillCard,
   EncounterCard,
   Enemy,
-  GameLogKind,
   GameState,
   LocationAttachment,
   PlayerCard,
@@ -233,30 +235,7 @@ function normalizeCardCounters(
   return normalized;
 }
 
-function isOpeningHandWeakness(card: PlayerCard): boolean {
-  return card.isWeakness === true;
-}
 
-export function createLogEntry(kind: GameLogKind, text: string) {
-  return {
-    id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    kind,
-    text,
-    createdAt: Date.now(),
-  } as const;
-}
-
-function hasLocationAttachment(
-  attachments: { attachedLocationId: string; name: string }[],
-  locationId: string,
-  name: string,
-): boolean {
-  return attachments.some(
-    (attachment) =>
-      attachment.attachedLocationId === locationId &&
-      attachment.name === name,
-  );
-}
 
 
 
