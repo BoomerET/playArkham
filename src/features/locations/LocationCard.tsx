@@ -358,11 +358,12 @@ export default function LocationCard({ location }: Props) {
       </div>
 
       {isHere && (
-        <div className="button-row">
+        <div className="location-card-actions">
           {location.abilities?.map((ability, index) => (
             <button
               key={`${location.id}-ability-${index}`}
               type="button"
+              className="location-card-action-button"
               onClick={() => locationAbility(index)}
             >
               {ability.label ?? `Ability ${index + 1}`}
@@ -373,6 +374,7 @@ export default function LocationCard({ location }: Props) {
             <button
               key={`${location.id}-action-${index}`}
               type="button"
+              className="location-card-action-button"
               onClick={() => locationAction(index)}
             >
               {action.label ?? `Action ${index + 1}`}
