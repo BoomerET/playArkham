@@ -357,6 +357,30 @@ export default function LocationCard({ location }: Props) {
         )}
       </div>
 
+      {isHere && (
+        <div className="button-row">
+          {location.abilities?.map((ability, index) => (
+            <button
+              key={`${location.id}-ability-${index}`}
+              type="button"
+              onClick={() => locationAbility(index)}
+            >
+              {ability.label ?? `Ability ${index + 1}`}
+            </button>
+          ))}
+
+          {location.actions?.map((action, index) => (
+            <button
+              key={`${location.id}-action-${index}`}
+              type="button"
+              onClick={() => locationAction(index)}
+            >
+              {action.label ?? `Action ${index + 1}`}
+            </button>
+          ))}
+        </div>
+      )}
+
       {previewLocation &&
         createPortal(
           <div className="card-preview-overlay" aria-hidden="true">
