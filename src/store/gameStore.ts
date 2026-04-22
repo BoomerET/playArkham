@@ -2461,19 +2461,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
 
-      //locations: applyConditionalLocationVisibility({
-      //  locations: normalizeScenarioLocations(
-      //    selectedScenario.locations,
-      //    chosenInvestigator.id,
-      //    selectedScenario.startingLocationId,
-      //  ),
-      //  campaignState: get().campaignState,
-      //}),
-      //threatArea: [],
+      locations: applyConditionalLocationVisibility({
+        locations: normalizeScenarioLocations(
+          selectedScenario.locations,
+          chosenInvestigator.id,
+          selectedScenario.startingLocationId,
+        ),
+        campaignState: get().campaignState,
+      }),
+      threatArea: [],
 
       /* DEBUG */
-      threatArea: debugThreatArea,
-      locations: debugLocations,
+      //threatArea: debugThreatArea,
+      //locations: debugLocations,
       /* END DEBUG */
 
       agenda: getInitialAgendaState(selectedScenario),
