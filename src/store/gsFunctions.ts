@@ -520,6 +520,8 @@ export function emitLocationEvent(args: {
         locations,
         enemies,
         campaignState,
+        threatArea: [],
+        encounterDiscard: [],
     });
 }
 
@@ -574,6 +576,8 @@ export function emitThreatAreaEvent(args: {
             locations: updatedLocations,
             enemies: updatedEnemies,
             campaignState: updatedCampaignState,
+            threatArea: [],
+            encounterDiscard: [],
         });
 
         updatedInvestigator = resolution.investigator;
@@ -601,11 +605,15 @@ export function executeForcedCardAbilities(args: {
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
 }): {
     investigator: Investigator;
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
     logEntries: ReturnType<typeof createLogEntry>[];
 } {
     const {
@@ -617,6 +625,8 @@ export function executeForcedCardAbilities(args: {
         locations,
         enemies,
         campaignState,
+        threatArea,
+        encounterDiscard,
     } = args;
 
     const abilities = getMatchingForcedAbilities({
@@ -647,6 +657,8 @@ export function executeForcedCardAbilities(args: {
             locations: updatedLocations,
             enemies: updatedEnemies,
             campaignState: updatedCampaignState,
+            threatArea,
+            encounterDiscard,
         });
 
         updatedInvestigator = resolution.investigator;
@@ -662,6 +674,8 @@ export function executeForcedCardAbilities(args: {
         enemies: updatedEnemies,
         campaignState: updatedCampaignState,
         logEntries,
+        threatArea,
+        encounterDiscard,
     };
 }
 
@@ -765,6 +779,8 @@ export function resolveImmediateAbilityEffect(args: {
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
 }): {
     investigator: Investigator;
     locations: GameState["locations"];
@@ -779,6 +795,8 @@ export function resolveImmediateAbilityEffect(args: {
         locations: args.locations,
         enemies: args.enemies,
         campaignState: args.campaignState,
+        threatArea: args.threatArea,
+        encounterDiscard: args.encounterDiscard,
     });
 }
 
