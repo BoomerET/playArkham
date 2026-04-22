@@ -15,6 +15,7 @@ import type {
     InteractiveActionDefinition,
     SkillType,
     LocationAttachment,
+    ScenarioStatus,
 } from "../types/game";
 
 import type {
@@ -1727,4 +1728,35 @@ export function getScenarioSequenceNumber(sequence: string): string {
 
 export function getScenarioSequenceSide(sequence: string): string {
     return sequence.slice(-1).toLowerCase();
+}
+
+export function savePersistedCampaignSetup(setup: PersistedCampaignSetup): void {
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    try {
+        window.localStorage.setItem(
+            CAMPAIGN_SETUP_STORAGE_KEY,
+            JSON.stringify(setup),
+        );
+    } catch (error) {
+        console.warn("Failed to save persisted campaign setup.", error);
+    }
+}
+
+export function isScenarioResolved(status: ScenarioStatus): boolean {
+    return status !== "inProgress";
+}
+
+export function getScenarioResolvedMessage(status: ScenarioStatus): string {
+    if (status === "won") {
+        return "The scenario is already complete. Return to home to start again.";
+    }
+
+    if (status === "resigned") {
+        return "You already resigned from the scenario. Return to home to start again.";
+    }
+
+    return "The scenario is over. Return to home to try again.";
 }

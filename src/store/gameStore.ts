@@ -44,11 +44,10 @@ import {
   loadPersistedCampaignSetup,
   advanceAgendaState,
   advanceActState,
+  isScenarioResolved,
+  getScenarioResolvedMessage,
+  savePersistedCampaignSetup,
 } from "./gsFunctions";
-
-import type {
-  PersistedCampaignSetup,
-} from "./gsTypes";
 
 import {
   canSpendInvestigationAction,
@@ -97,7 +96,6 @@ import type {
   LocationAbilityEffect,
   LocationAttachment,
   PlayerCard,
-  ScenarioStatus,
   SkillTestResult,
   ParleyEffect,
   GameLogItem,
@@ -154,8 +152,6 @@ import {
 import {
   buildEncounterDeckFromCodes,
 } from "../lib/buildEncounterDeck";
-
-const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";
 
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
@@ -427,42 +423,6 @@ export function buildEnemyFromEncounterCard(args: {
     parley: card.parley,
   };
 }
-
-
-function savePersistedCampaignSetup(setup: PersistedCampaignSetup): void {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  try {
-    window.localStorage.setItem(
-      CAMPAIGN_SETUP_STORAGE_KEY,
-      JSON.stringify(setup),
-    );
-  } catch (error) {
-    console.warn("Failed to save persisted campaign setup.", error);
-  }
-}
-
-function isScenarioResolved(status: ScenarioStatus): boolean {
-  return status !== "inProgress";
-}
-
-function getScenarioResolvedMessage(status: ScenarioStatus): string {
-  if (status === "won") {
-    return "The scenario is already complete. Return to home to start again.";
-  }
-
-  if (status === "resigned") {
-    return "You already resigned from the scenario. Return to home to start again.";
-  }
-
-  return "The scenario is over. Return to home to try again.";
-}
-
-
-
-
 
 //function getSetAsideEncounterCardByCode(args: {
 //  setAsideEncounterCards: EncounterCard[];
