@@ -1,0 +1,1 @@
+export const CAMPAIGN_SETUP_STORAGE_KEY = "playArkham.campaignSetup";

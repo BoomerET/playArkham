@@ -17,6 +17,16 @@ import type {
     LocationAttachment,
 } from "../types/game";
 
+import type {
+    AdvanceStoreSlice,
+    PersistedCampaignSetup,
+    AdvanceState,
+} from "./gsTypes";
+
+import {
+    CAMPAIGN_SETUP_STORAGE_KEY,
+} from "./gsConst";
+
 import {
     findCurrentLocation,
 } from "../lib/gameStateHelpers";
@@ -32,6 +42,24 @@ import {
 import {
     applyConditionalLocationVisibility,
 } from "./locationVisibility";
+
+import type {
+    ScenarioCardDefinition,
+    ScenarioDefinition,
+} from "../data/scenarios/scenarioTypes";
+
+import {
+    buildScenarioCardState,
+} from "../lib/scenarioCards";
+
+import {
+    applyScenarioAgendaAdvanceEffects,
+    applyScenarioActAdvanceEffects,
+} from "../lib/scenarioEffects";
+
+import {
+    defaultScenarioId,
+} from "../data/scenarios";
 
 export function readyEnemies(enemies: Enemy[]): Enemy[] {
     return enemies.map((enemy) =>
@@ -1205,4 +1233,498 @@ export function discardEnemyFromPlay(args: {
         encounterDiscard: [...encounterDiscard, discardedCard],
         discardedEnemy,
     };
+}
+
+export function getNextLocationTowardTarget(
+    locations: GameState["locations"],
+    startLocationId: string,
+    targetLocationId: string,
+): string | null {
+    if (startLocationId === targetLocationId) {
+        return targetLocationId;
+    }
+
+    const visited = new Set<string>([startLocationId]);
+    const queue: Array<{ locationId: string; firstStep: string | null }> = [
+        { locationId: startLocationId, firstStep: null },
+    ];
+
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (!current) {
+            continue;
+        }
+
+        const location = locations.find((entry) => entry.id === current.locationId);
+        if (!location) {
+            continue;
+        }
+
+        for (const connectedId of location.connections) {
+            if (visited.has(connectedId)) {
+                continue;
+            }
+
+            const firstStep = current.firstStep ?? connectedId;
+
+            if (connectedId === targetLocationId) {
+                return firstStep;
+            }
+
+            visited.add(connectedId);
+            queue.push({
+                locationId: connectedId,
+                firstStep,
+            });
+        }
+    }
+
+    return null;
+}
+
+export function advanceActState(
+    scenario: ScenarioDefinition,
+    state: AdvanceState,
+    allowChain = true,
+): AdvanceStoreSlice {
+    const currentAct = state.act;
+
+    if (!currentAct) {
+        return {
+            agenda: state.agenda,
+            act: null,
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: state.log,
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const acts = scenario.acts ?? [];
+    const currentIndex = acts.findIndex((entry) => entry.id === currentAct.id);
+
+    if (currentIndex === -1) {
+        return {
+            agenda: state.agenda,
+            act: {
+                ...currentAct,
+                progress: currentAct.threshold,
+            },
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Act ${currentAct.sequence} is ready to advance.`,
+                ),
+            ],
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const nextDefinition = acts[currentIndex + 1];
+
+    if (!nextDefinition) {
+        return {
+            agenda: state.agenda,
+            act: {
+                ...currentAct,
+                progress: currentAct.threshold,
+            },
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Act ${currentAct.sequence} has no further side to advance to.`,
+                ),
+            ],
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const nextAct = buildScenarioCardState(nextDefinition);
+
+    const effectResult = applyScenarioActAdvanceEffects(
+        scenario,
+        nextDefinition.id,
+        {
+            ...state,
+            act: nextAct,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Act advanced from ${currentAct.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+                ),
+            ],
+        },
+    );
+
+    const updatedCampaignState =
+        effectResult.campaignOutcomeToSet != null
+            ? {
+                ...state.campaignState,
+                previousScenarioOutcome: effectResult.campaignOutcomeToSet,
+            }
+            : state.campaignState;
+
+    let result: AdvanceStoreSlice = {
+        agenda: effectResult.agenda,
+        act: effectResult.act,
+        locations: effectResult.locations,
+        enemies: effectResult.enemies,
+        playArea: [
+            ...state.playArea,
+            ...(effectResult.grantedPlayerCards ?? []),
+        ],
+        log: effectResult.log,
+        selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+        scenarioStatus: state.scenarioStatus,
+        scenarioResolutionText: state.scenarioResolutionText,
+        scenarioResolutionTitle: state.scenarioResolutionTitle,
+        scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+        campaignState: updatedCampaignState,
+        locationAttachments: effectResult.locationAttachments,
+        setAsideEncounterCards: effectResult.setAsideEncounterCards,
+    };
+
+    result = applyAdvanceOutcome(nextDefinition, result);
+
+    if (allowChain && effectResult.advanceAgendaRequested) {
+        result = advanceAgendaState(
+            scenario,
+            {
+                ...effectResult,
+                agenda: result.agenda,
+                act: result.act,
+                locations: result.locations,
+                enemies: result.enemies,
+                log: result.log,
+                selectedEnemyTargetId: result.selectedEnemyTargetId,
+                scenarioStatus: result.scenarioStatus,
+                scenarioResolutionText: result.scenarioResolutionText,
+                scenarioResolutionTitle: result.scenarioResolutionTitle,
+                scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
+                campaignState: result.campaignState,
+                campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+                locationAttachments: result.locationAttachments,
+                setAsideEncounterCards: result.setAsideEncounterCards,
+            },
+            false,
+        );
+    }
+
+    return result;
+}
+
+export function applyAdvanceOutcome(
+    card: ScenarioCardDefinition,
+    result: AdvanceStoreSlice,
+): AdvanceStoreSlice {
+    const effects = card.onAdvance;
+
+    if (!effects) {
+        return result;
+    }
+
+    let scenarioStatus = result.scenarioStatus;
+    let scenarioResolutionText = result.scenarioResolutionText;
+    let scenarioResolutionTitle = result.scenarioResolutionTitle;
+    let scenarioResolutionSubtitle = result.scenarioResolutionSubtitle;
+
+    if (effects.resolutionTitle) {
+        scenarioResolutionTitle = effects.resolutionTitle;
+    }
+
+    if (effects.resolutionSubtitle) {
+        scenarioResolutionSubtitle = effects.resolutionSubtitle;
+    }
+
+    let log = result.log;
+
+    if (effects.winScenario) {
+        scenarioStatus = "won";
+    } else if (effects.loseScenario) {
+        scenarioStatus = "lost";
+    }
+
+    if (effects.resolutionText) {
+        scenarioResolutionText = effects.resolutionText;
+        log = [...log, createLogEntry("scenario", effects.resolutionText)];
+    }
+
+    return {
+        ...result,
+        scenarioStatus,
+        scenarioResolutionText,
+        scenarioResolutionTitle,
+        scenarioResolutionSubtitle,
+        log,
+    };
+}
+
+export function advanceAgendaState(
+    scenario: ScenarioDefinition,
+    state: AdvanceState,
+    allowChain = true,
+): AdvanceStoreSlice {
+    const currentAgenda = state.agenda;
+
+    if (!currentAgenda) {
+        return {
+            agenda: null,
+            act: state.act,
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: state.log,
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const agendas = scenario.agendas ?? [];
+    const currentIndex = agendas.findIndex(
+        (entry) => entry.id === currentAgenda.id,
+    );
+
+    if (currentIndex === -1) {
+        return {
+            agenda: {
+                ...currentAgenda,
+                progress: currentAgenda.threshold,
+            },
+            act: state.act,
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Agenda ${currentAgenda.sequence} is ready to advance.`,
+                ),
+            ],
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const nextDefinition = getNextScenarioCardDefinition(agendas, currentAgenda);
+
+    if (!nextDefinition) {
+        return {
+            agenda: {
+                ...currentAgenda,
+                progress: currentAgenda.threshold,
+            },
+            act: state.act,
+            locations: state.locations,
+            enemies: state.enemies,
+            playArea: state.playArea,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Agenda ${currentAgenda.sequence} has no further side to advance to.`
+                ),
+            ],
+            selectedEnemyTargetId: state.selectedEnemyTargetId,
+            scenarioStatus: state.scenarioStatus,
+            scenarioResolutionText: state.scenarioResolutionText,
+            scenarioResolutionTitle: state.scenarioResolutionTitle,
+            scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+            campaignState: state.campaignState,
+            locationAttachments: state.locationAttachments,
+            setAsideEncounterCards: state.setAsideEncounterCards,
+        };
+    }
+
+    const nextAgenda = buildScenarioCardState(nextDefinition);
+
+    const effectResult = applyScenarioAgendaAdvanceEffects(
+        scenario,
+        nextDefinition.id,
+        {
+            ...state,
+            agenda: nextAgenda,
+            log: [
+                ...state.log,
+                createLogEntry(
+                    "scenario",
+                    `Agenda advanced from ${currentAgenda.sequence} to ${nextDefinition.sequence}: ${nextDefinition.title}.`,
+                ),
+            ],
+        },
+    );
+
+    const updatedCampaignState =
+        effectResult.campaignOutcomeToSet != null
+            ? {
+                ...state.campaignState,
+                previousScenarioOutcome: effectResult.campaignOutcomeToSet,
+            }
+            : state.campaignState;
+
+    let result: AdvanceStoreSlice = {
+        agenda: effectResult.agenda,
+        act: effectResult.act,
+        locations: effectResult.locations,
+        enemies: effectResult.enemies,
+        playArea: [
+            ...state.playArea,
+            ...(effectResult.grantedPlayerCards ?? []),
+        ],
+        log: effectResult.log,
+        selectedEnemyTargetId: effectResult.selectedEnemyTargetId,
+        scenarioStatus: state.scenarioStatus,
+        scenarioResolutionText: state.scenarioResolutionText,
+        scenarioResolutionTitle: state.scenarioResolutionTitle,
+        scenarioResolutionSubtitle: state.scenarioResolutionSubtitle,
+        campaignState: updatedCampaignState,
+        locationAttachments: effectResult.locationAttachments,
+        setAsideEncounterCards: effectResult.setAsideEncounterCards,
+    };
+
+    result = applyAdvanceOutcome(nextDefinition, result);
+
+    if (allowChain && effectResult.advanceActRequested) {
+        result = advanceActState(
+            scenario,
+            {
+                ...effectResult,
+                agenda: result.agenda,
+                act: result.act,
+                locations: result.locations,
+                enemies: result.enemies,
+                playArea: state.playArea,
+                log: result.log,
+                selectedEnemyTargetId: result.selectedEnemyTargetId,
+                scenarioStatus: result.scenarioStatus,
+                scenarioResolutionText: result.scenarioResolutionText,
+                scenarioResolutionTitle: result.scenarioResolutionTitle,
+                scenarioResolutionSubtitle: result.scenarioResolutionSubtitle,
+                campaignState: result.campaignState,
+                campaignOutcomeToSet: effectResult.campaignOutcomeToSet ?? null,
+                locationAttachments: result.locationAttachments,
+                setAsideEncounterCards: result.setAsideEncounterCards,
+            },
+            false,
+        );
+    }
+
+    return result;
+}
+
+export function loadPersistedCampaignSetup(): PersistedCampaignSetup | null {
+    if (typeof window === "undefined") {
+        return null;
+    }
+
+    try {
+        const raw = window.localStorage.getItem(CAMPAIGN_SETUP_STORAGE_KEY);
+
+        if (!raw) {
+            return null;
+        }
+
+        const parsed = JSON.parse(raw) as Partial<PersistedCampaignSetup>;
+
+        return {
+            selectedDeckId:
+                typeof parsed.selectedDeckId === "string" ? parsed.selectedDeckId : "",
+            selectedScenarioId:
+                typeof parsed.selectedScenarioId === "string"
+                    ? parsed.selectedScenarioId
+                    : defaultScenarioId,
+            campaignState: {
+                scenarioFlags: {},
+                previousScenarioOutcome:
+                    typeof parsed.campaignState?.previousScenarioOutcome === "string"
+                        ? parsed.campaignState.previousScenarioOutcome
+                        : null,
+                randomizedSelectionsByCampaignKey:
+                    parsed.campaignState?.randomizedSelectionsByCampaignKey &&
+                        typeof parsed.campaignState.randomizedSelectionsByCampaignKey ===
+                        "object"
+                        ? parsed.campaignState.randomizedSelectionsByCampaignKey
+                        : {},
+            },
+        };
+    } catch (error) {
+        console.warn("Failed to load persisted campaign setup.", error);
+        return null;
+    }
+}
+
+
+export function getNextScenarioCardDefinition(
+    cards: ScenarioCardDefinition[],
+    currentCard: ScenarioCardState,
+): ScenarioCardDefinition | undefined {
+    const currentNumber = getScenarioSequenceNumber(currentCard.sequence);
+    const currentSide = getScenarioSequenceSide(currentCard.sequence);
+
+    if (currentSide === "a") {
+        return cards.find(
+            (entry) =>
+                getScenarioSequenceNumber(entry.sequence) === currentNumber &&
+                getScenarioSequenceSide(entry.sequence) === "b",
+        );
+    }
+
+    const nextNumber = String(Number(currentNumber) + 1);
+
+    return cards.find(
+        (entry) =>
+            getScenarioSequenceNumber(entry.sequence) === nextNumber &&
+            getScenarioSequenceSide(entry.sequence) === "a",
+    );
+}
+
+export function getScenarioSequenceNumber(sequence: string): string {
+    return sequence.slice(0, -1);
+}
+
+export function getScenarioSequenceSide(sequence: string): string {
+    return sequence.slice(-1).toLowerCase();
 }

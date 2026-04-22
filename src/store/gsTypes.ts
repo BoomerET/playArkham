@@ -13,6 +13,7 @@ import type {
     Enemy,
     ParleyEffect,
     LocationAbilityEffect,
+    ScenarioStatus,
 } from "../types/game";
 
 import type {
@@ -22,6 +23,10 @@ import type {
 import {
     type CampaignState,
 } from "../lib/campaignSetup";
+
+import {
+    type ScenarioEffectState,
+} from "../lib/scenarioEffects";
 
 type Screen = "home" | "game";
 
@@ -140,13 +145,13 @@ export type GameStore = GameState & CampaignStoreActions & {
     locationAction: (actionIndex: number) => void;
 };
 
-type PendingEncounterResolution = {
+export type PendingEncounterResolution = {
     cardName: string;
     onPass?: EncounterSkillTestOutcome;
     onFail?: EncounterSkillTestOutcome;
 } | null;
 
-type PendingChoice = {
+export type PendingChoice = {
     sourceCard: EncounterCard;
     options: {
         id: string;
@@ -155,20 +160,19 @@ type PendingChoice = {
     }[];
 } | null;
 
-
-type EncounterSkillTestOutcome =
+export type EncounterSkillTestOutcome =
     | { kind: "none" }
     | { kind: "damage"; amount: number }
     | { kind: "horror"; amount: number }
     | { kind: "damageByFailure" }
     | { kind: "horrorByFailure" };
 
-type ChoiceEffect =
+export type ChoiceEffect =
     | { kind: "doomOnAgenda"; amount: number }
     | { kind: "spawnEnemy"; enemy: Enemy }
     | { kind: "surge" };
 
-type CampaignStoreActions = {
+export type CampaignStoreActions = {
     setPreviousScenarioOutcome: (outcome: string | null) => void;
     setCampaignRandomizedSelection: (
         campaignKey: string,
@@ -177,13 +181,13 @@ type CampaignStoreActions = {
     ) => void;
 };
 
-type PendingTestResolution =
+export type PendingTestResolution =
     | { kind: "investigate"; locationId: string }
     | { kind: "fight"; enemyCode: string }
     | { kind: "evade"; enemyCode: string }
     | null;
 
-type PendingAssetPlay = {
+export type PendingAssetPlay = {
     cardCode: string;
     replacedSlot: string;
     replacementChoices: PlayerCard[];
@@ -191,7 +195,7 @@ type PendingAssetPlay = {
     requiredHandSlotsToFree?: number;
 } | null;
 
-type PendingInteractiveResolution =
+export type PendingInteractiveResolution =
     | {
         sourceName: string;
         sourceKind: "parley" | "locationAction";
@@ -200,3 +204,36 @@ type PendingInteractiveResolution =
         onFail?: ParleyEffect | LocationAbilityEffect;
     }
     | null;
+
+export type AdvanceState = ScenarioEffectState & {
+    scenarioStatus: ScenarioStatus;
+    scenarioResolutionText: string | null;
+    scenarioResolutionTitle: string | null;
+    scenarioResolutionSubtitle: string | null;
+    campaignState: CampaignState;
+    campaignOutcomeToSet?: string | null;
+};
+
+export type AdvanceStoreSlice = Pick<
+    GameStore,
+    | "agenda"
+    | "act"
+    | "locations"
+    | "enemies"
+    | "log"
+    | "playArea"
+    | "selectedEnemyTargetId"
+    | "scenarioStatus"
+    | "scenarioResolutionText"
+    | "scenarioResolutionTitle"
+    | "scenarioResolutionSubtitle"
+    | "campaignState"
+    | "locationAttachments"
+    | "setAsideEncounterCards"
+>;
+
+export type PersistedCampaignSetup = {
+    selectedDeckId: string;
+    selectedScenarioId: string;
+    campaignState: CampaignState;
+};
