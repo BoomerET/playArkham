@@ -11,6 +11,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
     const debugMode = useGameStore((state) => state.debugMode);
     const debugPreset = useGameStore((state) => state.debugPreset);
     const setDebugMode = useGameStore((state) => state.setDebugMode);
+    const setDebugPreset = useGameStore((state) => state.setDebugPreset);
 
     return (
         <section className="panel scenario-debug-panel">
