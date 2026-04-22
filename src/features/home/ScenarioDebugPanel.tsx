@@ -6,7 +6,7 @@ type Props = {
     scenario: ScenarioDefinition;
 };
 
-type DebugPreset = "none" | "threatAreaDiscard";
+type DebugPreset = "none" | "threatAreaDiscard" | "enemyFollowAndFight";
 
 export default function ScenarioDebugPanel({ scenario }: Props) {
     const setupNotes = scenario.setupNotes;
@@ -41,6 +41,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                             >
                                 <option value="none">None</option>
                                 <option value="threatAreaDiscard">Threat Area Discard</option>
+                                <option value="enemyFollowAndFight">Enemy Follow and Fight</option>
                             </select>
                         </label>
                     </div>

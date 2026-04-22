@@ -49,7 +49,6 @@ export function resolveLocationAbilityEffect(args: {
         campaignState,
         threatArea,
         encounterDiscard,
-        //targetEnemyId,
     } = args;
 
     if (effect.kind === "none") {
