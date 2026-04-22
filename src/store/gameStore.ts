@@ -92,7 +92,6 @@ import {
 
 import type {
   ActiveSkillTest,
-  CardCounterType,
   ChaosToken,
   CommittedSkillCard,
   EncounterCard,
@@ -193,47 +192,9 @@ function getSelectedScenario(state: {
   });
 }
 
-function shuffleArray<T>(items: T[]): T[] {
-  const result = [...items];
 
-  for (let i = result.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
 
-  return result;
-}
 
-function buildInitialEncounterDeck(
-  encounterCardCodes: string[] | undefined,
-): EncounterCard[] {
-  return shuffleArray(buildEncounterDeckFromCodes(encounterCardCodes ?? []));
-}
-
-function threatAreaHasCard(threatArea: EncounterCard[], cardName: string): boolean {
-  return threatArea.some((card) => card.name === cardName);
-}
-
-function normalizeCardCounters(
-  counters: Partial<Record<CardCounterType, number>> | undefined,
-) {
-  const normalized: Partial<Record<CardCounterType, number>> = {};
-
-  if (!counters) {
-    return normalized;
-  }
-
-  for (const [key, value] of Object.entries(counters)) {
-    const typedKey = key as CardCounterType;
-    const typedValue = typeof value === "number" ? value : 0;
-
-    if (typedValue > 0) {
-      normalized[typedKey] = typedValue;
-    }
-  }
-
-  return normalized;
-}
 
 
 
