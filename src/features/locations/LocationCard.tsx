@@ -273,6 +273,17 @@ export default function LocationCard({ location }: Props) {
               </div>
             </div>
 
+            {/*
+	    <div className="location-card-header">
+              <p className="entity-title location-card-title">{location.name}</p>
+
+              <div className="location-card-stats">
+                <span className="token-chip gold">S {location.shroud}</span>
+                <span className="token-chip gold">C {location.clues}</span>
+              </div>
+            </div>
+	    */}
+
             {(hasInvestigators || hasEnemies) && (
               <div className="location-card-side-rail">
                 {hasInvestigators &&
