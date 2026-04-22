@@ -38,7 +38,6 @@ import {
   enemyHasRetaliate,
   resolveEnemyAttacks,
   resolveEnemyDefeatedTriggers,
-  resolveParleyEffect,
   beginInteractiveAction,
   addLocationToVictoryDisplayIfCleared,
   resolveEnemyDefeatEffect,
@@ -51,6 +50,7 @@ import {
   savePersistedCampaignSetup,
   spawnEnemyAtLocation,
   attachEncounterCardToLocation,
+  resolveInteractiveEffect,
 } from "./gsFunctions";
 
 import {
@@ -261,58 +261,7 @@ function hasLocationAttachment(
   );
 }
 
-function resolveInteractiveEffect(args: {
-  sourceKind: "parley" | "locationAction";
-  effect: ParleyEffect | LocationAbilityEffect;
-  investigator: Investigator;
-  currentLocationId: string;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-}): {
-  investigator: Investigator;
-  locations: GameState["locations"];
-  enemies: Enemy[];
-  campaignState: CampaignState;
-  logEntries: ReturnType<typeof createLogEntry>[];
-} {
-  const {
-    sourceKind,
-    effect,
-    investigator,
-    currentLocationId,
-    locations,
-    enemies,
-    campaignState,
-  } = args;
 
-  if (sourceKind === "parley") {
-    const result = resolveParleyEffect({
-      effect: effect as ParleyEffect,
-      investigator,
-      currentLocationId,
-      locations,
-      campaignState,
-    });
-
-    return {
-      investigator: result.investigator,
-      locations: result.locations,
-      enemies,
-      campaignState: result.campaignState,
-      logEntries: result.logEntries,
-    };
-  }
-
-  return resolveLocationAbilityEffect({
-    effect: effect as LocationAbilityEffect,
-    investigator,
-    currentLocationId,
-    locations,
-    enemies,
-    campaignState,
-  });
-}
 
 
 
