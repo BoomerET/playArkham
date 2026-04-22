@@ -111,10 +111,6 @@ import {
 } from "../types/game";
 
 import {
-  encounterCards,
-} from "../data/encounterCards";
-
-import {
   applyConditionalLocationVisibility,
 } from "./locationVisibility";
 
@@ -358,9 +354,7 @@ function attachEncounterCardToLocation(args: {
   return [...locationAttachments, attachment];
 }
 
-export function getEncounterCardByCode(code: string): EncounterCard | null {
-  return encounterCards.find((card) => card.code === code) ?? null;
-}
+
 
 
 
