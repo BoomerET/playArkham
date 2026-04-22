@@ -2458,7 +2458,46 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (debugMode && debugPreset === "enemyFollowAndFight") {
-      console.log("enemyFollowAndFight");
+      debugLocations = debugLocations.map((location) => {
+        if (location.id === "fake-dormitories") {
+          return {
+            ...location,
+            isVisible: true,
+            revealed: true,
+            investigatorsHere: [chosenInvestigator.id],
+          };
+        }
+
+        if (location.id === "fake-miskatonic-quad") {
+          return {
+            ...location,
+            isVisible: true,
+            revealed: true,
+            investigatorsHere: location.investigatorsHere.filter(
+              (id) => id !== chosenInvestigator.id,
+            ),
+          };
+        }
+
+        return {
+          ...location,
+          investigatorsHere: location.investigatorsHere.filter(
+            (id) => id !== chosenInvestigator.id,
+          ),
+        };
+      });
+
+      setupEnemies = spawnEnemyAtLocation({
+        enemyCode: ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_1,
+        locationId: "fake-dormitories",
+        enemies: [],
+        investigator: chosenInvestigator,
+        locations: debugLocations,
+      });
+
+      setupLogEntries.push(
+        createLogEntry("system", "Debug preset applied: enemyFollowAndFight."),
+      );
     }
 
     set({
