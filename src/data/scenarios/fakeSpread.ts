@@ -49,14 +49,13 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
-      abilities: [
+      actions: [
         {
           label: "Clear Your Mind",
-          trigger: "action",
-          text: "Action: Discard Unspeakable Truths from your threat area.",
+          text: "Action: Discard Dave's Test Treachery from your threat area.",
           effect: {
             kind: "discardThreatAreaCard",
-            cardCode: "14002",
+            cardCode: ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
           },
         }
       ],
