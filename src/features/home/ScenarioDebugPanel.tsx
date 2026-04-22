@@ -16,7 +16,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
             <div className="scenario-debug-panel__header">
                 <p className="eyebrow">
                     Debug
-                    <label>
+                    <label className="scenario-debug-panel__value">
                         <input
                             type="checkbox"
                             checked={debugMode}
