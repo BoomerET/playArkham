@@ -1278,6 +1278,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
@@ -1363,6 +1365,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     });
 
     set({
@@ -1372,6 +1376,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: resolution.campaignState,
       turn: interaction.turn,
       log: [...interaction.log, ...resolution.logEntries],
+      threatArea: resolution.threatArea,
+      encounterDiscard: resolution.encounterDiscard,
     });
 
     const updatedState = get();
@@ -4108,6 +4114,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let updatedCampaignState = campaignState;
     let updatedEncounterDiscard = encounterDiscard;
     let updatedVictoryDisplay = victoryDisplay;
+    let updatedThreatArea = threatArea;
 
     let cardsToDrawOnSuccess = 0;
     let bonusCluesOnSuccess = 0;
@@ -4510,6 +4517,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           locations: updatedLocations,
           enemies: updatedEnemies,
           campaignState: updatedCampaignState,
+          threatArea: updatedThreatArea,
+          encounterDiscard: updatedEncounterDiscard,
         });
 
         updatedInvestigator = interactiveResolution.investigator;
