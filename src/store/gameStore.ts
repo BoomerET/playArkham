@@ -47,6 +47,7 @@ import {
   isScenarioResolved,
   getScenarioResolvedMessage,
   savePersistedCampaignSetup,
+  buildEnemyFromEncounterCard,
 } from "./gsFunctions";
 
 import {
@@ -395,34 +396,7 @@ function spawnEnemyAtLocation(args: {
   return [...enemies, spawnedEnemy];
 }
 
-export function buildEnemyFromEncounterCard(args: {
-  card: EncounterCard;
-  locationId: string;
-}): Enemy {
-  const { card, locationId } = args;
 
-  return {
-    id: `${card.code}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    code: card.code,
-    name: card.name,
-    fight: card.fight ?? 0,
-    evade: card.evade ?? 0,
-    health: card.health ?? 0,
-    damage: card.damage ?? 0,
-    horror: card.horror ?? 0,
-    locationId,
-    engagedInvestigatorId: null,
-    exhausted: false,
-    damageOnEnemy: 0,
-    ability: card.ability,
-    abilities: card.abilities,
-    text: card.text,
-    traits: card.traits,
-    set: card.set,
-    victoryPoints: card.victoryPoints,
-    parley: card.parley,
-  };
-}
 
 //function getSetAsideEncounterCardByCode(args: {
 //  setAsideEncounterCards: EncounterCard[];
