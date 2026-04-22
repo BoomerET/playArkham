@@ -14,6 +14,7 @@ import type {
 
 import {
     createLogEntry,
+    discardThreatAreaCardByCode,
 } from "./gsFunctions";
 
 import {
