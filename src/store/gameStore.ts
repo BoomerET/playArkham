@@ -48,6 +48,7 @@ import {
   getScenarioResolvedMessage,
   savePersistedCampaignSetup,
   spawnEnemyAtLocation,
+  getEncounterCardByCode,
 } from "./gsFunctions";
 
 import {
