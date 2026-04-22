@@ -54,6 +54,7 @@ import {
   normalizeCardCounters,
   shuffleArray,
   getSelectedScenario,
+  getEncounterCardByCode,
 } from "./gsFunctions";
 
 import {
@@ -173,6 +174,10 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  debugMode: false,
+  setDebugMode: (enabled) => {
+    set({ debugMode: enabled });
+  },
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
     const {
       setAsideEncounterCards,
@@ -2272,6 +2277,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setupGame: async () => {
+    const debugMode = get().debugMode;
     const selectedDeckId = get().selectedDeckId.trim();
     if (!selectedDeckId) {
       get().pushLog("system", "Cannot start game without an ArkhamDB deck ID.");
@@ -2403,6 +2409,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    let debugThreatArea: EncounterCard[] = [];
+    let debugLocations = applyConditionalLocationVisibility({
+      locations: normalizeScenarioLocations(
+        selectedScenario.locations,
+        chosenInvestigator.id,
+        selectedScenario.startingLocationId,
+      ),
+      campaignState: get().campaignState,
+    });
+
+    if (debugMode) {
+      debugLocations = debugLocations.map((location) => {
+        if (location.id === "fake-dormitories") {
+          return {
+            ...location,
+            isVisible: true,
+            revealed: true,
+            investigatorsHere: [chosenInvestigator.id],
+          };
+        }
+
+        return {
+          ...location,
+          investigatorsHere: location.investigatorsHere.filter(
+            (id) => id !== chosenInvestigator.id,
+          ),
+        };
+      });
+
+      const debugTreachery = getEncounterCardByCode(
+        ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
+      );
+
+      if (debugTreachery) {
+        debugThreatArea = [debugTreachery];
+      }
+    }
+
     set({
       investigator: chosenInvestigator,
       deck: shuffledDeck,
@@ -2417,14 +2461,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
 
-      locations: applyConditionalLocationVisibility({
-        locations: normalizeScenarioLocations(
-          selectedScenario.locations,
-          chosenInvestigator.id,
-          selectedScenario.startingLocationId,
-        ),
-        campaignState: get().campaignState,
-      }),
+      //locations: applyConditionalLocationVisibility({
+      //  locations: normalizeScenarioLocations(
+      //    selectedScenario.locations,
+      //    chosenInvestigator.id,
+      //    selectedScenario.startingLocationId,
+      //  ),
+      //  campaignState: get().campaignState,
+      //}),
+      //threatArea: [],
+
+      /* DEBUG */
+      threatArea: debugThreatArea,
+      locations: debugLocations,
+      /* END DEBUG */
+
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
@@ -2435,7 +2486,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       showDeckInspector: false,
       pendingChoice: null,
       isMulliganActive: true,
-      threatArea: [],
       locationAttachments: setupLocationAttachments,
       selectedMulliganCardIds: [],
       pendingInvestigateDifficultyModifier: 0,

@@ -495,6 +495,8 @@ export interface GameState {
   locationAttachments: LocationAttachment[];
   victoryDisplay: EncounterCard[];
   clearedVictoryLocations: GameLocation[];
+  debugMode: boolean;
+  setDebugMode: (enabled: boolean) => void;
 }
 
 
