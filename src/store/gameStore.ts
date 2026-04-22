@@ -3996,6 +3996,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState,
       encounterDiscard,
       victoryDisplay,
+      threatArea,
     } = get();
 
     if (!activeSkillTest) {
