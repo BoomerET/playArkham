@@ -496,7 +496,8 @@ export interface GameState {
   victoryDisplay: EncounterCard[];
   clearedVictoryLocations: GameLocation[];
   debugMode: boolean;
-  debugPreset: "none"
+  debugPreset:
+  "none"
   | "threatAreaDiscard"
   | "enemyFollowAndFight";
   setDebugMode: (enabled: boolean) => void;

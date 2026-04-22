@@ -2415,7 +2415,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    /* DEBUG */
     let debugThreatArea: EncounterCard[] = [];
     let debugLocations = applyConditionalLocationVisibility({
       locations: normalizeScenarioLocations(
@@ -2457,7 +2456,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         createLogEntry("system", "Debug preset applied: threatAreaDiscard."),
       );
     }
-    /* END DEBUG */
+
+    if (debugMode && debugPreset === "enemyFollowAndFight") {
+      console.log("enemyFollowAndFight");
+    }
 
     set({
       investigator: chosenInvestigator,
@@ -3551,17 +3553,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log: [...state.log, ...engagementLog],
     }));
   },
-
-  //readyAllEnemies: () => {
-  //  const { enemies } = get();
-
-  //  set({
-  //    enemies: enemies.map((enemy) => ({
-  //      ...enemy,
-  //      exhausted: false,
-  //    })),
-  //  });
-  //},
 
   enemyPhaseAttack: () => {
     const { investigator, enemies, log } = get();
