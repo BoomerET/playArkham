@@ -34,10 +34,11 @@ import {
     findCurrentLocation,
 } from "../lib/gameStateHelpers";
 
-import type {
-    CampaignState,
+import {
+    type CampaignState,
     resolveScenarioForCampaign,
 } from "../lib/campaignSetup";
+
 
 import {
     resolveLocationAbilityEffect,
