@@ -30,3 +30,9 @@
   font: inherit;
   cursor: pointer;
 }
+
+.scenario-debug-select option {
+  color: #000;
+  background: #fff;
+}
+
