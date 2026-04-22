@@ -1,8 +1,23 @@
-import type { GameState } from "../types/game";
-import { type CampaignState } from "../lib/campaignSetup";
-import type { LocationAbilityEffect, Investigator, Enemy } from "../types/game";
-import { createLogEntry } from "./gameStore";
-import { applyConditionalLocationVisibility } from "./locationVisibility";
+import type {
+    GameState,
+} from "../types/game";
+
+import {
+    type
+        CampaignState,
+} from "../lib/campaignSetup";
+
+import type {
+    LocationAbilityEffect, Investigator, Enemy,
+} from "../types/game";
+
+import {
+    createLogEntry,
+} from "./gsFunctions";
+
+import {
+    applyConditionalLocationVisibility,
+} from "./locationVisibility";
 
 export function resolveLocationAbilityEffect(args: {
     effect: LocationAbilityEffect;
