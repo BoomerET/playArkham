@@ -63,10 +63,7 @@ export function resolveLocationAbilityEffect(args: {
             enemies,
             campaignState,
             logEntries: [
-                createLogEntry(
-                    "scenario",
-                    `Took ${effect.amount} horror.`,
-                ),
+                createLogEntry("scenario", `Took ${effect.amount} horror.`),
             ],
         };
     }
@@ -81,10 +78,7 @@ export function resolveLocationAbilityEffect(args: {
             enemies,
             campaignState,
             logEntries: [
-                createLogEntry(
-                    "scenario",
-                    `Took ${effect.amount} damage.`,
-                ),
+                createLogEntry("scenario", `Took ${effect.amount} damage.`),
             ],
         };
     }
@@ -136,7 +130,10 @@ export function resolveLocationAbilityEffect(args: {
             },
             locations: locations.map((entry) =>
                 entry.id === currentLocationId
-                    ? { ...entry, clues: Math.max(0, entry.clues - cluesToDiscover) }
+                    ? {
+                        ...entry,
+                        clues: Math.max(0, entry.clues - cluesToDiscover),
+                    }
                     : entry,
             ),
             enemies,
