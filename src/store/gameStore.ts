@@ -54,6 +54,10 @@ import {
   createLogEntry,
   isOpeningHandWeakness,
   hasLocationAttachment,
+  threatAreaHasCard,
+  buildInitialEncounterDeck,
+  normalizeCardCounters,
+  shuffleArray,
 } from "./gsFunctions";
 
 import {
