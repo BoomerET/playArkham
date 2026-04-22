@@ -1103,10 +1103,15 @@ export function discardLocationAttachmentByCode(args: {
 
     const discardedCard: EncounterCard = {
         id: discardedAttachment.id,
-        code: discardedAttachment.code,
+        code: discardedAttachment.code ?? "",
         name: discardedAttachment.name,
         type: "treachery",
-        text: discardedAttachment.text,
+        text:
+            discardedAttachment.text == null
+                ? undefined
+                : Array.isArray(discardedAttachment.text)
+                    ? discardedAttachment.text
+                    : [discardedAttachment.text],
         traits: discardedAttachment.traits,
     };
 
