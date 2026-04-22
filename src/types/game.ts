@@ -182,27 +182,27 @@ export interface SkillTestResult {
 
 export type LocationAbilityEffect =
   | { kind: "none" }
-  | { kind: "gainResources"; amount: number }
-  | { kind: "loseResources"; amount: number }
   | { kind: "gainClues"; amount: number }
   | { kind: "takeHorror"; amount: number }
   | { kind: "takeDamage"; amount: number }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "loseResources"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
-  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
   | { kind: "trigger"; key: string; value: boolean | string | number }
-  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
+  | { kind: "discardThreatAreaCard"; cardCode: string }
+  | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
   | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
   | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };
 
 export type ParleyEffect =
+  | { kind: "none" }
   | { kind: "gainClues"; amount: number }
   | { kind: "gainResources"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
   | { kind: "setPreviousScenarioOutcome"; outcome: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-  | { kind: "none" }
-  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
+  | { kind: "discardThreatAreaCard"; cardCode: string }
   | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
   | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };;
 
@@ -254,14 +254,14 @@ export type CardAbilityTrigger =
 
 export type CardAbilityEffect =
   | { kind: "none" }
-  | { kind: "gainResources"; amount: number }
-  | { kind: "loseResources"; amount: number }
   | { kind: "gainClues"; amount: number }
   | { kind: "takeHorror"; amount: number }
   | { kind: "takeDamage"; amount: number }
+  | { kind: "gainResources"; amount: number }
+  | { kind: "loseResources"; amount: number }
   | { kind: "discoverLocationClue"; amount: number }
+  | { kind: "discardThreatAreaCard"; cardCode: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-  | { kind: "discardThreatAreaCard"; cardCode: string; logText: string; }
   | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
   | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };;
 

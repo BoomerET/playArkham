@@ -1,5 +1,6 @@
 import type {
     GameState,
+    EncounterCard,
 } from "../types/game";
 
 import {
@@ -26,12 +27,16 @@ export function resolveLocationAbilityEffect(args: {
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
     targetEnemyId?: string;
 }): {
     investigator: Investigator;
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
     logEntries: ReturnType<typeof createLogEntry>[];
 } {
     const {
@@ -41,6 +46,9 @@ export function resolveLocationAbilityEffect(args: {
         locations,
         enemies,
         campaignState,
+        threatArea,
+        encounterDiscard,
+        //targetEnemyId,
     } = args;
 
     if (effect.kind === "none") {
@@ -49,6 +57,8 @@ export function resolveLocationAbilityEffect(args: {
             locations,
             enemies,
             campaignState,
+            threatArea,
+            encounterDiscard,
             logEntries: [],
         };
     }
@@ -65,6 +75,8 @@ export function resolveLocationAbilityEffect(args: {
             logEntries: [
                 createLogEntry("scenario", `Took ${effect.amount} horror.`),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -80,6 +92,8 @@ export function resolveLocationAbilityEffect(args: {
             logEntries: [
                 createLogEntry("scenario", `Took ${effect.amount} damage.`),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -98,6 +112,8 @@ export function resolveLocationAbilityEffect(args: {
                     `Gained ${effect.amount} resource${effect.amount === 1 ? "" : "s"}.`,
                 ),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -116,6 +132,8 @@ export function resolveLocationAbilityEffect(args: {
                     `Gained ${effect.amount} clue${effect.amount === 1 ? "" : "s"}.`,
                 ),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -144,6 +162,8 @@ export function resolveLocationAbilityEffect(args: {
                     `Discovered ${cluesToDiscover} clue${cluesToDiscover === 1 ? "" : "s"} at this location.`,
                 ),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -162,6 +182,8 @@ export function resolveLocationAbilityEffect(args: {
                     `Scenario outcome set to "${effect.outcome}".`,
                 ),
             ],
+            threatArea,
+            encounterDiscard,
         };
     }
 
@@ -188,7 +210,13 @@ export function resolveLocationAbilityEffect(args: {
                     `Set scenario flag "${effect.key}" to ${String(effect.value)}.`,
                 ),
             ],
+            threatArea,
+            encounterDiscard,
         };
+    }
+
+    if (effect.kind === "discardThreatAreaCard") {
+        console.log("Trying to discard threat area card");
     }
 
     return {
@@ -197,5 +225,7 @@ export function resolveLocationAbilityEffect(args: {
         enemies,
         campaignState,
         logEntries: [],
+        threatArea,
+        encounterDiscard,
     };
 }

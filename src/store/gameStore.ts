@@ -153,13 +153,15 @@ import {
   buildEncounterDeckFromCodes,
 } from "../lib/buildEncounterDeck";
 
+import {
+  startingChaosBag
+} from "./gsConst.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
   scenarioFlags: {},
 };
-
-
 
 const initialCampaignState: CampaignState =
   persistedCampaignSetup?.campaignState ?? defaultCampaignState;
@@ -168,32 +170,6 @@ const initialSelectedScenarioId =
   persistedCampaignSetup?.selectedScenarioId ?? defaultScenarioId;
 
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
-
-
-import {
-  startingChaosBag
-} from "./gsConst.ts";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //function getSetAsideEncounterCardByCode(args: {
 //  setAsideEncounterCards: EncounterCard[];
