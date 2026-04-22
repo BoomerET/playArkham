@@ -137,7 +137,7 @@ export default function LocationCard({ location }: Props) {
     (state) => state.availableInvestigators,
   );
 
-  const isHere = location.investigatorsHere.includes(investigator.id);
+
 
   const [isRevealAnimating, setIsRevealAnimating] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -230,6 +230,8 @@ export default function LocationCard({ location }: Props) {
   const isInteractive = isLegalMove;
   const hasInvestigators = location.investigatorsHere.length > 0;
   const hasEnemies = enemiesHere.length > 0;
+
+  const isHere = location.investigatorsHere.includes(investigator.id);
 
   return (
     <>
