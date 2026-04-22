@@ -175,8 +175,10 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
   debugMode: false,
-  setDebugMode: (enabled) => {
-    set({ debugMode: enabled });
+  debugPreset: "none",
+
+  setDebugPreset: (preset) => {
+    set({ debugPreset: preset });
   },
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
     const {
@@ -2278,6 +2280,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setupGame: async () => {
     const debugMode = get().debugMode;
+    const debugPreset = get().debugPreset;
+
     const selectedDeckId = get().selectedDeckId.trim();
     if (!selectedDeckId) {
       get().pushLog("system", "Cannot start game without an ArkhamDB deck ID.");
@@ -2420,7 +2424,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState: get().campaignState,
     });
 
-    if (debugMode) {
+    if (debugMode && debugPreset === "threatAreaDiscard") {
       debugLocations = debugLocations.map((location) => {
         if (location.id === "fake-dormitories") {
           return {
@@ -2446,6 +2450,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (debugTreachery) {
         debugThreatArea = [debugTreachery];
       }
+
+      setupLogEntries.push(
+        createLogEntry("system", "Debug preset applied: threatAreaDiscard."),
+      );
     }
     /* END DEBUG */
 
@@ -2462,22 +2470,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-
-      //locations: applyConditionalLocationVisibility({
-      //  locations: normalizeScenarioLocations(
-      //    selectedScenario.locations,
-      //    chosenInvestigator.id,
-      //    selectedScenario.startingLocationId,
-      //  ),
-      //  campaignState: get().campaignState,
-      //}),
-      //threatArea: [],
-
-      /* DEBUG */
       threatArea: debugThreatArea,
       locations: debugLocations,
-      /* END DEBUG */
-
       agenda: getInitialAgendaState(selectedScenario),
       act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",

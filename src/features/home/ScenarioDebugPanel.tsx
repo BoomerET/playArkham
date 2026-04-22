@@ -17,12 +17,23 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                 <p className="eyebrow">
                     Debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label>
-                        <input
-                            type="checkbox"
-                            checked={debugMode}
-                            onChange={(event) => setDebugMode(event.target.checked)}
-                        />
-                        Debug Mode
+                        Debug Mode:
+                        <select
+                            value={debugMode ? debugPreset : "none"}
+                            onChange={(event) => {
+                                const value = event.target.value;
+
+                                if (value === "none") {
+                                    setDebugMode(false);
+                                } else {
+                                    setDebugMode(true);
+                                    setDebugPreset(value);
+                                }
+                            }}
+                        >
+                            <option value="none">None</option>
+                            <option value="threatAreaDiscard">Threat Area Discard</option>
+                        </select>
                     </label>
                 </p>
                 <h2 className="section-title">Scenario Setup</h2>
