@@ -23,6 +23,10 @@ const locationImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const investigator = useGameStore((state) => state.investigator);
+const locationAbility = useGameStore((state) => state.locationAbility);
+const locationAction = useGameStore((state) => state.locationAction);
+
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
 
@@ -132,6 +136,8 @@ export default function LocationCard({ location }: Props) {
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
   );
+
+  const isHere = location.investigatorsHere.includes(investigator.id);
 
   const [isRevealAnimating, setIsRevealAnimating] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -267,17 +273,6 @@ export default function LocationCard({ location }: Props) {
               </div>
             </div>
 
-            {/*
-	    <div className="location-card-header">
-              <p className="entity-title location-card-title">{location.name}</p>
-
-              <div className="location-card-stats">
-                <span className="token-chip gold">S {location.shroud}</span>
-                <span className="token-chip gold">C {location.clues}</span>
-              </div>
-            </div>
-	    */}
-
             {(hasInvestigators || hasEnemies) && (
               <div className="location-card-side-rail">
                 {hasInvestigators &&
@@ -336,6 +331,29 @@ export default function LocationCard({ location }: Props) {
                       )}
                     </div>
                   ))}
+              </div>
+            )}
+            {isHere && (
+              <div className="button-row">
+                {location.abilities?.map((ability, index) => (
+                  <button
+                    key={`${location.id}-ability-${index}`}
+                    type="button"
+                    onClick={() => locationAbility(index)}
+                  >
+                    {ability.label ?? `Ability ${index + 1}`}
+                  </button>
+                ))}
+
+                {location.actions?.map((action, index) => (
+                  <button
+                    key={`${location.id}-action-${index}`}
+                    type="button"
+                    onClick={() => locationAction(index)}
+                  >
+                    {action.label ?? `Action ${index + 1}`}
+                  </button>
+                ))}
               </div>
             )}
           </>
