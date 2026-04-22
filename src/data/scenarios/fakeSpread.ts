@@ -49,6 +49,17 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
+      abilities: [
+        {
+          label: "Clear Your Mind",
+          trigger: "action",
+          text: "Action: Discard Unspeakable Truths from your threat area.",
+          effect: {
+            kind: "discardThreatAreaCard",
+            cardCode: "14002",
+          },
+        }
+      ],
 
       text: ["Action: Heal 1 damage and 1 horror. (Limit once per game)",],
 
@@ -318,5 +329,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_4,
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_5,
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_6,
+    ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
   ],
 };
