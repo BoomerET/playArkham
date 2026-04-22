@@ -2409,6 +2409,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    /* DEBUG */
     let debugThreatArea: EncounterCard[] = [];
     let debugLocations = applyConditionalLocationVisibility({
       locations: normalizeScenarioLocations(
@@ -2446,6 +2447,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         debugThreatArea = [debugTreachery];
       }
     }
+    /* END DEBUG */
 
     set({
       investigator: chosenInvestigator,
@@ -2461,19 +2463,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
 
-      locations: applyConditionalLocationVisibility({
-        locations: normalizeScenarioLocations(
-          selectedScenario.locations,
-          chosenInvestigator.id,
-          selectedScenario.startingLocationId,
-        ),
-        campaignState: get().campaignState,
-      }),
-      threatArea: [],
+      //locations: applyConditionalLocationVisibility({
+      //  locations: normalizeScenarioLocations(
+      //    selectedScenario.locations,
+      //    chosenInvestigator.id,
+      //    selectedScenario.startingLocationId,
+      //  ),
+      //  campaignState: get().campaignState,
+      //}),
+      //threatArea: [],
 
       /* DEBUG */
-      //threatArea: debugThreatArea,
-      //locations: debugLocations,
+      threatArea: debugThreatArea,
+      locations: debugLocations,
       /* END DEBUG */
 
       agenda: getInitialAgendaState(selectedScenario),

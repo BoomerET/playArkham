@@ -1,4 +1,5 @@
 import type { ScenarioDefinition } from "../../data/scenarios/scenarioTypes";
+import { useGameStore } from "../../store/gameStore";
 
 type Props = {
     scenario: ScenarioDefinition;
@@ -7,6 +8,8 @@ type Props = {
 export default function ScenarioDebugPanel({ scenario }: Props) {
     const setupNotes = scenario.setupNotes;
     const randomizedSelections = scenario.randomizedSelections ?? [];
+    const debugMode = useGameStore((state) => state.debugMode);
+    const setDebugMode = useGameStore((state) => state.setDebugMode);
 
     return (
         <section className="panel scenario-debug-panel">
@@ -69,6 +72,14 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                     </ul>
                 )}
             </div>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={debugMode}
+                    onChange={(event) => setDebugMode(event.target.checked)}
+                />
+                Debug Mode
+            </label>
         </section>
     );
 }
