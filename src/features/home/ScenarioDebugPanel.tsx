@@ -1,5 +1,6 @@
 import type { ScenarioDefinition } from "../../data/scenarios/scenarioTypes";
 import { useGameStore } from "../../store/gameStore";
+import "./scenarioDebugPanel.css";
 
 type Props = {
     scenario: ScenarioDefinition;
@@ -20,26 +21,29 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
             <div className="scenario-debug-panel__header">
                 <p className="eyebrow">
                     Debug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label>
-                        Debug Mode:
-                        <select
-                            value={debugMode ? debugPreset : "none"}
-                            onChange={(event) => {
-                                const value = event.target.value as DebugPreset;
+                    <div className="scenario-debug-toolbar">
+                        <label className="scenario-debug-control">
+                            <span className="scenario-debug-control-label">Debug Preset</span>
+                            <select
+                                className="scenario-debug-select"
+                                value={debugMode ? debugPreset : "none"}
+                                onChange={(event) => {
+                                    const value = event.target.value as DebugPreset;
 
-                                if (value === "none") {
-                                    setDebugMode(false);
-                                    setDebugPreset("none");
-                                } else {
-                                    setDebugMode(true);
-                                    setDebugPreset(value);
-                                }
-                            }}
-                        >
-                            <option value="none">None</option>
-                            <option value="threatAreaDiscard">Threat Area Discard</option>
-                        </select>
-                    </label>
+                                    if (value === "none") {
+                                        setDebugMode(false);
+                                        setDebugPreset("none");
+                                    } else {
+                                        setDebugMode(true);
+                                        setDebugPreset(value);
+                                    }
+                                }}
+                            >
+                                <option value="none">None</option>
+                                <option value="threatAreaDiscard">Threat Area Discard</option>
+                            </select>
+                        </label>
+                    </div>
                 </p>
                 <h2 className="section-title">Scenario Setup</h2>
             </div>
