@@ -5,6 +5,8 @@ type Props = {
     scenario: ScenarioDefinition;
 };
 
+type DebugPreset = "none" | "threatAreaDiscard";
+
 export default function ScenarioDebugPanel({ scenario }: Props) {
     const setupNotes = scenario.setupNotes;
     const randomizedSelections = scenario.randomizedSelections ?? [];
@@ -23,10 +25,11 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                         <select
                             value={debugMode ? debugPreset : "none"}
                             onChange={(event) => {
-                                const value = event.target.value as "none" | "threatAreaDiscard";
+                                const value = event.target.value as DebugPreset;
 
                                 if (value === "none") {
                                     setDebugMode(false);
+                                    setDebugPreset("none");
                                 } else {
                                     setDebugMode(true);
                                     setDebugPreset(value);
