@@ -47,7 +47,7 @@ import {
   isScenarioResolved,
   getScenarioResolvedMessage,
   savePersistedCampaignSetup,
-  buildEnemyFromEncounterCard,
+  spawnEnemyAtLocation,
 } from "./gsFunctions";
 
 import {
