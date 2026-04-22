@@ -96,12 +96,9 @@ import type {
   Enemy,
   GameLogKind,
   GameState,
-  Investigator,
-  LocationAbilityEffect,
   LocationAttachment,
   PlayerCard,
   SkillTestResult,
-  ParleyEffect,
   GameLogItem,
 } from "../types/game";
 
