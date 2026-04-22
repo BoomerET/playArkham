@@ -1,0 +1,34 @@
+.location-card,
+.location-card * {
+  box-sizing: border-box;
+}
+
+.location-card-side-rail {
+  width: 44px;
+  min-width: 44px;
+}
+
+.location-investigator-token {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+}
+
+.location-investigator-token-active-ring {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.location-card {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.location-card.current-location,
+.location-card.legal-location,
+.location-card.illegal-location {
+  transform: translateZ(0);
+}

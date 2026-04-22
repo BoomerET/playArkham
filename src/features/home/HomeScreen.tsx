@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
 import type { Investigator } from "../../types/game";
+import "./homeScreen.css";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
