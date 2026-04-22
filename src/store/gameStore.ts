@@ -491,6 +491,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
@@ -599,6 +601,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     });
 
     set((state) => ({
@@ -610,6 +614,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...turn,
         actionsRemaining: turn.actionsRemaining - actionCost,
       },
+      threatArea: resolution.threatArea,
+      encounterDiscard: resolution.encounterDiscard,
       log: [
         ...state.log,
         ...extraLog,
@@ -792,6 +798,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     } = get();
 
     if (isScenarioResolved(scenarioStatus)) {
@@ -909,6 +917,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       locations,
       enemies,
       campaignState,
+      threatArea,
+      encounterDiscard,
     });
 
     set((state) => ({
@@ -4533,6 +4543,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           locations: updatedLocations,
           enemies: updatedEnemies,
           campaignState: updatedCampaignState,
+          threatArea: updatedThreatArea,
+          encounterDiscard: updatedEncounterDiscard,
         });
 
         updatedInvestigator = locationActionResolution.investigator;

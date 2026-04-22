@@ -1882,11 +1882,15 @@ export function resolveInteractiveEffect(args: {
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
 }): {
     investigator: Investigator;
     locations: GameState["locations"];
     enemies: Enemy[];
     campaignState: CampaignState;
+    threatArea: EncounterCard[];
+    encounterDiscard: EncounterCard[];
     logEntries: ReturnType<typeof createLogEntry>[];
 } {
     const {
@@ -1897,6 +1901,8 @@ export function resolveInteractiveEffect(args: {
         locations,
         enemies,
         campaignState,
+        threatArea,
+        encounterDiscard,
     } = args;
 
     if (sourceKind === "parley") {
@@ -1913,6 +1919,8 @@ export function resolveInteractiveEffect(args: {
             locations: result.locations,
             enemies,
             campaignState: result.campaignState,
+            threatArea,
+            encounterDiscard,
             logEntries: result.logEntries,
         };
     }
@@ -1924,6 +1932,8 @@ export function resolveInteractiveEffect(args: {
         locations,
         enemies,
         campaignState,
+        threatArea,
+        encounterDiscard,
     });
 }
 

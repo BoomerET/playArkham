@@ -216,7 +216,33 @@ export function resolveLocationAbilityEffect(args: {
     }
 
     if (effect.kind === "discardThreatAreaCard") {
-        console.log("Trying to discard threat area card");
+        const result = discardThreatAreaCardByCode({
+            threatArea,
+            cardCode: effect.cardCode,
+            encounterDiscard,
+        });
+
+        return {
+            investigator,
+            locations,
+            enemies,
+            campaignState,
+            threatArea: result.threatArea,
+            encounterDiscard: result.encounterDiscard,
+            logEntries: result.discardedCard
+                ? [
+                    createLogEntry(
+                        "scenario",
+                        `${result.discardedCard.name} was discarded from the threat area.`,
+                    ),
+                ]
+                : [
+                    createLogEntry(
+                        "system",
+                        `Could not find threat area card ${effect.cardCode} to discard.`,
+                    ),
+                ],
+        };
     }
 
     return {
