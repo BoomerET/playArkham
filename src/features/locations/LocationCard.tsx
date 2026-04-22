@@ -23,7 +23,7 @@ const locationImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const investigator = useGameStore((state) => state.investigator);
+//const investigator = useGameStore((state) => state.investigator);
 const locationAbility = useGameStore((state) => state.locationAbility);
 const locationAction = useGameStore((state) => state.locationAction);
 
