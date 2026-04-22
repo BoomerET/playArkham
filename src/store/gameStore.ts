@@ -13,10 +13,6 @@ import {
   scenarios,
 } from "../data/scenarios";
 
-import type {
-  ScenarioDefinition,
-} from "../data/scenarios/scenarioTypes";
-
 import {
   getChaosTokenModifier,
 } from "../lib/chaosToken";
@@ -58,6 +54,7 @@ import {
   buildInitialEncounterDeck,
   normalizeCardCounters,
   shuffleArray,
+  getSelectedScenario,
 } from "./gsFunctions";
 
 import {
@@ -147,7 +144,6 @@ import {
 } from "../lib/encounterEffects";
 
 import {
-  resolveScenarioForCampaign,
   type CampaignState,
 } from "../lib/campaignSetup";
 
@@ -184,17 +180,7 @@ const startingChaosBag: ChaosToken[] = [
   "elderSign",
 ];
 
-function getSelectedScenario(state: {
-  availableScenarios: ScenarioDefinition[];
-  selectedScenarioId: string;
-  campaignState: CampaignState;
-}): ScenarioDefinition {
-  return resolveScenarioForCampaign({
-    selectedScenarioId: state.selectedScenarioId,
-    availableScenarios: state.availableScenarios,
-    campaignState: state.campaignState,
-  });
-}
+
 
 
 

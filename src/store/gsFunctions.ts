@@ -35,7 +35,8 @@ import {
 } from "../lib/gameStateHelpers";
 
 import type {
-    CampaignState
+    CampaignState,
+    resolveScenarioForCampaign,
 } from "../lib/campaignSetup";
 
 import {
@@ -1990,4 +1991,16 @@ export function shuffleArray<T>(items: T[]): T[] {
     }
 
     return result;
+}
+
+export function getSelectedScenario(state: {
+    availableScenarios: ScenarioDefinition[];
+    selectedScenarioId: string;
+    campaignState: CampaignState;
+}): ScenarioDefinition {
+    return resolveScenarioForCampaign({
+        selectedScenarioId: state.selectedScenarioId,
+        availableScenarios: state.availableScenarios,
+        campaignState: state.campaignState,
+    });
 }
