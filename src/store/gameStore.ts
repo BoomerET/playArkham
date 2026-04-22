@@ -362,39 +362,7 @@ export function getEncounterCardByCode(code: string): EncounterCard | null {
   return encounterCards.find((card) => card.code === code) ?? null;
 }
 
-function spawnEnemyAtLocation(args: {
-  enemyCode: string;
-  locationId: string;
-  enemies: Enemy[];
-  investigator: Investigator;
-  locations: GameState["locations"];
-}): Enemy[] {
-  const { enemyCode, locationId, enemies, investigator, locations } = args;
 
-  const enemyCard = getEncounterCardByCode(enemyCode);
-
-  if (!enemyCard) {
-    console.warn("Enemy not found for setup spawn:", enemyCode);
-    return enemies;
-  }
-
-  const spawnedEnemy = buildEnemyFromEncounterCard({
-    card: enemyCard,
-    locationId,
-  });
-
-  const investigatorLocation = findCurrentLocation(locations, investigator.id);
-
-  if (
-    investigatorLocation &&
-    investigatorLocation.id === locationId &&
-    !enemyHasAloof(spawnedEnemy)
-  ) {
-    spawnedEnemy.engagedInvestigatorId = investigator.id;
-  }
-
-  return [...enemies, spawnedEnemy];
-}
 
 
 
