@@ -9,6 +9,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
     const setupNotes = scenario.setupNotes;
     const randomizedSelections = scenario.randomizedSelections ?? [];
     const debugMode = useGameStore((state) => state.debugMode);
+    const debugPreset = useGameStore((state) => state.debugPreset);
     const setDebugMode = useGameStore((state) => state.setDebugMode);
 
     return (
