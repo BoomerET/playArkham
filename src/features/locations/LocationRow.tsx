@@ -1,8 +1,6 @@
 import { useGameStore } from "../../store/gameStore";
 import LocationCard from "./LocationCard";
 
-const locationAbility = useGameStore((state) => state.locationAbility);
-
 export default function LocationRow() {
   const locations = useGameStore((state) => state.locations);
 
@@ -30,16 +28,6 @@ export default function LocationRow() {
           </span>
         </div>
       </div>
-
-      {currentLocation?.abilities?.map((ability, index) => (
-        <button
-          key={`${currentLocation.id}-ability-${index}`}
-          type="button"
-          onClick={() => locationAbility(index)}
-        >
-          {ability.label ?? `Ability ${index + 1}`}
-        </button>
-      ))}
 
       <div className="location-board-surface">
         {visibleLocations.length === 0 ? (
