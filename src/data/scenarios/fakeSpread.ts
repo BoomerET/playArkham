@@ -57,6 +57,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
             kind: "discardThreatAreaCard",
             cardCode: ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
           },
+          trigger: "action",
         }
       ],
 
