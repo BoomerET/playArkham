@@ -14,6 +14,7 @@ import type {
     ParleyEffect,
     InteractiveActionDefinition,
     SkillType,
+    LocationAttachment,
 } from "../types/game";
 
 import {
@@ -1072,7 +1073,7 @@ export function discardThreatAreaCardByCode(args: {
     };
 }
 
-function discardLocationAttachmentByCode(args: {
+export function discardLocationAttachmentByCode(args: {
     locationAttachments: LocationAttachment[];
     cardCode: string;
     encounterDiscard: EncounterCard[];
