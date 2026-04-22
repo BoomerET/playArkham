@@ -38,7 +38,6 @@ import {
   addLocationToVictoryDisplayIfCleared,
   resolveEnemyDefeatEffect,
   getNextLocationTowardTarget,
-  loadPersistedCampaignSetup,
   advanceAgendaState,
   advanceActState,
   isScenarioResolved,
@@ -56,6 +55,10 @@ import {
   shuffleArray,
   getSelectedScenario,
 } from "./gsFunctions";
+
+import {
+  persistedCampaignSetup
+} from "./gsConst";
 
 import {
   canSpendInvestigationAction,
@@ -93,7 +96,6 @@ import {
 
 import type {
   ActiveSkillTest,
-  ChaosToken,
   CommittedSkillCard,
   EncounterCard,
   Enemy,
@@ -157,7 +159,7 @@ const defaultCampaignState: CampaignState = {
   scenarioFlags: {},
 };
 
-const persistedCampaignSetup = loadPersistedCampaignSetup();
+
 
 const initialCampaignState: CampaignState =
   persistedCampaignSetup?.campaignState ?? defaultCampaignState;
@@ -167,19 +169,10 @@ const initialSelectedScenarioId =
 
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
-const startingChaosBag: ChaosToken[] = [
-  +1,
-  0,
-  0,
-  -1,
-  -1,
-  -2,
-  "skull",
-  "cultist",
-  "autoFail",
-  "elderSign",
-];
 
+import {
+  startingChaosBag
+} from "./gsConst.ts";
 
 
 
