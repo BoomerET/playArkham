@@ -50,15 +50,10 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
       ],
       actions: [
-        {
-          label: "Clear the Hazard",
-          trigger: "action",
-          text: "Action: Discard Fire! from this location.",
-          effect: {
-            kind: "discardLocationAttachment",
-            cardCode: ENCOUNTER_CARD_CODES.FIRE,
-          },
-        }
+
+      ],
+      abilities: [
+
       ],
       text: ["You're in the dorms",],
 
