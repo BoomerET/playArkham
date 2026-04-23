@@ -6,7 +6,11 @@ type Props = {
     scenario: ScenarioDefinition;
 };
 
-type DebugPreset = "none" | "threatAreaDiscard" | "enemyFollowAndFight";
+type DebugPreset =
+    "none"
+    | "threatAreaDiscard"
+    | "enemyFollowAndFight"
+    | "setAsideSpawn";
 
 export default function ScenarioDebugPanel({ scenario }: Props) {
     const setupNotes = scenario.setupNotes;
