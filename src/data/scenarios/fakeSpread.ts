@@ -18,15 +18,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       traits: [
         "Miskatonic",
       ],
-      //abilities: [
-      //  {
-      //    label: "Bloodstained Ground",
-      //    trigger: "forced",
-      //    event: "enemyDefeated",
-      //    text: "Forced — When an enemy is defeated here, gain 5 clue.",
-      //    effect: { kind: "gainClues", amount: 5 },
-      //  },
-      //],
+
 
       text: [
         "Action: Engage - Choose an enemy at a connecting location. That enemy moves to this location and engages you. This action does not provoke attacks of opportunity.",
@@ -50,24 +42,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
       ],
       actions: [
-        {
-          label: "Drive It Off",
-          trigger: "action",
-          text: "Action: Discard Dave's Test Enemy 1.",
-          effect: {
-            kind: "discardEnemy",
-            enemyCode: ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_1,
-            locationId: "fake-dormitories",
-            logText: "Dave's Test Enemy 1 was discarded from play.",
-          },
-        }
+
       ],
       abilities: [
 
       ],
       text: ["You're in the dorms",],
-
-
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
