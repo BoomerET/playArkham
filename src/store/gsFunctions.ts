@@ -1957,7 +1957,7 @@ export function resolveInteractiveEffect(args: {
         campaignState,
         threatArea,
         encounterDiscard,
-        locationAttachments,
+        locationAttachments: [],
     });
 }
 
