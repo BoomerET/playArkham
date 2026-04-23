@@ -192,7 +192,7 @@ export type LocationAbilityEffect =
   | { kind: "trigger"; key: string; value: boolean | string | number }
   | { kind: "discardThreatAreaCard"; cardCode: string }
   | { kind: "setScenarioFlag"; key: string; value: boolean | string | number }
-  | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; logText: string; }
+  | { kind: "discardLocationAttachment"; cardCode: string; locationId?: string; }
   | { kind: "discardEnemy"; enemyCode?: string; enemyId?: string; onlyIfEngaged?: boolean; locationId?: string; logText: string; };
 
 export type ParleyEffect =
