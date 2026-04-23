@@ -2595,6 +2595,38 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
+    if (debugMode && debugPreset === "enemyDiscard") {
+      debugLocations = debugLocations.map((location) => {
+        if (location.id === "fake-dormitories") {
+          return {
+            ...location,
+            isVisible: true,
+            revealed: true,
+            investigatorsHere: [chosenInvestigator.id],
+          };
+        }
+
+        return {
+          ...location,
+          investigatorsHere: location.investigatorsHere.filter(
+            (id) => id !== chosenInvestigator.id,
+          ),
+        };
+      });
+
+      setupEnemies = spawnEnemyAtLocation({
+        enemyCode: ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_1,
+        locationId: "fake-dormitories",
+        enemies: [],
+        investigator: chosenInvestigator,
+        locations: debugLocations,
+      });
+
+      setupLogEntries.push(
+        createLogEntry("system", "Debug preset applied: enemyDiscard."),
+      );
+    }
+
     set({
       //investigator: chosenInvestigator,
       investigator: debugInvestigator,

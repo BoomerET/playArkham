@@ -45,6 +45,7 @@ export default function ScenarioDebugPanel({ scenario }: Props) {
                             }}
                         >
                             <option value="none">None</option>
+                            <option value="enemyDiscard">Enemy Discard</option>
                             <option value="setAsideSpawn">Set Aside Spawn</option>
                             <option value="threatAreaDiscard">Threat Area Discard</option>
                             <option value="enemyFollowAndFight">Enemy Follow and Fight</option>
