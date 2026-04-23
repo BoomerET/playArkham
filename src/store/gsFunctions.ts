@@ -801,6 +801,7 @@ export function resolveImmediateAbilityEffect(args: {
         campaignState: args.campaignState,
         threatArea: args.threatArea,
         encounterDiscard: args.encounterDiscard,
+        locationAttachments: LocationAttachment[];
     });
 }
 
@@ -1956,6 +1957,7 @@ export function resolveInteractiveEffect(args: {
         campaignState,
         threatArea,
         encounterDiscard,
+        locationAttachments,
     });
 }
 

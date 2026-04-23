@@ -1,6 +1,7 @@
 import type {
     GameState,
     EncounterCard,
+    LocationAttachment,
 } from "../types/game";
 
 import {
@@ -31,6 +32,7 @@ export function resolveLocationAbilityEffect(args: {
     threatArea: EncounterCard[];
     encounterDiscard: EncounterCard[];
     targetEnemyId?: string;
+    locationAttachments: LocationAttachment[];
 }): {
     investigator: Investigator;
     locations: GameState["locations"];
