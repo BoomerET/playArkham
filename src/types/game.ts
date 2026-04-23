@@ -500,12 +500,14 @@ export interface GameState {
   "none"
   | "threatAreaDiscard"
   | "enemyFollowAndFight"
+  | "locationAttachmentDiscard"
   | "setAsideSpawn";
   setDebugMode: (enabled: boolean) => void;
   setDebugPreset: (preset:
     "none"
     | "threatAreaDiscard"
     | "enemyFollowAndFight"
+    | "locationAttachmentDiscard"
     | "setAsideSpawn"
   ) => void;
 }
