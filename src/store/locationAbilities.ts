@@ -290,6 +290,41 @@ export function resolveLocationAbilityEffect(args: {
         };
     }
 
+    if (effect.kind === "discardEnemy") {
+        const result = discardEnemyFromPlay({
+            enemies,
+            encounterDiscard,
+            investigatorId: investigator.id,
+            enemyCode: effect.enemyCode,
+            enemyId: effect.enemyId,
+            onlyIfEngaged: effect.onlyIfEngaged,
+            locationId: effect.locationId ?? currentLocationId,
+        });
+
+        return {
+            investigator,
+            locations,
+            enemies: result.enemies,
+            campaignState,
+            threatArea,
+            encounterDiscard: result.encounterDiscard,
+            locationAttachments: args.locationAttachments,
+            logEntries: result.discardedEnemy
+                ? [
+                    createLogEntry(
+                        "scenario",
+                        effect.logText || `${result.discardedEnemy.name} was discarded from play.`,
+                    ),
+                ]
+                : [
+                    createLogEntry(
+                        "system",
+                        "Could not find the enemy to discard from play.",
+                    ),
+                ],
+        };
+    }
+
     return {
         investigator,
         locations,
