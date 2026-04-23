@@ -50,12 +50,24 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "Miskatonic",
       ],
       actions: [
-
+        {
+          label: "Drive It Off",
+          trigger: "action",
+          text: "Action: Discard Dave's Test Enemy 1.",
+          effect: {
+            kind: "discardEnemy",
+            enemyCode: ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_1,
+            locationId: "fake-dormitories",
+            logText: "Dave's Test Enemy 1 was discarded from play.",
+          },
+        }
       ],
       abilities: [
 
       ],
       text: ["You're in the dorms",],
+
+
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
       mapPosition: { x: 30, y: 16 },
@@ -161,10 +173,10 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       code: "12109",
       onAdvance: {
         showLocationIds: ["fake-dormitories", "fake-miskatonic-quad"],
-        spawnSetAsideEnemy: {
-          enemyCode: "14004",
-          locationId: "fake-miskatonic-quad",
-        },
+        //spawnSetAsideEnemy: {
+        //  enemyCode: "14004",
+        //  locationId: "fake-miskatonic-quad",
+        //},
       },
     },
     {
@@ -176,9 +188,6 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "A burning apparition stands between you and the exit. You must escape the dormitories.",
       threshold: 2,
       thresholdLabel: "Clues",
-      onAdvance: {
-        showLocationIds: ["dormitories", "miskatonic-quad"],
-      },
     },
     {
       id: "fake-spreading-flames-act-2b",
@@ -204,11 +213,11 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: "Your friend had mentioned visiting the head librarian, Dr. Henry Armitage. With more and more strange figures arriving, you must scour the campus for his whereabouts.",
       threshold: 3,
       thresholdLabel: "Clues",
-      onAdvance: {
-        showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
-        hideLocationIds: ["friends-room"],
-        grantEncounterCardToInvestigator: "dr-henry-armitage-1",
-      },
+      //onAdvance: {
+      //  showLocationIds: ["orne-library", "science-hall", "warren-observatory"],
+      //  hideLocationIds: ["friends-room"],
+      //  grantEncounterCardToInvestigator: "dr-henry-armitage-1",
+      //},
     },
     {
       id: "fake-spreading-flames-act-3b",
