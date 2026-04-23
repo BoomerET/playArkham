@@ -602,6 +602,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState,
       threatArea,
       encounterDiscard,
+      locationAttachments: [],
     });
 
     set((state) => ({
@@ -918,6 +919,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       campaignState,
       threatArea,
       encounterDiscard,
+      locationAttachments: [],
     });
 
     set((state) => ({
