@@ -51,12 +51,12 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       actions: [
         {
-          label: "Clear Your Mind",
+          label: "Clear the Hazard",
           trigger: "action",
-          text: "Action: Discard Dave's Test Treachery from your threat area.",
+          text: "Action: Discard Fire! from this location.",
           effect: {
-            kind: "discardThreatAreaCard",
-            cardCode: ENCOUNTER_CARD_CODES.DAVES_TEST_TREACHERY,
+            kind: "discardLocationAttachment",
+            cardCode: ENCOUNTER_CARD_CODES.FIRE,
           },
         }
       ],

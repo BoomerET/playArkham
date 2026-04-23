@@ -2431,7 +2431,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let debugThreatArea: EncounterCard[] = [];
     let debugSetAsideEncounterCards = initialSetAsideEncounterCards;
     let debugAct = getInitialActState(selectedScenario);
-    let debugAgenda = getInitialAgendaState(selectedScenario);
+    let debugAgenda = getInitialAgendaState(selectedScenario)
 
     if (debugMode && debugPreset === "threatAreaDiscard") {
       debugLocations = debugLocations.map((location) => {
@@ -2559,6 +2559,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       setupLogEntries.push(
         createLogEntry("system", "Debug preset applied: setAsideSpawn."),
+      );
+    }
+
+    if (debugMode && debugPreset === "locationAttachmentDiscard") {
+      debugLocations = debugLocations.map((location) => {
+        if (location.id === "fake-dormitories") {
+          return {
+            ...location,
+            isVisible: true,
+            revealed: true,
+            investigatorsHere: [chosenInvestigator.id],
+          };
+        }
+
+        return {
+          ...location,
+          investigatorsHere: location.investigatorsHere.filter(
+            (id) => id !== chosenInvestigator.id,
+          ),
+        };
+      });
+
+      setupLocationAttachments = attachEncounterCardToLocation({
+        cardCode: ENCOUNTER_CARD_CODES.FIRE,
+        locationId: "fake-dormitories",
+        locationAttachments: [],
+      });
+
+      setupLogEntries.push(
+        createLogEntry(
+          "system",
+          "Debug preset applied: locationAttachmentDiscard.",
+        ),
       );
     }
 
