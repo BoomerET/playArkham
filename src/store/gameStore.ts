@@ -4691,6 +4691,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           campaignState: updatedCampaignState,
           threatArea: updatedThreatArea,
           encounterDiscard: updatedEncounterDiscard,
+          locationAttachments: [],
         });
 
         updatedInvestigator = locationActionResolution.investigator;
