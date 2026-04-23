@@ -16,6 +16,7 @@ import type {
 import {
     createLogEntry,
     discardThreatAreaCardByCode,
+    discardLocationAttachmentByCode,
 } from "./gsFunctions";
 
 import {
@@ -242,6 +243,38 @@ export function resolveLocationAbilityEffect(args: {
                     createLogEntry(
                         "system",
                         `Could not find threat area card ${effect.cardCode} to discard.`,
+                    ),
+                ],
+        };
+    }
+
+    if (effect.kind === "discardLocationAttachment") {
+        const result = discardLocationAttachmentByCode({
+            locationAttachments: [],
+            cardCode: effect.cardCode,
+            encounterDiscard,
+            locationId: effect.locationId ?? currentLocationId,
+        });
+
+        return {
+            investigator,
+            locations,
+            enemies,
+            campaignState,
+            threatArea,
+            encounterDiscard: result.encounterDiscard,
+            locationAttachments: result.locationAttachments,
+            logEntries: result.discardedAttachment
+                ? [
+                    createLogEntry(
+                        "scenario",
+                        `${result.discardedAttachment.name} was discarded from ${result.discardedAttachment.attachedLocationId}.`,
+                    ),
+                ]
+                : [
+                    createLogEntry(
+                        "system",
+                        `Could not find location attachment ${effect.cardCode} to discard.`,
                     ),
                 ],
         };
