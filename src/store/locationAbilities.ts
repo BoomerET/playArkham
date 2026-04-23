@@ -17,6 +17,7 @@ import {
     createLogEntry,
     discardThreatAreaCardByCode,
     discardLocationAttachmentByCode,
+    discardEnemyFromPlay,
 } from "./gsFunctions";
 
 import {
