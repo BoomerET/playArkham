@@ -42,6 +42,7 @@ export function resolveLocationAbilityEffect(args: {
     threatArea: EncounterCard[];
     encounterDiscard: EncounterCard[];
     logEntries: ReturnType<typeof createLogEntry>[];
+    locationAttachments: LocationAttachment[];
 } {
     const {
         effect,
@@ -63,6 +64,7 @@ export function resolveLocationAbilityEffect(args: {
             threatArea,
             encounterDiscard,
             logEntries: [],
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -80,6 +82,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -97,6 +100,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -117,6 +121,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -137,6 +142,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -167,6 +173,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -187,6 +194,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -215,6 +223,7 @@ export function resolveLocationAbilityEffect(args: {
             ],
             threatArea,
             encounterDiscard,
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -245,6 +254,7 @@ export function resolveLocationAbilityEffect(args: {
                         `Could not find threat area card ${effect.cardCode} to discard.`,
                     ),
                 ],
+            locationAttachments: args.locationAttachments,
         };
     }
 
@@ -288,5 +298,6 @@ export function resolveLocationAbilityEffect(args: {
         logEntries: [],
         threatArea,
         encounterDiscard,
+        locationAttachments: args.locationAttachments,
     };
 }
