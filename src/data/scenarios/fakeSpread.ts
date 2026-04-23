@@ -89,6 +89,18 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
       mapPosition: { x: 51, y: 16 },
 
+      actions: [
+        {
+          label: "Clear the Hazard",
+          trigger: "action",
+          text: "Action: Discard Fire! from this location.",
+          effect: {
+            kind: "discardLocationAttachment",
+            cardCode: ENCOUNTER_CARD_CODES.FIRE,
+          },
+        }
+      ],
+
       revealed: false,
       isVisible: false,
       investigatorsHere: [],
@@ -137,14 +149,15 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       investigatorsHere: [],
     },
   ],
-  //enemySpawns: [
-  //  {
-  //    locationId: "fake-miskatonic-quad",
-  //    enemyCode: "14004",
-  //  },
-  //],
+  enemySpawns: [
+    {
+      locationId: "fake-dormitories",
+      enemyCode: ENCOUNTER_CARD_CODES.FIRE,
+    },
+  ],
   setAsideEncounterCardCodes: [
     ENCOUNTER_CARD_CODES.DAVES_TEST_ENEMY_2,
+    ENCOUNTER_CARD_CODES.FIRE,
   ],
   acts: [
     {
