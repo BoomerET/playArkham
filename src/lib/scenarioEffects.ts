@@ -60,9 +60,10 @@ function convertEncounterStoryCardToPlayerCard(
     name: encounterCard.name,
     type: "asset",
     faction: "neutral",
-    text: Array.isArray(encounterCard.text)
-      ? encounterCard.text.join(" ")
-      : encounterCard.text,
+    //text: Array.isArray(encounterCard.text)
+    //  ? encounterCard.text.join(" ")
+    //  : encounterCard.text,
+    text: encounterCard.text,
     traits: encounterCard.traits,
     image: encounterCard.code ? `${encounterCard.code}.png` : undefined,
     exhausted: false,
