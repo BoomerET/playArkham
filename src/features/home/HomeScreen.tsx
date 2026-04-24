@@ -335,6 +335,10 @@ export default function HomeScreen() {
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
 
+  const setImportedArkhamBuildDeckJson = useGameStore(
+    (state) => state.setImportedArkhamBuildDeckJson,
+  );
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -369,7 +373,25 @@ export default function HomeScreen() {
               This app requires an ArkhamDB deck. Investigator selection is
               automatically derived from the selected deck.
             </p>
+            <label>
+              Import Arkham.build JSON
+              <input
+                type="file"
+                accept="application/json,.json"
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
 
+                  if (!file) {
+                    return;
+                  }
+
+                  const text = await file.text();
+                  const parsed = JSON.parse(text);
+
+                  setImportedArkhamBuildDeckJson(parsed);
+                }}
+              />
+            </label>
             <div
               className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
             >

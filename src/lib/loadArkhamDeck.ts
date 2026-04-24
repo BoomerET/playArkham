@@ -6,12 +6,18 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
+export type ArkhamBuildDeckJson = {
+  investigator_code?: string;
+  investigator_name?: string;
+  name?: string;
+  slots?: Record<string, number>;
+};
+
 function generateId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
   }
 
-  // fallback
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
@@ -20,6 +26,25 @@ function cloneCard(card: PlayerCard): PlayerCard {
     ...card,
     instanceId: `${card.code}-${generateId()}`,
   };
+}
+
+function buildDeckCardsFromSlots(slots: Record<string, number>): PlayerCard[] {
+  const deckCards: PlayerCard[] = [];
+
+  for (const [code, count] of Object.entries(slots)) {
+    const matchingCard = playerDeck.find((card) => card.code === code);
+
+    if (!matchingCard) {
+      console.warn(`Unsupported card code: ${code}`);
+      continue;
+    }
+
+    for (let i = 0; i < count; i += 1) {
+      deckCards.push(cloneCard(matchingCard));
+    }
+  }
+
+  return deckCards;
 }
 
 export async function loadArkhamDeck(deckId: string): Promise<{
@@ -46,23 +71,26 @@ export async function loadArkhamDeck(deckId: string): Promise<{
     throw new Error("ArkhamDB deck response did not include slots.");
   }
 
-  const deckCards: PlayerCard[] = [];
-  //let copyIndex = 0;
+  return {
+    investigatorCode: data.investigator_code?.trim() ?? null,
+    cards: buildDeckCardsFromSlots(data.slots),
+  };
+}
 
-  for (const [code, count] of Object.entries(data.slots)) {
-    const matchingCard = playerDeck.find((card) => card.code === code);
-
-    if (!matchingCard) {
-      continue;
-    }
-
-    for (let i = 0; i < count; i += 1) {
-      deckCards.push(cloneCard(matchingCard));
-    }
+export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
+  investigatorCode: string | null;
+  investigatorName: string | null;
+  deckName: string | null;
+  cards: PlayerCard[];
+} {
+  if (!deckJson.slots) {
+    throw new Error("Arkham.build deck JSON did not include slots.");
   }
 
   return {
-    investigatorCode: data.investigator_code?.trim() ?? null,
-    cards: deckCards,
+    investigatorCode: deckJson.investigator_code?.trim() ?? null,
+    investigatorName: deckJson.investigator_name?.trim() ?? null,
+    deckName: deckJson.name?.trim() ?? null,
+    cards: buildDeckCardsFromSlots(deckJson.slots),
   };
 }

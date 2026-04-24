@@ -131,6 +131,8 @@ import {
 
 import {
   loadArkhamDeck,
+  loadArkhamBuildDeckFromJson,
+  type ArkhamBuildDeckJson,
 } from "../lib/loadArkhamDeck";
 
 import {
@@ -174,6 +176,10 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  importedArkhamBuildDeckJson: null,
+  setImportedArkhamBuildDeckJson: (deck) => {
+    set({ importedArkhamBuildDeckJson: deck });
+  },
   debugMode: false,
   debugPreset: "none",
   setDebugMode: (enabled: boolean) => {
@@ -2286,14 +2292,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const debugMode = get().debugMode;
     const debugPreset = get().debugPreset;
 
+    const importedArkhamBuildDeckJson = get().importedArkhamBuildDeckJson;
     const selectedDeckId = get().selectedDeckId.trim();
-    if (!selectedDeckId) {
-      get().pushLog("system", "Cannot start game without an ArkhamDB deck ID.");
-      throw new Error("ArkhamDB deck ID is required.");
+
+    if (!importedArkhamBuildDeckJson && !selectedDeckId) {
+      get().pushLog(
+        "system",
+        "Cannot start game without an ArkhamDB deck ID or imported Arkham.build JSON.",
+      );
+      throw new Error("Deck source is required.");
     }
-    const selected = get().availableInvestigators.find(
-      (investigator) => investigator.id === get().selectedInvestigatorId,
-    );
+
+    const selected = importedArkhamBuildDeckJson?.investigator_code
+      ? get().availableInvestigators.find(
+        (investigator) =>
+          investigator.code === importedArkhamBuildDeckJson.investigator_code,
+      )
+      : get().availableInvestigators.find(
+        (investigator) => investigator.id === get().selectedInvestigatorId,
+      );
+
     if (!selected) {
       get().pushLog(
         "system",
@@ -2303,14 +2321,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
-    let loadedDeck;
+    let loadedDeck: {
+      investigatorCode: string | null;
+      investigatorName?: string | null;
+      deckName?: string | null;
+      cards: PlayerCard[];
+    };
+
     try {
-      loadedDeck = await loadArkhamDeck(selectedDeckId);
+      loadedDeck = importedArkhamBuildDeckJson
+        ? loadArkhamBuildDeckFromJson(importedArkhamBuildDeckJson)
+        : await loadArkhamDeck(selectedDeckId);
     } catch (error) {
       console.error(error);
       get().pushLog(
         "system",
-        `Failed to load ArkhamDB deck ${selectedDeckId}.`,
+        importedArkhamBuildDeckJson
+          ? "Failed to load imported Arkham.build deck JSON."
+          : `Failed to load ArkhamDB deck ${selectedDeckId}.`,
       );
       throw error;
     }
@@ -2673,7 +2701,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
         createLogEntry(
           "system",
-          `Deck source: ArkhamDB deck ${selectedDeckId}.`,
+          importedArkhamBuildDeckJson
+            ? `Deck source: Arkham.build import${loadedDeck.deckName ? ` (${loadedDeck.deckName})` : ""}.`
+            : `Deck source: ArkhamDB deck ${selectedDeckId}.`,
         ),
         ...setupLogEntries,
         createLogEntry("system", "Game setup complete."),

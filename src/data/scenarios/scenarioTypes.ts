@@ -40,6 +40,13 @@ export interface ScenarioAdvanceEffects {
     cardCode: string;
     locationId: string;
   };
+
+  discardEnemy?: {
+    enemyCode?: string;
+    enemyId?: string;
+    onlyIfEngaged?: boolean;
+    locationId?: string;
+  };
 }
 
 export interface ScenarioCardDefinition {

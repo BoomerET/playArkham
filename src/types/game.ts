@@ -1,3 +1,5 @@
+import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
+
 // ============================================================
 // Core primitives
 // ============================================================
@@ -512,6 +514,8 @@ export interface GameState {
     | "setAsideSpawn"
     | "enemyDiscard"
   ) => void;
+  importedArkhamBuildDeckJson: ArkhamBuildDeckJson | null;
+  setImportedArkhamBuildDeckJson: (deck: ArkhamBuildDeckJson | null) => void;
 }
 
 
