@@ -362,7 +362,7 @@ export default function HomeScreen() {
               id="arkhamdb-deck-id"
               type="text"
               className="home-screen__input"
-              value={selectedDeckId || "5884619"}
+              value={selectedDeckId}
               onChange={(event) => setSelectedDeckId(event.target.value)}
               placeholder="Required, e.g. 5841936"
               autoComplete="off"
