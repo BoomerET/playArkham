@@ -163,33 +163,33 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "bodyguard-6",
     "name": "Bodyguard",
     "type": "asset",
-    "text": ["Bodyguard may be assigned damage dealt to other investigators at your location. Reaction: When Bodyguard is defeated: Deal 1 damage to an enemy at your location.",
-      "cost": 3,
-      "icons": [
-        "combat"
-      ],
-      "slot": "Ally",
-      "traits": [
-        "Ally"
-      ],
-      "faction": "guardian",
-      "code": "12016",
+    "text": ["Bodyguard may be assigned damage dealt to other investigators at your location. Reaction: When Bodyguard is defeated: Deal 1 damage to an enemy at your location.",],
+    "cost": 3,
+    "icons": [
+      "combat"
+    ],
+    "slot": "Ally",
+    "traits": [
+      "Ally"
+    ],
+    "faction": "guardian",
+    "code": "12016",
   },
   {
     "instanceId": "endurance-7",
     "name": "Endurance",
     "type": "asset",
-    "text": ["Fast. Spend 1 resource: You get +1 combat for this skill test (+2 combat instead if this is an attac  k or evasion). Fast. Spend 1 resource: You get +1 agility for this skill test (+2 agility instead if this is an attack or evasion).",
-      "cost": 2,
-      "icons": [
-        "combat",
-        "agility"
-      ],
-      "traits": [
-        "Talent"
-      ],
-      "faction": "guardian",
-      "code": "12017",
+    "text": ["Fast. Spend 1 resource: You get +1 combat for this skill test (+2 combat instead if this is an attac  k or evasion). Fast. Spend 1 resource: You get +1 agility for this skill test (+2 agility instead if this is an attack or evasion).",],
+    "cost": 2,
+    "icons": [
+      "combat",
+      "agility"
+    ],
+    "traits": [
+      "Talent"
+    ],
+    "faction": "guardian",
+    "code": "12017",
   },
   {
     "instanceId": "logan-hastings-8",
@@ -416,18 +416,18 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "fingerprint-kit-1",
     "name": "Fingerprint Kit",
     "type": "asset",
-    "text": ["Uses (3 supplies). Action: Exhaust Fingerprint Kit and spend 1 supply: Investigate. You get +1 intellect for this investigation. If you succeed, you discover 1 additional clue at your location.",
-      "cost": 4,
-      "icons": [
-        "intellect"
-      ],
-      "slot": "Hand",
-      "traits": [
-        "Item",
-        "Tool"
-      ],
-      "faction": "seeker",
-      "code": "12031"
+    "text": ["Uses (3 supplies). Action: Exhaust Fingerprint Kit and spend 1 supply: Investigate. You get +1 intellect for this investigation. If you succeed, you discover 1 additional clue at your location.",],
+    "cost": 4,
+    "icons": [
+      "intellect"
+    ],
+    "slot": "Hand",
+    "traits": [
+      "Item",
+      "Tool"
+    ],
+    "faction": "seeker",
+    "code": "12031"
   },
   {
     "instanceId": "laboratory-assistant-2",
