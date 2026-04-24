@@ -23,14 +23,10 @@ Treachery template
     "instanceId": "name-1",
     "name": "Name",
     "type": "treachery",
-    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "text": "Flavor Text",
     "traits": [
       "Practiced"
     ],
-    "icons": [
-      "wild",
-    ],
-    "faction": "rogue",
     "isWeakness": false,
     "code": "60351"
   }
@@ -40,7 +36,7 @@ Asset template
     "instanceId": "name-1",
     "name": "Name",
     "type": "asset",
-    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "text": "Flavor Text",
     "traits": [
       "Practiced"
     ],

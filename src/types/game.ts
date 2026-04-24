@@ -129,7 +129,7 @@ export interface PlayerCard {
   faction: Faction;
   cost?: number;
   icons?: string[];
-  text?: string;
+  text?: string[];
   slot?: PlayerCardSlot;
   traits?: string[];
   image?: string;
