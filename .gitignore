@@ -3,3 +3,4 @@ package-lock.json
 dist/
 src/assets/.DS_Store
 convertPngToWebp.py
+src/assets/images/.DS_Store

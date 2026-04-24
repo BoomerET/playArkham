@@ -1584,5 +1584,51 @@ export const playerDeck: PlayerCard[] = [
     "faction": "neutral",
     "isWeakness": true,
     "code": "12104"
-  }
+  },
+  {
+    "instanceId": "know-the-exit-1",
+    "name": "Know the Exit",
+    "type": "skill",
+    "text": "Andre Patel deck only. While this card is commmitted to an attack or evasion, it gains 2 WILD",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60352"
+  },
+  {
+    "instanceId": "know-the-line-1",
+    "name": "Know the Line",
+    "type": "skill",
+    "text": "Andre Patel deck only. While this card is commmitted to a skill test on a scenario card, it gains 2 WILD.",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60353"
+  },
+  {
+    "instanceId": "know-the-scene-1",
+    "name": "Know the Scene",
+    "type": "skill",
+    "text": "Andre Patel deck only. While this card is commmitted to an investigation or parley, it gains 2 WILD",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60354"
+  },
+
 ];

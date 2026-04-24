@@ -1,0 +1,91 @@
+Player card template
+
+Skill template
+  {
+    "instanceId": "know-the-exit-1",
+    "name": "Know the Exit",
+    "type": "skill",
+    "text": "Andre Patel deck only. While this card is ",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60351"
+  },
+
+
+Treachery template
+  {
+    "instanceId": "name-1",
+    "name": "Name",
+    "type": "treachery",
+    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60351"
+  }
+
+Asset template
+  {
+    "instanceId": "name-1",
+    "name": "Name",
+    "type": "asset",
+    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60351"
+  }
+
+Event template
+  {
+    "instanceId": "name-1",
+    "name": "Name",
+    "type": "event",
+    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+      "will",
+      "intellect",
+      "combat",
+      "agility"
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60351"
+  }
+
+  Enemy template
+  {
+    "instanceId": "name-1",
+    "name": "Name",
+    "type": "enemy",
+    "text": "Revelation - Put Wounded into play in your threat area. Forced - The first time you move each turn: Take 1 damage. Action:Action:: Discard Wounded.",
+    "traits": [
+      "Practiced"
+    ],
+    "icons": [
+      "wild",
+    ],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60351"
+  }
