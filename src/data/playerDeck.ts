@@ -1589,13 +1589,14 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "know-the-exit-1",
     "name": "Know the Exit",
     "type": "skill",
-    "text": ["Andre Patel deck only. While this card is commmitted to an attack or evasion, it gains 2 WILD"],
+    "text": [
+      "André Patel deck only.",
+      "While this card is committed to an attack or an evasion, it gains [wild] [wild]."
+    ],
     "traits": [
-      "Practiced"
+      "Practiced."
     ],
-    "icons": [
-      "wild",
-    ],
+    "icons": [],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60352"
@@ -1604,17 +1605,14 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "know-the-line-1",
     "name": "Know the Line",
     "type": "skill",
-    "text":
-      [
-        "Andre Patel deck only.",
-        "While this card is commmitted to a skill test on a scenario card, it gains 2 WILD"
-      ],
+    "text": [
+      "André Patel deck only.",
+      "While this card is committed to a skill test on a scenario card, it gains [wild] [wild]."
+    ],
     "traits": [
-      "Practiced"
+      "Practiced."
     ],
-    "icons": [
-      "wild",
-    ],
+    "icons": [],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60353"
@@ -1623,17 +1621,14 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "know-the-scene-1",
     "name": "Know the Scene",
     "type": "skill",
-    "text":
-      [
-        "Andre Patel deck only.",
-        "While this card is commmitted to an investigation or parley, it gains 2 WILD"
-      ],
+    "text": [
+      "André Patel deck only.",
+      "While this card is committed to an investigation or parley, it gains [wild] [wild]."
+    ],
     "traits": [
-      "Practiced"
+      "Practiced."
     ],
-    "icons": [
-      "wild",
-    ],
+    "icons": [],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60354"
@@ -1642,13 +1637,476 @@ export const playerDeck: PlayerCard[] = [
     "instanceId": "weight-of-the-world-1",
     "name": "Weight of the World",
     "type": "treachery",
-    "text": ["Revelation - Put Weight of the World into play in your threat area."],
-    "traits": [
-      "terror"
+    "text": [
+      "<b>Revelation</b> - Put Weight of the World into play in your threat area.",
+      "<b>Forced</b> - When you fail a skill test while Weight of the World is in play, take 1 horror and shuffle it back into your deck."
     ],
-
+    "traits": [
+      "Terror."
+    ],
+    "icons": [],
     "faction": "neutral",
     "isWeakness": true,
-    "code": "60351"
+    "code": "60355"
+  },
+  {
+    "instanceId": "unaware-1",
+    "name": "Unaware",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Put Unaware into play in your threat area.",
+      "<b>Forced</b> - The first time you fail a skill test during your turn: Draw the top card of the encounter deck. If that card is an enemy, discard Unaware."
+    ],
+    "traits": [
+      "Flaw."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": false,
+    "code": "60356"
+  },
+  {
+    "instanceId": "center-stage-1",
+    "name": "Center Stage",
+    "type": "asset",
+    "text": [
+      "Limit 1 per investigator. Uses (3 renown). If there is no renown on Center Stage, discard it.",
+      "[fast] During a skill test, spend 1 renown and exhaust Center Stage: You get +1 skill value for each action you have spent this round <i>(including this one, if this is triggered during one of your actions)</i>."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60357"
+  },
+  {
+    "instanceId": "fame-1",
+    "name": "Fame",
+    "type": "asset",
+    "text": [
+      "Uses (4 renown). If there is no renown on Fame, discard it.",
+      "[action] If there is an enemy at your location, spend 1 renown: <b>Parley.</b> Gain 2 resources."
+    ],
+    "traits": [
+      "Condition."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60358"
+  },
+  {
+    "instanceId": "the-grapevine-1",
+    "name": "The Grapevine",
+    "type": "asset",
+    "text": [
+      "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.",
+      "[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 2 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it."
+    ],
+    "traits": [
+      "Connection."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60359"
+  },
+  {
+    "instanceId": "extravagant-ring-1",
+    "name": "Extravagant Ring",
+    "type": "asset",
+    "text": [
+      "Uses (3 renown).",
+      "[reaction] When you would succeed at a skill test, spend 1 renown and exhaust Extravagant Ring: You get +2 skill value for this test."
+    ],
+    "traits": [
+      "Item. Charm."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60360"
+  },
+  {
+    "instanceId": "lockpicks-1",
+    "name": "Lockpicks",
+    "type": "asset",
+    "text": [
+      "[action] Exhaust Lockpicks: <b>Investigate</b> ([intellect]). Add your [agility] to your [intellect] for this test. If you do not succeed by at least 2, discard Lockpicks."
+    ],
+    "traits": [
+      "Item. Tool. Illicit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60361"
+  },
+  {
+    "instanceId": "marcus-sengstacke-1",
+    "name": "Marcus Sengstacke",
+    "type": "asset",
+    "text": [
+      "You gain 1 additional resource during the upkeep phase.",
+      "<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke."
+    ],
+    "traits": [
+      "Ally. Patron."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60362"
+  },
+  {
+    "instanceId": "polished-cane-1",
+    "name": "Polished Cane",
+    "type": "asset",
+    "text": [
+      "[action]: <b>Fight</b> ([combat]). Add your [agility] to your [combat] for this attack. If this attack succeeds by 2 or more against a non-[[Elite]] enemy, you may exhaust Polished Cane to automatically evade that enemy."
+    ],
+    "traits": [
+      "Item. Weapon. Melee."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60363"
+  },
+  {
+    "instanceId": "clean-sweep-1",
+    "name": "Clean Sweep",
+    "type": "event",
+    "text": [
+      "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you discover the last clue at your location, you may move to a connecting location."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60364"
+  },
+  {
+    "instanceId": "pay-your-dues-1",
+    "name": "Pay Your Dues",
+    "type": "event",
+    "text": [
+      "<b>Parley.</b> Choose a non-[[Elite]] enemy at your location with X remaining health. That enemy disengages from each investigator and gains aloof until the end of the round. Discover 1 clue at your location."
+    ],
+    "traits": [
+      "Favor."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60365"
+  },
+  {
+    "instanceId": "quick-exit-1",
+    "name": "Quick Exit",
+    "type": "event",
+    "text": [
+      "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed by 2 or more and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60366"
+  },
+  {
+    "instanceId": "a-sudden-fall-1",
+    "name": "A Sudden Fall",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([combat]). You get +2 [combat] for this attack. If the targeted enemy is exhausted, this attack deals +1 damage."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60367"
+  },
+  {
+    "instanceId": "right-under-their-noses-1",
+    "name": "Right Under Their Noses",
+    "type": "event",
+    "text": [
+      "Fast. Play after you successfully evade an enemy.",
+      "Discover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, instead)."
+    ],
+    "traits": [
+      "Trick. Illicit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60368"
+  },
+  {
+    "instanceId": "easy-street-1",
+    "name": "Easy Street",
+    "type": "skill",
+    "text": [
+      "Commit only to a skill test you are performing. Max 1 committed per skill test.",
+      "Easy Street gains [wild] for every 3 resources you have (to a maximum of [wild] [wild] [wild])."
+    ],
+    "traits": [
+      "Favor."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60369"
+  },
+  {
+    "instanceId": "out-the-door-1",
+    "name": "Out the Door",
+    "type": "skill",
+    "text": [
+      "After Out the Door is committed to a skill test, the performing investigator gains 2 resources. If this skill test fails, that investigator loses 2 resources."
+    ],
+    "traits": [
+      "Gambit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60370"
+  },
+  {
+    "instanceId": "watch-this-1",
+    "name": "\"Watch this!\"",
+    "type": "skill",
+    "text": [
+      "Commit only to a skill test you are performing. As an additional cost to commit \"Watch this!\" spend up to 3 resources.",
+      "If you succeed by 1 or more, gain twice that many resources."
+    ],
+    "traits": [
+      "Gambit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60371"
+  },
+  {
+    "instanceId": "lockpicks-1",
+    "name": "Lockpicks",
+    "type": "asset",
+    "text": [
+      "Uses (3 supplies). If there are no supplies on Lockpicks, discard it.",
+      "[action] Exhaust Lockpicks: <b>Investigate</b> ([intellect]). Add your [agility] to your [intellect] for this test. If you do not succeed by at least 2, remove 1 supply from Lockpicks."
+    ],
+    "traits": [
+      "Item. Tool. Illicit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60372"
+  },
+  {
+    "instanceId": "out-the-door-1",
+    "name": "Out the Door",
+    "type": "skill",
+    "text": [
+      "After Out the Door is committed to a skill test, the performing investigator gains 4 resources. If this skill test fails, that investigator loses 4 resources."
+    ],
+    "traits": [
+      "Gambit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60373"
+  },
+  {
+    "instanceId": "the-grapevine-1",
+    "name": "The Grapevine",
+    "type": "asset",
+    "text": [
+      "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.",
+      "[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 3 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it. Draw 1 card."
+    ],
+    "traits": [
+      "Connection."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60374"
+  },
+  {
+    "instanceId": "marcus-sengstacke-1",
+    "name": "Marcus Sengstacke",
+    "type": "asset",
+    "text": [
+      "You gain 1 additional resource during the upkeep phase.",
+      "<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke."
+    ],
+    "traits": [
+      "Ally. Patron."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60375"
+  },
+  {
+    "instanceId": "clean-sweep-1",
+    "name": "Clean Sweep",
+    "type": "event",
+    "text": [
+      "<b>Investigate</b> ([agility]). Add your [intellect] to your [agility] for this test. After this test resolves, you may move to a connecting location."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60376"
+  },
+  {
+    "instanceId": "quick-exit-1",
+    "name": "Quick Exit",
+    "type": "event",
+    "text": [
+      "<b>Evade</b> ([agility]). Add your [willpower] to your [agility] for this test. If you succeed and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60377"
+  },
+  {
+    "instanceId": "a-sudden-fall-1",
+    "name": "A Sudden Fall",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([agility]). Add your [combat] to your [agility] for this test. If the targeted enemy is exhausted, this attack deals +2 damage."
+    ],
+    "traits": [
+      "Tactic. Trick."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60378"
+  },
+  {
+    "instanceId": "the-black-fan-1",
+    "name": "The Black Fan",
+    "type": "asset",
+    "text": [
+      "Exceptional.",
+      "While you have...",
+      "- ...10+ resources, you get +1 health and +1 sanity.",
+      "- ...15+ resources, you may take an additional action during your turn.",
+      "- ...20+ resources, you get +1 to each of your skills."
+    ],
+    "traits": [
+      "Item. Relic."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60379"
+  },
+  {
+    "instanceId": "silver-tongue-1",
+    "name": "Silver Tongue",
+    "type": "asset",
+    "text": [
+      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
+      "[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an evasion or parley).",
+      "[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an evasion or parley)."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60380"
+  },
+  {
+    "instanceId": "well-connected-1",
+    "name": "Well Connected",
+    "type": "asset",
+    "text": [
+      "Limit 1 per investigator.",
+      "[fast] Exhaust Well Connected: You get +1 skill value for this skill test for every 4 resources you have.",
+      "[fast] Spend 2 resources: Ready Well Connected. (Limit once per round.)"
+    ],
+    "traits": [
+      "Condition."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60381"
+  },
+  {
+    "instanceId": "right-under-their-noses-1",
+    "name": "Right Under Their Noses",
+    "type": "event",
+    "text": [
+      "Fast. Play after you successfully evade an enemy.",
+      "Discover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, as well)."
+    ],
+    "traits": [
+      "Trick. Illicit."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60382"
+  },
+  {
+    "instanceId": "contingency-1",
+    "name": "Contingency",
+    "type": "skill",
+    "text": [
+      "While Contingency is committed to a skill test targeting an enemy, after revealing chaos tokens, you may spend 3 resources to cancel a revealed token, return it to the chaos bag, and reveal a new one. <i>(You may do this any number of times.)</i>"
+    ],
+    "traits": [
+      "Practiced. Expert."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60383"
+  },
+  {
+    "instanceId": "the-red-clock-1",
+    "name": "The Red Clock",
+    "type": "asset",
+    "text": [
+      "Exceptional. Uses (0 charges).",
+      "<b>Forced</b> - After your turn begins: You may take all charges here, as resources. Place 1 charge here. If it has exactly...",
+      "- ...1 charge, you get +4 skill value for your next skill test.",
+      "- ...2 charges, you may move up to 3 times.",
+      "- ...3 charges, you may take 2 additional actions this turn."
+    ],
+    "traits": [
+      "Item. Relic."
+    ],
+    "icons": [],
+    "faction": "rogue",
+    "isWeakness": false,
+    "code": "60384"
   }
 ];
