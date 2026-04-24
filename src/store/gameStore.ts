@@ -132,7 +132,6 @@ import {
 import {
   loadArkhamDeck,
   loadArkhamBuildDeckFromJson,
-  type ArkhamBuildDeckJson,
 } from "../lib/loadArkhamDeck";
 
 import {
@@ -2458,8 +2457,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     let debugThreatArea: EncounterCard[] = [];
     let debugSetAsideEncounterCards = initialSetAsideEncounterCards;
-    let debugAct = getInitialActState(selectedScenario);
-    let debugAgenda = getInitialAgendaState(selectedScenario)
+    const debugAct = getInitialActState(selectedScenario);
+    const debugAgenda = getInitialAgendaState(selectedScenario)
 
     if (debugMode && debugPreset === "threatAreaDiscard") {
       debugLocations = debugLocations.map((location) => {
