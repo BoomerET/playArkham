@@ -188,8 +188,8 @@ export default function HomeScreen() {
     (state) => state.setImportedArkhamBuildDeckJson,
   );
 
-  const importedInvestigatorCode =
-    importedArkhamBuildDeckJson?.investigator_code?.trim() ?? "";
+  //const importedInvestigatorCode =
+  //  importedArkhamBuildDeckJson?.investigator_code?.trim() ?? "";
 
   useEffect(() => {
     if (!trimmedDeckId) {
