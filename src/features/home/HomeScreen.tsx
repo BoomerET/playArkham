@@ -413,19 +413,14 @@ export default function HomeScreen() {
                     0,
                   );
 
-                  const unsupportedCodes = slotEntries
-                    .map(([code]) => code)
-                    .filter((code) => {
-                      // This requires importing playerDeck, or skip this here and rely on loader.
-                      return false;
-                    });
+                  //const unsupportedCodes: string[] = [];
 
                   setImportedDeckSummary({
                     deckName: parsed.name?.trim() ?? null,
                     investigatorName: parsed.investigator_name?.trim() ?? null,
                     investigatorCode: parsed.investigator_code?.trim() ?? null,
                     cardCount,
-                    unsupportedCodes: unsupportedCodes,
+                    unsupportedCodes: [],
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
