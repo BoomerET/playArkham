@@ -2616,5 +2616,496 @@ export const playerDeck: PlayerCard[] = [
     "faction": "mystic",
     "isWeakness": false,
     "code": "60483"
-  }
+  },
+  {
+    "instanceId": "miguel-s-knapsack-1",
+    "name": "Miguel's Knapsack",
+    "type": "asset",
+    "text": [
+      "Miguel de la Cruz deck only.",
+      "[reaction] When you play an event, exhaust Miguel's Knapsack: Either play that event at a connecting location as if you were at that location, or draw 1 card."
+    ],
+    "traits": [
+      "Item."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60552"
+  },
+  {
+    "instanceId": "feline-hybrid-1",
+    "name": "Feline Hybrid",
+    "type": "enemy",
+    "text": [
+      "Elusive. Hunter. Prey (Miguel de la Cruz only).",
+      "Feline Hybrid is immune to player card effects."
+    ],
+    "traits": [
+      "Creature. Mutated."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60553"
+  },
+  {
+    "instanceId": "blood-drinker-1",
+    "name": "Blood Drinker",
+    "type": "enemy",
+    "text": [
+      "Hunter. Retaliate.",
+      "<b>Forced</b> - After Blood Drinker attacks: Heal 1 damage from it."
+    ],
+    "traits": [
+      "Humanoid. Monster."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": false,
+    "code": "60554"
+  },
+  {
+    "instanceId": "daniel-jameson-1",
+    "name": "Daniel Jameson",
+    "type": "asset",
+    "text": [
+      "You get +1 [agility].",
+      "[reaction] After you fail an attack or evasion, exhaust Daniel Jameson: Attempt that skill test again, with +1 skill value."
+    ],
+    "traits": [
+      "Ally. Hunter."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60555"
+  },
+  {
+    "instanceId": "hunting-dog-1",
+    "name": "Hunting Dog",
+    "type": "asset",
+    "text": [
+      "[reaction] When an enemy enters play, exhaust Hunting Dog: Move once toward that enemy's location."
+    ],
+    "traits": [
+      "Ally. Creature."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60556"
+  },
+  {
+    "instanceId": "loner-1",
+    "name": "Loner",
+    "type": "asset",
+    "text": [
+      "Limit 1 per investigator.",
+      "[fast] During your turn, exhaust Loner: Move to an empty connecting location."
+    ],
+    "traits": [
+      "Condition."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60557"
+  },
+  {
+    "instanceId": "old-compass-1",
+    "name": "Old Compass",
+    "type": "asset",
+    "text": [
+      "[action]: <b>Investigate</b> ([intellect]). Your location gets -1 shroud for this investigation. If you fail, you may exhaust Old Compass to attempt this skill test again."
+    ],
+    "traits": [
+      "Item. Tool."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60558"
+  },
+  {
+    "instanceId": "pocketknife-1",
+    "name": "Pocketknife",
+    "type": "asset",
+    "text": [
+      "[action]: <b>Fight</b> ([combat] or [agility]). You get +1 skill value for this test. If this attack defeats an enemy, you may exhaust Pocketknife to gain 1 resource."
+    ],
+    "traits": [
+      "Item. Tool. Weapon. Melee."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60559"
+  },
+  {
+    "instanceId": "rabbit-s-foot-1",
+    "name": "Rabbit's Foot",
+    "type": "asset",
+    "text": [
+      "[reaction] After you fail a skill test, exhaust Rabbit's Foot: Draw 1 card."
+    ],
+    "traits": [
+      "Item. Charm."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60560"
+  },
+  {
+    "instanceId": "same-old-thing-1",
+    "name": "Same Old Thing",
+    "type": "asset",
+    "text": [
+      "Uses (5 supplies). If there are no supplies on Same Old Thing, discard it.",
+      "You may spend supplies on Same Old Thing as resources to pay for events played by any investigator at your location."
+    ],
+    "traits": [
+      "Condition."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60561"
+  },
+  {
+    "instanceId": "decoy-trap-1",
+    "name": "Decoy Trap",
+    "type": "event",
+    "text": [
+      "Fast. Attach to your location. Limit 1 [[Trap]] per location.",
+      "[reaction] After an enemy enters attached location, exhaust Decoy Trap: <b>Evade</b> ([intellect] or [agility]). Evade that enemy. You get +1 skill value for this evasion. If this test succeeds, you may discard Decoy Trap to move to this location. <i>(You may trigger this ability from any location.)</i>"
+    ],
+    "traits": [
+      "Trap. Trick."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60562"
+  },
+  {
+    "instanceId": "glassing-1",
+    "name": "Glassing",
+    "type": "event",
+    "text": [
+      "Fast. Attach to your location. Limit 1 [[Trap]] per location.",
+      "[reaction] After an enemy enters attached location, exhaust Glassing: <b>Investigate</b> ([intellect] or [agility]). You get +1 skill value for this investigation. If you succeed, you may discard Glassing to discover 1 additional clue at this location. <i>(You may trigger this ability from any location.)</i>"
+    ],
+    "traits": [
+      "Insight. Trap."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60563"
+  },
+  {
+    "instanceId": "guerrilla-tactics-1",
+    "name": "Guerrilla Tactics",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([combat]) or <b>Evade</b> ([agility]). You get +1 skill value for this test and you may target an enemy at a connecting location as if you were engaged with that enemy."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60564"
+  },
+  {
+    "instanceId": "hidden-shelter-1",
+    "name": "Hidden Shelter",
+    "type": "event",
+    "text": [
+      "Attach to your location. Limit 1 per location.",
+      "[reaction] When the round ends, each investigator at this location may choose one of the following: Draw 1 card, gain 1 resource, heal 1 damage, or heal 1 horror.",
+      "<b>Forced</b> - After an enemy enters this location: Discard Hidden Shelter."
+    ],
+    "traits": [
+      "Supply. Trick."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60565"
+  },
+  {
+    "instanceId": "lie-in-wait-1",
+    "name": "Lie in Wait",
+    "type": "event",
+    "text": [
+      "Fast. Attach to your location. Limit 1 [[Trap]] per location.",
+      "[reaction] After an enemy enters this location, exhaust Lie in Wait: <b>Fight</b> ([combat] or [agility]). Fight that enemy. You get +1 skill value for this attack. You may discard Lie in Wait for this attack to deal +1 damage. <i>(You may trigger this ability from any location.)</i>"
+    ],
+    "traits": [
+      "Tactic. Trap."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60566"
+  },
+  {
+    "instanceId": "stalk-prey-1",
+    "name": "Stalk Prey",
+    "type": "event",
+    "text": [
+      "Search the top 9 cards of the encounter deck for an enemy, draw it, and shuffle the encounter deck. Then, draw 1 card and discover 1 clue at your location. If that enemy is not at your location, you may move once toward its location."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60567"
+  },
+  {
+    "instanceId": "do-or-die-1",
+    "name": "Do-or-Die",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful, choose a [survivor] asset or event in your discard pile and add it to your hand."
+    ],
+    "traits": [
+      "Fortune."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60568"
+  },
+  {
+    "instanceId": "on-the-brink-1",
+    "name": "On the Brink",
+    "type": "skill",
+    "text": [
+      "Max 1 committed per skill test.",
+      "If this test fails, return each other card committed to this test to its owner's hand."
+    ],
+    "traits": [
+      "Gambit. Desperate."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60569"
+  },
+  {
+    "instanceId": "extra-rations-1",
+    "name": "Extra Rations",
+    "type": "asset",
+    "text": [
+      "Uses (4 supplies). If there are no supplies on Extra Rations, discard it.",
+      "[fast] Spend 1 supply and exhaust Extra Rations: Heal 1 damage from your investigator or an [[Ally]] asset you control."
+    ],
+    "traits": [
+      "Item. Supply."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60570"
+  },
+  {
+    "instanceId": "field-dressing-1",
+    "name": "Field Dressing",
+    "type": "event",
+    "text": [
+      "Fast. Play after a [[Creature]] or [[Monster]] enemy at your location is defeated.",
+      "Heal up to 3 damage from among investigators and/or [[Ally]] assets at your location."
+    ],
+    "traits": [
+      "Spirit."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60571"
+  },
+  {
+    "instanceId": "rough-1",
+    "name": "Rough",
+    "type": "skill",
+    "text": [
+      "For every 2 damage on you (rounded up), Rough gains [wild]."
+    ],
+    "traits": [
+      "Innate."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60572"
+  },
+  {
+    "instanceId": "canteen-1",
+    "name": "Canteen",
+    "type": "asset",
+    "text": [
+      "Uses (3 supplies).",
+      "[fast] Spend 1 supply and exhaust Canteen: Heal 2 horror."
+    ],
+    "traits": [
+      "Item."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60573"
+  },
+  {
+    "instanceId": "hunter-s-instinct-1",
+    "name": "Hunter's Instinct",
+    "type": "asset",
+    "text": [
+      "Limit 1 per investigator. Uses (3 supplies).",
+      "[reaction] After you engage an enemy, spend 1 supply and exhaust Hunter's Instinct: Add a level 0-2 event in your discard pile to your hand."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60574"
+  },
+  {
+    "instanceId": "winchester-model-52-1",
+    "name": "Winchester Model 52",
+    "type": "asset",
+    "text": [
+      "Uses (2 ammo).",
+      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.",
+      "[action] Discard Winchester Model 52: <b>Fight</b> ([combat]). You get +3 [combat] for this attack. If you succeed, automatically evade the targeted enemy."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60575"
+  },
+  {
+    "instanceId": "guerrilla-tactics-1",
+    "name": "Guerrilla Tactics",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([combat]) or <b>Evade</b> ([agility]). You get +2 skill value for this test and you may target an enemy at a connecting location as if you were engaged with that enemy. If you succeed, deal 1 damage to that enemy <i>(in addition to its standard damage)</i>."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60576"
+  },
+  {
+    "instanceId": "respite-1",
+    "name": "Respite",
+    "type": "event",
+    "text": [
+      "Play only if there are no enemies at your location.",
+      "Choose up to 3 level 0 event and/or skill cards in your discard pile and shuffle them into your deck. Draw 1 card."
+    ],
+    "traits": [
+      "Spirit."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60577"
+  },
+  {
+    "instanceId": "rope-trap-1",
+    "name": "Rope Trap",
+    "type": "event",
+    "text": [
+      "Attach to your location. Limit 1 [[Trap]] attached.",
+      "[reaction] When an enemy enters attached location, exhaust Rope Trap: Deal 1 damage to that enemy. Reveal a random token from the chaos bag. If a [skull] or [auto_fail] token is revealed, discard Rope Trap. <i>(You may trigger this ability from any location.)</i>"
+    ],
+    "traits": [
+      "Trap. Trick."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60578"
+  },
+  {
+    "instanceId": "levelheaded-1",
+    "name": "Levelheaded",
+    "type": "asset",
+    "text": [
+      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
+      "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a scenario card).",
+      "[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this test is on a scenario card)."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60579"
+  },
+  {
+    "instanceId": "longbow-1",
+    "name": "Longbow",
+    "type": "asset",
+    "text": [
+      "Uses (1 arrow).",
+      "[action] Spend 1 arrow: <b>Fight</b> ([agility]). You get +2 [agility] and deal +2 damage for this attack. This attack ignores the aloof keyword.",
+      "[action]: Replenish 1 arrow on Longbow."
+    ],
+    "traits": [
+      "Item. Weapon. Ranged."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60580"
+  },
+  {
+    "instanceId": "makeshift-bomb-1",
+    "name": "Makeshift Bomb",
+    "type": "event",
+    "text": [
+      "Attach to your location. Limit 1 [[Trap]] attached.",
+      "[reaction] After an enemy or investigator enters attached location, discard Makeshift Bomb: Deal 3 damage to each enemy and investigator at that location. <i>(You may trigger this ability from any location.)</i>"
+    ],
+    "traits": [
+      "Trap."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60581"
+  },
+  {
+    "instanceId": "timely-intervention-1",
+    "name": "Timely Intervention",
+    "type": "skill",
+    "text": [
+      "Max 1 committed per skill test.",
+      "You may commit Timely Intervention from your hand after revealing chaos tokens during a skill test you are performing."
+    ],
+    "traits": [
+      "Fortune."
+    ],
+    "icons": [],
+    "faction": "survivor",
+    "isWeakness": false,
+    "code": "60582"
+  },
 ];
