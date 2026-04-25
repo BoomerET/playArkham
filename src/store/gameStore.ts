@@ -2343,6 +2343,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw error;
     }
 
+    const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
+
     if (loadedDeck.unsupportedCodes.length > 0) {
       get().pushLog(
         "system",
@@ -2718,6 +2720,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
             createLogEntry(
               "system",
               `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+            ),
+          ]
+          : []),
+        ...(unsupportedCodes.length > 0
+          ? [
+            createLogEntry(
+              "system",
+              `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
             ),
           ]
           : []),
