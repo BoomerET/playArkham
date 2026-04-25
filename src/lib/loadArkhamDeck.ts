@@ -92,3 +92,59 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
     unsupportedCodes: buildResult.unsupportedCodes,
   };
 }
+
+function buildDeckCardsFromSlots(slots: Record<string, number>): {
+  cards: PlayerCard[];
+  unsupportedCodes: string[];
+  randomWeaknesses: string[];
+} {
+  const deckCards: PlayerCard[] = [];
+  const unsupportedCodes: string[] = [];
+  const randomWeaknesses: string[] = [];
+
+  const weaknessPool = getBasicWeaknessPool();
+  const usedWeaknessCodes = new Set<string>();
+
+  for (const [code, count] of Object.entries(slots)) {
+    for (let i = 0; i < count; i += 1) {
+      let matchingCard: PlayerCard | undefined;
+
+      if (isRandomWeaknessPlaceholder(code)) {
+        const available = weaknessPool.filter(
+          (w) => !usedWeaknessCodes.has(w.code),
+        );
+
+        const chosenPool =
+          available.length > 0 ? available : weaknessPool;
+
+        if (chosenPool.length === 0) {
+          console.warn("No weaknesses available.");
+          continue;
+        }
+
+        const chosen =
+          chosenPool[Math.floor(Math.random() * chosenPool.length)];
+
+        matchingCard = chosen;
+        usedWeaknessCodes.add(chosen.code);
+        randomWeaknesses.push(chosen.name);
+      } else {
+        matchingCard = playerDeck.find((card) => card.code === code);
+      }
+
+      if (!matchingCard) {
+        console.warn(`Unsupported card code: ${code}`);
+        unsupportedCodes.push(code);
+        continue;
+      }
+
+      deckCards.push(cloneCard(matchingCard));
+    }
+  }
+
+  return {
+    cards: deckCards,
+    unsupportedCodes,
+    randomWeaknesses,
+  };
+}
