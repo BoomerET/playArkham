@@ -180,6 +180,17 @@ export default function HomeScreen() {
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
 
+  const importedArkhamBuildDeckJson = useGameStore(
+    (state) => state.importedArkhamBuildDeckJson,
+  );
+
+  const setImportedArkhamBuildDeckJson = useGameStore(
+    (state) => state.setImportedArkhamBuildDeckJson,
+  );
+
+  const importedInvestigatorCode =
+    importedArkhamBuildDeckJson?.investigator_code?.trim() ?? "";
+
   useEffect(() => {
     if (!trimmedDeckId) {
       setDeckLookupState("idle");
@@ -263,12 +274,9 @@ export default function HomeScreen() {
     };
   }, [availableInvestigators, setSelectedInvestigator, trimmedDeckId]);
 
-  const selectedInvestigator =
-    deckLookupState === "ready"
-      ? availableInvestigators.find(
-        (item) => item.id === selectedInvestigatorId,
-      )
-      : null;
+  const selectedInvestigator = availableInvestigators.find(
+    (item) => item.id === selectedInvestigatorId,
+  ) ?? null;
 
   const previewInvestigator = useMemo<PreviewInvestigator | null>(() => {
     if (!zoomHeld || !hoveredId) {
@@ -327,17 +335,19 @@ export default function HomeScreen() {
       : (previewInvestigator?.frontImageUrl ?? null);
 
   const canStartGame =
-    trimmedDeckId.length > 0 &&
-    deckLookupState === "ready" &&
-    Boolean(selectedInvestigator);
+    Boolean(selectedInvestigator) &&
+    (
+      (trimmedDeckId.length > 0 && deckLookupState === "ready") ||
+      importedArkhamBuildDeckJson != null
+    );
 
   const selectedInvestigatorImageUrl = selectedInvestigator
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
 
-  const setImportedArkhamBuildDeckJson = useGameStore(
-    (state) => state.setImportedArkhamBuildDeckJson,
-  );
+  //const setImportedArkhamBuildDeckJson = useGameStore(
+  //  (state) => state.setImportedArkhamBuildDeckJson,
+  //);
 
   return (
     <main className="app-shell">
@@ -363,7 +373,12 @@ export default function HomeScreen() {
               type="text"
               className="home-screen__input"
               value={selectedDeckId}
-              onChange={(event) => setSelectedDeckId(event.target.value)}
+
+              onChange={(event) => {
+                setImportedArkhamBuildDeckJson(null);
+                setSelectedDeckId(event.target.value);
+              }}
+
               placeholder="Required, e.g. 5841936"
               autoComplete="off"
               inputMode="numeric"
@@ -389,6 +404,33 @@ export default function HomeScreen() {
                   const parsed = JSON.parse(text);
 
                   setImportedArkhamBuildDeckJson(parsed);
+                  setSelectedDeckId("");
+
+                  const investigatorCode = parsed.investigator_code?.trim() ?? "";
+                  const matchingInvestigator = availableInvestigators.find((item) => {
+                    const itemWithOptionalCode = item as typeof item & { code?: string };
+
+                    return itemWithOptionalCode.code === investigatorCode;
+                  });
+
+                  if (matchingInvestigator) {
+                    setSelectedInvestigator(matchingInvestigator.id);
+                    setDetectedDeckName(parsed.name?.trim() ?? null);
+                    setDeckLookupState("ready");
+                    setDeckLookupMessage(
+                      parsed.name
+                        ? `Using Arkham.build deck "${parsed.name}" with investigator ${matchingInvestigator.name}.`
+                        : `Using Arkham.build import with investigator ${matchingInvestigator.name}.`,
+                    );
+                  } else {
+                    setDeckLookupState("error");
+                    setDeckLookupMessage(
+                      investigatorCode
+                        ? `Arkham.build investigator code "${investigatorCode}" is not supported by this app yet.`
+                        : "The imported Arkham.build deck did not include an investigator code.",
+                    );
+                  }
+
                 }}
               />
             </label>
