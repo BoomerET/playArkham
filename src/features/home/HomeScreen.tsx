@@ -524,6 +524,28 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
+              {importedSummary.unsupportedCodes.length > 0 ? (
+                <div className="home-screen__deck-warning">
+                  Unsupported card code(s):{" "}
+                  <strong>{importedSummary.unsupportedCodes.join(", ")}</strong>
+
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() =>
+                      void navigator.clipboard.writeText(
+                        importedSummary.unsupportedCodes.join(", "),
+                      )
+                    }
+                  >
+                    Copy Codes
+                  </button>
+                </div>
+              ) : (
+                <div className="home-screen__deck-meta">
+                  All imported card codes are supported.
+                </div>
+              )}
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
                   Investigator: <strong>{selectedInvestigator.name}</strong>
