@@ -425,7 +425,7 @@ export default function HomeScreen() {
                     investigatorName: parsed.investigator_name?.trim() ?? null,
                     investigatorCode: parsed.investigator_code?.trim() ?? null,
                     cardCount,
-                    unsupportedCodes: [],
+                    unsupportedCodes: unsupportedCodes,
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
