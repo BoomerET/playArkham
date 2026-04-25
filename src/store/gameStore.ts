@@ -2325,6 +2325,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigatorName?: string | null;
       deckName?: string | null;
       cards: PlayerCard[];
+      unsupportedCodes: string[];
     };
 
     try {
@@ -2340,6 +2341,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
           : `Failed to load ArkhamDB deck ${selectedDeckId}.`,
       );
       throw error;
+    }
+
+    if (loadedDeck.unsupportedCodes.length > 0) {
+      get().pushLog(
+        "system",
+        `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+      );
     }
 
     const deckCards = loadedDeck.cards;

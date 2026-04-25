@@ -379,6 +379,7 @@ export default function HomeScreen() {
 
               onChange={(event) => {
                 setImportedArkhamBuildDeckJson(null);
+                setImportedDeckSummary(null);
                 setSelectedDeckId(event.target.value);
               }}
 
