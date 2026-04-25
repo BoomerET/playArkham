@@ -408,7 +408,7 @@ export default function HomeScreen() {
                   const text = await file.text();
                   const parsed = JSON.parse(text);
 
-                  const slotEntries = Object.entries(parsed.slots ?? {});
+                  //const slotEntries = Object.entries(parsed.slots ?? {});
                   //const cardCount = slotEntries.reduce(
                   //  (total, [, count]) => total + Number(count ?? 0),
                   //  0,
@@ -424,10 +424,10 @@ export default function HomeScreen() {
                   //  unsupportedCodes: [],
                   //});
 
-                  const slots = parsed.slots ?? {};
+                  const slots = (parsed.slots ?? {}) as Record<string, number>;
                   const buildResult = buildDeckCardsFromSlots(slots);
 
-                  const cardCount = Object.values(slots).reduce(
+                  const cardCount = Object.values(slots).reduce<number>(
                     (total, count) => total + Number(count ?? 0),
                     0,
                   );
