@@ -33,30 +33,8 @@ type DeckBuildResult = {
   unsupportedCodes: string[];
 };
 
-export function buildDeckCardsFromSlots(
-  slots: Record<string, number>
-): DeckBuildResult {
-  const deckCards: PlayerCard[] = [];
-  const unsupportedCodes: string[] = [];
-
-  for (const [code, count] of Object.entries(slots)) {
-    const matchingCard = playerDeck.find((card) => card.code === code);
-
-    if (!matchingCard) {
-      console.warn(`Unsupported card code: ${code}`);
-      unsupportedCodes.push(code);
-      continue;
-    }
-
-    for (let i = 0; i < count; i += 1) {
-      deckCards.push(cloneCard(matchingCard));
-    }
-  }
-
-  return {
-    cards: deckCards,
-    unsupportedCodes,
-  };
+function isRandomWeaknessPlaceholder(code: string): boolean {
+  return code === "01000";
 }
 
 export async function loadArkhamDeck(deckId: string): Promise<{

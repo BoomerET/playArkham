@@ -2040,10 +2040,10 @@ export function getSelectedScenario(state: {
     });
 }
 
-export function isRandomWeakness(code: string): boolean {
-    return code === "01000"; // expand later if needed
-}
-
-export function isRandomWeaknessPlaceholder(code: string): boolean {
-    return code === "01000";
-}
+//export function isRandomWeakness(code: string): boolean {
+//    return code === "01000"; // expand later if needed
+//}
+//
+//export function isRandomWeaknessPlaceholder(code: string): boolean {
+//    return code === "01000";
+//}
