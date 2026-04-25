@@ -32,11 +32,6 @@ function cloneCard(card: PlayerCard): PlayerCard {
   };
 }
 
-type DeckBuildResult = {
-  cards: PlayerCard[];
-  unsupportedCodes: string[];
-};
-
 export function isRandomWeaknessPlaceholder(code: string): boolean {
   return code === "01000";
 }
