@@ -2108,5 +2108,513 @@ export const playerDeck: PlayerCard[] = [
     "faction": "rogue",
     "isWeakness": false,
     "code": "60384"
+  },
+  {
+    "instanceId": "grand-m-re-s-charm-1",
+    "name": "Grand-Mère's Charm",
+    "type": "asset",
+    "text": [
+      "Marie Lambeau deck only.",
+      "[fast] Take 1 direct damage and exhaust Grand-Mère's Charm: Replenish 1 charge on an asset at your location."
+    ],
+    "traits": [
+      "Item. Charm. Occult. Blessed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60452"
+  },
+  {
+    "instanceId": "called-to-guin-e-1",
+    "name": "Called to Guinée",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Put Called to Guinée into play in your threat area.",
+      "You cannot heal damage.",
+      "[action] Choose and discard 3 cards from your hand: Discard Called to Guinée."
+    ],
+    "traits": [
+      "Curse. Pact."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60453"
+  },
+  {
+    "instanceId": "hemophobia-1",
+    "name": "Hemophobia",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Put Hemophobia into play in your threat area.",
+      "<b>Forced</b> - The first time each round an investigator at your location takes damage: Take 1 horror.",
+      "[action] [action]: Discard Hemophobia."
+    ],
+    "traits": [
+      "Terror."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": false,
+    "code": "60454"
+  },
+  {
+    "instanceId": "arcane-initiate-1",
+    "name": "Arcane Initiate",
+    "type": "asset",
+    "text": [
+      "<b>Forced</b> - After Arcane Initiate enters play: Place 1 doom on it.",
+      "[fast] Exhaust Arcane Initiate: Search the top 3 cards of your deck for a [[Spell]] card and draw it. Shuffle your deck."
+    ],
+    "traits": [
+      "Ally. Sorcerer."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60455"
+  },
+  {
+    "instanceId": "offering-bowl-1",
+    "name": "Offering Bowl",
+    "type": "asset",
+    "text": [
+      "Uses (3 offerings). If there are no offerings on Offering Bowl, discard it.",
+      "[fast] Spend 1 offering and exhaust Offering Bowl: Take 1 damage and gain 2 resources."
+    ],
+    "traits": [
+      "Item. Occult."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60456"
+  },
+  {
+    "instanceId": "bloodstone-1",
+    "name": "Bloodstone",
+    "type": "asset",
+    "text": [
+      "You get +1 [willpower]."
+    ],
+    "traits": [
+      "Item. Charm. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60457"
+  },
+  {
+    "instanceId": "sacrificial-doll-1",
+    "name": "Sacrificial Doll",
+    "type": "asset",
+    "text": [
+      "While you have 3 or fewer remaining health, Sacrificial Doll does not take up a hand slot.",
+      "[reaction] After you reveal a non-[auto_fail] chaos token during a skill test, take 1 damage and exhaust Sacrificial Doll: Cancel that token and reveal tokens from the chaos bag until a symbol token is revealed. Resolve that token and ignore the rest."
+    ],
+    "traits": [
+      "Item. Charm. Occult."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60458"
+  },
+  {
+    "instanceId": "cosmic-flame-1",
+    "name": "Cosmic Flame",
+    "type": "asset",
+    "text": [
+      "Uses (3 charges).",
+      "[action]: <b>Fight</b> ([willpower]). If you succeed, you may spend 1 charge to deal +1 damage for this attack. If you reveal a [skull] token during this test, remove 1 charge from Cosmic Flame (if you cannot, take 1 damage and discard this card)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60459"
+  },
+  {
+    "instanceId": "second-sight-1",
+    "name": "Second Sight",
+    "type": "asset",
+    "text": [
+      "Uses (3 charges).",
+      "[action]: <b>Investigate</b> ([willpower]). If you succeed, you may spend 1 charge to discover 1 additional clue at your location. If you reveal a [cultist] token during this test, remove 1 charge from Second Sight (if you cannot, take 1 horror and discard this card)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60460"
+  },
+  {
+    "instanceId": "shadowmeld-1",
+    "name": "Shadowmeld",
+    "type": "asset",
+    "text": [
+      "Uses (4 charges).",
+      "[action]: <b>Evade</b> ([willpower]). If you succeed, you may spend 1 charge to move to a connecting location. If you reveal a [tablet] token during this test, remove 1 charge from Shadowmeld (if you cannot, lose 1 action and discard this card)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60461"
+  },
+  {
+    "instanceId": "consume-life-1",
+    "name": "Consume Life",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([willpower]). This attack deals +1 damage. If this attack defeats an enemy, heal 1 damage from an investigator or [[Ally]] asset at your location."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60462"
+  },
+  {
+    "instanceId": "favor-of-baalshandor-1",
+    "name": "Favor of Baalshandor",
+    "type": "event",
+    "text": [
+      "As an additional cost to play Favor of Baalshandor, take 1 damage.",
+      "Play a [[Spell]] or [[Ritual]] asset from your hand, reducing its cost by 3. Playing this card does not provoke attacks of opportunity."
+    ],
+    "traits": [
+      "Ritual."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60463"
+  },
+  {
+    "instanceId": "infuse-life-1",
+    "name": "Infuse Life",
+    "type": "event",
+    "text": [
+      "Heal 3 damage from among investigators and/or [[Ally]] assets at your location."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60464"
+  },
+  {
+    "instanceId": "mirror-form-1",
+    "name": "Mirror Form",
+    "type": "event",
+    "text": [
+      "Fast. Play only during your turn.",
+      "Choose a [[Spell]] or [[Charm]] asset in your hand and put it into play under your control. When the round ends, shuffle that asset into your deck if it is still in play."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60465"
+  },
+  {
+    "instanceId": "spiritual-charm-1",
+    "name": "Spiritual Charm",
+    "type": "event",
+    "text": [
+      "<b>Parley</b>. Choose a non-[[Elite]] enemy at your location or at a connecting location. Move that enemy to your location, engage it, and gain resources equal to its combined damage/horror values."
+    ],
+    "traits": [
+      "Spell. Trick."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60466"
+  },
+  {
+    "instanceId": "blood-curse-1",
+    "name": "Blood Curse",
+    "type": "skill",
+    "text": [
+      "Max 1 committed per skill test.",
+      "If this skill test is successful, take 1 direct damage."
+    ],
+    "traits": [
+      "Spell. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60467"
+  },
+  {
+    "instanceId": "cosmic-guidance-1",
+    "name": "Cosmic Guidance",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful, heal 1 damage from the performing investigator."
+    ],
+    "traits": [
+      "Augury."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60468"
+  },
+  {
+    "instanceId": "torrent-of-power-1",
+    "name": "Torrent of Power",
+    "type": "skill",
+    "text": [
+      "As an additional cost to commit Torrent of Power to a skill test, spend up to 3 charges from among assets you control.",
+      "For each charge spent in this way, Torrent of Power gains [willpower] [wild]."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60469"
+  },
+  {
+    "instanceId": "ceremonial-robes-1",
+    "name": "Ceremonial Robes",
+    "type": "asset",
+    "text": [
+      "Reduce the cost of the first [[Spell]] or [[Ritual]] card you play each round by 1."
+    ],
+    "traits": [
+      "Item. Clothing."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60470"
+  },
+  {
+    "instanceId": "eldritch-whispers-1",
+    "name": "Eldritch Whispers",
+    "type": "skill",
+    "text": [
+      "Max 1 committed per skill test.",
+      "If a symbol token is revealed during this test, place up to 2 charges or 2 secrets among assets you control."
+    ],
+    "traits": [
+      "Innate."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60471"
+  },
+  {
+    "instanceId": "blood-ward-1",
+    "name": "Blood Ward",
+    "type": "event",
+    "text": [
+      "Fast. Play when a non-[[Elite]] enemy attacks an investigator at your location.",
+      "Cancel that attack and heal 2 damage from the targeted investigator."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60472"
+  },
+  {
+    "instanceId": "retribution-1",
+    "name": "Retribution",
+    "type": "event",
+    "text": [
+      "Fast. Play when an enemy attacks an investigator at your location.",
+      "You take all damage and horror from this attack. For each point of damage/horror taken, deal 1 damage to an enemy at your location."
+    ],
+    "traits": [
+      "Spell. Spirit."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60473"
+  },
+  {
+    "instanceId": "dread-curse-of-azathoth-1",
+    "name": "Dread Curse of Azathoth",
+    "type": "asset",
+    "text": [
+      "Exceptional.",
+      "[action] Place 1 doom on Dread Curse of Azathoth: <b>Fight</b> ([willpower]). You get +2 [willpower] and deal +1 damage for this attack. If this attack defeats an enemy, remove 1 doom from Dread Curse of Azathoth. If a [skull] or [elder_thing] token is revealed during this test, remove all doom from this card."
+    ],
+    "traits": [
+      "Spell. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60474"
+  },
+  {
+    "instanceId": "ritual-dagger-1",
+    "name": "Ritual Dagger",
+    "type": "asset",
+    "text": [
+      "[action]: <b>Fight</b> ([combat]). Add your [willpower] to your [combat] for this attack.",
+      "[reaction] After you play a [[Spell]] event, take 1 damage and exhaust Ritual Dagger: Shuffle that event into your deck instead of discarding it."
+    ],
+    "traits": [
+      "Item. Weapon. Melee. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60475"
+  },
+  {
+    "instanceId": "spiritual-intuition-1",
+    "name": "Spiritual Intuition",
+    "type": "asset",
+    "text": [
+      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
+      "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a [[Spell]] or [[Ritual]] card).",
+      "[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this test is on a [[Spell]] or [[Ritual]] card)."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60476"
+  },
+  {
+    "instanceId": "blood-curse-1",
+    "name": "Blood Curse",
+    "type": "skill",
+    "text": [
+      "Max 1 committed per skill test.",
+      "If this test is successful, deal 1 damage to a card with health at your location."
+    ],
+    "traits": [
+      "Spell. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60477"
+  },
+  {
+    "instanceId": "arcane-experience-1",
+    "name": "Arcane Experience",
+    "type": "asset",
+    "text": [
+      "Permanent. Limit 1 per deck.",
+      "You have 1 additional arcane slot."
+    ],
+    "traits": [
+      "Condition."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60478"
+  },
+  {
+    "instanceId": "jim-culver-1",
+    "name": "Jim Culver",
+    "type": "asset",
+    "text": [
+      "You get +1 [willpower].",
+      "[reaction] After you take damage and/or horror, exhaust Jim Culver: Draw 1 card and gain 1 resource."
+    ],
+    "traits": [
+      "Ally. Performer."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60479"
+  },
+  {
+    "instanceId": "ultimate-sacrifice-1",
+    "name": "Ultimate Sacrifice",
+    "type": "event",
+    "text": [
+      "Fast. Play when the investigation phase ends.",
+      "Repeat the investigation phase. At the end of that phase, you are defeated and suffer 1 physical trauma. Max once per game."
+    ],
+    "traits": [
+      "Spell. Spirit."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60480"
+  },
+  {
+    "instanceId": "second-sight-1",
+    "name": "Second Sight",
+    "type": "asset",
+    "text": [
+      "Uses (4 charges).",
+      "[action]: <b>Investigate</b> ([willpower]). You get +2 [willpower] for this investigation. If you succeed, you may spend 1 charge to discover 1 additional clue at your location or 1 clue at a connecting location. If you reveal a [cultist] token during this test, remove 1 charge from Second Sight (if you cannot, take 1 horror and discard this card)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60481"
+  },
+  {
+    "instanceId": "shadowmeld-1",
+    "name": "Shadowmeld",
+    "type": "asset",
+    "text": [
+      "Uses (5 charges).",
+      "[action]: <b>Evade</b> ([willpower]). You get +2 [willpower] for this evasion. If you succeed, you may spend 1 charge to move to a location up to 2 connections away. If you reveal a [tablet] token during this test, remove 1 charge from Shadowmeld (if you cannot, lose 1 action and discard this card)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60482"
+  },
+  {
+    "instanceId": "bend-blood-1",
+    "name": "Bend Blood",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([willpower]). You get +3 [willpower] and deal +1 damage for this attack. If you succeed, deal 1 damage to each other enemy at your location. Each enemy dealt damage by Bend Blood cannot attack you for the remainder of the round."
+    ],
+    "traits": [
+      "Spell. Cursed."
+    ],
+    "icons": [],
+    "faction": "mystic",
+    "isWeakness": false,
+    "code": "60483"
   }
 ];
