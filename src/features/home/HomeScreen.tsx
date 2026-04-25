@@ -512,15 +512,17 @@ export default function HomeScreen() {
                   Deck: <strong>{detectedDeckName}</strong>
                 </div>
               )}
-              {importedDeckSummary.unsupportedCodes.length > 0 ? (
-                <div className="home-screen__deck-warning">
-                  Unsupported card code(s):{" "}
-                  <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
-                </div>
-              ) : (
-                <div className="home-screen__deck-meta">
-                  All imported card codes are supported.
-                </div>
+              {importedDeckSummary && (
+                importedDeckSummary.unsupportedCodes.length > 0 ? (
+                  <div className="home-screen__deck-warning">
+                    Unsupported card code(s):{" "}
+                    <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
+                  </div>
+                ) : (
+                  <div className="home-screen__deck-meta">
+                    All imported card codes are supported.
+                  </div>
+                )
               )}
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
