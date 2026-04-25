@@ -2713,6 +2713,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
             : `Deck source: ArkhamDB deck ${selectedDeckId}.`,
         ),
         ...setupLogEntries,
+        ...(loadedDeck.unsupportedCodes.length > 0
+          ? [
+            createLogEntry(
+              "system",
+              `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+            ),
+          ]
+          : []),
         createLogEntry("system", "Game setup complete."),
       ],
       lastSkillTest: null,
