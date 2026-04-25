@@ -2047,3 +2047,4 @@ export function getSelectedScenario(state: {
 //export function isRandomWeaknessPlaceholder(code: string): boolean {
 //    return code === "01000";
 //}
+
