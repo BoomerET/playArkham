@@ -2039,3 +2039,11 @@ export function getSelectedScenario(state: {
         campaignState: state.campaignState,
     });
 }
+
+export function isRandomWeakness(code: string): boolean {
+    return code === "01000"; // expand later if needed
+}
+
+export function isRandomWeaknessPlaceholder(code: string): boolean {
+    return code === "01000";
+}
