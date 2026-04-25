@@ -33,7 +33,9 @@ type DeckBuildResult = {
   unsupportedCodes: string[];
 };
 
-function buildDeckCardsFromSlots(slots: Record<string, number>): DeckBuildResult {
+export function buildDeckCardsFromSlots(
+  slots: Record<string, number>
+): DeckBuildResult {
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
 

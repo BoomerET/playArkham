@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
 import type { Investigator } from "../../types/game";
+import { buildDeckCardsFromSlots } from "../../lib/loadArkhamDeck";
 import "./homeScreen.css";
 
 const investigatorImages = import.meta.glob(
@@ -408,19 +409,35 @@ export default function HomeScreen() {
                   const parsed = JSON.parse(text);
 
                   const slotEntries = Object.entries(parsed.slots ?? {});
-                  const cardCount = slotEntries.reduce(
-                    (total, [, count]) => total + Number(count ?? 0),
-                    0,
-                  );
+                  //const cardCount = slotEntries.reduce(
+                  //  (total, [, count]) => total + Number(count ?? 0),
+                  //  0,
+                  //);
 
                   //const unsupportedCodes: string[] = [];
+
+                  //setImportedDeckSummary({
+                  //  deckName: parsed.name?.trim() ?? null,
+                  //  investigatorName: parsed.investigator_name?.trim() ?? null,
+                  //  investigatorCode: parsed.investigator_code?.trim() ?? null,
+                  //  cardCount,
+                  //  unsupportedCodes: [],
+                  //});
+
+                  const slots = parsed.slots ?? {};
+                  const buildResult = buildDeckCardsFromSlots(slots);
+
+                  const cardCount = Object.values(slots).reduce(
+                    (total, count) => total + Number(count ?? 0),
+                    0,
+                  );
 
                   setImportedDeckSummary({
                     deckName: parsed.name?.trim() ?? null,
                     investigatorName: parsed.investigator_name?.trim() ?? null,
                     investigatorCode: parsed.investigator_code?.trim() ?? null,
                     cardCount,
-                    unsupportedCodes: [],
+                    unsupportedCodes: buildResult.unsupportedCodes,
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
@@ -495,7 +512,16 @@ export default function HomeScreen() {
                   Deck: <strong>{detectedDeckName}</strong>
                 </div>
               )}
-
+              {importedDeckSummary.unsupportedCodes.length > 0 ? (
+                <div className="home-screen__deck-warning">
+                  Unsupported card code(s):{" "}
+                  <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
+                </div>
+              ) : (
+                <div className="home-screen__deck-meta">
+                  All imported card codes are supported.
+                </div>
+              )}
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
                   Investigator: <strong>{selectedInvestigator.name}</strong>

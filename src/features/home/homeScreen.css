@@ -32,3 +32,9 @@
 .location-card.illegal-location {
   transform: translateZ(0);
 }
+
+.home-screen__deck-warning {
+  margin-top: 0.5rem;
+  color: #f5b971;
+  font-size: 0.9rem;
+}
