@@ -37,7 +37,7 @@ type DeckBuildResult = {
   unsupportedCodes: string[];
 };
 
-function isRandomWeaknessPlaceholder(code: string): boolean {
+export function isRandomWeaknessPlaceholder(code: string): boolean {
   return code === "01000";
 }
 
@@ -97,7 +97,7 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
   };
 }
 
-function buildDeckCardsFromSlots(slots: Record<string, number>): {
+export function buildDeckCardsFromSlots(slots: Record<string, number>): {
   cards: PlayerCard[];
   unsupportedCodes: string[];
   randomWeaknesses: string[];
