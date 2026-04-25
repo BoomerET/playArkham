@@ -121,6 +121,14 @@ export default function HomeScreen() {
     (state) => state.setSelectedInvestigator,
   );
 
+  const [importedDeckSummary, setImportedDeckSummary] = useState<{
+    deckName: string | null;
+    investigatorName: string | null;
+    investigatorCode: string | null;
+    cardCount: number;
+    unsupportedCodes: string[];
+  } | null>(null);
+
   const availableScenarios = useGameStore((state) => state.availableScenarios);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
   const setSelectedScenario = useGameStore(
@@ -142,8 +150,6 @@ export default function HomeScreen() {
     "Enter an ArkhamDB deck ID to begin.",
   );
   const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
-  //const [setDetectedInvestigatorCode] = useState<string | null>(null);
-  //const [setDetectedInvestigatorCode] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -187,9 +193,6 @@ export default function HomeScreen() {
   const setImportedArkhamBuildDeckJson = useGameStore(
     (state) => state.setImportedArkhamBuildDeckJson,
   );
-
-  //const importedInvestigatorCode =
-  //  importedArkhamBuildDeckJson?.investigator_code?.trim() ?? "";
 
   useEffect(() => {
     if (!trimmedDeckId) {
@@ -403,6 +406,27 @@ export default function HomeScreen() {
                   const text = await file.text();
                   const parsed = JSON.parse(text);
 
+                  const slotEntries = Object.entries(parsed.slots ?? {});
+                  const cardCount = slotEntries.reduce(
+                    (total, [, count]) => total + Number(count ?? 0),
+                    0,
+                  );
+
+                  const unsupportedCodes = slotEntries
+                    .map(([code]) => code)
+                    .filter((code) => {
+                      // This requires importing playerDeck, or skip this here and rely on loader.
+                      return false;
+                    });
+
+                  setImportedDeckSummary({
+                    deckName: parsed.name?.trim() ?? null,
+                    investigatorName: parsed.investigator_name?.trim() ?? null,
+                    investigatorCode: parsed.investigator_code?.trim() ?? null,
+                    cardCount,
+                    unsupportedCodes: [],
+                  });
+
                   setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
 
@@ -434,6 +458,37 @@ export default function HomeScreen() {
                 }}
               />
             </label>
+            {importedDeckSummary ? (
+              <div className="home-screen__deck-meta">
+                <div>
+                  Imported Arkham.build deck:{" "}
+                  <strong>{importedDeckSummary.deckName ?? "Unnamed Deck"}</strong>
+                </div>
+                <div>
+                  Investigator:{" "}
+                  <strong>
+                    {importedDeckSummary.investigatorName ??
+                      importedDeckSummary.investigatorCode ??
+                      "Unknown"}
+                  </strong>
+                </div>
+                <div>Cards listed: {importedDeckSummary.cardCount}</div>
+
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={() => {
+                    setImportedArkhamBuildDeckJson(null);
+                    setImportedDeckSummary(null);
+                    setDetectedDeckName(null);
+                    setDeckLookupState("idle");
+                    setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
+                  }}
+                >
+                  Clear Imported Deck
+                </button>
+              </div>
+            ) : null}
             <div
               className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
             >

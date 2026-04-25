@@ -28,14 +28,21 @@ function cloneCard(card: PlayerCard): PlayerCard {
   };
 }
 
-function buildDeckCardsFromSlots(slots: Record<string, number>): PlayerCard[] {
+type DeckBuildResult = {
+  cards: PlayerCard[];
+  unsupportedCodes: string[];
+};
+
+function buildDeckCardsFromSlots(slots: Record<string, number>): DeckBuildResult {
   const deckCards: PlayerCard[] = [];
+  const unsupportedCodes: string[] = [];
 
   for (const [code, count] of Object.entries(slots)) {
     const matchingCard = playerDeck.find((card) => card.code === code);
 
     if (!matchingCard) {
       console.warn(`Unsupported card code: ${code}`);
+      unsupportedCodes.push(code);
       continue;
     }
 
@@ -44,12 +51,16 @@ function buildDeckCardsFromSlots(slots: Record<string, number>): PlayerCard[] {
     }
   }
 
-  return deckCards;
+  return {
+    cards: deckCards,
+    unsupportedCodes,
+  };
 }
 
 export async function loadArkhamDeck(deckId: string): Promise<{
   investigatorCode: string | null;
   cards: PlayerCard[];
+  unsupportedCodes: string[];
 }> {
   const trimmedDeckId = deckId.trim();
 
@@ -71,9 +82,12 @@ export async function loadArkhamDeck(deckId: string): Promise<{
     throw new Error("ArkhamDB deck response did not include slots.");
   }
 
+  const buildResult = buildDeckCardsFromSlots(data.slots);
+
   return {
     investigatorCode: data.investigator_code?.trim() ?? null,
-    cards: buildDeckCardsFromSlots(data.slots),
+    cards: buildResult.cards,
+    unsupportedCodes: buildResult.unsupportedCodes,
   };
 }
 
@@ -82,15 +96,19 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
   investigatorName: string | null;
   deckName: string | null;
   cards: PlayerCard[];
+  unsupportedCodes: string[];
 } {
   if (!deckJson.slots) {
     throw new Error("Arkham.build deck JSON did not include slots.");
   }
 
+  const buildResult = buildDeckCardsFromSlots(deckJson.slots);
+
   return {
     investigatorCode: deckJson.investigator_code?.trim() ?? null,
     investigatorName: deckJson.investigator_name?.trim() ?? null,
     deckName: deckJson.name?.trim() ?? null,
-    cards: buildDeckCardsFromSlots(deckJson.slots),
+    cards: buildResult.cards,
+    unsupportedCodes: buildResult.unsupportedCodes,
   };
 }
