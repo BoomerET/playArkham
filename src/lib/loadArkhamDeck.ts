@@ -115,7 +115,7 @@ export function buildDeckCardsFromSlots(slots: Record<string, number>): {
 
       if (isRandomWeaknessPlaceholder(code)) {
         const available = weaknessPool.filter(
-          (w) => !usedWeaknessCodes.has(w.code),
+          (w) => w.code !== undefined && !usedWeaknessCodes.has(w.code),
         );
 
         const chosenPool =
