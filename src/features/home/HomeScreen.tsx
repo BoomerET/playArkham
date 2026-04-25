@@ -525,28 +525,6 @@ export default function HomeScreen() {
                         <strong>{importedDeckSummary.randomWeaknesses.join(", ")}</strong>
                       </div>
                     ) : null}
-                    {importedDeckSummary.unsupportedCodes.length > 0 ? (
-                      <div className="home-screen__deck-warning">
-                        Unsupported card code(s):{" "}
-                        <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
-
-                        <button
-                          type="button"
-                          className="secondary-button"
-                          onClick={() =>
-                            void navigator.clipboard.writeText(
-                              importedDeckSummary.unsupportedCodes.join(", "),
-                            )
-                          }
-                        >
-                          Copy Codes
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="home-screen__deck-meta">
-                        All imported card codes are supported.
-                      </div>
-                    )}
 
                     <button
                       type="button"
