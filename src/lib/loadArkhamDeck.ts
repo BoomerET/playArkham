@@ -1,6 +1,10 @@
 import type { PlayerCard } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
 
+function getBasicWeaknessPool(): PlayerCard[] {
+  return playerDeck.filter((card) => card.isWeakness === true);
+}
+
 type ArkhamDeckResponse = {
   investigator_code?: string;
   slots?: Record<string, number>;
@@ -126,7 +130,9 @@ function buildDeckCardsFromSlots(slots: Record<string, number>): {
           chosenPool[Math.floor(Math.random() * chosenPool.length)];
 
         matchingCard = chosen;
-        usedWeaknessCodes.add(chosen.code);
+        if (chosen.code) {
+          usedWeaknessCodes.add(chosen.code);
+        }
         randomWeaknesses.push(chosen.name);
       } else {
         matchingCard = playerDeck.find((card) => card.code === code);
