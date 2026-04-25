@@ -128,6 +128,7 @@ export default function HomeScreen() {
     investigatorCode: string | null;
     cardCount: number;
     unsupportedCodes: string[];
+    randomWeaknesses: string[];
   } | null>(null);
 
   const availableScenarios = useGameStore((state) => state.availableScenarios);
@@ -438,6 +439,7 @@ export default function HomeScreen() {
                     investigatorCode: parsed.investigator_code?.trim() ?? null,
                     cardCount,
                     unsupportedCodes: buildResult.unsupportedCodes,
+                    randomWeaknesses: buildResult.randomWeaknesses,
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
@@ -517,7 +519,41 @@ export default function HomeScreen() {
                   <div className="home-screen__deck-warning">
                     Unsupported card code(s):{" "}
                     <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
+                    {importedDeckSummary.randomWeaknesses.length > 0 ? (
+                      <div className="home-screen__deck-meta">
+                        Random weakness assigned:{" "}
+                        <strong>{importedDeckSummary.randomWeaknesses.join(", ")}</strong>
+                      </div>
+                    ) : null}
+                    {importedDeckSummary.unsupportedCodes.length > 0 ? (
+                      <div className="home-screen__deck-warning">
+                        Unsupported card code(s):{" "}
+                        <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
 
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={() =>
+                            void navigator.clipboard.writeText(
+                              importedDeckSummary.unsupportedCodes.join(", "),
+                            )
+                          }
+                        >
+                          Copy Codes
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="home-screen__deck-meta">
+                        All imported card codes are supported.
+                      </div>
+                    )}
+
+                    {importedDeckSummary.randomWeaknesses.length > 0 ? (
+                      <div className="home-screen__deck-meta">
+                        Random weakness assigned:{" "}
+                        <strong>{importedDeckSummary.randomWeaknesses.join(", ")}</strong>
+                      </div>
+                    ) : null}
                     <button
                       type="button"
                       className="secondary-button"
@@ -536,6 +572,7 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
+
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
                   Investigator: <strong>{selectedInvestigator.name}</strong>
