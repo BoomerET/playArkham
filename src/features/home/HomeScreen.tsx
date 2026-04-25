@@ -548,12 +548,6 @@ export default function HomeScreen() {
                       </div>
                     )}
 
-                    {importedDeckSummary.randomWeaknesses.length > 0 ? (
-                      <div className="home-screen__deck-meta">
-                        Random weakness assigned:{" "}
-                        <strong>{importedDeckSummary.randomWeaknesses.join(", ")}</strong>
-                      </div>
-                    ) : null}
                     <button
                       type="button"
                       className="secondary-button"
