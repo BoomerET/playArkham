@@ -19,6 +19,7 @@ export type ArkhamBuildDeckJson = {
   investigator_name?: string;
   name?: string;
   slots?: Record<string, number>;
+  validationWarnings?: string[];
 }
 
 function getBasicWeaknessPool(): PlayerCard[] {
