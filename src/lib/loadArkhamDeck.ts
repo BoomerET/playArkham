@@ -116,6 +116,7 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
 
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
+
 ): DeckBuildResult {
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];

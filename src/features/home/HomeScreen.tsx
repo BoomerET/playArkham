@@ -428,13 +428,13 @@ export default function HomeScreen() {
                   const text = await file.text();
                   const parsed = JSON.parse(text);
 
-                  const slots = (parsed.slots ?? {}) as Record<string, number>;
-                  const buildResult = buildDeckCardsFromSlots(slots);
+                  //const slots = (parsed.slots ?? {}) as Record<string, number>;
+                  //const buildResult = buildDeckCardsFromSlots(slots);
 
-                  const cardCount = Object.values(slots).reduce<number>(
-                    (total, count) => total + Number(count ?? 0),
-                    0,
-                  );
+                  //const cardCount = Object.values(slots).reduce<number>(
+                  //  (total, count) => total + Number(count ?? 0),
+                  //  0,
+                  //);
 
                   //const resolvedDeck = useGameStore(
                   //  (state) => state.importedArkhamBuildResolvedDeck
