@@ -450,7 +450,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   screen: "home",
   availableInvestigators: investigators,
   availableScenarios: scenarios,
-  //selectedInvestigatorId: investigators[0].id,
   selectedInvestigatorId: "",
   selectedScenarioId: initialSelectedScenarioId,
   selectedDeckId: initialSelectedDeckId,
@@ -2669,7 +2668,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     set({
-      //investigator: chosenInvestigator,
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
@@ -2687,8 +2685,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       chaosBag: selectedScenario.chaosBag
         ? [...selectedScenario.chaosBag]
         : [...startingChaosBag],
-      //agenda: getInitialAgendaState(selectedScenario),
-      //act: getInitialActState(selectedScenario),
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
