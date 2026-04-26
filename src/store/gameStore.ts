@@ -2330,6 +2330,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deckName?: string | null;
       cards: PlayerCard[];
       unsupportedCodes: string[];
+      validationWarnings: string[];
     };
 
     try {
