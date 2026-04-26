@@ -1,5 +1,29 @@
-import type { PlayerCard } from "../types/game";
+import type { PlayerCard, LoadedDeck } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
+
+//const emptyLoadedDeck = (): LoadedDeck => ({
+//  investigatorCode: null,
+//  investigatorName: null,
+//  deckName: null,
+//  cards: [],
+//  unsupportedCodes: [],
+//  randomWeaknesses: [],
+//  validationWarnings: [],
+//  validationErrors: [],
+//});
+
+const normalizeLoadedDeck = (
+  deck: Partial<LoadedDeck>,
+): LoadedDeck => ({
+  investigatorCode: deck.investigatorCode ?? null,
+  investigatorName: deck.investigatorName ?? null,
+  deckName: deck.deckName ?? null,
+  cards: deck.cards ?? [],
+  unsupportedCodes: deck.unsupportedCodes ?? [],
+  randomWeaknesses: deck.randomWeaknesses ?? [],
+  validationWarnings: deck.validationWarnings ?? [],
+  validationErrors: deck.validationErrors ?? [],
+});
 
 type ArkhamDeckResponse = {
   investigator_code?: string;
@@ -125,6 +149,7 @@ export function buildDeckCardsFromSlots(
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
   const validationWarnings: string[] = [];
+  const validationErrors: string[] = [];
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
@@ -181,11 +206,21 @@ export function buildDeckCardsFromSlots(
     }
   }
 
-  return {
+  //return {
+  //  cards: deckCards,
+  //  unsupportedCodes,
+  //  randomWeaknesses,
+  //  validationWarnings,
+  //  validationErrors: [],
+  //};
+  return normalizeLoadedDeck({
+    investigatorCode: null,
+    investigatorName: null,
+    deckName: null,
     cards: deckCards,
     unsupportedCodes,
     randomWeaknesses,
     validationWarnings,
-    validationErrors: [],
-  };
+    validationErrors,
+  });
 }
