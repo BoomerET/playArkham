@@ -445,6 +445,7 @@ export default function HomeScreen() {
 
                   setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
+                  setSelectedInvestigator("");
 
                   const investigatorCode = parsed.investigator_code?.trim() ?? "";
                   const matchingInvestigator = availableInvestigators.find((item) => {
