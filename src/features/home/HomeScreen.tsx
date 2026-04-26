@@ -453,7 +453,7 @@ export default function HomeScreen() {
                     validationErrors: resolvedDeck.validationErrors,
                   });
 
-                  //setImportedArkhamBuildDeckJson(parsed);
+                  setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
                   setSelectedInvestigator("");
 
@@ -559,16 +559,7 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
-              {importedDeckSummary && importedDeckSummary.validationWarnings.length > 0 ? (
-                <div className="home-screen__deck-warning">
-                  <div>Deck validation warning(s):</div>
-                  <ul>
-                    {importedDeckSummary.validationWarnings.map((warning, index) => (
-                      <li key={`deck-warning-${index}`}>{warning}</li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+
 
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
