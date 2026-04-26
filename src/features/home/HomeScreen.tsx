@@ -453,7 +453,7 @@ export default function HomeScreen() {
                     validationErrors: resolvedDeck.validationErrors,
                   });
 
-                  setImportedArkhamBuildDeckJson(resolvedDeck);
+                  //setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
                   setSelectedInvestigator("");
 
