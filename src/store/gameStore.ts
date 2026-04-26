@@ -2331,6 +2331,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       cards: PlayerCard[];
       unsupportedCodes: string[];
       validationWarnings: string[];
+      randomWeaknesses: string[];
+      validationErrors: string[];
     };
 
     try {
@@ -2362,6 +2364,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
         `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
       );
     }
+
+    const randomWeaknesses = loadedDeck.randomWeaknesses ?? [];
 
     const deckCards = loadedDeck.cards;
 
@@ -2738,6 +2742,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
               `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
             ),
           ]
+          : []),
+        ...(unsupportedCodes.length > 0
+          ? [
+            createLogEntry(
+              "system",
+              `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
+            ),
+          ]
+          : []),
+
+        ...(randomWeaknesses.length > 0
+          ? [
+            createLogEntry(
+              "system",
+              `Random weakness assigned: ${randomWeaknesses.join(", ")}.`,
+            ),
+          ]
+          : []),
+
+        ...(validationWarnings.length > 0
+          ? validationWarnings.map((warning) =>
+            createLogEntry("system", `Deck warning: ${warning}`),
+          )
           : []),
         createLogEntry("system", "Game setup complete."),
       ],
