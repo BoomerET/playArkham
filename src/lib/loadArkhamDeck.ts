@@ -177,6 +177,5 @@ export function buildDeckCardsFromSlots(
     unsupportedCodes,
     randomWeaknesses,
     validationWarnings,
-    validationErrors,
   };
 }
