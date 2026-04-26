@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
 import type { Investigator } from "../../types/game";
-import { buildDeckCardsFromSlots } from "../../lib/loadArkhamDeck";
+import { buildDeckCardsFromSlots, loadArkhamBuildDeckFromJson } from "../../lib/loadArkhamDeck";
 import "./homeScreen.css";
 
 const investigatorImages = import.meta.glob(
@@ -436,15 +436,20 @@ export default function HomeScreen() {
                     0,
                   );
 
+                  //const resolvedDeck = useGameStore(
+                  //  (state) => state.importedArkhamBuildResolvedDeck
+                  //);
+                  const resolvedDeck = loadArkhamBuildDeckFromJson(parsed)!;
+
                   setImportedDeckSummary({
-                    deckName: parsed.name?.trim() ?? null,
-                    investigatorName: parsed.investigator_name?.trim() ?? null,
-                    investigatorCode: parsed.investigator_code?.trim() ?? null,
-                    cardCount,
-                    unsupportedCodes: buildResult.unsupportedCodes,
-                    randomWeaknesses: buildResult.randomWeaknesses,
-                    validationWarnings: buildResult.validationWarnings,
-                    validationErrors: buildResult.validationErrors,
+                    deckName: resolvedDeck.deckName,
+                    investigatorName: resolvedDeck.investigatorName,
+                    investigatorCode: resolvedDeck.investigatorCode,
+                    cardCount: resolvedDeck.cards.length,
+                    unsupportedCodes: resolvedDeck.unsupportedCodes,
+                    randomWeaknesses: resolvedDeck.randomWeaknesses,
+                    validationWarnings: resolvedDeck.validationWarnings,
+                    validationErrors: resolvedDeck.validationErrors,
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
