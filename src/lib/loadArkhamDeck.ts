@@ -105,6 +105,7 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
     unsupportedCodes: buildResult.unsupportedCodes,
     randomWeaknesses: buildResult.randomWeaknesses,
     validationWarnings: buildResult.validationWarnings,
+    validationErrors: buildResult.validationErrors,
   };
 }
 
@@ -176,5 +177,6 @@ export function buildDeckCardsFromSlots(
     unsupportedCodes,
     randomWeaknesses,
     validationWarnings,
+    validationErrors,
   };
 }
