@@ -141,6 +141,7 @@ export interface PlayerCard {
   deckLimit?: number;
   validationWarnings?: string[];
   randomWeaknesses?: string[];
+  validationErrors?: string[];
 }
 
 
