@@ -138,6 +138,7 @@ export interface PlayerCard {
   isWeakness?: boolean;
   code?: string;
   passiveSkillModifiers?: PassiveSkillModifiers;
+  deckLimit?: number;
 }
 
 

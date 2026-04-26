@@ -1,13 +1,17 @@
 import type { PlayerCard } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
 
-function getBasicWeaknessPool(): PlayerCard[] {
-  return playerDeck.filter((card) => card.isWeakness === true);
-}
-
 type ArkhamDeckResponse = {
   investigator_code?: string;
   slots?: Record<string, number>;
+};
+
+type DeckBuildResult = {
+  cards: PlayerCard[];
+  unsupportedCodes: string[];
+  randomWeaknesses: string[];
+  validationWarnings: string[];
+  validationErrors: string[];
 };
 
 export type ArkhamBuildDeckJson = {
@@ -15,7 +19,11 @@ export type ArkhamBuildDeckJson = {
   investigator_name?: string;
   name?: string;
   slots?: Record<string, number>;
-};
+}
+
+function getBasicWeaknessPool(): PlayerCard[] {
+  return playerDeck.filter((card) => card.isWeakness === true);
+}
 
 function generateId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -34,6 +42,10 @@ function cloneCard(card: PlayerCard): PlayerCard {
 
 export function isRandomWeaknessPlaceholder(code: string): boolean {
   return code === "01000";
+}
+
+function getDeckLimit(card: PlayerCard): number {
+  return card.deckLimit ?? 2;
 }
 
 export async function loadArkhamDeck(deckId: string): Promise<{
@@ -67,6 +79,8 @@ export async function loadArkhamDeck(deckId: string): Promise<{
     investigatorCode: data.investigator_code?.trim() ?? null,
     cards: buildResult.cards,
     unsupportedCodes: buildResult.unsupportedCodes,
+    randomWeaknesses: buildResult.randomWeaknesses,
+    validationWarnings: buildResult.validationWarnings,
   };
 }
 
@@ -92,53 +106,65 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
   };
 }
 
-export function buildDeckCardsFromSlots(slots: Record<string, number>): {
-  cards: PlayerCard[];
-  unsupportedCodes: string[];
-  randomWeaknesses: string[];
-} {
+export function buildDeckCardsFromSlots(
+  slots: Record<string, number>,
+): DeckBuildResult {
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
+  const validationWarnings: string[] = [];
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
 
   for (const [code, count] of Object.entries(slots)) {
-    for (let i = 0; i < count; i += 1) {
-      let matchingCard: PlayerCard | undefined;
-
-      if (isRandomWeaknessPlaceholder(code)) {
+    if (isRandomWeaknessPlaceholder(code)) {
+      for (let i = 0; i < count; i += 1) {
         const available = weaknessPool.filter(
-          (w) => w.code !== undefined && !usedWeaknessCodes.has(w.code),
+          (weakness) =>
+            weakness.code != null && !usedWeaknessCodes.has(weakness.code),
         );
 
-        const chosenPool =
-          available.length > 0 ? available : weaknessPool;
+        const chosenPool = available.length > 0 ? available : weaknessPool;
 
         if (chosenPool.length === 0) {
-          console.warn("No weaknesses available.");
+          validationWarnings.push(
+            "Random weakness placeholder found, but no weaknesses are available.",
+          );
           continue;
         }
 
         const chosen =
           chosenPool[Math.floor(Math.random() * chosenPool.length)];
 
-        matchingCard = chosen;
         if (chosen.code) {
           usedWeaknessCodes.add(chosen.code);
         }
+
         randomWeaknesses.push(chosen.name);
-      } else {
-        matchingCard = playerDeck.find((card) => card.code === code);
+        deckCards.push(cloneCard(chosen));
       }
 
-      if (!matchingCard) {
-        console.warn(`Unsupported card code: ${code}`);
-        unsupportedCodes.push(code);
-        continue;
-      }
+      continue;
+    }
 
+    const matchingCard = playerDeck.find((card) => card.code === code);
+
+    if (!matchingCard) {
+      console.warn(`Unsupported card code: ${code}`);
+      unsupportedCodes.push(code);
+      continue;
+    }
+
+    const deckLimit = getDeckLimit(matchingCard);
+
+    if (!matchingCard.isWeakness && count > deckLimit) {
+      validationWarnings.push(
+        `${matchingCard.name} has ${count} copies; limit is ${deckLimit}.`,
+      );
+    }
+
+    for (let i = 0; i < count; i += 1) {
       deckCards.push(cloneCard(matchingCard));
     }
   }
@@ -147,5 +173,6 @@ export function buildDeckCardsFromSlots(slots: Record<string, number>): {
     cards: deckCards,
     unsupportedCodes,
     randomWeaknesses,
+    validationWarnings,
   };
 }
