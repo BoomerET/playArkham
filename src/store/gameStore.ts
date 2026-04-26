@@ -2346,12 +2346,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw error;
     }
 
-    const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
+    const validationWarnings = loadedDeck.validationWarnings ?? [];
+    if (validationWarnings.length > 0) {
+      for (const warning of validationWarnings) {
+        get().pushLog("system", `Deck Warning: ${warning}`);
+      }
+    }
 
-    if (loadedDeck.unsupportedCodes.length > 0) {
+    const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
+    if (unsupportedCodes.length > 0) {
       get().pushLog(
         "system",
-        `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+        `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
       );
     }
 

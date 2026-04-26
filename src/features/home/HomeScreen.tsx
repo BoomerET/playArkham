@@ -528,6 +528,7 @@ export default function HomeScreen() {
                   Deck: <strong>{detectedDeckName}</strong>
                 </div>
               )}
+
               {importedDeckSummary && (
                 importedDeckSummary.unsupportedCodes.length > 0 ? (
                   <div className="home-screen__deck-warning">
@@ -558,6 +559,16 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
+              {importedDeckSummary.validationWarnings.length > 0 ? (
+                <div className="home-screen__deck-warning">
+                  <div>Deck validation warning(s):</div>
+                  <ul>
+                    {importedDeckSummary.validationWarnings.map((warning, index) => (
+                      <li key={`deck-warning-${index}`}>{warning}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
 
               {selectedInvestigator && (
                 <div className="home-screen__deck-meta">
