@@ -190,6 +190,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setDebugPreset: (preset) => {
     set({ debugPreset: preset });
   },
+  validationWarnings: [],
   spawnSetAsideEnemyAtLocation: (enemyCode: string, locationId: string) => {
     const {
       setAsideEncounterCards,
