@@ -112,6 +112,7 @@ type PreviewInvestigator = {
 };
 
 export default function HomeScreen() {
+
   const availableInvestigators = useGameStore(
     (state) => state.availableInvestigators,
   );
@@ -517,6 +518,7 @@ export default function HomeScreen() {
                     setDetectedDeckName(null);
                     setDeckLookupState("idle");
                     setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
+                    setSelectedInvestigator("");
                   }}
                 >
                   Clear Imported Deck
