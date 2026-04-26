@@ -2324,6 +2324,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
+    const importedArkhamBuildResolvedDeck = get().importedArkhamBuildResolvedDeck;
     let loadedDeck: {
       investigatorCode: string | null;
       investigatorName?: string | null;
@@ -2336,9 +2337,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
 
     try {
-      loadedDeck = importedArkhamBuildDeckJson
-        ? loadArkhamBuildDeckFromJson(importedArkhamBuildDeckJson)
-        : await loadArkhamDeck(selectedDeckId);
+      loadedDeck = importedArkhamBuildResolvedDeck
+        ? importedArkhamBuildResolvedDeck
+        : importedArkhamBuildDeckJson
+          ? loadArkhamBuildDeckFromJson(importedArkhamBuildDeckJson)
+          : await loadArkhamDeck(selectedDeckId);
     } catch (error) {
       console.error(error);
       get().pushLog(
@@ -2732,14 +2735,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
             createLogEntry(
               "system",
               `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
-            ),
-          ]
-          : []),
-        ...(unsupportedCodes.length > 0
-          ? [
-            createLogEntry(
-              "system",
-              `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
             ),
           ]
           : []),
