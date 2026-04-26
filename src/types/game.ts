@@ -139,8 +139,8 @@ export interface PlayerCard {
   code?: string;
   passiveSkillModifiers?: PassiveSkillModifiers;
   deckLimit?: number;
-  validationErrors?: string[];
   validationWarnings?: string[];
+  randomWeaknesses?: string[];
 }
 
 
