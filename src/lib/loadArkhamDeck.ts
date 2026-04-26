@@ -149,7 +149,6 @@ export function buildDeckCardsFromSlots(
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
   const validationWarnings: string[] = [];
-  const validationErrors: string[] = [];
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
@@ -221,6 +220,6 @@ export function buildDeckCardsFromSlots(
     unsupportedCodes,
     randomWeaknesses,
     validationWarnings,
-    validationErrors,
+    validationErrors: [],
   });
 }
