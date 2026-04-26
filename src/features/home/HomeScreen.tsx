@@ -130,6 +130,8 @@ export default function HomeScreen() {
     cardCount: number;
     unsupportedCodes: string[];
     randomWeaknesses: string[];
+    validationWarnings: string[];
+    validationErrors: string[];
   } | null>(null);
 
   const availableScenarios = useGameStore((state) => state.availableScenarios);
@@ -441,6 +443,8 @@ export default function HomeScreen() {
                     cardCount,
                     unsupportedCodes: buildResult.unsupportedCodes,
                     randomWeaknesses: buildResult.randomWeaknesses,
+                    validationWarnings: buildResult.validationWarnings,
+                    validationErrors: buildResult.validationErrors,
                   });
 
                   setImportedArkhamBuildDeckJson(parsed);
