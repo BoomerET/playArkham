@@ -354,6 +354,25 @@ export default function HomeScreen() {
   //  (state) => state.setImportedArkhamBuildDeckJson,
   //);
 
+  async function copyTextToClipboard(text: string) {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  }
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -530,7 +549,7 @@ export default function HomeScreen() {
                       type="button"
                       className="secondary-button"
                       onClick={() =>
-                        void navigator.clipboard.writeText(
+                        void copyTextToClipboard(
                           importedDeckSummary.unsupportedCodes.join(", "),
                         )
                       }
