@@ -559,7 +559,7 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
-              {importedDeckSummary.validationWarnings.length > 0 ? (
+              {importedDeckSummary && importedDeckSummary.validationWarnings.length > 0 ? (
                 <div className="home-screen__deck-warning">
                   <div>Deck validation warning(s):</div>
                   <ul>
