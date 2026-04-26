@@ -84,6 +84,7 @@ export async function loadArkhamDeck(deckId: string): Promise<{
     unsupportedCodes: buildResult.unsupportedCodes,
     randomWeaknesses: buildResult.randomWeaknesses,
     validationWarnings: buildResult.validationWarnings,
+    validationErrors: buildResult.validationErrors,
   };
 }
 
