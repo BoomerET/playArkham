@@ -465,6 +465,7 @@ export default function HomeScreen() {
                     );
                   } else {
                     setDeckLookupState("error");
+                    setSelectedInvestigator("");
                     setDeckLookupMessage(
                       investigatorCode
                         ? `Arkham.build investigator code "${investigatorCode}" is not supported by this app yet.`
