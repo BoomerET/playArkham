@@ -173,11 +173,14 @@ const initialSelectedScenarioId =
 
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
-
 export const useGameStore = create<GameStore>((set, get) => ({
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
     set({ importedArkhamBuildDeckJson: deck });
+  },
+  importedArkhamBuildResolvedDeck: null,
+  setImportedArkhamBuildResolvedDeck: (deck) => {
+    set({ importedArkhamBuildResolvedDeck: deck });
   },
   debugMode: false,
   debugPreset: "none",

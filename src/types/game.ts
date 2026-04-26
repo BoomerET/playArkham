@@ -516,6 +516,18 @@ export interface GameState {
   ) => void;
   importedArkhamBuildDeckJson: ArkhamBuildDeckJson | null;
   setImportedArkhamBuildDeckJson: (deck: ArkhamBuildDeckJson | null) => void;
+  importedArkhamBuildResolvedDeck: {
+    investigatorCode: string | null;
+    investigatorName: string | null;
+    deckName: string | null;
+    cards: PlayerCard[];
+    unsupportedCodes: string[];
+    randomWeaknesses: string[];
+  } | null;
+
+  setImportedArkhamBuildResolvedDeck: (
+    deck: GameState["importedArkhamBuildResolvedDeck"],
+  ) => void;
 }
 
 
