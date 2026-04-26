@@ -52,6 +52,9 @@ export async function loadArkhamDeck(deckId: string): Promise<{
   investigatorCode: string | null;
   cards: PlayerCard[];
   unsupportedCodes: string[];
+  randomWeaknesses: string[];
+  validationWarnings: string[];
+  validationErrors: string[];
 }> {
   const trimmedDeckId = deckId.trim();
 
@@ -177,5 +180,6 @@ export function buildDeckCardsFromSlots(
     unsupportedCodes,
     randomWeaknesses,
     validationWarnings,
+    validationErrors: [],
   };
 }
