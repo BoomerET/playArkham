@@ -94,6 +94,9 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
   deckName: string | null;
   cards: PlayerCard[];
   unsupportedCodes: string[];
+  randomWeaknesses: string[];
+  validationWarnings: string[];
+  validationErrors: string[];
 } {
   if (!deckJson.slots) {
     throw new Error("Arkham.build deck JSON did not include slots.");
