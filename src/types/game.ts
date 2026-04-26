@@ -527,6 +527,8 @@ export interface GameState {
     cards: PlayerCard[];
     unsupportedCodes: string[];
     randomWeaknesses: string[];
+    validationWarnings: string[];
+    validationErrors: string[];
   } | null;
 
   setImportedArkhamBuildResolvedDeck: (
