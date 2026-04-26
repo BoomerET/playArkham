@@ -351,10 +351,6 @@ export default function HomeScreen() {
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
 
-  //const setImportedArkhamBuildDeckJson = useGameStore(
-  //  (state) => state.setImportedArkhamBuildDeckJson,
-  //);
-
   async function copyTextToClipboard(text: string) {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
@@ -403,6 +399,7 @@ export default function HomeScreen() {
                 setImportedArkhamBuildDeckJson(null);
                 setImportedDeckSummary(null);
                 setSelectedDeckId(event.target.value);
+                setSelectedInvestigator("");
               }}
 
               placeholder="Required, e.g. 5841936"
@@ -428,22 +425,6 @@ export default function HomeScreen() {
 
                   const text = await file.text();
                   const parsed = JSON.parse(text);
-
-                  //const slotEntries = Object.entries(parsed.slots ?? {});
-                  //const cardCount = slotEntries.reduce(
-                  //  (total, [, count]) => total + Number(count ?? 0),
-                  //  0,
-                  //);
-
-                  //const unsupportedCodes: string[] = [];
-
-                  //setImportedDeckSummary({
-                  //  deckName: parsed.name?.trim() ?? null,
-                  //  investigatorName: parsed.investigator_name?.trim() ?? null,
-                  //  investigatorCode: parsed.investigator_code?.trim() ?? null,
-                  //  cardCount,
-                  //  unsupportedCodes: [],
-                  //});
 
                   const slots = (parsed.slots ?? {}) as Record<string, number>;
                   const buildResult = buildDeckCardsFromSlots(slots);
