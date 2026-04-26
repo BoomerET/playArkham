@@ -110,10 +110,9 @@ export function loadArkhamBuildDeckFromJson(deckJson: ArkhamBuildDeckJson): {
     deckName: deckJson.name?.trim() ?? null,
     cards: buildResult.cards,
     unsupportedCodes: buildResult.unsupportedCodes,
-
-    //randomWeaknesses: buildResult.randomWeaknesses,
-    //validationWarnings: buildResult.validationWarnings,
-    //validationErrors: buildResult.validationErrors,
+    randomWeaknesses: buildResult.randomWeaknesses,
+    validationWarnings: buildResult.validationWarnings,
+    validationErrors: buildResult.validationErrors,
   };
 }
 
