@@ -192,8 +192,8 @@ export default function HomeScreen() {
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
 
-  const importedArkhamBuildDeckJson = useGameStore(
-    (state) => state.importedArkhamBuildDeckJson,
+  const importedArkhamBuildResolvedDeck = useGameStore(
+    (state) => state.importedArkhamBuildResolvedDeck,
   );
 
   const setImportedArkhamBuildDeckJson = useGameStore(
@@ -347,7 +347,8 @@ export default function HomeScreen() {
     Boolean(selectedInvestigator) &&
     (
       (trimmedDeckId.length > 0 && deckLookupState === "ready") ||
-      importedArkhamBuildDeckJson != null
+      //importedArkhamBuildDeckJson != null
+      importedArkhamBuildResolvedDeck?.randomWeaknesses
     );
 
   const selectedInvestigatorImageUrl = selectedInvestigator
