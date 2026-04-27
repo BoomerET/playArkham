@@ -10,19 +10,6 @@ import { playerDeck } from "../data/playerDeck";
 
 import seedrandom from "seedrandom";
 
-//export const normalizeLoadedDeck = (
-//  deck: Partial<LoadedDeck>,
-//): LoadedDeck => ({
-//  investigatorCode: deck.investigatorCode ?? null,
-//  investigatorName: deck.investigatorName ?? null,
-//  deckName: deck.deckName ?? null,
-//  cards: deck.cards ?? [],
-//  unsupportedCodes: deck.unsupportedCodes ?? [],
-//  randomWeaknesses: deck.randomWeaknesses ?? [],
-//  validationWarnings: deck.validationWarnings ?? [],
-//  validationErrors: deck.validationErrors ?? [],
-//});
-
 type ArkhamDeckResponse = {
   investigator_code?: string;
   name?: string;
@@ -34,10 +21,10 @@ type BuildDeckCardsResult = {
   metadata: DeckBuildMetadata;
 };
 
-type DeckValidationResult = {
-  validationWarnings: string[];
-  validationErrors: string[];
-};
+type DeckValidationResult = Pick<
+  DeckBuildMetadata,
+  "validationWarnings" | "validationErrors"
+>;
 
 export type ArkhamBuildDeckJson = {
   investigator_code?: string;
