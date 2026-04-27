@@ -2689,6 +2689,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
+    const deckLogEntries: ReturnType<typeof createLogEntry>[] = [
+      createLogEntry(
+        "system",
+        importedArkhamBuildDeckJson
+          ? `Deck source: Arkham.build import${loadedDeck.deckName ? ` (${loadedDeck.deckName})` : ""}.`
+          : `Deck source: ArkhamDB deck ${selectedDeckId}.`,
+      ),
+
+      ...(loadedDeck.unsupportedCodes.length > 0
+        ? [
+          createLogEntry(
+            "system",
+            `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+          ),
+        ]
+        : []),
+
+      ...(loadedDeck.randomWeaknesses.length > 0
+        ? [
+          createLogEntry(
+            "system",
+            `Random weakness assigned: ${loadedDeck.randomWeaknesses.join(", ")}.`,
+          ),
+        ]
+        : []),
+
+      ...loadedDeck.validationWarnings.map((warning) =>
+        createLogEntry("system", `Deck warning: ${warning}`),
+      ),
+    ];
+
     set({
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
@@ -2730,45 +2761,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           "scenario",
           `Selected scenario: ${selectedScenario.name}`,
         ),
-        createLogEntry(
-          "system",
-          importedArkhamBuildDeckJson
-            ? `Deck source: Arkham.build import${loadedDeck.deckName ? ` (${loadedDeck.deckName})` : ""}.`
-            : `Deck source: ArkhamDB deck ${selectedDeckId}.`,
-        ),
+        ...deckLogEntries,
         ...setupLogEntries,
-        ...(loadedDeck.unsupportedCodes.length > 0
-          ? [
-            createLogEntry(
-              "system",
-              `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
-            ),
-          ]
-          : []),
-        ...(unsupportedCodes.length > 0
-          ? [
-            createLogEntry(
-              "system",
-              `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
-            ),
-          ]
-          : []),
-
-        ...(randomWeaknesses.length > 0
-          ? [
-            createLogEntry(
-              "system",
-              `Random weakness assigned: ${randomWeaknesses.join(", ")}.`,
-            ),
-          ]
-          : []),
-
-        ...(validationWarnings.length > 0
-          ? validationWarnings.map((warning) =>
-            createLogEntry("system", `Deck warning: ${warning}`),
-          )
-          : []),
-        createLogEntry("system", "Game setup complete."),
+        createLogEntry("system", "Game setup complete"),
       ],
       lastSkillTest: null,
       activeSkillTest: null,
