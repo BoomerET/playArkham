@@ -31,14 +31,26 @@ describe("buildDeckCardsFromSlots", () => {
         expect(new Set(weaknessCodes).size).toBe(2);
     });
     it("tracks unsupported card codes and skips them", () => {
-  const result = buildDeckCardsFromSlots(
-    {
-      NOT_A_REAL_CARD: 1,
-    },
-    () => 0,
-  );
+        const result = buildDeckCardsFromSlots(
+            {
+                NOT_A_REAL_CARD: 1,
+            },
+            () => 0,
+        );
 
-  expect(result.cards).toHaveLength(0);
-  expect(result.metadata.unsupportedCodes).toEqual(["NOT_A_REAL_CARD"]);
-});
+        expect(result.cards).toHaveLength(0);
+        expect(result.metadata.unsupportedCodes).toEqual(["NOT_A_REAL_CARD"]);
+    });
+    it("warns when a non-weakness card exceeds its deck limit", () => {
+        const result = buildDeckCardsFromSlots(
+            {
+                "01065": 3,
+            },
+            () => 0,
+        );
+
+        expect(result.metadata.validationWarnings).toEqual([
+            expect.stringContaining("has 3 copies; limit is"),
+        ]);
+    });
 });
