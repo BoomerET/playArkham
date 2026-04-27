@@ -55,18 +55,10 @@ export type ScenarioFlagCondition = {
   equals: ScenarioFlagValue;
 };
 
-//export type LoadedDeck = {
-//  investigatorCode: string | null;
-//  investigatorName: string | null;
-//  deckName: string | null;
-//
-//  cards: PlayerCard[];
-//
-//  unsupportedCodes: string[];
-//  randomWeaknesses: string[];
-//  validationWarnings: string[];
-//  validationErrors: string[];
-//};
+export type DeckValidationMetadata = Pick<
+  DeckBuildMetadata,
+  "validationWarnings" | "validationErrors"
+>;
 
 export type DeckMetadata = {
   investigatorCode: string | null;

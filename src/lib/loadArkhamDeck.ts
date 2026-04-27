@@ -4,6 +4,7 @@ import type
   LoadedDeck,
   DeckMetadata,
   DeckBuildMetadata,
+  DeckValidationMetadata,
 } from "../types/game";
 
 import { playerDeck } from "../data/playerDeck";
@@ -122,7 +123,7 @@ export function loadArkhamBuildDeckFromJson(
 
 export function validateDeckSlots(
   slots: Record<string, number>,
-): Pick<DeckBuildMetadata, "validationWarnings" | "validationErrors"> {
+): DeckValidationMetadata {
   const validationWarnings: string[] = [];
   const validationErrors: string[] = [];
 
