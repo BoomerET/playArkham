@@ -160,7 +160,6 @@ export function buildDeckCardsFromSlots(
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
-  //const validation = validateDeckSlots(slots);
   const validationMetadata = validateDeckSlots(slots);
 
   const weaknessPool = getBasicWeaknessPool();
