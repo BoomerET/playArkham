@@ -133,7 +133,6 @@ import {
 } from "../features/playerCards/slots";
 
 import {
-  loadArkhamDeck,
   loadArkhamBuildDeckFromJson,
 } from "../lib/loadArkhamDeck";
 
