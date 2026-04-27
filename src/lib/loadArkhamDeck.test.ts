@@ -44,7 +44,7 @@ describe("buildDeckCardsFromSlots", () => {
     it("warns when a non-weakness card exceeds its deck limit", () => {
         const result = buildDeckCardsFromSlots(
             {
-                "01065": 3,
+                "60352": 3,
             },
             () => 0,
         );
