@@ -160,7 +160,6 @@ export function buildDeckCardsFromSlots(
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
   const validation = validateDeckSlots(slots);
-  //const validationWarnings: string[] = [];
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
@@ -208,13 +207,16 @@ export function buildDeckCardsFromSlots(
       deckCards.push(cloneCard(matchingCard));
     }
   }
+
+  const metadata: DeckBuildMetadata = {
+    unsupportedCodes,
+    randomWeaknesses,
+    validationWarnings: validation.validationWarnings,
+    validationErrors: validation.validationErrors,
+  };
+
   return {
     cards: deckCards,
-    metadata: {
-      unsupportedCodes,
-      randomWeaknesses,
-      validationWarnings: validation.validationWarnings,
-      validationErrors: validation.validationErrors,
-    },
+    metadata,
   };
 }
