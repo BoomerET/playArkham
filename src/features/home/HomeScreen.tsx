@@ -430,30 +430,6 @@ export default function HomeScreen() {
                   const text = await file.text();
                   const parsed = JSON.parse(text);
 
-                  //const slots = (parsed.slots ?? {}) as Record<string, number>;
-                  //const buildResult = buildDeckCardsFromSlots(slots);
-
-                  //const cardCount = Object.values(slots).reduce<number>(
-                  //  (total, count) => total + Number(count ?? 0),
-                  //  0,
-                  //);
-
-                  //const resolvedDeck = useGameStore(
-                  //  (state) => state.importedArkhamBuildResolvedDeck
-                  //);
-                  //const resolvedDeck = loadArkhamBuildDeckFromJson(parsed)!;
-
-                  //setImportedDeckSummary({
-                  //  deckName: resolvedDeck.deckName,
-                  //  investigatorName: resolvedDeck.investigatorName,
-                  //  investigatorCode: resolvedDeck.investigatorCode,
-                  //  cardCount: resolvedDeck.cards.length,
-                  //  unsupportedCodes: resolvedDeck.unsupportedCodes,
-                  //  randomWeaknesses: resolvedDeck.randomWeaknesses,
-                  //  validationWarnings: resolvedDeck.validationWarnings,
-                  //  validationErrors: resolvedDeck.validationErrors,
-                  //});
-
                   setImportedArkhamBuildDeckJson(parsed);
 
                   const resolvedDeck =
