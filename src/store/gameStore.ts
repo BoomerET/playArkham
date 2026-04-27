@@ -2363,7 +2363,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const validationWarnings = loadedDeck.validationWarnings;
     const unsupportedCodes = loadedDeck.unsupportedCodes;
-    const randomWeaknesses = loadedDeck.randomWeaknesses;
+    //const randomWeaknesses = loadedDeck.randomWeaknesses;
     if (validationWarnings.length > 0) {
       for (const warning of validationWarnings) {
         get().pushLog("system", `Deck Warning: ${warning}`);
