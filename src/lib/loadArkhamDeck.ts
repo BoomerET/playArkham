@@ -1,17 +1,6 @@
 import type { PlayerCard, LoadedDeck } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
 
-//const emptyLoadedDeck = (): LoadedDeck => ({
-//  investigatorCode: null,
-//  investigatorName: null,
-//  deckName: null,
-//  cards: [],
-//  unsupportedCodes: [],
-//  randomWeaknesses: [],
-//  validationWarnings: [],
-//  validationErrors: [],
-//});
-
 export const normalizeLoadedDeck = (
   deck: Partial<LoadedDeck>,
 ): LoadedDeck => ({
