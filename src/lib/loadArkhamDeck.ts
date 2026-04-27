@@ -227,6 +227,10 @@ export function addCopiesOfCard(params: {
   }
 }
 
+export function findPlayerCardByCode(code: string): PlayerCard | null {
+  return playerDeck.find((card) => card.code === code) ?? null;
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -257,7 +261,7 @@ export function buildDeckCardsFromSlots(
       continue;
     }
 
-    const matchingCard = playerDeck.find((card) => card.code === code);
+    const matchingCard = findPlayerCardByCode(code);
 
     if (!matchingCard) {
       console.warn(`Unsupported card code: ${code}`);
