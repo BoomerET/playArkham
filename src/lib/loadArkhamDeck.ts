@@ -107,10 +107,7 @@ export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
     investigatorCode: data.investigator_code?.trim() ?? null,
     investigatorName: null,
     deckName: data.name?.trim() ?? null,
-    unsupportedCodes: buildResult.metadata.unsupportedCodes,
-    randomWeaknesses: buildResult.metadata.randomWeaknesses,
-    validationWarnings: buildResult.metadata.validationWarnings,
-    validationErrors: buildResult.metadata.validationErrors,
+    ...buildResult.metadata,
   };
 
   return {
@@ -132,10 +129,7 @@ export function loadArkhamBuildDeckFromJson(
     investigatorCode: deckJson.investigator_code?.trim() ?? null,
     investigatorName: deckJson.investigator_name?.trim() ?? null,
     deckName: deckJson.name?.trim() ?? null,
-    unsupportedCodes: buildResult.metadata.unsupportedCodes,
-    randomWeaknesses: buildResult.metadata.randomWeaknesses,
-    validationWarnings: buildResult.metadata.validationWarnings,
-    validationErrors: buildResult.metadata.validationErrors,
+    ...buildResult.metadata,
   };
 
   return {
