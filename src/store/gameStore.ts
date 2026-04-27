@@ -177,9 +177,14 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 export const useGameStore = create<GameStore>((set, get) => ({
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
-    set({ importedArkhamBuildDeckJson: deck });
+    set({
+      importedArkhamBuildDeckJson: deck,
+      importedArkhamBuildResolvedDeck: deck
+        ? loadArkhamBuildDeckFromJson(deck)
+        : null,
+    });
   },
-  importedArkhamBuildResolvedDeck: LoadedDeck | null,
+  importedArkhamBuildResolvedDeck: null,
   setImportedArkhamBuildResolvedDeck: (deck) => {
     set({ importedArkhamBuildResolvedDeck: deck });
   },
@@ -2326,23 +2331,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
     const importedArkhamBuildResolvedDeck = get().importedArkhamBuildResolvedDeck;
-    let loadedDeck: {
-      investigatorCode: string | null;
-      investigatorName?: string | null;
-      deckName?: string | null;
-      cards: PlayerCard[];
-      unsupportedCodes: string[];
-      validationWarnings: string[];
-      randomWeaknesses: string[];
-      validationErrors: string[];
-    };
+    //let loadedDeck: {
+    //  investigatorCode: string | null;
+    //  investigatorName?: string | null;
+    //  deckName?: string | null;
+    //  cards: PlayerCard[];
+    //  unsupportedCodes: string[];
+    //  validationWarnings: string[];
+    //  randomWeaknesses: string[];
+    //  validationErrors: string[];
+    //};
+
+    let loadedDeck: LoadedDeck;
 
     try {
-      loadedDeck = importedArkhamBuildResolvedDeck
-        ? importedArkhamBuildResolvedDeck
-        : importedArkhamBuildDeckJson
-          ? loadArkhamBuildDeckFromJson(importedArkhamBuildDeckJson)
-          : await loadArkhamDeck(selectedDeckId);
+      if (importedArkhamBuildResolvedDeck) {
+        loadedDeck = importedArkhamBuildResolvedDeck;
+      } else if (importedArkhamBuildDeckJson) {
+        loadedDeck = loadArkhamBuildDeckFromJson(importedArkhamBuildDeckJson);
+
+        set({
+          importedArkhamBuildResolvedDeck: loadedDeck,
+        });
+      } else {
+        loadedDeck = await loadArkhamDeck(selectedDeckId);
+      }
     } catch (error) {
       console.error(error);
       get().pushLog(
@@ -2354,14 +2367,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw error;
     }
 
-    const validationWarnings = loadedDeck.validationWarnings ?? [];
+    //const validationWarnings = loadedDeck.validationWarnings ?? [];
+    const validationWarnings = loadedDeck.validationWarnings;
+    const unsupportedCodes = loadedDeck.unsupportedCodes;
+    const randomWeaknesses = loadedDeck.randomWeaknesses;
     if (validationWarnings.length > 0) {
       for (const warning of validationWarnings) {
         get().pushLog("system", `Deck Warning: ${warning}`);
       }
     }
 
-    const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
+    //const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
     if (unsupportedCodes.length > 0) {
       get().pushLog(
         "system",
@@ -2369,7 +2385,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    const randomWeaknesses = loadedDeck.randomWeaknesses ?? [];
+    //const randomWeaknesses = loadedDeck.randomWeaknesses ?? [];
 
     const deckCards = loadedDeck.cards;
 
