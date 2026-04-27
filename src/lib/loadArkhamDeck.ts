@@ -234,6 +234,29 @@ export function addUnsupportedCardCode(params: {
   params.unsupportedCodes.push(params.code);
 }
 
+export function resolveDeckSlotCard(params: {
+  code: string;
+  count: number;
+  deckCards: PlayerCard[];
+  unsupportedCodes: string[];
+}): void {
+  const matchingCard = findPlayerCardByCode(params.code);
+
+  if (!matchingCard) {
+    addUnsupportedCardCode({
+      code: params.code,
+      unsupportedCodes: params.unsupportedCodes,
+    });
+    return;
+  }
+
+  addCopiesOfCard({
+    card: matchingCard,
+    count: params.count,
+    deckCards: params.deckCards,
+  });
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -264,20 +287,11 @@ export function buildDeckCardsFromSlots(
       continue;
     }
 
-    const matchingCard = findPlayerCardByCode(code);
-
-    if (!matchingCard) {
-      addUnsupportedCardCode({
-        code,
-        unsupportedCodes,
-      });
-      continue;
-    }
-
-    addCopiesOfCard({
-      card: matchingCard,
+    resolveDeckSlotCard({
+      code,
       count,
       deckCards,
+      unsupportedCodes,
     });
   }
 
