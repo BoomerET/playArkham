@@ -105,6 +105,7 @@ import type {
   PlayerCard,
   SkillTestResult,
   GameLogItem,
+  LoadedDeck,
 } from "../types/game";
 
 import type {
@@ -178,7 +179,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setImportedArkhamBuildDeckJson: (deck) => {
     set({ importedArkhamBuildDeckJson: deck });
   },
-  importedArkhamBuildResolvedDeck: null,
+  importedArkhamBuildResolvedDeck: LoadedDeck | null,
   setImportedArkhamBuildResolvedDeck: (deck) => {
     set({ importedArkhamBuildResolvedDeck: deck });
   },
