@@ -153,6 +153,31 @@ export function validateDeckSlots(
   };
 }
 
+export function chooseRandomWeakness(
+  weaknessPool: PlayerCard[],
+  usedWeaknessCodes: Set<string>,
+  rng: () => number,
+): PlayerCard | null {
+  const available = weaknessPool.filter(
+    (weakness) =>
+      weakness.code != null && !usedWeaknessCodes.has(weakness.code),
+  );
+
+  const chosenPool = available.length > 0 ? available : weaknessPool;
+
+  if (chosenPool.length === 0) {
+    return null;
+  }
+
+  const chosen = chosenPool[Math.floor(rng() * chosenPool.length)];
+
+  if (chosen.code) {
+    usedWeaknessCodes.add(chosen.code);
+  }
+
+  return chosen;
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -168,25 +193,17 @@ export function buildDeckCardsFromSlots(
   for (const [code, count] of Object.entries(slots)) {
     if (isRandomWeaknessPlaceholder(code)) {
       for (let i = 0; i < count; i += 1) {
-        const available = weaknessPool.filter(
-          (weakness) =>
-            weakness.code != null && !usedWeaknessCodes.has(weakness.code),
+        const chosen = chooseRandomWeakness(
+          weaknessPool,
+          usedWeaknessCodes,
+          rng,
         );
 
-        const chosenPool = available.length > 0 ? available : weaknessPool;
-
-        if (chosenPool.length === 0) {
+        if (!chosen) {
           validationMetadata.validationWarnings.push(
             "Random weakness placeholder found, but no weaknesses are available.",
           );
           continue;
-        }
-
-        const chosen =
-          chosenPool[Math.floor(rng() * chosenPool.length)];
-
-        if (chosen.code) {
-          usedWeaknessCodes.add(chosen.code);
         }
 
         randomWeaknesses.push(chosen.name);
