@@ -28,6 +28,11 @@ type DeckBuildResult = {
   validationErrors: string[];
 };
 
+type DeckValidationResult = {
+  validationWarnings: string[];
+  validationErrors: string[];
+};
+
 export type ArkhamBuildDeckJson = {
   investigator_code?: string;
   investigator_name?: string;
@@ -112,6 +117,36 @@ export function loadArkhamBuildDeckFromJson(
   });
 }
 
+function validateDeckSlots(slots: Record<string, number>): DeckValidationResult {
+  const validationWarnings: string[] = [];
+  const validationErrors: string[] = [];
+
+  for (const [code, count] of Object.entries(slots)) {
+    if (isRandomWeaknessPlaceholder(code)) {
+      continue;
+    }
+
+    const matchingCard = playerDeck.find((card) => card.code === code);
+
+    if (!matchingCard) {
+      continue;
+    }
+
+    const deckLimit = getDeckLimit(matchingCard);
+
+    if (!matchingCard.isWeakness && count > deckLimit) {
+      validationWarnings.push(
+        `${matchingCard.name} has ${count} copies; limit is ${deckLimit}.`,
+      );
+    }
+  }
+
+  return {
+    validationWarnings,
+    validationErrors,
+  };
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -119,7 +154,8 @@ export function buildDeckCardsFromSlots(
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
-  const validationWarnings: string[] = [];
+  const validation = validateDeckSlots(slots);
+  //const validationWarnings: string[] = [];
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
@@ -135,7 +171,7 @@ export function buildDeckCardsFromSlots(
         const chosenPool = available.length > 0 ? available : weaknessPool;
 
         if (chosenPool.length === 0) {
-          validationWarnings.push(
+          validation.validationWarnings.push(
             "Random weakness placeholder found, but no weaknesses are available.",
           );
           continue;
@@ -163,14 +199,6 @@ export function buildDeckCardsFromSlots(
       continue;
     }
 
-    const deckLimit = getDeckLimit(matchingCard);
-
-    if (!matchingCard.isWeakness && count > deckLimit) {
-      validationWarnings.push(
-        `${matchingCard.name} has ${count} copies; limit is ${deckLimit}.`,
-      );
-    }
-
     for (let i = 0; i < count; i += 1) {
       deckCards.push(cloneCard(matchingCard));
     }
@@ -179,7 +207,7 @@ export function buildDeckCardsFromSlots(
     cards: deckCards,
     unsupportedCodes,
     randomWeaknesses,
-    validationWarnings,
-    validationErrors: [],
+    validationWarnings: validation.validationWarnings,
+    validationErrors: validation.validationErrors,
   };
 }
