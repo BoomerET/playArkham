@@ -30,10 +30,13 @@ type ArkhamDeckResponse = {
 
 type BuildDeckCardsResult = {
   cards: PlayerCard[];
-  unsupportedCodes: string[];
-  randomWeaknesses: string[];
-  validationWarnings: string[];
-  validationErrors: string[];
+  metadata: Pick<
+    DeckMetadata,
+    | "unsupportedCodes"
+    | "randomWeaknesses"
+    | "validationWarnings"
+    | "validationErrors"
+  >;
 };
 
 type DeckValidationResult = {
@@ -100,25 +103,14 @@ export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
 
   const buildResult = buildDeckCardsFromSlots(data.slots, rng);
 
-  //return {
-  //  investigatorCode: data.investigator_code?.trim() ?? null,
-  //  investigatorName: null,
-  //  deckName: null,
-  //  cards: buildResult.cards,
-  //  unsupportedCodes: buildResult.unsupportedCodes,
-  //  randomWeaknesses: buildResult.randomWeaknesses,
-  //  validationWarnings: buildResult.validationWarnings,
-  //  validationErrors: buildResult.validationErrors,
-  //};
-
   const metadata: DeckMetadata = {
     investigatorCode: data.investigator_code?.trim() ?? null,
     investigatorName: null,
     deckName: data.name?.trim() ?? null,
-    unsupportedCodes: buildResult.unsupportedCodes,
-    randomWeaknesses: buildResult.randomWeaknesses,
-    validationWarnings: buildResult.validationWarnings,
-    validationErrors: buildResult.validationErrors,
+    unsupportedCodes: buildResult.metadata.unsupportedCodes,
+    randomWeaknesses: buildResult.metadata.randomWeaknesses,
+    validationWarnings: buildResult.metadata.validationWarnings,
+    validationErrors: buildResult.metadata.validationErrors,
   };
 
   return {
@@ -140,27 +132,16 @@ export function loadArkhamBuildDeckFromJson(
     investigatorCode: deckJson.investigator_code?.trim() ?? null,
     investigatorName: deckJson.investigator_name?.trim() ?? null,
     deckName: deckJson.name?.trim() ?? null,
-    unsupportedCodes: buildResult.unsupportedCodes,
-    randomWeaknesses: buildResult.randomWeaknesses,
-    validationWarnings: buildResult.validationWarnings,
-    validationErrors: buildResult.validationErrors,
+    unsupportedCodes: buildResult.metadata.unsupportedCodes,
+    randomWeaknesses: buildResult.metadata.randomWeaknesses,
+    validationWarnings: buildResult.metadata.validationWarnings,
+    validationErrors: buildResult.metadata.validationErrors,
   };
 
   return {
     ...metadata,
     cards: buildResult.cards,
   };
-
-  //return {
-  //  investigatorCode: deckJson.investigator_code?.trim() ?? null,
-  //  investigatorName: deckJson.investigator_name?.trim() ?? null,
-  //  deckName: deckJson.name?.trim() ?? null,
-  //  cards: buildResult.cards,
-  //  unsupportedCodes: buildResult.unsupportedCodes,
-  //  randomWeaknesses: buildResult.randomWeaknesses,
-  //  validationWarnings: buildResult.validationWarnings,
-  //  validationErrors: buildResult.validationErrors,
-  //};
 }
 
 export function validateDeckSlots(
@@ -253,9 +234,11 @@ export function buildDeckCardsFromSlots(
   }
   return {
     cards: deckCards,
-    unsupportedCodes,
-    randomWeaknesses,
-    validationWarnings: validation.validationWarnings,
-    validationErrors: validation.validationErrors,
+    metadata: {
+      unsupportedCodes,
+      randomWeaknesses,
+      validationWarnings: validation.validationWarnings,
+      validationErrors: validation.validationErrors,
+    },
   };
 }
