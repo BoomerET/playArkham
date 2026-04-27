@@ -49,6 +49,7 @@ describe("buildDeckCardsFromSlots", () => {
             () => 0,
         );
 
+        expect(result.metadata.unsupportedCodes).toEqual([]);
         expect(result.metadata.validationWarnings).toEqual([
             expect.stringContaining("has 3 copies; limit is"),
         ]);
