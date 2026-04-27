@@ -17,7 +17,7 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
-type BuildDeckCardsResult = {
+export type BuildDeckCardsResult = {
   cards: PlayerCard[];
   metadata: DeckBuildMetadata;
 };
@@ -155,7 +155,9 @@ export function chooseRandomWeakness(
 ): PlayerCard | null {
   const available = weaknessPool.filter(
     (weakness) =>
-      weakness.code != null && !usedWeaknessCodes.has(weakness.code),
+      isCardWeakness(weakness) &&
+      weakness.code != null &&
+      !usedWeaknessCodes.has(weakness.code),
   );
 
   const chosenPool = available.length > 0 ? available : weaknessPool;
@@ -257,6 +259,10 @@ export function resolveDeckSlotCard(params: {
   });
 }
 
+function isCardWeakness(card: PlayerCard): boolean {
+  return card.isWeakness === true;
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -267,6 +273,9 @@ export function buildDeckCardsFromSlots(
   const validationMetadata = validateDeckSlots(slots);
 
   const weaknessPool = getBasicWeaknessPool();
+  if (weaknessPool.some((card) => !isCardWeakness(card))) {
+    console.warn("Weakness pool contains non-weakness cards.");
+  }
   const usedWeaknessCodes = new Set<string>();
 
   for (const [code, count] of Object.entries(slots)) {
