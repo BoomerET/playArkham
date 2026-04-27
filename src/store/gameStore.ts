@@ -55,6 +55,8 @@ import {
   shuffleArray,
   getSelectedScenario,
   getEncounterCardByCode,
+  resolveSelectedDeck,
+  findInvestigatorForDeck,
 } from "./gsFunctions";
 
 import {
@@ -173,20 +175,6 @@ const initialSelectedScenarioId =
   persistedCampaignSetup?.selectedScenarioId ?? defaultScenarioId;
 
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
-
-async function resolveSelectedDeck(state: GameStore): Promise<LoadedDeck> {
-  if (state.importedArkhamBuildResolvedDeck) {
-    return state.importedArkhamBuildResolvedDeck;
-  }
-
-  const selectedDeckId = state.selectedDeckId.trim();
-
-  if (!selectedDeckId) {
-    throw new Error("Deck source is required.");
-  }
-
-  return loadArkhamDeck(selectedDeckId);
-}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   importedArkhamBuildDeckJson: null,
@@ -2342,13 +2330,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw error;
     }
 
-    const selected = loadedDeck.investigatorCode
-      ? state.availableInvestigators.find(
-        (investigator) => investigator.code === loadedDeck.investigatorCode,
-      )
-      : state.availableInvestigators.find(
-        (investigator) => investigator.id === state.selectedInvestigatorId,
-      );
+    const selected = findInvestigatorForDeck(loadedDeck, state);
 
     if (!selected) {
       get().pushLog(

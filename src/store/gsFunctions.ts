@@ -18,12 +18,14 @@ import type {
     ScenarioStatus,
     PlayerCard,
     CardCounterType,
+    LoadedDeck,
 } from "../types/game";
 
 import type {
     AdvanceStoreSlice,
     PersistedCampaignSetup,
     AdvanceState,
+    GameStore,
 } from "./gsTypes";
 
 import {
@@ -73,6 +75,10 @@ import {
 import {
     buildEncounterDeckFromCodes,
 } from "../lib/buildEncounterDeck";
+
+import {
+    loadArkhamDeck,
+} from "../lib/loadArkhamDeck";
 
 export function readyEnemies(enemies: Enemy[]): Enemy[] {
     return enemies.map((enemy) =>
@@ -2040,11 +2046,31 @@ export function getSelectedScenario(state: {
     });
 }
 
-//export function isRandomWeakness(code: string): boolean {
-//    return code === "01000"; // expand later if needed
-//}
-//
-//export function isRandomWeaknessPlaceholder(code: string): boolean {
-//    return code === "01000";
-//}
+export function findInvestigatorForDeck(
+    deck: LoadedDeck,
+    state: GameStore,
+): Investigator | undefined {
+    if (deck.investigatorCode) {
+        return state.availableInvestigators.find(
+            (investigator) => investigator.code === deck.investigatorCode,
+        );
+    }
 
+    return state.availableInvestigators.find(
+        (investigator) => investigator.id === state.selectedInvestigatorId,
+    );
+}
+
+export async function resolveSelectedDeck(state: GameStore): Promise<LoadedDeck> {
+    if (state.importedArkhamBuildResolvedDeck) {
+        return state.importedArkhamBuildResolvedDeck;
+    }
+
+    const selectedDeckId = state.selectedDeckId.trim();
+
+    if (!selectedDeckId) {
+        throw new Error("Deck source is required.");
+    }
+
+    return loadArkhamDeck(selectedDeckId);
+}
