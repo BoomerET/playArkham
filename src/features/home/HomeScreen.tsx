@@ -432,23 +432,24 @@ export default function HomeScreen() {
 
                   setImportedArkhamBuildDeckJson(parsed);
 
-                  const resolvedDeck =
-                    useGameStore.getState().importedArkhamBuildResolvedDeck;
+                  const resolvedDeck = useGameStore.getState().importedArkhamBuildResolvedDeck;
 
-                  if (resolvedDeck) {
-                    setImportedDeckSummary({
-                      deckName: resolvedDeck.deckName,
-                      investigatorName: resolvedDeck.investigatorName,
-                      investigatorCode: resolvedDeck.investigatorCode,
-                      cardCount: resolvedDeck.cards.length,
-                      unsupportedCodes: resolvedDeck.unsupportedCodes,
-                      randomWeaknesses: resolvedDeck.randomWeaknesses,
-                      validationWarnings: resolvedDeck.validationWarnings,
-                      validationErrors: resolvedDeck.validationErrors,
-                    });
+                  if (!resolvedDeck) {
+                    throw new Error("Imported deck did not resolve.");
                   }
 
-                  setImportedArkhamBuildDeckJson(parsed);
+                  setImportedDeckSummary({
+                    deckName: resolvedDeck.deckName,
+                    investigatorName: resolvedDeck.investigatorName,
+                    investigatorCode: resolvedDeck.investigatorCode,
+                    cardCount: resolvedDeck.cards.length,
+                    unsupportedCodes: resolvedDeck.unsupportedCodes,
+                    randomWeaknesses: resolvedDeck.randomWeaknesses,
+                    validationWarnings: resolvedDeck.validationWarnings,
+                    validationErrors: resolvedDeck.validationErrors,
+                  });
+
+                  //setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
                   setSelectedInvestigator("");
 
