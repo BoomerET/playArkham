@@ -2312,6 +2312,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const importedArkhamBuildDeckJson = state.importedArkhamBuildDeckJson;
     const selectedDeckId = state.selectedDeckId.trim();
+    const isArkhamBuildImport = state.importedArkhamBuildResolvedDeck != null;
 
     let loadedDeck: LoadedDeck;
 
@@ -2677,7 +2678,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         `Deck source: ${getLoadedDeckSourceLabel({
           loadedDeck,
           selectedDeckId,
-          isArkhamBuildImport: importedArkhamBuildDeckJson != null,
+          isArkhamBuildImport,
         })}.`
       ),
 
