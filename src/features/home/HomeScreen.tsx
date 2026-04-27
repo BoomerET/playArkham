@@ -3,7 +3,7 @@ import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
 import type { Investigator } from "../../types/game";
 //import { buildDeckCardsFromSlots, loadArkhamBuildDeckFromJson } from "../../lib/loadArkhamDeck";
-import { loadArkhamBuildDeckFromJson } from "../../lib/loadArkhamDeck";
+//import { loadArkhamBuildDeckFromJson } from "../../lib/loadArkhamDeck";
 import "./homeScreen.css";
 
 const investigatorImages = import.meta.glob(
@@ -441,18 +441,36 @@ export default function HomeScreen() {
                   //const resolvedDeck = useGameStore(
                   //  (state) => state.importedArkhamBuildResolvedDeck
                   //);
-                  const resolvedDeck = loadArkhamBuildDeckFromJson(parsed)!;
+                  //const resolvedDeck = loadArkhamBuildDeckFromJson(parsed)!;
 
-                  setImportedDeckSummary({
-                    deckName: resolvedDeck.deckName,
-                    investigatorName: resolvedDeck.investigatorName,
-                    investigatorCode: resolvedDeck.investigatorCode,
-                    cardCount: resolvedDeck.cards.length,
-                    unsupportedCodes: resolvedDeck.unsupportedCodes,
-                    randomWeaknesses: resolvedDeck.randomWeaknesses,
-                    validationWarnings: resolvedDeck.validationWarnings,
-                    validationErrors: resolvedDeck.validationErrors,
-                  });
+                  //setImportedDeckSummary({
+                  //  deckName: resolvedDeck.deckName,
+                  //  investigatorName: resolvedDeck.investigatorName,
+                  //  investigatorCode: resolvedDeck.investigatorCode,
+                  //  cardCount: resolvedDeck.cards.length,
+                  //  unsupportedCodes: resolvedDeck.unsupportedCodes,
+                  //  randomWeaknesses: resolvedDeck.randomWeaknesses,
+                  //  validationWarnings: resolvedDeck.validationWarnings,
+                  //  validationErrors: resolvedDeck.validationErrors,
+                  //});
+
+                  setImportedArkhamBuildDeckJson(parsed);
+
+                  const resolvedDeck =
+                    useGameStore.getState().importedArkhamBuildResolvedDeck;
+
+                  if (resolvedDeck) {
+                    setImportedDeckSummary({
+                      deckName: resolvedDeck.deckName,
+                      investigatorName: resolvedDeck.investigatorName,
+                      investigatorCode: resolvedDeck.investigatorCode,
+                      cardCount: resolvedDeck.cards.length,
+                      unsupportedCodes: resolvedDeck.unsupportedCodes,
+                      randomWeaknesses: resolvedDeck.randomWeaknesses,
+                      validationWarnings: resolvedDeck.validationWarnings,
+                      validationErrors: resolvedDeck.validationErrors,
+                    });
+                  }
 
                   setImportedArkhamBuildDeckJson(parsed);
                   setSelectedDeckId("");
