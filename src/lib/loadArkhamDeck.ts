@@ -1,5 +1,6 @@
 import type { PlayerCard, LoadedDeck } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
+import seedrandom from "seedrandom";
 
 export const normalizeLoadedDeck = (
   deck: Partial<LoadedDeck>,
@@ -63,6 +64,7 @@ function getDeckLimit(card: PlayerCard): number {
 }
 
 export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
+  const rng = seedrandom(deckId);
   const trimmedDeckId = deckId.trim();
 
   if (!trimmedDeckId) {
@@ -83,7 +85,7 @@ export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
     throw new Error("ArkhamDB deck response did not include slots.");
   }
 
-  const buildResult = buildDeckCardsFromSlots(data.slots);
+  const buildResult = buildDeckCardsFromSlots(data.slots, rng);
 
   return normalizeLoadedDeck({
     investigatorCode: data.investigator_code?.trim() ?? null,
@@ -112,7 +114,7 @@ export function loadArkhamBuildDeckFromJson(
 
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
-
+  rng: () => number = Math.random,
 ): DeckBuildResult {
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
@@ -140,7 +142,7 @@ export function buildDeckCardsFromSlots(
         }
 
         const chosen =
-          chosenPool[Math.floor(Math.random() * chosenPool.length)];
+          chosenPool[Math.floor(rng() * chosenPool.length)];
 
         if (chosen.code) {
           usedWeaknessCodes.add(chosen.code);

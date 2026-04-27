@@ -2331,16 +2331,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const selectedScenario = getSelectedScenario(get());
     const chosenInvestigator = createGameInvestigator(selected);
     const importedArkhamBuildResolvedDeck = get().importedArkhamBuildResolvedDeck;
-    //let loadedDeck: {
-    //  investigatorCode: string | null;
-    //  investigatorName?: string | null;
-    //  deckName?: string | null;
-    //  cards: PlayerCard[];
-    //  unsupportedCodes: string[];
-    //  validationWarnings: string[];
-    //  randomWeaknesses: string[];
-    //  validationErrors: string[];
-    //};
 
     let loadedDeck: LoadedDeck;
 
@@ -2367,7 +2357,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw error;
     }
 
-    //const validationWarnings = loadedDeck.validationWarnings ?? [];
     const validationWarnings = loadedDeck.validationWarnings;
     const unsupportedCodes = loadedDeck.unsupportedCodes;
     const randomWeaknesses = loadedDeck.randomWeaknesses;
@@ -2377,15 +2366,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
-    //const unsupportedCodes = loadedDeck.unsupportedCodes ?? [];
     if (unsupportedCodes.length > 0) {
       get().pushLog(
         "system",
         `Unsupported card code(s) skipped: ${unsupportedCodes.join(", ")}.`,
       );
     }
-
-    //const randomWeaknesses = loadedDeck.randomWeaknesses ?? [];
 
     const deckCards = loadedDeck.cards;
 
