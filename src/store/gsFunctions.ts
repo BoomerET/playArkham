@@ -2088,3 +2088,45 @@ export function getLoadedDeckSourceLabel(params: {
 
     return `ArkhamDB deck ${selectedDeckId}`;
 }
+
+export function buildDeckLogEntries(params: {
+    loadedDeck: LoadedDeck;
+    selectedDeckId: string;
+    isArkhamBuildImport: boolean;
+}): ReturnType<typeof createLogEntry>[] {
+    const { loadedDeck, selectedDeckId, isArkhamBuildImport } = params;
+
+    return [
+        createLogEntry(
+            "system",
+            `Deck source: ${getLoadedDeckSourceLabel({
+                loadedDeck,
+                selectedDeckId,
+                isArkhamBuildImport,
+            })}.`,
+        ),
+
+        ...(loadedDeck.unsupportedCodes.length > 0
+            ? [
+                createLogEntry(
+                    "system",
+                    `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
+                ),
+            ]
+            : []),
+
+        ...(loadedDeck.randomWeaknesses.length > 0
+            ? [
+                createLogEntry(
+                    "system",
+                    `Random weakness assigned: ${loadedDeck.randomWeaknesses.join(", ")}.`,
+                ),
+            ]
+            : []),
+
+        ...loadedDeck.validationWarnings.map((warning) =>
+            createLogEntry("system", `Deck warning: ${warning}`),
+        ),
+    ];
+}
+

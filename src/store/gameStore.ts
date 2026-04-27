@@ -57,7 +57,7 @@ import {
   getEncounterCardByCode,
   resolveSelectedDeck,
   findInvestigatorForDeck,
-  getLoadedDeckSourceLabel,
+  buildDeckLogEntries,
 } from "./gsFunctions";
 
 import {
@@ -2672,38 +2672,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    const deckLogEntries: ReturnType<typeof createLogEntry>[] = [
-      createLogEntry(
-        "system",
-        `Deck source: ${getLoadedDeckSourceLabel({
-          loadedDeck,
-          selectedDeckId,
-          isArkhamBuildImport,
-        })}.`
-      ),
-
-      ...(loadedDeck.unsupportedCodes.length > 0
-        ? [
-          createLogEntry(
-            "system",
-            `Unsupported card code(s) skipped: ${loadedDeck.unsupportedCodes.join(", ")}.`,
-          ),
-        ]
-        : []),
-
-      ...(loadedDeck.randomWeaknesses.length > 0
-        ? [
-          createLogEntry(
-            "system",
-            `Random weakness assigned: ${loadedDeck.randomWeaknesses.join(", ")}.`,
-          ),
-        ]
-        : []),
-
-      ...loadedDeck.validationWarnings.map((warning) =>
-        createLogEntry("system", `Deck warning: ${warning}`),
-      ),
-    ];
+    const deckLogEntries = buildDeckLogEntries({
+      loadedDeck,
+      selectedDeckId,
+      isArkhamBuildImport,
+    });
 
     set({
       investigator: debugInvestigator,
