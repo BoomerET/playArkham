@@ -122,16 +122,22 @@ export default function HomeScreen() {
     (state) => state.setSelectedInvestigator,
   );
 
-  const [importedDeckSummary, setImportedDeckSummary] = useState<{
-    deckName: string | null;
-    investigatorName: string | null;
-    investigatorCode: string | null;
-    cardCount: number;
-    unsupportedCodes: string[];
-    randomWeaknesses: string[];
-    validationWarnings: string[];
-    validationErrors: string[];
-  } | null>(null);
+  const importedArkhamBuildResolvedDeck = useGameStore(
+    (state) => state.importedArkhamBuildResolvedDeck,
+  );
+
+  const importedDeckSummary = importedArkhamBuildResolvedDeck
+    ? {
+      deckName: importedArkhamBuildResolvedDeck.deckName,
+      investigatorName: importedArkhamBuildResolvedDeck.investigatorName,
+      investigatorCode: importedArkhamBuildResolvedDeck.investigatorCode,
+      cardCount: importedArkhamBuildResolvedDeck.cards.length,
+      unsupportedCodes: importedArkhamBuildResolvedDeck.unsupportedCodes,
+      randomWeaknesses: importedArkhamBuildResolvedDeck.randomWeaknesses,
+      validationWarnings: importedArkhamBuildResolvedDeck.validationWarnings,
+      validationErrors: importedArkhamBuildResolvedDeck.validationErrors,
+    }
+    : null;
 
   const availableScenarios = useGameStore((state) => state.availableScenarios);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
@@ -188,10 +194,6 @@ export default function HomeScreen() {
 
   const randomizeCampaignSelectionsForScenario = useGameStore(
     (state) => state.randomizeCampaignSelectionsForScenario,
-  );
-
-  const importedArkhamBuildResolvedDeck = useGameStore(
-    (state) => state.importedArkhamBuildResolvedDeck,
   );
 
   const setImportedArkhamBuildDeckJson = useGameStore(
@@ -398,7 +400,6 @@ export default function HomeScreen() {
 
               onChange={(event) => {
                 setImportedArkhamBuildDeckJson(null);
-                setImportedDeckSummary(null);
                 setSelectedDeckId(event.target.value);
                 setSelectedInvestigator("");
               }}
@@ -435,16 +436,16 @@ export default function HomeScreen() {
                     throw new Error("Imported deck did not resolve.");
                   }
 
-                  setImportedDeckSummary({
-                    deckName: resolvedDeck.deckName,
-                    investigatorName: resolvedDeck.investigatorName,
-                    investigatorCode: resolvedDeck.investigatorCode,
-                    cardCount: resolvedDeck.cards.length,
-                    unsupportedCodes: resolvedDeck.unsupportedCodes,
-                    randomWeaknesses: resolvedDeck.randomWeaknesses,
-                    validationWarnings: resolvedDeck.validationWarnings,
-                    validationErrors: resolvedDeck.validationErrors,
-                  });
+                  //setImportedDeckSummary({
+                  //  deckName: resolvedDeck.deckName,
+                  //  investigatorName: resolvedDeck.investigatorName,
+                  //  investigatorCode: resolvedDeck.investigatorCode,
+                  //  cardCount: resolvedDeck.cards.length,
+                  //  unsupportedCodes: resolvedDeck.unsupportedCodes,
+                  //  randomWeaknesses: resolvedDeck.randomWeaknesses,
+                  //  validationWarnings: resolvedDeck.validationWarnings,
+                  //  validationErrors: resolvedDeck.validationErrors,
+                  //});
 
                   setSelectedInvestigator("");
 
@@ -498,7 +499,6 @@ export default function HomeScreen() {
                   className="secondary-button"
                   onClick={() => {
                     setImportedArkhamBuildDeckJson(null);
-                    setImportedDeckSummary(null);
                     setDetectedDeckName(null);
                     setDeckLookupState("idle");
                     setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
