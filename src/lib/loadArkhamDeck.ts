@@ -20,7 +20,7 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
-type DeckBuildResult = {
+type BuildDeckCardsResult = {
   cards: PlayerCard[];
   unsupportedCodes: string[];
   randomWeaknesses: string[];
@@ -117,7 +117,9 @@ export function loadArkhamBuildDeckFromJson(
   });
 }
 
-function validateDeckSlots(slots: Record<string, number>): DeckValidationResult {
+export function validateDeckSlots(
+  slots: Record<string, number>,
+): DeckValidationResult {
   const validationWarnings: string[] = [];
   const validationErrors: string[] = [];
 
@@ -150,7 +152,7 @@ function validateDeckSlots(slots: Record<string, number>): DeckValidationResult 
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
-): DeckBuildResult {
+): BuildDeckCardsResult {
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
