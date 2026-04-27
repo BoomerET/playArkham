@@ -21,10 +21,10 @@ type BuildDeckCardsResult = {
   metadata: DeckBuildMetadata;
 };
 
-type DeckValidationResult = Pick<
-  DeckBuildMetadata,
-  "validationWarnings" | "validationErrors"
->;
+//type DeckValidationResult = Pick<
+//  DeckBuildMetadata,
+//  "validationWarnings" | "validationErrors"
+//>;
 
 export type ArkhamBuildDeckJson = {
   investigator_code?: string;
@@ -122,7 +122,7 @@ export function loadArkhamBuildDeckFromJson(
 
 export function validateDeckSlots(
   slots: Record<string, number>,
-): DeckValidationResult {
+): Pick<DeckBuildMetadata, "validationWarnings" | "validationErrors"> {
   const validationWarnings: string[] = [];
   const validationErrors: string[] = [];
 
@@ -159,7 +159,8 @@ export function buildDeckCardsFromSlots(
   const deckCards: PlayerCard[] = [];
   const unsupportedCodes: string[] = [];
   const randomWeaknesses: string[] = [];
-  const validation = validateDeckSlots(slots);
+  //const validation = validateDeckSlots(slots);
+  const validationMetadata = validateDeckSlots(slots);
 
   const weaknessPool = getBasicWeaknessPool();
   const usedWeaknessCodes = new Set<string>();
@@ -175,7 +176,7 @@ export function buildDeckCardsFromSlots(
         const chosenPool = available.length > 0 ? available : weaknessPool;
 
         if (chosenPool.length === 0) {
-          validation.validationWarnings.push(
+          validationMetadata.validationWarnings.push(
             "Random weakness placeholder found, but no weaknesses are available.",
           );
           continue;
@@ -211,8 +212,7 @@ export function buildDeckCardsFromSlots(
   const metadata: DeckBuildMetadata = {
     unsupportedCodes,
     randomWeaknesses,
-    validationWarnings: validation.validationWarnings,
-    validationErrors: validation.validationErrors,
+    ...validationMetadata,
   };
 
   return {
