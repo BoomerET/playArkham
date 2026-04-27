@@ -79,6 +79,14 @@ export type DeckMetadata = {
   validationErrors: string[];
 };
 
+export type DeckBuildMetadata = Pick<
+  DeckMetadata,
+  | "unsupportedCodes"
+  | "randomWeaknesses"
+  | "validationWarnings"
+  | "validationErrors"
+>;
+
 export type LoadedDeck = DeckMetadata & {
   cards: PlayerCard[];
 };

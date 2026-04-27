@@ -2,7 +2,8 @@ import type
 {
   PlayerCard,
   LoadedDeck,
-  DeckMetadata
+  DeckMetadata,
+  DeckBuildMetadata,
 } from "../types/game";
 
 import { playerDeck } from "../data/playerDeck";
@@ -30,13 +31,7 @@ type ArkhamDeckResponse = {
 
 type BuildDeckCardsResult = {
   cards: PlayerCard[];
-  metadata: Pick<
-    DeckMetadata,
-    | "unsupportedCodes"
-    | "randomWeaknesses"
-    | "validationWarnings"
-    | "validationErrors"
-  >;
+  metadata: DeckBuildMetadata;
 };
 
 type DeckValidationResult = {
