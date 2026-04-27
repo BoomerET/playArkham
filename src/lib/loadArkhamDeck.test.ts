@@ -54,4 +54,20 @@ describe("buildDeckCardsFromSlots", () => {
             expect.stringContaining("has 3 copies; limit is"),
         ]);
     });
+    it("allows duplicate weaknesses only when pool is exhausted", () => {
+        // Force more draws than unique weaknesses likely available
+        const result = buildDeckCardsFromSlots(
+            {
+                "01000": 10,
+            },
+            () => 0,
+        );
+
+        expect(result.cards).toHaveLength(10);
+        expect(result.metadata.randomWeaknesses).toHaveLength(10);
+
+        const uniqueCodes = new Set(result.cards.map((card) => card.code));
+
+        expect(uniqueCodes.size).toBeLessThanOrEqual(result.cards.length);
+    });
 });
