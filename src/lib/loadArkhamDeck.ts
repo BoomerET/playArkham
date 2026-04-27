@@ -178,6 +178,45 @@ export function chooseRandomWeakness(
   return chosen;
 }
 
+export function resolveRandomWeaknessPlaceholders(params: {
+  count: number;
+  weaknessPool: PlayerCard[];
+  usedWeaknessCodes: Set<string>;
+  rng: () => number;
+}): {
+  cards: PlayerCard[];
+  randomWeaknesses: string[];
+  validationWarnings: string[];
+} {
+  const cards: PlayerCard[] = [];
+  const randomWeaknesses: string[] = [];
+  const validationWarnings: string[] = [];
+
+  for (let i = 0; i < params.count; i += 1) {
+    const chosen = chooseRandomWeakness(
+      params.weaknessPool,
+      params.usedWeaknessCodes,
+      params.rng,
+    );
+
+    if (!chosen) {
+      validationWarnings.push(
+        "Random weakness placeholder found, but no weaknesses are available.",
+      );
+      continue;
+    }
+
+    randomWeaknesses.push(chosen.name);
+    cards.push(cloneCard(chosen));
+  }
+
+  return {
+    cards,
+    randomWeaknesses,
+    validationWarnings,
+  };
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -192,23 +231,18 @@ export function buildDeckCardsFromSlots(
 
   for (const [code, count] of Object.entries(slots)) {
     if (isRandomWeaknessPlaceholder(code)) {
-      for (let i = 0; i < count; i += 1) {
-        const chosen = chooseRandomWeakness(
-          weaknessPool,
-          usedWeaknessCodes,
-          rng,
-        );
+      const resolvedWeaknesses = resolveRandomWeaknessPlaceholders({
+        count,
+        weaknessPool,
+        usedWeaknessCodes,
+        rng,
+      });
 
-        if (!chosen) {
-          validationMetadata.validationWarnings.push(
-            "Random weakness placeholder found, but no weaknesses are available.",
-          );
-          continue;
-        }
-
-        randomWeaknesses.push(chosen.name);
-        deckCards.push(cloneCard(chosen));
-      }
+      deckCards.push(...resolvedWeaknesses.cards);
+      randomWeaknesses.push(...resolvedWeaknesses.randomWeaknesses);
+      validationMetadata.validationWarnings.push(
+        ...resolvedWeaknesses.validationWarnings,
+      );
 
       continue;
     }
