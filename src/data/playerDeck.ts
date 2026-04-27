@@ -1586,6 +1586,982 @@ export const playerDeck: PlayerCard[] = [
     "code": "12104"
   },
   {
+    "instanceId": "becky-1",
+    "name": "Becky",
+    "type": "asset",
+    "text": [
+      "Tommy Muldoon deck only. Uses (2 ammo).",
+      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack.",
+      "[reaction] When you trigger the above [action] ability, exhaust Becky: This attack ignores the aloof and retaliate keywords."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60152"
+  },
+  {
+    "instanceId": "loose-cannon-1",
+    "name": "Loose Cannon",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - You must either discard each [[Firearm]] asset you control or lose 5 resources."
+    ],
+    "traits": [
+      "Flaw."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60153"
+  },
+  {
+    "instanceId": "overconfident-1",
+    "name": "Overconfident",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Put Overconfident into play in your threat area.",
+      "<b>Forced</b> - After you fail a skill test: Take 1 damage.",
+      "[action] [action]: Discard Overconfident."
+    ],
+    "traits": [
+      "Flaw."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60154"
+  },
+  {
+    "instanceId": "m1911-1",
+    "name": "M1911",
+    "type": "asset",
+    "text": [
+      "Uses (4 ammo).",
+      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +1 [combat] and deal +1 damage for this attack."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60155"
+  },
+  {
+    "instanceId": "police-dog-1",
+    "name": "Police Dog",
+    "type": "asset",
+    "text": [
+      "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +1 skill value for this test."
+    ],
+    "traits": [
+      "Ally. Creature. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60156"
+  },
+  {
+    "instanceId": "rookie-cop-1",
+    "name": "Rookie Cop",
+    "type": "asset",
+    "text": [
+      "Rookie Cop may be assigned damage and/or horror dealt to other investigators at your location.",
+      "[reaction] When Rookie Cop is defeated: Discover 1 clue at your location."
+    ],
+    "traits": [
+      "Ally. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60157"
+  },
+  {
+    "instanceId": "service-revolver-1",
+    "name": "Service Revolver",
+    "type": "asset",
+    "text": [
+      "Uses (3 ammo).",
+      "[reaction] After an enemy attacks you, spend 1 ammo: <b>Fight</b> ([combat]). This attack targets that enemy. You get +1 [combat] and deal +1 damage for this attack."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60158"
+  },
+  {
+    "instanceId": "protective-vest-1",
+    "name": "Protective Vest",
+    "type": "asset",
+    "text": [
+      "[reaction] After you play Protective Vest: Search the top 6 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck."
+    ],
+    "traits": [
+      "Item. Armor."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60159"
+  },
+  {
+    "instanceId": "make-em-sing-1",
+    "name": "\"Make 'em sing\"",
+    "type": "event",
+    "text": [
+      "<b>Parley.</b> Choose an enemy at your location and test [combat] (X), where X is that enemy's remaining health. If you succeed, automatically evade that enemy and discover 1 clue at your location."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60160"
+  },
+  {
+    "instanceId": "bounty-1",
+    "name": "Bounty",
+    "type": "event",
+    "text": [
+      "Fast. Play after an enemy at your location is defeated.",
+      "Investigators at your location gain a total of X resources, distributed as your wish. X is that enemy's printed health (to a maximum of 6)."
+    ],
+    "traits": [
+      "Fortune."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60161"
+  },
+  {
+    "instanceId": "custom-grip-1",
+    "name": "Custom Grip",
+    "type": "event",
+    "text": [
+      "Fast. Play only during your turn.",
+      "Attach to a [[Firearm]] asset you control.",
+      "[fast] During your turn, except during an action, discard Custom Grip: Return attached asset to your hand. You may play a [[Firearm]] asset from your hand <i>(paying its cost)</i>."
+    ],
+    "traits": [
+      "Upgrade."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60162"
+  },
+  {
+    "instanceId": "iron-sights-1",
+    "name": "Iron Sights",
+    "type": "event",
+    "text": [
+      "Fast. Play only during your turn.",
+      "Attach to a [[Firearm]] asset you control.",
+      "[action] Exhaust Iron Sights: You get +3 skill value the next time you fight using attached asset this turn. This action does not provoke attacks of opportunity."
+    ],
+    "traits": [
+      "Item. Upgrade."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60163"
+  },
+  {
+    "instanceId": "physical-fitness-1",
+    "name": "Physical Fitness",
+    "type": "event",
+    "text": [
+      "<b>Move.</b> After this move, heal 2 damage."
+    ],
+    "traits": [
+      "Spirit."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60164"
+  },
+  {
+    "instanceId": "restrained-1",
+    "name": "Restrained",
+    "type": "event",
+    "text": [
+      "Fast. Play after a non-[[Elite]] enemy attacks you.",
+      "Automatically evade that enemy and attach Restrained to it. Attached enemy cannot ready.",
+      "<b>Forced</b> - When the round ends, if attached enemy is not a [[Humanoid]]: Discard Restrained."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60165"
+  },
+  {
+    "instanceId": "stakeout-1",
+    "name": "Stakeout",
+    "type": "event",
+    "text": [
+      "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, heal 1 horror."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60166"
+  },
+  {
+    "instanceId": "adapt-and-overcome-1",
+    "name": "Adapt and Overcome",
+    "type": "skill",
+    "text": [
+      "Commit only to a skill test during an attack or evasion.",
+      "The performing investigator ignores the alert and retaliate keywords during this test."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60167"
+  },
+  {
+    "instanceId": "armed-to-the-teeth-1",
+    "name": "Armed to the Teeth",
+    "type": "skill",
+    "text": [
+      "While it is committed to a skill test on an [[Item]] asset you control, Armed to the Teeth gains [wild] [wild]."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60168"
+  },
+  {
+    "instanceId": "vicious-blow-1",
+    "name": "Vicious Blow",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful during an attack, that attack deals +1 damage."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60169"
+  },
+  {
+    "instanceId": "police-dog-1",
+    "name": "Police Dog",
+    "type": "asset",
+    "text": [
+      "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +2 skill value for this test."
+    ],
+    "traits": [
+      "Ally. Creature. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60170"
+  },
+  {
+    "instanceId": "m1911-1",
+    "name": "M1911",
+    "type": "asset",
+    "text": [
+      "Uses (4 ammo).",
+      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack. Ignore the retaliate keyword for this attack."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60171"
+  },
+  {
+    "instanceId": "extended-barrel-1",
+    "name": "Extended Barrel",
+    "type": "event",
+    "text": [
+      "Fast. Play only during your turn.",
+      "Attach to a [[Firearm]] asset you control.",
+      "You get +1 skill value while attacking with attached asset."
+    ],
+    "traits": [
+      "Item. Upgrade."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60172"
+  },
+  {
+    "instanceId": "on-the-beat-1",
+    "name": "On the Beat",
+    "type": "event",
+    "text": [
+      "Fast. Play when your turn begins.",
+      "Until the end of your turn, you get +3 skill value while investigating or parleying."
+    ],
+    "traits": [
+      "Tactic. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60173"
+  },
+  {
+    "instanceId": "physical-fitness-1",
+    "name": "Physical Fitness",
+    "type": "event",
+    "text": [
+      "<b>Move.</b> After this move, heal 3 damage."
+    ],
+    "traits": [
+      "Spirit."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60174"
+  },
+  {
+    "instanceId": "stock-ammo-reload-1",
+    "name": "Stock Ammo Reload",
+    "type": "event",
+    "text": [
+      "Place 5 ammo, divided as you choose, among [[Firearm]] assets you control."
+    ],
+    "traits": [
+      "Supply."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60175"
+  },
+  {
+    "instanceId": "vicious-blow-1",
+    "name": "Vicious Blow",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful during an attack, that attack deals +1 damage (+2 damage instead if it succeeds by 2 or more)."
+    ],
+    "traits": [
+      "Practiced. Expert."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60176"
+  },
+  {
+    "instanceId": "detective-sherman-1",
+    "name": "Detective Sherman",
+    "type": "asset",
+    "text": [
+      "You get +1 [combat].",
+      "Detective Sherman may be assigned damage and/or horror dealt to other investigators at your location.",
+      "[reaction] After damage is placed on Detective Sherman, exhaust him: Discover 1 clue at your location."
+    ],
+    "traits": [
+      "Ally. Detective. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60177"
+  },
+  {
+    "instanceId": "endurance-1",
+    "name": "Endurance",
+    "type": "asset",
+    "text": [
+      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
+      "[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this is an attack or evasion).",
+      "[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an attack or evasion)."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60178"
+  },
+  {
+    "instanceId": "stakeout-1",
+    "name": "Stakeout",
+    "type": "event",
+    "text": [
+      "<b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location and heal 2 horror."
+    ],
+    "traits": [
+      "Tactic."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60179"
+  },
+  {
+    "instanceId": "indomitable-1",
+    "name": "Indomitable",
+    "type": "skill",
+    "text": [
+      "If an enemy has attacked an investigator at this location this round, Indomitable gains [wild] [wild] [wild]."
+    ],
+    "traits": [
+      "Innate. Developed."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60180"
+  },
+  {
+    "instanceId": "protective-vest-1",
+    "name": "Protective Vest",
+    "type": "asset",
+    "text": [
+      "You have 1 additional hand slot, which may only be used to hold a [[Firearm]] asset.",
+      "[reaction] After you play Protective Vest: Search the top 9 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck."
+    ],
+    "traits": [
+      "Item. Armor. Police."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60181"
+  },
+  {
+    "instanceId": "thompson-submachine-gun-1",
+    "name": "Thompson Submachine Gun",
+    "type": "asset",
+    "text": [
+      "Uses (6 ammo).",
+      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.",
+      "[reaction] After you resolve the above [action] ability, spend 1 ammo: <b>Fight</b> ([combat]). This attack deals +1 damage."
+    ],
+    "traits": [
+      "Item. Weapon. Firearm."
+    ],
+    "icons": [],
+    "faction": "guardian",
+    "isWeakness": false,
+    "code": "60182"
+  },
+  {
+    "instanceId": "experimental-psychology-1",
+    "name": "Experimental Psychology",
+    "type": "asset",
+    "text": [
+      "Carolyn Fern deck only.",
+      "[action]: Test [intellect] (2). If you succeed, heal 1 horror from an investigator or [[Ally]] asset at your location.",
+      "[reaction] After you heal horror from an investigator, exhaust Experimental Psychology: That investigator gets +2 skill value to their next skill test this round."
+    ],
+    "traits": [
+      "Item. Tome. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60252"
+  },
+  {
+    "instanceId": "unbroken-web-1",
+    "name": "Unbroken Web",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Put this card into play in your threat area.",
+      "[reaction] When you would discover any number of clues: Place that much horror on Unbroken Web, instead. Then, discard this card if there is 4 or more horror on it.",
+      "<b>Forced</b> - When the game ends or you are eliminated: You earn 2 fewer experience."
+    ],
+    "traits": [
+      "Terror. Dreamlands."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60253"
+  },
+  {
+    "instanceId": "lethal-curiosity-1",
+    "name": "Lethal Curiosity",
+    "type": "treachery",
+    "text": [
+      "<b>Revelation</b> - Test [willpower] (4). For each point you fail by, you must either take 1 damage or place 1 of your clues on your location."
+    ],
+    "traits": [
+      "Flaw."
+    ],
+    "icons": [],
+    "faction": "neutral",
+    "isWeakness": true,
+    "code": "60254"
+  },
+  {
+    "instanceId": "dreamer-s-chronicle-1",
+    "name": "Dreamer's Chronicle",
+    "type": "asset",
+    "text": [
+      "Uses (4 secrets).",
+      "[action] Spend 1 secret: <b>Investigate</b> ([intellect]). The first card you commit to this investigation gains [wild]. If you succeed, you may take 1 horror to discover 1 additional clue at your location."
+    ],
+    "traits": [
+      "Item. Tome."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60255"
+  },
+  {
+    "instanceId": "occult-records-1",
+    "name": "Occult Records",
+    "type": "asset",
+    "text": [
+      "Uses (3 secrets).",
+      "[fast] During your turn, spend 1 secret and exhaust Occult Records: Heal 2 horror from an investigator at your location. Then, test [willpower] (2). If you fail, discard 1 card at random from your hand."
+    ],
+    "traits": [
+      "Item. Tome. Occult."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60256"
+  },
+  {
+    "instanceId": "private-practice-1",
+    "name": "Private Practice",
+    "type": "asset",
+    "text": [
+      "Limit 1 per investigator.",
+      "[reaction] After you heal 1 or more horror, exhaust Private Practice: Gain 1 resource."
+    ],
+    "traits": [
+      "Profession."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60257"
+  },
+  {
+    "instanceId": "psychology-student-1",
+    "name": "Psychology Student",
+    "type": "asset",
+    "text": [
+      "[reaction] After you play Psychology Student: Heal 2 horror from an investigator or [[Ally]] asset at your location."
+    ],
+    "traits": [
+      "Ally. Miskatonic."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60258"
+  },
+  {
+    "instanceId": "scroll-of-the-pharaohs-1",
+    "name": "Scroll of the Pharaohs",
+    "type": "asset",
+    "text": [
+      "Uses (4 secrets).",
+      "[action] Spend 1 secret and exhaust Scroll of the Pharaohs: Deal 1 horror to an investigator or [[Ally]] asset at your location. Then, if there are no secrets on Scroll of the Pharaohs, discard it, draw 3 cards, and record \"you have unearthed the secrets of the Pharaohs\" in your campaign log."
+    ],
+    "traits": [
+      "Item. Relic. Tome."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60259"
+  },
+  {
+    "instanceId": "university-archivist-1",
+    "name": "University Archivist",
+    "type": "asset",
+    "text": [
+      "You have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.",
+      "[reaction] After University Archivist enters play: Search the top 6 cards of your deck for a [[Tome]] asset and add it to your hand. Shuffle your deck."
+    ],
+    "traits": [
+      "Ally. Miskatonic."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60260"
+  },
+  {
+    "instanceId": "caustic-reaction-1",
+    "name": "Caustic Reaction",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([intellect]). You get +1 [intellect] for this attack. If you control 2 or more clues, this attack deals +1 damage."
+    ],
+    "traits": [
+      "Tactic. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60261"
+  },
+  {
+    "instanceId": "unflappable-1",
+    "name": "Unflappable",
+    "type": "event",
+    "text": [
+      "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed and you control 2 or more clues, heal 1 horror."
+    ],
+    "traits": [
+      "Insight."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60262"
+  },
+  {
+    "instanceId": "preposterous-sketches-1",
+    "name": "Preposterous Sketches",
+    "type": "event",
+    "text": [
+      "Play only if there is a clue on your location.",
+      "Draw 3 cards."
+    ],
+    "traits": [
+      "Insight."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60263"
+  },
+  {
+    "instanceId": "psychoanalysis-1",
+    "name": "Psychoanalysis",
+    "type": "event",
+    "text": [
+      "Choose an investigator at your location and reveal the top 3 cards of their deck. That investigator may choose to either draw 1 revealed card and shuffle the rest into their deck, or heal 2 horror and return the revealed cards to the top of their owner's deck in any order."
+    ],
+    "traits": [
+      "Insight. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60264"
+  },
+  {
+    "instanceId": "de-escalate-1",
+    "name": "De-Escalate",
+    "type": "event",
+    "text": [
+      "<b>Parley.</b> Choose an enemy at your location. Heal horror equal to that enemy's horror value."
+    ],
+    "traits": [
+      "Insight."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60265"
+  },
+  {
+    "instanceId": "insidious-truths-1",
+    "name": "Insidious Truths",
+    "type": "event",
+    "text": [
+      "As an additional cost to play Insidious Truths, you may discard up to 2 cards from hand.",
+      "<b>Fight</b> ([combat]). For each card discarded as part of this card's cost, you get +2 [combat] and deal +1 damage for this attack."
+    ],
+    "traits": [
+      "Insight. Cursed."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60266"
+  },
+  {
+    "instanceId": "deduction-1",
+    "name": "Deduction",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful while investigating a location, discover 1 additional clue at that location."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60267"
+  },
+  {
+    "instanceId": "establish-motive-1",
+    "name": "Establish Motive",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful, the performing investigator searches the top 6 cards of their deck for an [[Insight]] event, draws it, and shuffles their deck."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60268"
+  },
+  {
+    "instanceId": "literary-analysis-1",
+    "name": "Literary Analysis",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful, replenish 1 secret on a [[Tome]] asset at your location."
+    ],
+    "traits": [
+      "Practiced."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60269"
+  },
+  {
+    "instanceId": "magnifying-glass-1",
+    "name": "Magnifying Glass",
+    "type": "asset",
+    "text": [
+      "Fast.",
+      "You get +1 [intellect] while investigating.",
+      "[fast] If there are no clues on your location: Return Magnifying Glass to your hand."
+    ],
+    "traits": [
+      "Item. Tool."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60270"
+  },
+  {
+    "instanceId": "unflappable-1",
+    "name": "Unflappable",
+    "type": "event",
+    "text": [
+      "<b>Evade</b> ([agility]). You get +3 [agility] for this evasion. If you succeed, heal 2 horror from among cards you control."
+    ],
+    "traits": [
+      "Insight."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60271"
+  },
+  {
+    "instanceId": "typewriter-1",
+    "name": "Typewriter",
+    "type": "asset",
+    "text": [
+      "Uses (3 secrets). If there are no secrets on Typewriter, discard it.",
+      "Secrets on Typewriter may be spent as if they were on [[Tome]] assets you control."
+    ],
+    "traits": [
+      "Item. Tool."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60272"
+  },
+  {
+    "instanceId": "caustic-reaction-1",
+    "name": "Caustic Reaction",
+    "type": "event",
+    "text": [
+      "<b>Fight</b> ([intellect]). You get +2 [intellect] and deal +1 damage for this attack. If you succeed and you control 2 or more clues, this attack deals +2 damage instead."
+    ],
+    "traits": [
+      "Tactic. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60273"
+  },
+  {
+    "instanceId": "hypnotize-1",
+    "name": "Hypnotize",
+    "type": "event",
+    "text": [
+      "<b>Parley</b> ([intellect]). You get +2 [intellect] for this parley. Choose a non-[[Elite]] enemy at your location. This test's difficulty is equal to that enemy's remaining health. If you succeed, shuffle that enemy into the encounter deck."
+    ],
+    "traits": [
+      "Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60274"
+  },
+  {
+    "instanceId": "deduction-1",
+    "name": "Deduction",
+    "type": "skill",
+    "text": [
+      "If this skill test is successful while investigating a location, discover 1 additional clue at that location (2 additional clues instead if it succeeds by 2 or more)."
+    ],
+    "traits": [
+      "Practiced. Expert."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60275"
+  },
+  {
+    "instanceId": "autopsy-report-1",
+    "name": "Autopsy Report",
+    "type": "asset",
+    "text": [
+      "[reaction] After an enemy at your location is defeated, exhaust Autopsy Report: <b>Investigate</b> ([intellect]). You get +X [intellect] for this investigation, where X is the defeated enemy's printed health (to a maximum of +5)."
+    ],
+    "traits": [
+      "Item. Tome. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60276"
+  },
+  {
+    "instanceId": "sharp-rhetoric-1",
+    "name": "Sharp Rhetoric",
+    "type": "asset",
+    "text": [
+      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
+      "[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an investigation or parley).",
+      "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this is an investigation or parley)."
+    ],
+    "traits": [
+      "Talent."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60277"
+  },
+  {
+    "instanceId": "psychoanalysis-1",
+    "name": "Psychoanalysis",
+    "type": "event",
+    "text": [
+      "One at a time, each investigator at your location reveals the top 3 cards of their deck, draws 1 of those cards, shuffles the remaining cards into their deck, and heals 2 horror."
+    ],
+    "traits": [
+      "Insight. Science."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60278"
+  },
+  {
+    "instanceId": "scroll-of-the-pharaohs-1",
+    "name": "Scroll of the Pharaohs",
+    "type": "asset",
+    "text": [
+      "Researched. Uses (4 secrets).",
+      "[action] Take 1 horror and spend 1 or 2 secrets: For each secret you spent as part of this ability's cost, reveal 3 cards from the top of the encounter deck. Choose and discard 1 non-peril, non-[[Elite]] card among them, then return the rest to the top of the encounter deck in any order."
+    ],
+    "traits": [
+      "Item. Relic. Tome."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60279"
+  },
+  {
+    "instanceId": "scroll-of-the-pharaohs-1",
+    "name": "Scroll of the Pharaohs",
+    "type": "asset",
+    "text": [
+      "Researched. Uses (4 secrets).",
+      "[action] Take 1 horror and spend 1 or 2 secrets: <b>Fight</b> ([intellect]). You get +3 [intellect] for this attack. If you succeed, this attack deals +1 damage for each secret you spent as part of this ability's cost."
+    ],
+    "traits": [
+      "Item. Relic. Tome."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60280"
+  },
+  {
+    "instanceId": "scroll-of-the-pharaohs-1",
+    "name": "Scroll of the Pharaohs",
+    "type": "asset",
+    "text": [
+      "Researched. Uses (4 secrets).",
+      "[action] Take 1 horror and spend 1 or 2 secrets: <b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location for each secret you spent as part of this ability's cost."
+    ],
+    "traits": [
+      "Item. Relic. Tome."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60281"
+  },
+  {
+    "instanceId": "commune-with-the-cosmos-1",
+    "name": "Commune with the Cosmos",
+    "type": "event",
+    "text": [
+      "When you play Commune with the Cosmos, you may take up to 3 horror.",
+      "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, discover X additional clues at your location, where X is the amount of horror on you (to a maximum of 4 additional clues)."
+    ],
+    "traits": [
+      "Spell."
+    ],
+    "icons": [],
+    "faction": "seeker",
+    "isWeakness": false,
+    "code": "60282"
+  },
+  {
     "instanceId": "know-the-exit-1",
     "name": "Know the Exit",
     "type": "skill",
@@ -1662,7 +2638,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "icons": [],
     "faction": "neutral",
-    "isWeakness": false,
+    "isWeakness": true,
     "code": "60356"
   },
   {
@@ -2156,7 +3132,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "icons": [],
     "faction": "neutral",
-    "isWeakness": false,
+    "isWeakness": true,
     "code": "60454"
   },
   {
@@ -2662,7 +3638,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "icons": [],
     "faction": "neutral",
-    "isWeakness": false,
+    "isWeakness": true,
     "code": "60554"
   },
   {
@@ -3107,981 +4083,5 @@ export const playerDeck: PlayerCard[] = [
     "faction": "survivor",
     "isWeakness": false,
     "code": "60582"
-  },
-  {
-    "instanceId": "experimental-psychology-1",
-    "name": "Experimental Psychology",
-    "type": "asset",
-    "text": [
-      "Carolyn Fern deck only.",
-      "[action]: Test [intellect] (2). If you succeed, heal 1 horror from an investigator or [[Ally]] asset at your location.",
-      "[reaction] After you heal horror from an investigator, exhaust Experimental Psychology: That investigator gets +2 skill value to their next skill test this round."
-    ],
-    "traits": [
-      "Item. Tome. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60252"
-  },
-  {
-    "instanceId": "unbroken-web-1",
-    "name": "Unbroken Web",
-    "type": "treachery",
-    "text": [
-      "<b>Revelation</b> - Put this card into play in your threat area.",
-      "[reaction] When you would discover any number of clues: Place that much horror on Unbroken Web, instead. Then, discard this card if there is 4 or more horror on it.",
-      "<b>Forced</b> - When the game ends or you are eliminated: You earn 2 fewer experience."
-    ],
-    "traits": [
-      "Terror. Dreamlands."
-    ],
-    "icons": [],
-    "faction": "neutral",
-    "isWeakness": true,
-    "code": "60253"
-  },
-  {
-    "instanceId": "lethal-curiosity-1",
-    "name": "Lethal Curiosity",
-    "type": "treachery",
-    "text": [
-      "<b>Revelation</b> - Test [willpower] (4). For each point you fail by, you must either take 1 damage or place 1 of your clues on your location."
-    ],
-    "traits": [
-      "Flaw."
-    ],
-    "icons": [],
-    "faction": "neutral",
-    "isWeakness": false,
-    "code": "60254"
-  },
-  {
-    "instanceId": "dreamer-s-chronicle-1",
-    "name": "Dreamer's Chronicle",
-    "type": "asset",
-    "text": [
-      "Uses (4 secrets).",
-      "[action] Spend 1 secret: <b>Investigate</b> ([intellect]). The first card you commit to this investigation gains [wild]. If you succeed, you may take 1 horror to discover 1 additional clue at your location."
-    ],
-    "traits": [
-      "Item. Tome."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60255"
-  },
-  {
-    "instanceId": "occult-records-1",
-    "name": "Occult Records",
-    "type": "asset",
-    "text": [
-      "Uses (3 secrets).",
-      "[fast] During your turn, spend 1 secret and exhaust Occult Records: Heal 2 horror from an investigator at your location. Then, test [willpower] (2). If you fail, discard 1 card at random from your hand."
-    ],
-    "traits": [
-      "Item. Tome. Occult."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60256"
-  },
-  {
-    "instanceId": "private-practice-1",
-    "name": "Private Practice",
-    "type": "asset",
-    "text": [
-      "Limit 1 per investigator.",
-      "[reaction] After you heal 1 or more horror, exhaust Private Practice: Gain 1 resource."
-    ],
-    "traits": [
-      "Profession."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60257"
-  },
-  {
-    "instanceId": "psychology-student-1",
-    "name": "Psychology Student",
-    "type": "asset",
-    "text": [
-      "[reaction] After you play Psychology Student: Heal 2 horror from an investigator or [[Ally]] asset at your location."
-    ],
-    "traits": [
-      "Ally. Miskatonic."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60258"
-  },
-  {
-    "instanceId": "scroll-of-the-pharaohs-1",
-    "name": "Scroll of the Pharaohs",
-    "type": "asset",
-    "text": [
-      "Uses (4 secrets).",
-      "[action] Spend 1 secret and exhaust Scroll of the Pharaohs: Deal 1 horror to an investigator or [[Ally]] asset at your location. Then, if there are no secrets on Scroll of the Pharaohs, discard it, draw 3 cards, and record \"you have unearthed the secrets of the Pharaohs\" in your campaign log."
-    ],
-    "traits": [
-      "Item. Relic. Tome."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60259"
-  },
-  {
-    "instanceId": "university-archivist-1",
-    "name": "University Archivist",
-    "type": "asset",
-    "text": [
-      "You have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.",
-      "[reaction] After University Archivist enters play: Search the top 6 cards of your deck for a [[Tome]] asset and add it to your hand. Shuffle your deck."
-    ],
-    "traits": [
-      "Ally. Miskatonic."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60260"
-  },
-  {
-    "instanceId": "caustic-reaction-1",
-    "name": "Caustic Reaction",
-    "type": "event",
-    "text": [
-      "<b>Fight</b> ([intellect]). You get +1 [intellect] for this attack. If you control 2 or more clues, this attack deals +1 damage."
-    ],
-    "traits": [
-      "Tactic. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60261"
-  },
-  {
-    "instanceId": "unflappable-1",
-    "name": "Unflappable",
-    "type": "event",
-    "text": [
-      "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed and you control 2 or more clues, heal 1 horror."
-    ],
-    "traits": [
-      "Insight."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60262"
-  },
-  {
-    "instanceId": "preposterous-sketches-1",
-    "name": "Preposterous Sketches",
-    "type": "event",
-    "text": [
-      "Play only if there is a clue on your location.",
-      "Draw 3 cards."
-    ],
-    "traits": [
-      "Insight."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60263"
-  },
-  {
-    "instanceId": "psychoanalysis-1",
-    "name": "Psychoanalysis",
-    "type": "event",
-    "text": [
-      "Choose an investigator at your location and reveal the top 3 cards of their deck. That investigator may choose to either draw 1 revealed card and shuffle the rest into their deck, or heal 2 horror and return the revealed cards to the top of their owner's deck in any order."
-    ],
-    "traits": [
-      "Insight. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60264"
-  },
-  {
-    "instanceId": "de-escalate-1",
-    "name": "De-Escalate",
-    "type": "event",
-    "text": [
-      "<b>Parley.</b> Choose an enemy at your location. Heal horror equal to that enemy's horror value."
-    ],
-    "traits": [
-      "Insight."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60265"
-  },
-  {
-    "instanceId": "insidious-truths-1",
-    "name": "Insidious Truths",
-    "type": "event",
-    "text": [
-      "As an additional cost to play Insidious Truths, you may discard up to 2 cards from hand.",
-      "<b>Fight</b> ([combat]). For each card discarded as part of this card's cost, you get +2 [combat] and deal +1 damage for this attack."
-    ],
-    "traits": [
-      "Insight. Cursed."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60266"
-  },
-  {
-    "instanceId": "deduction-1",
-    "name": "Deduction",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful while investigating a location, discover 1 additional clue at that location."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60267"
-  },
-  {
-    "instanceId": "establish-motive-1",
-    "name": "Establish Motive",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful, the performing investigator searches the top 6 cards of their deck for an [[Insight]] event, draws it, and shuffles their deck."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60268"
-  },
-  {
-    "instanceId": "literary-analysis-1",
-    "name": "Literary Analysis",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful, replenish 1 secret on a [[Tome]] asset at your location."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60269"
-  },
-  {
-    "instanceId": "magnifying-glass-1",
-    "name": "Magnifying Glass",
-    "type": "asset",
-    "text": [
-      "Fast.",
-      "You get +1 [intellect] while investigating.",
-      "[fast] If there are no clues on your location: Return Magnifying Glass to your hand."
-    ],
-    "traits": [
-      "Item. Tool."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60270"
-  },
-  {
-    "instanceId": "unflappable-1",
-    "name": "Unflappable",
-    "type": "event",
-    "text": [
-      "<b>Evade</b> ([agility]). You get +3 [agility] for this evasion. If you succeed, heal 2 horror from among cards you control."
-    ],
-    "traits": [
-      "Insight."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60271"
-  },
-  {
-    "instanceId": "typewriter-1",
-    "name": "Typewriter",
-    "type": "asset",
-    "text": [
-      "Uses (3 secrets). If there are no secrets on Typewriter, discard it.",
-      "Secrets on Typewriter may be spent as if they were on [[Tome]] assets you control."
-    ],
-    "traits": [
-      "Item. Tool."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60272"
-  },
-  {
-    "instanceId": "caustic-reaction-1",
-    "name": "Caustic Reaction",
-    "type": "event",
-    "text": [
-      "<b>Fight</b> ([intellect]). You get +2 [intellect] and deal +1 damage for this attack. If you succeed and you control 2 or more clues, this attack deals +2 damage instead."
-    ],
-    "traits": [
-      "Tactic. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60273"
-  },
-  {
-    "instanceId": "hypnotize-1",
-    "name": "Hypnotize",
-    "type": "event",
-    "text": [
-      "<b>Parley</b> ([intellect]). You get +2 [intellect] for this parley. Choose a non-[[Elite]] enemy at your location. This test's difficulty is equal to that enemy's remaining health. If you succeed, shuffle that enemy into the encounter deck."
-    ],
-    "traits": [
-      "Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60274"
-  },
-  {
-    "instanceId": "deduction-1",
-    "name": "Deduction",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful while investigating a location, discover 1 additional clue at that location (2 additional clues instead if it succeeds by 2 or more)."
-    ],
-    "traits": [
-      "Practiced. Expert."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60275"
-  },
-  {
-    "instanceId": "autopsy-report-1",
-    "name": "Autopsy Report",
-    "type": "asset",
-    "text": [
-      "[reaction] After an enemy at your location is defeated, exhaust Autopsy Report: <b>Investigate</b> ([intellect]). You get +X [intellect] for this investigation, where X is the defeated enemy's printed health (to a maximum of +5)."
-    ],
-    "traits": [
-      "Item. Tome. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60276"
-  },
-  {
-    "instanceId": "sharp-rhetoric-1",
-    "name": "Sharp Rhetoric",
-    "type": "asset",
-    "text": [
-      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
-      "[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an investigation or parley).",
-      "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this is an investigation or parley)."
-    ],
-    "traits": [
-      "Talent."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60277"
-  },
-  {
-    "instanceId": "psychoanalysis-1",
-    "name": "Psychoanalysis",
-    "type": "event",
-    "text": [
-      "One at a time, each investigator at your location reveals the top 3 cards of their deck, draws 1 of those cards, shuffles the remaining cards into their deck, and heals 2 horror."
-    ],
-    "traits": [
-      "Insight. Science."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60278"
-  },
-  {
-    "instanceId": "scroll-of-the-pharaohs-1",
-    "name": "Scroll of the Pharaohs",
-    "type": "asset",
-    "text": [
-      "Researched. Uses (4 secrets).",
-      "[action] Take 1 horror and spend 1 or 2 secrets: For each secret you spent as part of this ability's cost, reveal 3 cards from the top of the encounter deck. Choose and discard 1 non-peril, non-[[Elite]] card among them, then return the rest to the top of the encounter deck in any order."
-    ],
-    "traits": [
-      "Item. Relic. Tome."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60279"
-  },
-  {
-    "instanceId": "scroll-of-the-pharaohs-1",
-    "name": "Scroll of the Pharaohs",
-    "type": "asset",
-    "text": [
-      "Researched. Uses (4 secrets).",
-      "[action] Take 1 horror and spend 1 or 2 secrets: <b>Fight</b> ([intellect]). You get +3 [intellect] for this attack. If you succeed, this attack deals +1 damage for each secret you spent as part of this ability's cost."
-    ],
-    "traits": [
-      "Item. Relic. Tome."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60280"
-  },
-  {
-    "instanceId": "scroll-of-the-pharaohs-1",
-    "name": "Scroll of the Pharaohs",
-    "type": "asset",
-    "text": [
-      "Researched. Uses (4 secrets).",
-      "[action] Take 1 horror and spend 1 or 2 secrets: <b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location for each secret you spent as part of this ability's cost."
-    ],
-    "traits": [
-      "Item. Relic. Tome."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60281"
-  },
-  {
-    "instanceId": "commune-with-the-cosmos-1",
-    "name": "Commune with the Cosmos",
-    "type": "event",
-    "text": [
-      "When you play Commune with the Cosmos, you may take up to 3 horror.",
-      "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, discover X additional clues at your location, where X is the amount of horror on you (to a maximum of 4 additional clues)."
-    ],
-    "traits": [
-      "Spell."
-    ],
-    "icons": [],
-    "faction": "seeker",
-    "isWeakness": false,
-    "code": "60282"
-  },
-  {
-    "instanceId": "becky-1",
-    "name": "Becky",
-    "type": "asset",
-    "text": [
-      "Tommy Muldoon deck only. Uses (2 ammo).",
-      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack.",
-      "[reaction] When you trigger the above [action] ability, exhaust Becky: This attack ignores the aloof and retaliate keywords."
-    ],
-    "traits": [
-      "Item. Weapon. Firearm."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60152"
-  },
-  {
-    "instanceId": "loose-cannon-1",
-    "name": "Loose Cannon",
-    "type": "treachery",
-    "text": [
-      "<b>Revelation</b> - You must either discard each [[Firearm]] asset you control or lose 5 resources."
-    ],
-    "traits": [
-      "Flaw."
-    ],
-    "icons": [],
-    "faction": "neutral",
-    "isWeakness": true,
-    "code": "60153"
-  },
-  {
-    "instanceId": "overconfident-1",
-    "name": "Overconfident",
-    "type": "treachery",
-    "text": [
-      "<b>Revelation</b> - Put Overconfident into play in your threat area.",
-      "<b>Forced</b> - After you fail a skill test: Take 1 damage.",
-      "[action] [action]: Discard Overconfident."
-    ],
-    "traits": [
-      "Flaw."
-    ],
-    "icons": [],
-    "faction": "neutral",
-    "isWeakness": false,
-    "code": "60154"
-  },
-  {
-    "instanceId": "m1911-1",
-    "name": "M1911",
-    "type": "asset",
-    "text": [
-      "Uses (4 ammo).",
-      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +1 [combat] and deal +1 damage for this attack."
-    ],
-    "traits": [
-      "Item. Weapon. Firearm."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60155"
-  },
-  {
-    "instanceId": "police-dog-1",
-    "name": "Police Dog",
-    "type": "asset",
-    "text": [
-      "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +1 skill value for this test."
-    ],
-    "traits": [
-      "Ally. Creature. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60156"
-  },
-  {
-    "instanceId": "rookie-cop-1",
-    "name": "Rookie Cop",
-    "type": "asset",
-    "text": [
-      "Rookie Cop may be assigned damage and/or horror dealt to other investigators at your location.",
-      "[reaction] When Rookie Cop is defeated: Discover 1 clue at your location."
-    ],
-    "traits": [
-      "Ally. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60157"
-  },
-  {
-    "instanceId": "service-revolver-1",
-    "name": "Service Revolver",
-    "type": "asset",
-    "text": [
-      "Uses (3 ammo).",
-      "[reaction] After an enemy attacks you, spend 1 ammo: <b>Fight</b> ([combat]). This attack targets that enemy. You get +1 [combat] and deal +1 damage for this attack."
-    ],
-    "traits": [
-      "Item. Weapon. Firearm. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60158"
-  },
-  {
-    "instanceId": "protective-vest-1",
-    "name": "Protective Vest",
-    "type": "asset",
-    "text": [
-      "[reaction] After you play Protective Vest: Search the top 6 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck."
-    ],
-    "traits": [
-      "Item. Armor."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60159"
-  },
-  {
-    "instanceId": "make-em-sing-1",
-    "name": "\"Make 'em sing\"",
-    "type": "event",
-    "text": [
-      "<b>Parley.</b> Choose an enemy at your location and test [combat] (X), where X is that enemy's remaining health. If you succeed, automatically evade that enemy and discover 1 clue at your location."
-    ],
-    "traits": [
-      "Tactic."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60160"
-  },
-  {
-    "instanceId": "bounty-1",
-    "name": "Bounty",
-    "type": "event",
-    "text": [
-      "Fast. Play after an enemy at your location is defeated.",
-      "Investigators at your location gain a total of X resources, distributed as your wish. X is that enemy's printed health (to a maximum of 6)."
-    ],
-    "traits": [
-      "Fortune."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60161"
-  },
-  {
-    "instanceId": "custom-grip-1",
-    "name": "Custom Grip",
-    "type": "event",
-    "text": [
-      "Fast. Play only during your turn.",
-      "Attach to a [[Firearm]] asset you control.",
-      "[fast] During your turn, except during an action, discard Custom Grip: Return attached asset to your hand. You may play a [[Firearm]] asset from your hand <i>(paying its cost)</i>."
-    ],
-    "traits": [
-      "Upgrade."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60162"
-  },
-  {
-    "instanceId": "iron-sights-1",
-    "name": "Iron Sights",
-    "type": "event",
-    "text": [
-      "Fast. Play only during your turn.",
-      "Attach to a [[Firearm]] asset you control.",
-      "[action] Exhaust Iron Sights: You get +3 skill value the next time you fight using attached asset this turn. This action does not provoke attacks of opportunity."
-    ],
-    "traits": [
-      "Item. Upgrade."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60163"
-  },
-  {
-    "instanceId": "physical-fitness-1",
-    "name": "Physical Fitness",
-    "type": "event",
-    "text": [
-      "<b>Move.</b> After this move, heal 2 damage."
-    ],
-    "traits": [
-      "Spirit."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60164"
-  },
-  {
-    "instanceId": "restrained-1",
-    "name": "Restrained",
-    "type": "event",
-    "text": [
-      "Fast. Play after a non-[[Elite]] enemy attacks you.",
-      "Automatically evade that enemy and attach Restrained to it. Attached enemy cannot ready.",
-      "<b>Forced</b> - When the round ends, if attached enemy is not a [[Humanoid]]: Discard Restrained."
-    ],
-    "traits": [
-      "Tactic."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60165"
-  },
-  {
-    "instanceId": "stakeout-1",
-    "name": "Stakeout",
-    "type": "event",
-    "text": [
-      "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, heal 1 horror."
-    ],
-    "traits": [
-      "Tactic."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60166"
-  },
-  {
-    "instanceId": "adapt-and-overcome-1",
-    "name": "Adapt and Overcome",
-    "type": "skill",
-    "text": [
-      "Commit only to a skill test during an attack or evasion.",
-      "The performing investigator ignores the alert and retaliate keywords during this test."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60167"
-  },
-  {
-    "instanceId": "armed-to-the-teeth-1",
-    "name": "Armed to the Teeth",
-    "type": "skill",
-    "text": [
-      "While it is committed to a skill test on an [[Item]] asset you control, Armed to the Teeth gains [wild] [wild]."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60168"
-  },
-  {
-    "instanceId": "vicious-blow-1",
-    "name": "Vicious Blow",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful during an attack, that attack deals +1 damage."
-    ],
-    "traits": [
-      "Practiced."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60169"
-  },
-  {
-    "instanceId": "police-dog-1",
-    "name": "Police Dog",
-    "type": "asset",
-    "text": [
-      "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +2 skill value for this test."
-    ],
-    "traits": [
-      "Ally. Creature. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60170"
-  },
-  {
-    "instanceId": "m1911-1",
-    "name": "M1911",
-    "type": "asset",
-    "text": [
-      "Uses (4 ammo).",
-      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack. Ignore the retaliate keyword for this attack."
-    ],
-    "traits": [
-      "Item. Weapon. Firearm."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60171"
-  },
-  {
-    "instanceId": "extended-barrel-1",
-    "name": "Extended Barrel",
-    "type": "event",
-    "text": [
-      "Fast. Play only during your turn.",
-      "Attach to a [[Firearm]] asset you control.",
-      "You get +1 skill value while attacking with attached asset."
-    ],
-    "traits": [
-      "Item. Upgrade."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60172"
-  },
-  {
-    "instanceId": "on-the-beat-1",
-    "name": "On the Beat",
-    "type": "event",
-    "text": [
-      "Fast. Play when your turn begins.",
-      "Until the end of your turn, you get +3 skill value while investigating or parleying."
-    ],
-    "traits": [
-      "Tactic. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60173"
-  },
-  {
-    "instanceId": "physical-fitness-1",
-    "name": "Physical Fitness",
-    "type": "event",
-    "text": [
-      "<b>Move.</b> After this move, heal 3 damage."
-    ],
-    "traits": [
-      "Spirit."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60174"
-  },
-  {
-    "instanceId": "stock-ammo-reload-1",
-    "name": "Stock Ammo Reload",
-    "type": "event",
-    "text": [
-      "Place 5 ammo, divided as you choose, among [[Firearm]] assets you control."
-    ],
-    "traits": [
-      "Supply."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60175"
-  },
-  {
-    "instanceId": "vicious-blow-1",
-    "name": "Vicious Blow",
-    "type": "skill",
-    "text": [
-      "If this skill test is successful during an attack, that attack deals +1 damage (+2 damage instead if it succeeds by 2 or more)."
-    ],
-    "traits": [
-      "Practiced. Expert."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60176"
-  },
-  {
-    "instanceId": "detective-sherman-1",
-    "name": "Detective Sherman",
-    "type": "asset",
-    "text": [
-      "You get +1 [combat].",
-      "Detective Sherman may be assigned damage and/or horror dealt to other investigators at your location.",
-      "[reaction] After damage is placed on Detective Sherman, exhaust him: Discover 1 clue at your location."
-    ],
-    "traits": [
-      "Ally. Detective. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60177"
-  },
-  {
-    "instanceId": "endurance-1",
-    "name": "Endurance",
-    "type": "asset",
-    "text": [
-      "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>",
-      "[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this is an attack or evasion).",
-      "[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an attack or evasion)."
-    ],
-    "traits": [
-      "Talent."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60178"
-  },
-  {
-    "instanceId": "stakeout-1",
-    "name": "Stakeout",
-    "type": "event",
-    "text": [
-      "<b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location and heal 2 horror."
-    ],
-    "traits": [
-      "Tactic."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60179"
-  },
-  {
-    "instanceId": "indomitable-1",
-    "name": "Indomitable",
-    "type": "skill",
-    "text": [
-      "If an enemy has attacked an investigator at this location this round, Indomitable gains [wild] [wild] [wild]."
-    ],
-    "traits": [
-      "Innate. Developed."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60180"
-  },
-  {
-    "instanceId": "protective-vest-1",
-    "name": "Protective Vest",
-    "type": "asset",
-    "text": [
-      "You have 1 additional hand slot, which may only be used to hold a [[Firearm]] asset.",
-      "[reaction] After you play Protective Vest: Search the top 9 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck."
-    ],
-    "traits": [
-      "Item. Armor. Police."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60181"
-  },
-  {
-    "instanceId": "thompson-submachine-gun-1",
-    "name": "Thompson Submachine Gun",
-    "type": "asset",
-    "text": [
-      "Uses (6 ammo).",
-      "[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.",
-      "[reaction] After you resolve the above [action] ability, spend 1 ammo: <b>Fight</b> ([combat]). This attack deals +1 damage."
-    ],
-    "traits": [
-      "Item. Weapon. Firearm."
-    ],
-    "icons": [],
-    "faction": "guardian",
-    "isWeakness": false,
-    "code": "60182"
   },
 ];
