@@ -22,11 +22,6 @@ type BuildDeckCardsResult = {
   metadata: DeckBuildMetadata;
 };
 
-//type DeckValidationResult = Pick<
-//  DeckBuildMetadata,
-//  "validationWarnings" | "validationErrors"
-//>;
-
 export type ArkhamBuildDeckJson = {
   investigator_code?: string;
   investigator_name?: string;
@@ -231,6 +226,14 @@ export function findPlayerCardByCode(code: string): PlayerCard | null {
   return playerDeck.find((card) => card.code === code) ?? null;
 }
 
+export function addUnsupportedCardCode(params: {
+  code: string;
+  unsupportedCodes: string[];
+}): void {
+  console.warn(`Unsupported card code: ${params.code}`);
+  params.unsupportedCodes.push(params.code);
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -264,8 +267,10 @@ export function buildDeckCardsFromSlots(
     const matchingCard = findPlayerCardByCode(code);
 
     if (!matchingCard) {
-      console.warn(`Unsupported card code: ${code}`);
-      unsupportedCodes.push(code);
+      addUnsupportedCardCode({
+        code,
+        unsupportedCodes,
+      });
       continue;
     }
 
