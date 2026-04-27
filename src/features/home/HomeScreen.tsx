@@ -347,7 +347,7 @@ export default function HomeScreen() {
     Boolean(selectedInvestigator) &&
     (
       (trimmedDeckId.length > 0 && deckLookupState === "ready") ||
-      importedArkhamBuildResolvedDeck?.randomWeaknesses
+      importedArkhamBuildResolvedDeck != null
     );
 
   const selectedInvestigatorImageUrl = selectedInvestigator
@@ -435,17 +435,6 @@ export default function HomeScreen() {
                   if (!resolvedDeck) {
                     throw new Error("Imported deck did not resolve.");
                   }
-
-                  //setImportedDeckSummary({
-                  //  deckName: resolvedDeck.deckName,
-                  //  investigatorName: resolvedDeck.investigatorName,
-                  //  investigatorCode: resolvedDeck.investigatorCode,
-                  //  cardCount: resolvedDeck.cards.length,
-                  //  unsupportedCodes: resolvedDeck.unsupportedCodes,
-                  //  randomWeaknesses: resolvedDeck.randomWeaknesses,
-                  //  validationWarnings: resolvedDeck.validationWarnings,
-                  //  validationErrors: resolvedDeck.validationErrors,
-                  //});
 
                   setSelectedInvestigator("");
 
