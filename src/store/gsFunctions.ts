@@ -2074,3 +2074,17 @@ export async function resolveSelectedDeck(state: GameStore): Promise<LoadedDeck>
 
     return loadArkhamDeck(selectedDeckId);
 }
+
+export function getLoadedDeckSourceLabel(params: {
+    loadedDeck: LoadedDeck;
+    selectedDeckId: string;
+    isArkhamBuildImport: boolean;
+}): string {
+    const { loadedDeck, selectedDeckId, isArkhamBuildImport } = params;
+
+    if (isArkhamBuildImport) {
+        return `Arkham.build import${loadedDeck.deckName ? ` (${loadedDeck.deckName})` : ""}`;
+    }
+
+    return `ArkhamDB deck ${selectedDeckId}`;
+}

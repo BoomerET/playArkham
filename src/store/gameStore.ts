@@ -57,6 +57,7 @@ import {
   getEncounterCardByCode,
   resolveSelectedDeck,
   findInvestigatorForDeck,
+  getLoadedDeckSourceLabel,
 } from "./gsFunctions";
 
 import {
@@ -2673,9 +2674,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const deckLogEntries: ReturnType<typeof createLogEntry>[] = [
       createLogEntry(
         "system",
-        importedArkhamBuildDeckJson
-          ? `Deck source: Arkham.build import${loadedDeck.deckName ? ` (${loadedDeck.deckName})` : ""}.`
-          : `Deck source: ArkhamDB deck ${selectedDeckId}.`,
+        `Deck source: ${getLoadedDeckSourceLabel({
+          loadedDeck,
+          selectedDeckId,
+          isArkhamBuildImport: importedArkhamBuildDeckJson != null,
+        })}.`
       ),
 
       ...(loadedDeck.unsupportedCodes.length > 0
