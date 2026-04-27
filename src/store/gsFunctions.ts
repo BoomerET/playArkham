@@ -2130,3 +2130,19 @@ export function buildDeckLogEntries(params: {
     ];
 }
 
+export function getDeckLoadFailureMessage(params: {
+    selectedDeckId: string;
+    isArkhamBuildImport: boolean;
+}): string {
+    const { selectedDeckId, isArkhamBuildImport } = params;
+
+    if (isArkhamBuildImport) {
+        return "Failed to load imported Arkham.build deck JSON.";
+    }
+
+    if (selectedDeckId) {
+        return `Failed to load ArkhamDB deck ${selectedDeckId}.`;
+    }
+
+    return "Cannot start game without an ArkhamDB deck ID or imported Arkham.build JSON.";
+}

@@ -58,6 +58,7 @@ import {
   resolveSelectedDeck,
   findInvestigatorForDeck,
   buildDeckLogEntries,
+  getDeckLoadFailureMessage,
 } from "./gsFunctions";
 
 import {
@@ -2310,7 +2311,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const debugMode = state.debugMode;
     const debugPreset = state.debugPreset;
 
-    const importedArkhamBuildDeckJson = state.importedArkhamBuildDeckJson;
     const selectedDeckId = state.selectedDeckId.trim();
     const isArkhamBuildImport = state.importedArkhamBuildResolvedDeck != null;
 
@@ -2322,11 +2322,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       console.error(error);
       get().pushLog(
         "system",
-        importedArkhamBuildDeckJson
-          ? "Failed to load imported Arkham.build deck JSON."
-          : selectedDeckId
-            ? `Failed to load ArkhamDB deck ${selectedDeckId}.`
-            : "Cannot start game without an ArkhamDB deck ID or imported Arkham.build JSON.",
+        getDeckLoadFailureMessage({
+          selectedDeckId,
+          isArkhamBuildImport,
+        }),
       );
       throw error;
     }
