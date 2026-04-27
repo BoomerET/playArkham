@@ -2,18 +2,18 @@ import type { PlayerCard, LoadedDeck } from "../types/game";
 import { playerDeck } from "../data/playerDeck";
 import seedrandom from "seedrandom";
 
-export const normalizeLoadedDeck = (
-  deck: Partial<LoadedDeck>,
-): LoadedDeck => ({
-  investigatorCode: deck.investigatorCode ?? null,
-  investigatorName: deck.investigatorName ?? null,
-  deckName: deck.deckName ?? null,
-  cards: deck.cards ?? [],
-  unsupportedCodes: deck.unsupportedCodes ?? [],
-  randomWeaknesses: deck.randomWeaknesses ?? [],
-  validationWarnings: deck.validationWarnings ?? [],
-  validationErrors: deck.validationErrors ?? [],
-});
+//export const normalizeLoadedDeck = (
+//  deck: Partial<LoadedDeck>,
+//): LoadedDeck => ({
+//  investigatorCode: deck.investigatorCode ?? null,
+//  investigatorName: deck.investigatorName ?? null,
+//  deckName: deck.deckName ?? null,
+//  cards: deck.cards ?? [],
+//  unsupportedCodes: deck.unsupportedCodes ?? [],
+//  randomWeaknesses: deck.randomWeaknesses ?? [],
+//  validationWarnings: deck.validationWarnings ?? [],
+//  validationErrors: deck.validationErrors ?? [],
+//});
 
 type ArkhamDeckResponse = {
   investigator_code?: string;
@@ -92,12 +92,16 @@ export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
 
   const buildResult = buildDeckCardsFromSlots(data.slots, rng);
 
-  return normalizeLoadedDeck({
+  return {
     investigatorCode: data.investigator_code?.trim() ?? null,
     investigatorName: null,
     deckName: null,
-    ...buildResult,
-  });
+    cards: buildResult.cards,
+    unsupportedCodes: buildResult.unsupportedCodes,
+    randomWeaknesses: buildResult.randomWeaknesses,
+    validationWarnings: buildResult.validationWarnings,
+    validationErrors: buildResult.validationErrors,
+  };
 }
 
 export function loadArkhamBuildDeckFromJson(
@@ -109,12 +113,16 @@ export function loadArkhamBuildDeckFromJson(
 
   const buildResult = buildDeckCardsFromSlots(deckJson.slots);
 
-  return normalizeLoadedDeck({
+  return {
     investigatorCode: deckJson.investigator_code?.trim() ?? null,
     investigatorName: deckJson.investigator_name?.trim() ?? null,
     deckName: deckJson.name?.trim() ?? null,
-    ...buildResult,
-  });
+    cards: buildResult.cards,
+    unsupportedCodes: buildResult.unsupportedCodes,
+    randomWeaknesses: buildResult.randomWeaknesses,
+    validationWarnings: buildResult.validationWarnings,
+    validationErrors: buildResult.validationErrors,
+  };
 }
 
 export function validateDeckSlots(
