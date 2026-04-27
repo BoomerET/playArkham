@@ -30,4 +30,15 @@ describe("buildDeckCardsFromSlots", () => {
 
         expect(new Set(weaknessCodes).size).toBe(2);
     });
+    it("tracks unsupported card codes and skips them", () => {
+  const result = buildDeckCardsFromSlots(
+    {
+      NOT_A_REAL_CARD: 1,
+    },
+    () => 0,
+  );
+
+  expect(result.cards).toHaveLength(0);
+  expect(result.metadata.unsupportedCodes).toEqual(["NOT_A_REAL_CARD"]);
+});
 });
