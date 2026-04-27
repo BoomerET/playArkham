@@ -114,6 +114,7 @@ import type {
 
 import type {
   GameStore,
+  ResolvedDeckSource,
 } from "./gsTypes";
 
 import {
@@ -2312,24 +2313,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const debugPreset = state.debugPreset;
 
     const selectedDeckId = state.selectedDeckId.trim();
-    const isArkhamBuildImport = state.importedArkhamBuildResolvedDeck != null;
+    //const isArkhamBuildImport = state.importedArkhamBuildResolvedDeck != null;
 
     let loadedDeck: LoadedDeck;
+    let deckSource: ResolvedDeckSource;
 
     try {
-      loadedDeck = await resolveSelectedDeck(state);
+      const resolvedDeckSelection = await resolveSelectedDeck(state);
+      loadedDeck = resolvedDeckSelection.loadedDeck;
+      deckSource = resolvedDeckSelection.source;
     } catch (error) {
       console.error(error);
       get().pushLog(
         "system",
         getDeckLoadFailureMessage({
           selectedDeckId,
-          isArkhamBuildImport,
+          isArkhamBuildImport: state.importedArkhamBuildResolvedDeck != null,
         }),
       );
       throw error;
     }
 
+    const isArkhamBuildImport = deckSource === "arkhamBuild";
     const selected = findInvestigatorForDeck(loadedDeck, state);
 
     if (!selected) {

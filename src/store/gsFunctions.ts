@@ -26,6 +26,7 @@ import type {
     PersistedCampaignSetup,
     AdvanceState,
     GameStore,
+    ResolvedDeckSelection,
 } from "./gsTypes";
 
 import {
@@ -2061,9 +2062,16 @@ export function findInvestigatorForDeck(
     );
 }
 
-export async function resolveSelectedDeck(state: GameStore): Promise<LoadedDeck> {
+
+
+export async function resolveSelectedDeck(
+    state: GameStore,
+): Promise<ResolvedDeckSelection> {
     if (state.importedArkhamBuildResolvedDeck) {
-        return state.importedArkhamBuildResolvedDeck;
+        return {
+            loadedDeck: state.importedArkhamBuildResolvedDeck,
+            source: "arkhamBuild",
+        };
     }
 
     const selectedDeckId = state.selectedDeckId.trim();
@@ -2072,7 +2080,10 @@ export async function resolveSelectedDeck(state: GameStore): Promise<LoadedDeck>
         throw new Error("Deck source is required.");
     }
 
-    return loadArkhamDeck(selectedDeckId);
+    return {
+        loadedDeck: await loadArkhamDeck(selectedDeckId),
+        source: "arkhamDb",
+    };
 }
 
 export function getLoadedDeckSourceLabel(params: {

@@ -14,6 +14,7 @@ import type {
     ParleyEffect,
     LocationAbilityEffect,
     ScenarioStatus,
+    LoadedDeck,
 } from "../types/game";
 
 import type {
@@ -236,4 +237,11 @@ export type PersistedCampaignSetup = {
     selectedDeckId: string;
     selectedScenarioId: string;
     campaignState: CampaignState;
+};
+
+export type ResolvedDeckSource = "arkhamBuild" | "arkhamDb";
+
+export type ResolvedDeckSelection = {
+    loadedDeck: LoadedDeck;
+    source: ResolvedDeckSource;
 };
