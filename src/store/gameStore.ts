@@ -178,6 +178,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
     set({
+      selectedDeckId: "",
       importedArkhamBuildDeckJson: deck,
       importedArkhamBuildResolvedDeck: deck
         ? loadArkhamBuildDeckFromJson(deck)
@@ -687,7 +688,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setSelectedDeckId: (deckId) => {
-    set({ selectedDeckId: deckId });
+    set({
+      selectedDeckId: deckId,
+      importedArkhamBuildDeckJson: null,
+      importedArkhamBuildResolvedDeck: null,
+    });
 
     const state = get();
     savePersistedCampaignSetup({

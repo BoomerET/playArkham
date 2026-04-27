@@ -446,7 +446,6 @@ export default function HomeScreen() {
                     validationErrors: resolvedDeck.validationErrors,
                   });
 
-                  setSelectedDeckId("");
                   setSelectedInvestigator("");
 
                   const investigatorCode = parsed.investigator_code?.trim() ?? "";
