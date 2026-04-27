@@ -55,17 +55,32 @@ export type ScenarioFlagCondition = {
   equals: ScenarioFlagValue;
 };
 
-export type LoadedDeck = {
+//export type LoadedDeck = {
+//  investigatorCode: string | null;
+//  investigatorName: string | null;
+//  deckName: string | null;
+//
+//  cards: PlayerCard[];
+//
+//  unsupportedCodes: string[];
+//  randomWeaknesses: string[];
+//  validationWarnings: string[];
+//  validationErrors: string[];
+//};
+
+export type DeckMetadata = {
   investigatorCode: string | null;
   investigatorName: string | null;
   deckName: string | null;
-
-  cards: PlayerCard[];
 
   unsupportedCodes: string[];
   randomWeaknesses: string[];
   validationWarnings: string[];
   validationErrors: string[];
+};
+
+export type LoadedDeck = DeckMetadata & {
+  cards: PlayerCard[];
 };
 
 
