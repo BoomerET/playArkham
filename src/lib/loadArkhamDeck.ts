@@ -217,6 +217,16 @@ export function resolveRandomWeaknessPlaceholders(params: {
   };
 }
 
+export function addCopiesOfCard(params: {
+  card: PlayerCard;
+  count: number;
+  deckCards: PlayerCard[];
+}): void {
+  for (let i = 0; i < params.count; i += 1) {
+    params.deckCards.push(cloneCard(params.card));
+  }
+}
+
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -255,9 +265,11 @@ export function buildDeckCardsFromSlots(
       continue;
     }
 
-    for (let i = 0; i < count; i += 1) {
-      deckCards.push(cloneCard(matchingCard));
-    }
+    addCopiesOfCard({
+      card: matchingCard,
+      count,
+      deckCards,
+    });
   }
 
   const metadata: DeckBuildMetadata = {
