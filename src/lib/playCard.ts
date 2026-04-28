@@ -14,7 +14,7 @@ export function playCard(params: {
     newInvestigator: Investigator;
     status: "playedAsset" | "playedAndDiscarded" | "notInHand" | "notEnoughResources";
 } {
-    const cost = params.cost ?? 0;
+    const cost = params.cost ?? params.card.cost ?? 0;
 
     const newHand = params.hand.filter(
         (card) => card.instanceId !== params.card.instanceId,

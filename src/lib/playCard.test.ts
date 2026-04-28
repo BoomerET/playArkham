@@ -94,3 +94,22 @@ it("does nothing if investigator cannot afford the card", () => {
     expect(result.status).toBe("notEnoughResources");
 });
 
+it("uses card cost when explicit cost is not provided", () => {
+    const event = {
+        instanceId: "event-1",
+        name: "Test Event",
+        type: "event",
+        cost: 2,
+    } as any;
+
+    const result = playCard({
+        hand: [event],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 5 } as any,
+        card: event,
+    });
+
+    expect(result.newInvestigator.resources).toBe(3);
+    expect(result.status).toBe("playedAndDiscarded");
+});
