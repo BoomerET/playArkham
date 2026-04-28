@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 //import { drawOpeningHandWithoutWeaknesses } from "./gsFunctions";
 import { drawOpeningHandWithoutWeaknesses } from "../lib/openingHand";
 import type { PlayerCard } from "../types/game";
+import { shuffleDeck } from "../lib/openingHand";
 
 function card(name: string, isWeakness = false): PlayerCard {
     return {
@@ -30,5 +31,17 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         //]);
         expect(result.deck).toHaveLength(1);
         expect(result.deck[0].isWeakness).toBe(true);
+    });
+    it("returns deck with same cards after shuffle", () => {
+        const deck = [
+            card("A"),
+            card("B"),
+            card("C"),
+        ];
+
+        const shuffled = shuffleDeck(deck, () => 0.5);
+
+        expect(shuffled).toHaveLength(3);
+        expect(shuffled.map((c) => c.name).sort()).toEqual(["A", "B", "C"]);
     });
 });

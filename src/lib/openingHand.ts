@@ -29,8 +29,22 @@ export function drawOpeningHandWithoutWeaknesses(params: {
 
     return {
         hand,
-        deck: [...remainingDeck, ...skippedWeaknesses],
+        deck: shuffleDeck([...remainingDeck, ...skippedWeaknesses]),
     };
+}
+
+export function shuffleDeck(
+    deck: PlayerCard[],
+    rng: () => number = Math.random,
+): PlayerCard[] {
+    const result = [...deck];
+
+    for (let i = result.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rng() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+
+    return result;
 }
 
 export function drawCards(params: {
