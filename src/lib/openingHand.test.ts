@@ -10,6 +10,7 @@ import {
     shuffleDeck,
     performMulligan,
     discardCards,
+    drawCardsWithDiscardReshuffle,
 } from "./openingHand";
 
 import type { PlayerCard } from "../types/game";
@@ -141,5 +142,20 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
 
         expect(result.newHand.map((card) => card.name)).toEqual(["Card 2"]);
         expect(result.newDiscardPile.map((card) => card.name)).toEqual(["Card 1"]);
+    });
+    it("reshuffles discard into deck when drawing from an empty deck", () => {
+        const discarded = card("Discarded Card");
+
+        const result = drawCardsWithDiscardReshuffle({
+            deck: [],
+            discard: [discarded],
+            count: 1,
+            rng: () => 0,
+        });
+
+        expect(result.drawn.map((card) => card.name)).toEqual(["Discarded Card"]);
+        expect(result.deck).toEqual([]);
+        expect(result.discard).toEqual([]);
+        expect(result.reshuffledDiscard).toBe(true);
     });
 });

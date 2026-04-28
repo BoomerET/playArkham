@@ -133,3 +133,44 @@ export function discardCards(params: {
         newDiscardPile: [...params.discardPile, ...params.cardsToDiscard],
     };
 }
+
+export function drawCardsWithDiscardReshuffle(params: {
+    deck: PlayerCard[];
+    discard: PlayerCard[];
+    count: number;
+    rng?: () => number;
+}): {
+    drawn: PlayerCard[];
+    deck: PlayerCard[];
+    discard: PlayerCard[];
+    reshuffledDiscard: boolean;
+} {
+    const rng = params.rng ?? Math.random;
+    let deck = [...params.deck];
+    let discard = [...params.discard];
+    const drawn: PlayerCard[] = [];
+    let reshuffledDiscard = false;
+
+    while (drawn.length < params.count) {
+        if (deck.length === 0) {
+            if (discard.length === 0) {
+                break;
+            }
+
+            deck = shuffleDeck(discard, rng);
+            discard = [];
+            reshuffledDiscard = true;
+        }
+
+        const [topCard, ...remainingDeck] = deck;
+        drawn.push(topCard);
+        deck = remainingDeck;
+    }
+
+    return {
+        drawn,
+        deck,
+        discard,
+        reshuffledDiscard,
+    };
+}

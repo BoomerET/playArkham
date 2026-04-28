@@ -89,6 +89,7 @@ import {
   performMulligan,
   drawCards,
   discardCards,
+  drawCardsWithDiscardReshuffle,
 } from "../lib/openingHand";
 
 import {
@@ -5226,17 +5227,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
     );
   },
   drawPlayerCards: (count = 1) => {
-    const { deck, hand } = get();
+    const { deck, hand, discard } = get();
 
-    const drawResult = drawCards({
+    const drawResult = drawCardsWithDiscardReshuffle({
       deck,
+      discard,
       count,
     });
 
     set({
       deck: drawResult.deck,
+      discard: drawResult.discard,
       hand: [...hand, ...drawResult.drawn],
     });
+
+    if (drawResult.reshuffledDiscard) {
+      get().pushLog(
+        "player",
+        "Shuffled discard pile into a new player deck.",
+      );
+    }
 
     for (const card of drawResult.drawn) {
       get().pushLog("player", `Drew card: ${card.name}`);
@@ -5245,7 +5255,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (drawResult.drawn.length < count) {
       get().pushLog(
         "system",
-        `Could only draw ${drawResult.drawn.length}/${count} card${count === 1 ? "" : "s"} because the deck ran out.`,
+        `Could only draw ${drawResult.drawn.length}/${count} card${count === 1 ? "" : "s"
+        } because both deck and discard were empty.`,
       );
     }
   },
