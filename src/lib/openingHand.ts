@@ -128,13 +128,8 @@ export function discardCards(params: {
             ),
     );
 
-    const newDiscardPile = [
-        ...params.discardPile,
-        ...params.cardsToDiscard,
-    ];
-
     return {
         newHand,
-        newDiscardPile,
+        newDiscardPile: [...params.discardPile, ...params.cardsToDiscard],
     };
 }

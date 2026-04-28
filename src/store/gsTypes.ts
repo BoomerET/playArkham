@@ -57,6 +57,7 @@ export type GameStore = GameState & CampaignStoreActions & {
     pendingChoice: PendingChoice;
     setAsideEncounterCards: EncounterCard[];
     discardPile: PlayerCard[];
+    discardPlayerCards: (cards: PlayerCard[]) => void;
     advanceActByClues: () => void;
     locationAbility: (abilityIndex: number) => void;
     setPreviousScenarioOutcome: (outcome: string | null) => void;

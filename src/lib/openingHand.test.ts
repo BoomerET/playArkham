@@ -129,4 +129,17 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         expect(result.newHand.map((c) => c.name)).toEqual(["Card 2"]);
         expect(result.newDiscardPile.map((c) => c.name)).toEqual(["Card 1"]);
     });
+    it("moves cards from hand to discard pile", () => {
+        const c1 = card("Card 1");
+        const c2 = card("Card 2");
+
+        const result = discardCards({
+            hand: [c1, c2],
+            discardPile: [],
+            cardsToDiscard: [c1],
+        });
+
+        expect(result.newHand.map((card) => card.name)).toEqual(["Card 2"]);
+        expect(result.newDiscardPile.map((card) => card.name)).toEqual(["Card 1"]);
+    });
 });
