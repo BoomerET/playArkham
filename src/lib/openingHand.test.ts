@@ -158,4 +158,16 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         expect(result.discard).toEqual([]);
         expect(result.reshuffledDiscard).toBe(true);
     });
+    it("does not mark reshuffledDiscard when the deck has enough cards", () => {
+        const result = drawCardsWithDiscardReshuffle({
+            deck: [card("Card 1"), card("Card 2")],
+            discard: [card("Discarded Card")],
+            count: 1,
+            rng: () => 0,
+        });
+
+        expect(result.drawn.map((card) => card.name)).toEqual(["Card 1"]);
+        expect(result.reshuffledDiscard).toBe(false);
+        expect(result.discard.map((card) => card.name)).toEqual(["Discarded Card"]);
+    });
 });
