@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { playCard } from "./playCard";
+import { discardFromPlayArea } from "./playArea";
 
 function card(name: string): any {
     return {
@@ -183,4 +184,16 @@ it("moves card from play area to discard", () => {
     expect(result.newPlayArea).toEqual([]);
     expect(result.newDiscard).toEqual([asset]);
     expect(result.status).toBe("discardedFromPlayArea");
+});
+
+it("does nothing if card is not in play area", () => {
+    const asset = card("Asset");
+
+    const result = discardFromPlayArea({
+        playArea: [],
+        discard: [],
+        card: asset,
+    });
+
+    expect(result.status).toBe("notInPlayArea");
 });
