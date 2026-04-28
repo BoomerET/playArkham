@@ -45,3 +45,25 @@ it("puts assets into play instead of discard", () => {
     expect(result.newPlayArea).toEqual([asset]);
     expect(result.newInvestigator.resources).toBe(3);
 });
+
+it("does nothing if the card is not in hand", () => {
+    const cardNotInHand = {
+        instanceId: "missing",
+        name: "Missing Card",
+        type: "event",
+    } as any;
+
+    const result = playCard({
+        hand: [],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 5 } as any,
+        card: cardNotInHand,
+        cost: 2,
+    });
+
+    expect(result.newHand).toEqual([]);
+    expect(result.newDiscard).toEqual([]);
+    expect(result.newPlayArea).toEqual([]);
+    expect(result.newInvestigator.resources).toBe(5);
+});

@@ -26,6 +26,19 @@ export function playCard(params: {
 
     const isAsset = params.card.type === "asset";
 
+    const cardInHand = params.hand.some(
+        (card) => card.instanceId === params.card.instanceId,
+    );
+
+    if (!cardInHand) {
+        return {
+            newHand: params.hand,
+            newDiscard: params.discard,
+            newPlayArea: params.playArea,
+            newInvestigator: params.investigator,
+        };
+    }
+
     return {
         newHand,
         newDiscard: isAsset
