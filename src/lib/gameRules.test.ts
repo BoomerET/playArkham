@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { expect, it } from "vitest";
 import { applyDeckExhaustionPenalty } from "./gameRules";
 
 it("adds 1 horror when deck is exhausted", () => {
