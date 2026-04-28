@@ -5301,14 +5301,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   playPlayerCard: (card) => {
     const { hand, discard, playArea, investigator } = get();
 
-    if (investigator.resources < cost) {
-      get().pushLog(
-        "system",
-        `Not enough resources to play ${card.name}.`,
-      );
-      return;
-    }
-
     const result = playCard({
       hand,
       discard,
@@ -5316,11 +5308,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator,
       card,
     });
-
-    //if (result.status === "notInHand") {
-    //  get().pushLog("system", `${card.name} is not in your hand.`);
-    //  return;
-    //}
 
     if (result.status === "notInHand") {
       get().pushLog("system", `${card.name} is not in your hand.`);
@@ -5332,8 +5319,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const paidCost = card.cost ?? 0;
-
     set({
       hand: result.newHand,
       discard: result.newDiscard,
@@ -5341,12 +5326,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator: result.newInvestigator,
     });
 
+    const paidCost = card.cost ?? 0;
+
     get().pushLog(
       "player",
       result.status === "playedAsset"
         ? `Played asset ${card.name} (cost ${paidCost}).`
-        : `Played ${card.name} (cost ${paidCost}) and discarded it.`
+        : `Played ${card.name} (cost ${paidCost}) and discarded it.`,
     );
-
   },
 }));
