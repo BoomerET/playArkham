@@ -10,6 +10,7 @@ export function drawOpeningHandWithoutWeaknesses(params: {
 }): {
     hand: PlayerCard[];
     deck: PlayerCard[];
+    skippedWeaknesses: PlayerCard[];
 } {
     let remainingDeck = [...params.deck];
     const hand: PlayerCard[] = [];
@@ -30,6 +31,7 @@ export function drawOpeningHandWithoutWeaknesses(params: {
     return {
         hand,
         deck: shuffleDeck([...remainingDeck, ...skippedWeaknesses]),
+        skippedWeaknesses,
     };
 }
 
