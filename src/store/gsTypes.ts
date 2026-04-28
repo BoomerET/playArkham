@@ -56,7 +56,8 @@ export type GameStore = GameState & CampaignStoreActions & {
     campaignState: CampaignState;
     pendingChoice: PendingChoice;
     setAsideEncounterCards: EncounterCard[];
-    discardPile: PlayerCard[];
+    //discardPile: PlayerCard[];
+    discard: PlayerCard[];
     discardPlayerCards: (cards: PlayerCard[]) => void;
     advanceActByClues: () => void;
     locationAbility: (abilityIndex: number) => void;

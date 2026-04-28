@@ -184,7 +184,7 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  discardPile: [],
+  discard: [],
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
     set({
@@ -5252,18 +5252,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
   },
-  discardPlayerCards: (cards: PlayerCard[]) => {
-    const { hand, discardPile } = get();
+  discardPlayerCards: (cards) => {
+    const { hand, discard } = get();
 
     const result = discardCards({
       hand,
-      discardPile,
+      discardPile: discard,
       cardsToDiscard: cards,
     });
 
     set({
       hand: result.newHand,
-      discardPile: result.newDiscardPile,
+      discard: result.newDiscardPile,
     });
 
     for (const card of cards) {
