@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 //import { drawOpeningHandWithoutWeaknesses } from "./gsFunctions";
 import { drawOpeningHandWithoutWeaknesses } from "../lib/openingHand";
 import type { PlayerCard } from "../types/game";
