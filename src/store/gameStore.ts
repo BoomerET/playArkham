@@ -5320,6 +5320,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       cost,
     });
 
+    if (result.status === "notInHand") {
+      get().pushLog("system", `${card.name} is not in your hand.`);
+      return;
+    }
+
     set({
       hand: result.newHand,
       discard: result.newDiscard,
@@ -5329,9 +5334,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     get().pushLog(
       "player",
-      result.newPlayArea.some((entry) => entry.instanceId === card.instanceId)
+      result.status === "playedAsset"
         ? `Played asset ${card.name} (cost ${cost}).`
         : `Played ${card.name} (cost ${cost}) and discarded it.`,
     );
+
   },
 }));
