@@ -2699,9 +2699,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
-      discardPile: [],
       encounterDeck: initialEncounterDeck,
-
       encounterDiscard: [],
       enemies: setupEnemies,
       chaosBag: selectedScenario.chaosBag
