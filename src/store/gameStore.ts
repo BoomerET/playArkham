@@ -84,7 +84,7 @@ import {
 
 import {
   shuffle,
-  shuffleDeck,
+  //shuffleDeck,
   drawOpeningHandWithoutWeaknesses,
 } from "../lib/openingHand";
 
