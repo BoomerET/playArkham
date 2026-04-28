@@ -84,7 +84,6 @@ import {
 
 import {
   shuffle,
-  //shuffleDeck,
   drawOpeningHandWithoutWeaknesses,
   performMulligan,
   drawCards,
@@ -173,6 +172,10 @@ import {
 import {
   applyDeckExhaustionPenalty,
 } from "../lib/gameRules.ts";
+
+import {
+  playCard
+} from "../lib/playCard";
 
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
@@ -5294,5 +5297,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
     for (const card of cards) {
       get().pushLog("player", `Discarded: ${card.name}`);
     }
+  },
+  playPlayerCard: (card) => {
+    const { hand, discard, investigator } = get();
+
+    const cost = card.cost ?? 0;
+
+    if (investigator.resources < cost) {
+      get().pushLog(
+        "system",
+        `Not enough resources to play ${card.name}.`,
+      );
+      return;
+    }
+
+    const result = playCard({
+      hand,
+      discard,
+      investigator,
+      card,
+      cost,
+    });
+
+    set({
+      hand: result.newHand,
+      discard: result.newDiscard,
+      investigator: result.newInvestigator,
+    });
+
+    get().pushLog(
+      "player",
+      `Played ${card.name} (cost ${cost}).`,
+    );
   },
 }));
