@@ -88,6 +88,7 @@ import {
   drawOpeningHandWithoutWeaknesses,
   performMulligan,
   drawCards,
+  discardCards,
 } from "../lib/openingHand";
 
 import {
@@ -183,6 +184,7 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  discardPile: [],
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
     set({
@@ -2697,6 +2699,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       hand: [],
       discard: [],
       playArea: [],
+      discardPile: [],
       encounterDeck: initialEncounterDeck,
 
       encounterDiscard: [],
@@ -5247,6 +5250,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
         "system",
         `Could only draw ${drawResult.drawn.length}/${count} card${count === 1 ? "" : "s"} because the deck ran out.`,
       );
+    }
+  },
+  discardPlayerCards: (cards: PlayerCard[]) => {
+    const { hand, discardPile } = get();
+
+    const result = discardCards({
+      hand,
+      discardPile,
+      cardsToDiscard: cards,
+    });
+
+    set({
+      hand: result.newHand,
+      discardPile: result.newDiscardPile,
+    });
+
+    for (const card of cards) {
+      get().pushLog("player", `Discarded: ${card.name}`);
     }
   },
 }));

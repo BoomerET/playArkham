@@ -8,7 +8,8 @@ import {
     drawCards,
     drawOpeningHandWithoutWeaknesses,
     shuffleDeck,
-    performMulligan
+    performMulligan,
+    discardCards,
 } from "./openingHand";
 
 import type { PlayerCard } from "../types/game";
@@ -102,7 +103,6 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
 
         expect(result.newHand.some((c) => c.name === "Card 2")).toBe(true);
     });
-
     it("does not allow weaknesses to be mulliganed", () => {
         const weakness = card("Weakness", true);
         const normal = card("Normal");
@@ -115,5 +115,18 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         });
 
         expect(result.newHand.some((c) => c.name === "Weakness")).toBe(true);
+    });
+    it("moves cards from hand to discard pile", () => {
+        const c1 = card("Card 1");
+        const c2 = card("Card 2");
+
+        const result = discardCards({
+            hand: [c1, c2],
+            discardPile: [],
+            cardsToDiscard: [c1],
+        });
+
+        expect(result.newHand.map((c) => c.name)).toEqual(["Card 2"]);
+        expect(result.newDiscardPile.map((c) => c.name)).toEqual(["Card 1"]);
     });
 });

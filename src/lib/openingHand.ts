@@ -112,3 +112,29 @@ export function performMulligan(params: {
         newDeck: remainingDeck,
     };
 }
+
+export function discardCards(params: {
+    hand: PlayerCard[];
+    discardPile: PlayerCard[];
+    cardsToDiscard: PlayerCard[];
+}): {
+    newHand: PlayerCard[];
+    newDiscardPile: PlayerCard[];
+} {
+    const newHand = params.hand.filter(
+        (card) =>
+            !params.cardsToDiscard.some(
+                (discard) => discard.instanceId === card.instanceId,
+            ),
+    );
+
+    const newDiscardPile = [
+        ...params.discardPile,
+        ...params.cardsToDiscard,
+    ];
+
+    return {
+        newHand,
+        newDiscardPile,
+    };
+}
