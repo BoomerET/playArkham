@@ -181,6 +181,10 @@ import {
   discardFromPlayArea as discardFromPlayAreaHelper
 } from "../lib/playArea";
 
+import {
+  resolvePlayerCardEffect,
+} from "../lib/playerCardRules";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5323,11 +5327,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    const effectResult = resolvePlayerCardEffect({
+      investigator: result.newInvestigator,
+      effect: card.onPlay,
+    });
+
     set({
       hand: result.newHand,
       discard: result.newDiscard,
       playArea: result.newPlayArea,
-      investigator: result.newInvestigator,
+      investigator: effectResult.investigator,
     });
 
     const paidCost = result.paidCost;
@@ -5338,6 +5347,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? `Played asset ${card.name} (cost ${paidCost}).`
         : `Played ${card.name} (cost ${paidCost}) and discarded it.`,
     );
+
+    if (effectResult.logText) {
+      get().pushLog("player", effectResult.logText);
+    }
   },
   discardFromPlayArea: (card) => {
     const { playArea, discard } = get();
