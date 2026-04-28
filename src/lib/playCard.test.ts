@@ -170,3 +170,17 @@ it("returns paid cost when not enough resources", () => {
 
     expect(result.paidCost).toBe(4);
 });
+
+it("moves card from play area to discard", () => {
+    const asset = card("Asset");
+
+    const result = discardFromPlayArea({
+        playArea: [asset],
+        discard: [],
+        card: asset,
+    });
+
+    expect(result.newPlayArea).toEqual([]);
+    expect(result.newDiscard).toEqual([asset]);
+    expect(result.status).toBe("discardedFromPlayArea");
+});

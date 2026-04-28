@@ -177,6 +177,10 @@ import {
   playCard
 } from "../lib/playCard";
 
+import {
+  discardFromPlayArea as discardFromPlayAreaHelper
+} from "../lib/playArea";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5334,5 +5338,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ? `Played asset ${card.name} (cost ${paidCost}).`
         : `Played ${card.name} (cost ${paidCost}) and discarded it.`,
     );
+  },
+  discardFromPlayArea: (card) => {
+    const { playArea, discard } = get();
+
+    const result = discardFromPlayAreaHelper({
+      playArea,
+      discard,
+      card,
+    });
+
+    if (result.status === "notInPlayArea") {
+      get().pushLog("system", `${card.name} is not in play.`);
+      return;
+    }
+
+    set({
+      playArea: result.newPlayArea,
+      discard: result.newDiscard,
+    });
+
+    get().pushLog("player", `Discarded ${card.name} from play.`);
   },
 }));
