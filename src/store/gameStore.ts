@@ -83,7 +83,9 @@ import {
 } from "../lib/scenarioCards";
 
 import {
-  shuffle
+  shuffle,
+  shuffleDeck,
+  drawOpeningHandWithoutWeaknesses,
 } from "../lib/openingHand";
 
 import {
@@ -2790,30 +2792,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   drawStartingHand: (count = 5) => {
-    let { deck, hand } = get();
-    let cardsDrawn = 0;
-    const skippedWeaknesses: PlayerCard[] = [];
+    const { deck } = get();
 
-    while (cardsDrawn < count && deck.length > 0) {
-      const [topCard, ...remainingDeck] = deck;
-      deck = remainingDeck;
+    const openingDraw = drawOpeningHandWithoutWeaknesses({
+      deck,
+      handSize: count,
+    });
 
-      if (isOpeningHandWeakness(topCard)) {
-        skippedWeaknesses.push(topCard);
-        get().pushLog(
-          "player",
-          `Set aside opening-hand weakness: ${topCard.name}`,
-        );
-        continue;
-      }
+    const drawnCardNames = openingDraw.hand.map((card) => card.name);
 
-      hand = [...hand, topCard];
-      cardsDrawn += 1;
-      get().pushLog("player", `Drew opening hand card: ${topCard.name}`);
+    const skippedWeaknesses = deck.filter(
+      (card) =>
+        isOpeningHandWeakness(card) &&
+        !openingDraw.hand.some((drawnCard) => drawnCard.instanceId === card.instanceId) &&
+        !openingDraw.deck.some((remainingCard) => remainingCard.instanceId === card.instanceId),
+    );
+
+    set({
+      deck: openingDraw.deck,
+      hand: openingDraw.hand,
+    });
+
+    for (const cardName of drawnCardNames) {
+      get().pushLog("player", `Drew opening hand card: ${cardName}`);
+    }
+
+    for (const weakness of skippedWeaknesses) {
+      get().pushLog(
+        "player",
+        `Set aside opening-hand weakness: ${weakness.name}`,
+      );
     }
 
     if (skippedWeaknesses.length > 0) {
-      deck = shuffleArray([...deck, ...skippedWeaknesses]);
       get().pushLog(
         "player",
         `Shuffled ${skippedWeaknesses.length} weakness${skippedWeaknesses.length === 1 ? "" : "es"
@@ -2821,15 +2832,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
-    set({
-      deck,
-      hand,
-    });
-
-    if (cardsDrawn < count) {
+    if (openingDraw.hand.length < count) {
       get().pushLog(
         "system",
-        `Opening hand drew ${cardsDrawn} card${cardsDrawn === 1 ? "" : "s"
+        `Opening hand drew ${openingDraw.hand.length} card${openingDraw.hand.length === 1 ? "" : "s"
         } because the deck ran out of non-weakness cards.`,
       );
     }
