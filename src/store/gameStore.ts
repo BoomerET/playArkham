@@ -86,6 +86,7 @@ import {
   shuffle,
   //shuffleDeck,
   drawOpeningHandWithoutWeaknesses,
+  performMulligan,
 } from "../lib/openingHand";
 
 import {
@@ -5200,5 +5201,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
       ],
     }));
+  },
+  performMulliganAction: (cardsToMulligan: PlayerCard[]) => {
+    const { hand, deck } = get();
+
+    const result = performMulligan({
+      hand,
+      deck,
+      cardsToMulligan,
+    });
+
+    set({
+      hand: result.newHand,
+      deck: result.newDeck,
+    });
+
+    get().pushLog(
+      "player",
+      `Mulliganed ${cardsToMulligan.length} card${cardsToMulligan.length === 1 ? "" : "s"
+      }.`,
+    );
   },
 }));
