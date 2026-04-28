@@ -70,3 +70,27 @@ it("does nothing if the card is not in hand", () => {
     expect(result.newInvestigator.resources).toBe(5);
     expect(result.status).toBe("notInHand");
 });
+
+it("does nothing if investigator cannot afford the card", () => {
+    const expensive = {
+        instanceId: "expensive",
+        name: "Expensive Card",
+        type: "event",
+    } as any;
+
+    const result = playCard({
+        hand: [expensive],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 1 } as any,
+        card: expensive,
+        cost: 2,
+    });
+
+    expect(result.newHand).toEqual([expensive]);
+    expect(result.newDiscard).toEqual([]);
+    expect(result.newPlayArea).toEqual([]);
+    expect(result.newInvestigator.resources).toBe(1);
+    expect(result.status).toBe("notEnoughResources");
+});
+
