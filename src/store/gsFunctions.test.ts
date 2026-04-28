@@ -4,7 +4,7 @@ import { drawOpeningHandWithoutWeaknesses } from "../lib/openingHand";
 import type { PlayerCard } from "../types/game";
 import { shuffleDeck, performMulligan } from "../lib/openingHand";
 
-function card(name: string, isWeakness = false): PlayerCard {
+export function card(name: string, isWeakness = false): PlayerCard {
     return {
         instanceId: name,
         name,

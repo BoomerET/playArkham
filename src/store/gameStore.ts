@@ -5225,4 +5225,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }.`,
     );
   },
+  drawPlayerCards: (count = 1) => {
+    const { deck, hand } = get();
+
+    const drawResult = drawCards({
+      deck,
+      count,
+    });
+
+    set({
+      deck: drawResult.deck,
+      hand: [...hand, ...drawResult.drawn],
+    });
+
+    for (const card of drawResult.drawn) {
+      get().pushLog("player", `Drew card: ${card.name}`);
+    }
+
+    if (drawResult.drawn.length < count) {
+      get().pushLog(
+        "system",
+        `Could only draw ${drawResult.drawn.length}/${count} card${count === 1 ? "" : "s"} because the deck ran out.`,
+      );
+    }
+  },
 }));
