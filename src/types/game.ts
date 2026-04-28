@@ -1,4 +1,5 @@
 import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
+import type { PlayerCardEffect } from "../store/gsTypes";
 
 // ============================================================
 // Core primitives
@@ -167,6 +168,7 @@ export interface PlayerCard {
   code?: string;
   passiveSkillModifiers?: PassiveSkillModifiers;
   deckLimit?: number;
+  onPlay?: PlayerCardEffect;
 }
 
 

@@ -249,3 +249,8 @@ export type ResolvedDeckSelection = {
     loadedDeck: LoadedDeck;
     source: ResolvedDeckSource;
 };
+
+export type PlayerCardEffect =
+    | { kind: "none" }
+    | { kind: "gainResources"; amount: number }
+    | { kind: "drawCards"; amount: number };
