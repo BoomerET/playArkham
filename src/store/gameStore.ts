@@ -5248,6 +5248,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       );
     }
 
+    if (drawResult.reshuffledDiscard) {
+      const investigator = get().investigator;
+
+      set({
+        investigator: {
+          ...investigator,
+          horror: investigator.horror + 1,
+        },
+      });
+
+      get().pushLog(
+        "player",
+        `${investigator.name} takes 1 horror because their deck ran out.`,
+      );
+    }
+
     for (const card of drawResult.drawn) {
       get().pushLog("player", `Drew card: ${card.name}`);
     }
