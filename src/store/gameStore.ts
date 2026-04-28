@@ -82,9 +82,9 @@ import {
   getInitialAgendaState,
 } from "../lib/scenarioCards";
 
-//import {
-//  shuffleDeck
-//} from "../lib/openingHand";
+import {
+  shuffle
+} from "../lib/openingHand";
 
 import {
   countMatchingIcons,
