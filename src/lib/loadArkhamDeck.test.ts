@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildDeckCardsFromSlots } from "./loadArkhamDeck";
 
 describe("buildDeckCardsFromSlots", () => {
@@ -69,5 +69,23 @@ describe("buildDeckCardsFromSlots", () => {
         const uniqueCodes = new Set(result.cards.map((card) => card.code));
 
         expect(uniqueCodes.size).toBeLessThanOrEqual(result.cards.length);
+    });
+    it("tracks unsupported card codes and skips them", () => {
+        const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => { });
+
+        const result = buildDeckCardsFromSlots(
+            {
+                NOT_A_REAL_CARD: 1,
+            },
+            () => 0,
+        );
+
+        expect(result.cards).toHaveLength(0);
+        expect(result.metadata.unsupportedCodes).toEqual(["NOT_A_REAL_CARD"]);
+        expect(warnSpy).toHaveBeenCalledWith(
+            "Unsupported card code: NOT_A_REAL_CARD",
+        );
+
+        warnSpy.mockRestore();
     });
 });
