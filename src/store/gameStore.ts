@@ -5299,7 +5299,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   playPlayerCard: (card) => {
-    const { hand, discard, investigator } = get();
+    const { hand, discard, playArea, investigator } = get();
 
     const cost = card.cost ?? 0;
 
@@ -5314,6 +5314,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const result = playCard({
       hand,
       discard,
+      playArea,
       investigator,
       card,
       cost,
@@ -5322,12 +5323,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       hand: result.newHand,
       discard: result.newDiscard,
+      playArea: result.newPlayArea,
       investigator: result.newInvestigator,
     });
 
     get().pushLog(
       "player",
-      `Played ${card.name} (cost ${cost}).`,
+      result.newPlayArea.some((entry) => entry.instanceId === card.instanceId)
+        ? `Played asset ${card.name} (cost ${cost}).`
+        : `Played ${card.name} (cost ${cost}) and discarded it.`,
     );
   },
 }));

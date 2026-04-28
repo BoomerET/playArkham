@@ -3,30 +3,37 @@ import type { PlayerCard, Investigator } from "../types/game";
 export function playCard(params: {
     hand: PlayerCard[];
     discard: PlayerCard[];
+    playArea: PlayerCard[];
     investigator: Investigator;
     card: PlayerCard;
     cost?: number;
 }): {
     newHand: PlayerCard[];
     newDiscard: PlayerCard[];
+    newPlayArea: PlayerCard[];
     newInvestigator: Investigator;
 } {
     const cost = params.cost ?? 0;
 
     const newHand = params.hand.filter(
-        (c) => c.instanceId !== params.card.instanceId,
+        (card) => card.instanceId !== params.card.instanceId,
     );
-
-    const newDiscard = [...params.discard, params.card];
 
     const newInvestigator = {
         ...params.investigator,
         resources: params.investigator.resources - cost,
     };
 
+    const isAsset = params.card.type === "asset";
+
     return {
         newHand,
-        newDiscard,
+        newDiscard: isAsset
+            ? params.discard
+            : [...params.discard, params.card],
+        newPlayArea: isAsset
+            ? [...params.playArea, params.card]
+            : params.playArea,
         newInvestigator,
     };
 }
