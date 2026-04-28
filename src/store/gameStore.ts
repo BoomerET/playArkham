@@ -170,6 +170,10 @@ import {
   startingChaosBag
 } from "./gsConst.ts";
 
+import {
+  applyDeckExhaustionPenalty,
+} from "../lib/gameRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5252,10 +5256,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const investigator = get().investigator;
 
       set({
-        investigator: {
-          ...investigator,
-          horror: investigator.horror + 1,
-        },
+        investigator: applyDeckExhaustionPenalty(investigator),
       });
 
       get().pushLog(
