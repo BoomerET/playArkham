@@ -2801,12 +2801,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const drawnCardNames = openingDraw.hand.map((card) => card.name);
 
-    const skippedWeaknesses = deck.filter(
-      (card) =>
-        isOpeningHandWeakness(card) &&
-        !openingDraw.hand.some((drawnCard) => drawnCard.instanceId === card.instanceId) &&
-        !openingDraw.deck.some((remainingCard) => remainingCard.instanceId === card.instanceId),
-    );
+    const skippedWeaknesses = openingDraw.skippedWeaknesses;
 
     set({
       deck: openingDraw.deck,
