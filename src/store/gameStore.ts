@@ -87,6 +87,7 @@ import {
   //shuffleDeck,
   drawOpeningHandWithoutWeaknesses,
   performMulligan,
+  drawCards,
 } from "../lib/openingHand";
 
 import {
@@ -3865,9 +3866,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (turn.phase === "upkeep") {
       const nextRound = turn.round + 1;
-      const drawnCardName = deck.length > 0 ? deck[0].name : null;
-      const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
-      const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
+      //const drawnCardName = deck.length > 0 ? deck[0].name : null;
+      //const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
+      //const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
+      const drawResult = drawCards({
+        deck,
+        count: 1,
+      });
+
+      const drawnCard = drawResult.drawn[0] ?? null;
+      const updatedDeck = drawResult.deck;
+      const updatedHand = [...hand, ...drawResult.drawn];
       const updatedEnemies = readyEnemies(enemies);
       const readyCount = enemies.filter((enemy) => enemy.exhausted).length;
 
@@ -3887,15 +3896,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           "player",
           `${investigator.name} gains 1 resource during upkeep.`,
         ),
-        drawnCardName
-          ? createLogEntry(
-            "player",
-            `Drew card during upkeep: ${drawnCardName}`,
-          )
-          : createLogEntry(
-            "system",
-            "Tried to draw a card during upkeep, but the deck was empty.",
-          ),
+        drawnCard
+          ? createLogEntry("player", `Drew card during upkeep: ${drawnCard.name}`)
+          : createLogEntry("system", "Could not draw during upkeep because the deck is empty."),
         ...(readyCount > 0
           ? [
             createLogEntry(
