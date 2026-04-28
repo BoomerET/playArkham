@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { drawOpeningHandWithoutWeaknesses } from "./gsFunctions";
+//import { drawOpeningHandWithoutWeaknesses } from "./gsFunctions";
+import { drawOpeningHandWithoutWeaknesses } from "../lib/openingHand";
 import type { PlayerCard } from "../types/game";
 
 function card(name: string, isWeakness = false): PlayerCard {
