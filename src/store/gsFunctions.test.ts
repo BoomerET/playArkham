@@ -27,7 +27,7 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         expect(result.deck).toHaveLength(1);
         expect(result.deck[0].isWeakness).toBe(true);
         expect(result.skippedWeaknesses).toHaveLength(1);
-        expect(result.skippedWeaknesses).toEqual([]);
+        //expect(result.skippedWeaknesses).toEqual([]);
     });
     it("returns deck with same cards after shuffle", () => {
         const deck = [
