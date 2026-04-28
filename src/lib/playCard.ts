@@ -64,5 +64,6 @@ export function playCard(params: {
             : params.playArea,
         newInvestigator,
         status: isAsset ? "playedAsset" : "playedAndDiscarded",
+        paidCost: cost,
     };
 }
