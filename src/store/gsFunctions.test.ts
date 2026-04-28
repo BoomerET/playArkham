@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 //import { drawOpeningHandWithoutWeaknesses } from "./gsFunctions";
 import { drawOpeningHandWithoutWeaknesses } from "../lib/openingHand";
 import type { PlayerCard } from "../types/game";
-import { shuffleDeck } from "../lib/openingHand";
+import { shuffleDeck, performMulligan } from "../lib/openingHand";
 
 function card(name: string, isWeakness = false): PlayerCard {
     return {
@@ -45,4 +45,37 @@ describe("drawOpeningHandWithoutWeaknesses", () => {
         expect(shuffled).toHaveLength(3);
         expect(shuffled.map((c) => c.name).sort()).toEqual(["A", "B", "C"]);
     });
+    it("performs mulligan correctly", () => {
+        const c1 = card("Card 1");
+        const c2 = card("Card 2");
+        const c3 = card("Card 3");
+        const c4 = card("Card 4");
+
+        const result = performMulligan({
+            hand: [c1, c2],
+            deck: [c3, c4],
+            cardsToMulligan: [c1],
+            rng: () => 0,
+        });
+
+        expect(result.newHand).toHaveLength(2);
+        expect(result.newDeck).toHaveLength(2);
+
+        expect(result.newHand.some((c) => c.name === "Card 2")).toBe(true);
+    });
+
+    it("does not allow weaknesses to be mulliganed", () => {
+        const weakness = card("Weakness", true);
+        const normal = card("Normal");
+
+        const result = performMulligan({
+            hand: [weakness, normal],
+            deck: [card("Deck Card")],
+            cardsToMulligan: [weakness],
+            rng: () => 0,
+        });
+
+        expect(result.newHand.some((c) => c.name === "Weakness")).toBe(true);
+    });
 });
+

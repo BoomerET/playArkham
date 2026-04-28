@@ -72,3 +72,43 @@ export function shuffle<T>(items: T[]): T[] {
 
     return copy;
 }
+
+export function performMulligan(params: {
+    hand: PlayerCard[];
+    deck: PlayerCard[];
+    cardsToMulligan: PlayerCard[];
+    rng?: () => number;
+}): {
+    newHand: PlayerCard[];
+    newDeck: PlayerCard[];
+} {
+    const rng = params.rng ?? Math.random;
+
+    const validMulliganCards = params.cardsToMulligan.filter(
+        (card) => !isOpeningHandWeakness(card),
+    );
+
+    const cardsToKeep = params.hand.filter(
+        (card) =>
+            !validMulliganCards.some(
+                (m) => m.instanceId === card.instanceId,
+            ),
+    );
+
+    const returnedCards = validMulliganCards;
+
+    const reshuffledDeck = shuffleDeck(
+        [...params.deck, ...returnedCards],
+        rng,
+    );
+
+    const drawCount = validMulliganCards.length;
+
+    const drawn = reshuffledDeck.slice(0, drawCount);
+    const remainingDeck = reshuffledDeck.slice(drawCount);
+
+    return {
+        newHand: [...cardsToKeep, ...drawn],
+        newDeck: remainingDeck,
+    };
+}
