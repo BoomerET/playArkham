@@ -1,11 +1,27 @@
-import { describe, expect, it } from "vitest";
+import {
+    describe,
+    expect,
+    it
+} from "vitest";
+
 import {
     drawCards,
     drawOpeningHandWithoutWeaknesses,
     shuffleDeck,
     performMulligan
 } from "./openingHand";
-import { card } from "../store/gsFunctions";
+
+import type { PlayerCard } from "../types/game";
+
+export function card(name: string, isWeakness = false): PlayerCard {
+    return {
+        instanceId: name,
+        name,
+        type: isWeakness ? "treachery" : "asset",
+        faction: "neutral",
+        isWeakness,
+    };
+}
 
 describe("drawOpeningHandWithoutWeaknesses", () => {
     it("draws cards from the top of the deck", () => {

@@ -2197,13 +2197,3 @@ export function shuffle<T>(array: T[], rng: () => number = Math.random): T[] {
 
     return result;
 }
-
-export function card(name: string, isWeakness = false): PlayerCard {
-    return {
-        instanceId: name,
-        name,
-        type: isWeakness ? "treachery" : "asset",
-        faction: "neutral",
-        isWeakness,
-    };
-}
