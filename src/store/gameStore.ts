@@ -5326,7 +5326,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator: result.newInvestigator,
     });
 
-    const paidCost = card.cost ?? 0;
+    const paidCost = result.paidCost;
 
     get().pushLog(
       "player",

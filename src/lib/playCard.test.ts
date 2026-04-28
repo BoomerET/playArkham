@@ -113,3 +113,60 @@ it("uses card cost when explicit cost is not provided", () => {
     expect(result.newInvestigator.resources).toBe(3);
     expect(result.status).toBe("playedAndDiscarded");
 });
+
+it("returns the amount of resources paid", () => {
+    const event = {
+        instanceId: "event-1",
+        name: "Test Event",
+        type: "event",
+        cost: 2,
+    } as any;
+
+    const result = playCard({
+        hand: [event],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 5 } as any,
+        card: event,
+    });
+
+    expect(result.paidCost).toBe(2);
+});
+
+it("returns 0 paid cost when card not in hand", () => {
+    const cardNotInHand = {
+        instanceId: "missing",
+        name: "Missing Card",
+        type: "event",
+        cost: 2,
+    } as any;
+
+    const result = playCard({
+        hand: [],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 5 } as any,
+        card: cardNotInHand,
+    });
+
+    expect(result.paidCost).toBe(0);
+});
+
+it("returns paid cost when not enough resources", () => {
+    const card = {
+        instanceId: "card-1",
+        name: "Test Card",
+        type: "event",
+        cost: 4,
+    } as any;
+
+    const result = playCard({
+        hand: [card],
+        discard: [],
+        playArea: [],
+        investigator: { resources: 1 } as any,
+        card,
+    });
+
+    expect(result.paidCost).toBe(4);
+});

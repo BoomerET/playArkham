@@ -12,6 +12,7 @@ export function playCard(params: {
     newDiscard: PlayerCard[];
     newPlayArea: PlayerCard[];
     newInvestigator: Investigator;
+    paidCost: number;
     status: "playedAsset" | "playedAndDiscarded" | "notInHand" | "notEnoughResources";
 } {
     const cost = params.cost ?? params.card.cost ?? 0;
@@ -38,6 +39,7 @@ export function playCard(params: {
             newPlayArea: params.playArea,
             newInvestigator: params.investigator,
             status: "notInHand",
+            paidCost: 0,
         };
     }
 
@@ -48,6 +50,7 @@ export function playCard(params: {
             newPlayArea: params.playArea,
             newInvestigator: params.investigator,
             status: "notEnoughResources",
+            paidCost: cost,
         };
     }
 
