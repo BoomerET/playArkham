@@ -40,7 +40,7 @@ describe("attackEnemy", () => {
         });
 
         expect(result.enemies).toHaveLength(0);
-        expect(result.defeatedEnemyIds).toEqual(["enemy-1"]);
+        expect(result.defeatedEnemies.map((enemy) => enemy.id)).toEqual(["enemy-1"]);
     });
 
     it("returns notFound when enemy is missing", () => {

@@ -6,12 +6,12 @@ export function attackEnemy(params: {
     damage: number;
 }): {
     enemies: Enemy[];
-    defeatedEnemyIds: Enemy[];
+    defeatedEnemies: Enemy[];
     status: "hit" | "notFound";
     logTexts: string[];
 } {
     let found = false;
-    const defeatedEnemyIds: Enemy[] = [];
+    const defeatedEnemies: Enemy[] = [];
     const logTexts: string[] = [];
 
     const enemies = params.enemies
@@ -21,7 +21,6 @@ export function attackEnemy(params: {
             found = true;
 
             const newDamage = enemy.damageOnEnemy + params.damage;
-
             const defeated = newDamage >= enemy.health;
 
             if (defeated) {
@@ -29,8 +28,9 @@ export function attackEnemy(params: {
                     ...enemy,
                     damageOnEnemy: newDamage,
                 });
+
                 logTexts.push(`${enemy.name} is defeated.`);
-                return null; // remove later
+                return null;
             }
 
             logTexts.push(
@@ -42,21 +42,19 @@ export function attackEnemy(params: {
                 damageOnEnemy: newDamage,
             };
         })
-        .filter((e): e is Enemy => e !== null);
+        .filter((enemy): enemy is Enemy => enemy !== null);
 
     if (!found) {
         return {
             enemies: params.enemies,
-            defeatedEnemyIds: [],
+            defeatedEnemies: [],
             status: "notFound",
             logTexts: [],
-            defeatedEnemies: [],
         };
     }
 
     return {
         enemies,
-        defeatedEnemyIds,
         defeatedEnemies,
         status: "hit",
         logTexts,
