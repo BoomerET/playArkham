@@ -1,5 +1,4 @@
-import type { Investigator } from "../types/game";
-import type { PlayerCardEffect } from "../store/gsTypes";
+import type { Investigator, PlayerCardEffect } from "../types/game";
 
 export function resolvePlayerCardEffect(params: {
     investigator: Investigator;
