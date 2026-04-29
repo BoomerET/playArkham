@@ -196,7 +196,9 @@ import {
   runEnemyPhase as runEnemyPhaseRule
 } from "../lib/enemyPhaseRules";
 
-
+import {
+  getNextPhase
+} from "../lib/phaseRules";
 
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
@@ -3876,7 +3878,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigator: updatedInvestigator,
       });
 
-      get().setPhase("enemy");
+      get().setPhase(getNextPhase(turn.phase));
       return;
     }
 
@@ -3889,7 +3891,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       get().pushLog("system", "Enemy phase: Enemies attack.");
       get().runEnemyPhase();
 
-      get().setPhase("upkeep");
+      get().setPhase(getNextPhase(turn.phase));
       return;
     }
 
@@ -3956,14 +3958,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
 
       get().engageEnemiesAtLocation();
-      get().setPhase("mythos");
+      get().setPhase(getNextPhase(turn.phase));
       return;
     }
 
     if (turn.phase === "mythos") {
       get().pushLog("system", "Mythos phase begins.");
       get().resolveMythosPhase();
-      get().setPhase("investigation");
+      get().setPhase(getNextPhase(turn.phase));
       get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
       return;
     }
