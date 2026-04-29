@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resolveEnemyAttacks } from "../lib/enemyAttackRules";
+import { readyEnemies } from "../lib/enemyReadyRules";
 import type { Enemy, Investigator } from "../types/game";
 
 function investigator(): Investigator {
@@ -102,5 +103,12 @@ describe("resolveEnemyAttacks", () => {
         });
 
         expect(result.enemies[0].exhausted).toBe(true);
+    });
+    it("readies exhausted enemies", () => {
+        const result = readyEnemies([
+            enemy({ exhausted: true }),
+        ]);
+
+        expect(result[0].exhausted).toBe(false);
     });
 });

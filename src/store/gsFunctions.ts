@@ -1,7 +1,7 @@
 // Exported functions for gameStore.ts
 
 import {
-resolveEnemyAttacks as resolveEnemyAttacksRule
+    resolveEnemyAttacks as resolveEnemyAttacksRule
 
 } from "../lib/enemyAttackRules";
 
@@ -86,14 +86,6 @@ import {
 import {
     loadArkhamDeck,
 } from "../lib/loadArkhamDeck";
-
-export function readyEnemies(enemies: Enemy[]): Enemy[] {
-    return enemies.map((enemy) =>
-        enemy.exhausted
-            ? { ...enemy, exhausted: false }
-            : enemy,
-    );
-}
 
 export function takeSetAsideEncounterCardByCode(args: {
     setAsideEncounterCards: EncounterCard[];
@@ -407,8 +399,6 @@ export function resolveAttackOfOpportunity(args: {
         logEntries,
     };
 }
-
-
 
 export function resolveEnemyDefeatedTriggers(args: {
     enemyCode: string;
