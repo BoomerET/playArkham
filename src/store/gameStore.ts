@@ -3858,7 +3858,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (turn.phase === "investigation") {
       const { locationAttachments } = get();
-      const currentLocation = findCurrentLocation(locations, investigator.id);
+      const currentLocation =
+        findCurrentLocation(locations, investigator.id) ?? null;
 
       const result = runInvestigationPhaseEnd({
         investigator,
