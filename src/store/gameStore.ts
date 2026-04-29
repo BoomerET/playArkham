@@ -196,6 +196,8 @@ import {
   runEnemyPhase as runEnemyPhaseRule
 } from "../lib/enemyPhaseRules";
 
+
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -2345,7 +2347,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const debugPreset = state.debugPreset;
 
     const selectedDeckId = state.selectedDeckId.trim();
-    //const isArkhamBuildImport = state.importedArkhamBuildResolvedDeck != null;
 
     let loadedDeck: LoadedDeck;
     let deckSource: ResolvedDeckSource;
@@ -3876,26 +3877,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
         investigator: updatedInvestigator,
       });
 
-      get().enemyPhaseAttack();
       get().setPhase("enemy");
       return;
     }
 
     if (turn.phase === "enemy") {
+      get().pushLog("system", "Enemy phase begins.");
+
       get().pushLog("system", "Enemy phase: Hunter enemies move.");
       get().moveHunterEnemies();
 
       get().pushLog("system", "Enemy phase: Enemies attack.");
-      get().enemyPhaseAttack();
+      get().runEnemyPhase();
+
       get().setPhase("upkeep");
       return;
     }
 
     if (turn.phase === "upkeep") {
       const nextRound = turn.round + 1;
-      //const drawnCardName = deck.length > 0 ? deck[0].name : null;
-      //const updatedDeck = deck.length > 0 ? deck.slice(1) : deck;
-      //const updatedHand = deck.length > 0 ? [...hand, deck[0]] : hand;
       const drawResult = drawCards({
         deck,
         count: 1,
