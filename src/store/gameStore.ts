@@ -89,7 +89,7 @@ import {
   shuffle,
   drawOpeningHandWithoutWeaknesses,
   performMulligan,
-  drawCards,
+  //drawCards,
   discardCards,
   drawCardsWithDiscardReshuffle,
 } from "../lib/openingHand";
@@ -116,7 +116,7 @@ import type {
   LocationAttachment,
   PlayerCard,
   SkillTestResult,
-  GameLogItem,
+  //GameLogItem,
   LoadedDeck,
 } from "../types/game";
 
