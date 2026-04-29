@@ -47,6 +47,13 @@ export type ScenarioStatus =
   | "lost"
   | "resigned";
 
+export type SkillTest = {
+  type: SkillType;
+  difficulty: number;
+  baseValue: number;
+  modifier: number;
+};
+
 export type ScenarioCardKind = "agenda" | "act";
 
 export type ScenarioFlagValue = boolean | string | number;
