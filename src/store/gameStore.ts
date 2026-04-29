@@ -204,6 +204,10 @@ import {
   runUpkeep
 } from "../lib/upkeepRules";
 
+import {
+  runMythosPhase
+} from "../lib/mythosPhaseRules";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
