@@ -224,6 +224,10 @@ import {
   evadeEnemy as evadeEnemyRule,
 } from "../lib/enemyEvadeRules.ts";
 
+import {
+  attackEnemy as attackEnemyRule,
+} from "../lib/playerAttackRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5500,6 +5504,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     if (result.logText) {
       get().pushLog("player", result.logText);
+    }
+  },
+  attackEnemy: (enemyId: string) => {
+    const { enemies } = get();
+
+    const result = attackEnemyRule({
+      enemies,
+      enemyId,
+      damage: 1, // base attack for now
+    });
+
+    if (result.status === "notFound") {
+      get().pushLog("system", "Enemy not found.");
+      return;
+    }
+
+    set({
+      enemies: result.enemies,
+    });
+
+    for (const text of result.logTexts) {
+      get().pushLog("player", text);
     }
   },
 }));

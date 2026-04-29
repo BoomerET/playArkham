@@ -58,6 +58,7 @@ export type GameStore = GameState & CampaignStoreActions & {
     setAsideEncounterCards: EncounterCard[];
     discard: PlayerCard[];
     evadeEnemy: (enemyId: string) => void;
+    attackEnemy: (enemyId: string) => void;
     runEnemyPhase: () => void;
     drawPlayerCards: (count: number) => void;
     playPlayerCard: (card: PlayerCard) => void;
