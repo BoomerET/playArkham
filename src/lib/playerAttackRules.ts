@@ -6,12 +6,12 @@ export function attackEnemy(params: {
     damage: number;
 }): {
     enemies: Enemy[];
-    defeatedEnemyIds: string[];
+    defeatedEnemyIds: Enemy[];
     status: "hit" | "notFound";
     logTexts: string[];
 } {
     let found = false;
-    const defeatedEnemyIds: string[] = [];
+    const defeatedEnemyIds: Enemy[] = [];
     const logTexts: string[] = [];
 
     const enemies = params.enemies
@@ -25,7 +25,10 @@ export function attackEnemy(params: {
             const defeated = newDamage >= enemy.health;
 
             if (defeated) {
-                defeatedEnemyIds.push(enemy.id);
+                defeatedEnemies.push({
+                    ...enemy,
+                    damageOnEnemy: newDamage,
+                });
                 logTexts.push(`${enemy.name} is defeated.`);
                 return null; // remove later
             }
@@ -47,12 +50,14 @@ export function attackEnemy(params: {
             defeatedEnemyIds: [],
             status: "notFound",
             logTexts: [],
+            defeatedEnemies: [],
         };
     }
 
     return {
         enemies,
         defeatedEnemyIds,
+        defeatedEnemies,
         status: "hit",
         logTexts,
     };
