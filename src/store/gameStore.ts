@@ -5351,6 +5351,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (effectResult.logText) {
       get().pushLog("player", effectResult.logText);
     }
+
+    if (effectResult.drawCount) {
+      get().drawPlayerCards(effectResult.drawCount);
+    }
   },
   discardFromPlayArea: (card) => {
     const { playArea, discard } = get();

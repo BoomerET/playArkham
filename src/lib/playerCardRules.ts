@@ -7,6 +7,7 @@ export function resolvePlayerCardEffect(params: {
 }): {
     investigator: Investigator;
     logText: string | null;
+    drawCount?: number;
 } {
     const effect = params.effect ?? { kind: "none" };
 
@@ -17,6 +18,14 @@ export function resolvePlayerCardEffect(params: {
                 resources: params.investigator.resources + effect.amount,
             },
             logText: `Gained ${effect.amount} resource${effect.amount === 1 ? "" : "s"}.`,
+        };
+    }
+
+    if (effect.kind === "drawCards") {
+        return {
+            investigator: params.investigator,
+            logText: `Draw ${effect.amount} card${effect.amount === 1 ? "" : "s"}.`,
+            drawCount: effect.amount,
         };
     }
 

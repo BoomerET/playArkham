@@ -57,6 +57,7 @@ export type GameStore = GameState & CampaignStoreActions & {
     pendingChoice: PendingChoice;
     setAsideEncounterCards: EncounterCard[];
     discard: PlayerCard[];
+    drawPlayerCards: (count: number) => void;
     playPlayerCard: (card: PlayerCard) => void;
     discardFromPlayArea: (card: PlayerCard) => void;
     discardPlayerCards: (cards: PlayerCard[]) => void;
