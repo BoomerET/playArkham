@@ -95,4 +95,12 @@ describe("resolveEnemyAttacks", () => {
         expect(result.investigator.horror).toBe(1);
         expect(result.logTexts).toHaveLength(2);
     });
+    it("exhausts enemies after they attack", () => {
+        const result = resolveEnemyAttacks({
+            investigator: investigator(),
+            enemies: [enemy()],
+        });
+
+        expect(result.enemies[0].exhausted).toBe(true);
+    });
 });

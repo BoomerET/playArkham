@@ -30,7 +30,10 @@ export function resolveEnemyAttacks(args: {
         updatedInvestigator = attackResult.investigator;
         logTexts.push(attackResult.logText);
 
-        return enemy;
+        return {
+            ...enemy,
+            exhausted: true,
+        };
     });
 
     return {
