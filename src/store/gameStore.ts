@@ -185,6 +185,10 @@ import {
   resolvePlayerCardEffect,
 } from "../lib/playerCardRules";
 
+import {
+  resolveEnemyAttack,
+} from "../lib/enemyRules";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5376,5 +5380,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     get().pushLog("player", `Discarded ${card.name} from play.`);
+  },
+  enemyAttack: (enemyName: string, damage: number, horror: number) => {
+    const { investigator } = get();
+
+    const result = resolveEnemyAttack({
+      investigator,
+      enemyName,
+      damage,
+      horror,
+    });
+
+    set({
+      investigator: result.investigator,
+    });
+
+    get().pushLog("enemy", result.logText);
   },
 }));
