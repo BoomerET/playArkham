@@ -3828,7 +3828,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       log: [...log, ...attackResolution.logEntries]
     });
   },
-
   advancePhase: () => {
     const {
       turn,
