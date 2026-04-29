@@ -17,9 +17,9 @@ import {
   getChaosTokenModifier,
 } from "../lib/chaosToken";
 
-//import {
-//  readyEnemies,
-//} from "../lib/enemyReadyRules";
+import {
+  runInvestigationPhaseEnd
+} from "../lib/investigationPhaseRules";
 
 import {
   takeSetAsideEncounterCardByCode,
@@ -3857,31 +3857,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "investigation") {
-      const { locationAttachments, investigator, locations } = get();
+      const { locationAttachments } = get();
       const currentLocation = findCurrentLocation(locations, investigator.id);
 
-      let updatedInvestigator = investigator;
-      const fireAttachments = locationAttachments.filter(
-        (attachment) => attachment.name === "Fire!",
-      );
-
-      for (const attachment of fireAttachments) {
-        if (currentLocation && attachment.attachedLocationId === currentLocation.id) {
-          updatedInvestigator = {
-            ...updatedInvestigator,
-            damage: updatedInvestigator.damage + 1,
-          };
-
-          get().pushLog(
-            "scenario",
-            `Fire! at ${currentLocation.name} dealt 1 direct damage at the end of the Investigation phase.`,
-          );
-        }
-      }
+      const result = runInvestigationPhaseEnd({
+        investigator,
+        currentLocation,
+        locationAttachments,
+      });
 
       set({
-        investigator: updatedInvestigator,
+        investigator: result.investigator,
       });
+
+      for (const text of result.logTexts) {
+        get().pushLog("scenario", text);
+      }
 
       get().setPhase(getNextPhase(turn.phase));
       return;
