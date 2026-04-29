@@ -414,7 +414,7 @@ export default function HomeScreen() {
               automatically derived from the selected deck.
             </p>
             <label>
-              Import Arkham.build JSON&nbsp;&nbsp;
+              Import Arkham.build JSON
               <input
                 type="file"
                 accept="application/json,.json"
