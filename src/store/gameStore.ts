@@ -3784,21 +3784,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ),
     ];
 
-    const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyCode: engagement.engagedEnemyIds[0],
-      locationId: currentLocation.id,
-      investigator: updatedInvestigator,
-      locations: updatedLocations,
-      enemies: finalEnemies,
-      campaignState: updatedCampaignState,
-    });
+    let extraLog: ReturnType<typeof createLogEntry>[] = [];
 
-    updatedInvestigator = forcedResolution.investigator;
-    updatedLocations = forcedResolution.locations;
-    finalEnemies = forcedResolution.enemies;
-    updatedCampaignState = forcedResolution.campaignState;
-    const extraLog: ReturnType<typeof createLogEntry>[] = [];
-    extraLog.push(...forcedResolution.logEntries);
+    for (const enemyId of engagement.engagedEnemyIds) {
+      const forcedResolution = resolveEnemyEngagedTriggers({
+        enemyCode: enemyId,
+        locationId: currentLocation.id,
+        investigator: updatedInvestigator,
+        locations: updatedLocations,
+        enemies: finalEnemies,
+        campaignState: updatedCampaignState,
+      });
+
+      updatedInvestigator = forcedResolution.investigator;
+      updatedLocations = forcedResolution.locations;
+      finalEnemies = forcedResolution.enemies;
+      updatedCampaignState = forcedResolution.campaignState;
+
+      extraLog.push(...forcedResolution.logEntries);
+    }
+
+    //updatedInvestigator = forcedResolution.investigator;
+    //updatedLocations = forcedResolution.locations;
+    //finalEnemies = forcedResolution.enemies;
+    //updatedCampaignState = forcedResolution.campaignState;
+    //const extraLog: ReturnType<typeof createLogEntry>[] = [];
+    //extraLog.push(...forcedResolution.logEntries);
 
     set((state) => ({
       investigator: updatedInvestigator,
