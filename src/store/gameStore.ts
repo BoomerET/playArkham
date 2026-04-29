@@ -212,6 +212,10 @@ import {
   runInvestigationPhaseStart
 } from "../lib/investigationPhaseStartRules.ts";
 
+import {
+  buildUpkeepLogTexts
+} from "../lib/upkeepLogRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -3922,40 +3926,52 @@ export const useGameStore = create<GameStore>((set, get) => ({
         : null;
 
       // logging (keep in store)
-      get().pushLog(
-        "player",
-        `${investigator.name} gains 1 resource during upkeep.`,
-      );
+      //get().pushLog(
+      //  "player",
+      //  `${investigator.name} gains 1 resource during upkeep.`,
+      //);
 
-      if (result.drawnCard) {
-        get().pushLog(
-          "player",
-          `Drew card during upkeep: ${result.drawnCard.name}`,
-        );
-      } else {
-        get().pushLog(
-          "system",
-          "Could not draw during upkeep because the deck is empty.",
-        );
+      //if (result.drawnCard) {
+      //  get().pushLog(
+      //    "player",
+      //    `Drew card during upkeep: ${result.drawnCard.name}`,
+      //  );
+      //} else {
+      //  get().pushLog(
+      //    "system",
+      //    "Could not draw during upkeep because the deck is empty.",
+      //  );
+      //}
+
+      //if (result.readyCount > 0) {
+      //  get().pushLog(
+      //    "system",
+      //    result.readyCount === 1
+      //      ? "1 exhausted enemy readied during upkeep."
+      //      : `${result.readyCount} exhausted enemies readied during upkeep.`,
+      //  );
+      //}
+
+      //if (result.reshuffledDiscard) {
+      //  get().pushLog(
+      //    "player",
+      //    "Shuffled discard pile into a new player deck.",
+      //  );
+      //}
+
+      //get().pushLog("system", `Round ${result.nextRound} begins.`);
+
+      const upkeepLogTexts = buildUpkeepLogTexts({
+        investigator,
+        drawnCard: result.drawnCard,
+        readyCount: result.readyCount,
+        nextRound: result.nextRound,
+        reshuffledDiscard: result.reshuffledDiscard,
+      });
+
+      for (const text of upkeepLogTexts) {
+        get().pushLog("system", text);
       }
-
-      if (result.readyCount > 0) {
-        get().pushLog(
-          "system",
-          result.readyCount === 1
-            ? "1 exhausted enemy readied during upkeep."
-            : `${result.readyCount} exhausted enemies readied during upkeep.`,
-        );
-      }
-
-      if (result.reshuffledDiscard) {
-        get().pushLog(
-          "player",
-          "Shuffled discard pile into a new player deck.",
-        );
-      }
-
-      get().pushLog("system", `Round ${result.nextRound} begins.`);
 
       set({
         investigator: result.investigator,
