@@ -208,6 +208,10 @@ import {
   runMythosPhase
 } from "../lib/mythosPhaseRules";
 
+import {
+  runInvestigationPhaseStart
+} from "../lib/investigationPhaseStartRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -3983,10 +3987,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       get().setPhase(getNextPhase(turn.phase));
 
-      get().pushLog(
-        "system",
-        `${investigator.name} has 3 actions this turn.`,
-      );
+      const investigationStart = runInvestigationPhaseStart({
+        investigator,
+      });
+
+      set({
+        turn: {
+          ...get().turn,
+          actionsRemaining: investigationStart.actionsRemaining,
+        },
+      });
+
+      for (const text of investigationStart.logTexts) {
+        get().pushLog("system", text);
+      }
 
       return;
     }
