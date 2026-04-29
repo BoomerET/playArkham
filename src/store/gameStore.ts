@@ -220,6 +220,10 @@ import {
   engageEnemiesAtLocationRule,
 } from "../lib/enemyEngagementRules.ts";
 
+import {
+  evadeEnemy as evadeEnemyRule,
+} from "../lib/enemyEvadeRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5475,6 +5479,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     for (const text of result.logTexts) {
       get().pushLog("enemy", text);
+    }
+  },
+  evadeEnemy: (enemyId: string) => {
+    const { enemies } = get();
+
+    const result = evadeEnemyRule({
+      enemies,
+      enemyId,
+    });
+
+    if (result.status === "notFound") {
+      get().pushLog("system", "Enemy not found.");
+      return;
+    }
+
+    set({
+      enemies: result.enemies,
+    });
+
+    if (result.logText) {
+      get().pushLog("player", result.logText);
     }
   },
 }));
