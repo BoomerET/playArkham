@@ -1,3 +1,46 @@
+import type { ChaosToken } from "../types/game";
+import { drawChaosToken } from "./chaosBagRules";
+
+function getChaosTokenValue(token: ChaosToken | null): number {
+    if (typeof token === "number") {
+        return token;
+    }
+
+    return 0;
+}
+
+export function drawAndResolveSkillTest(params: {
+    baseValue: number;
+    modifier: number;
+    difficulty: number;
+    chaosBag: ChaosToken[];
+    rng?: () => number;
+}): {
+    token: ChaosToken | null;
+    finalValue: number;
+    success: boolean;
+} {
+    const tokenResult = drawChaosToken({
+        chaosBag: params.chaosBag,
+        rng: params.rng,
+    });
+
+    const chaosTokenValue = getChaosTokenValue(tokenResult.token);
+
+    const result = resolveSkillTest({
+        baseValue: params.baseValue,
+        modifier: params.modifier,
+        chaosToken: chaosTokenValue,
+        difficulty: params.difficulty,
+    });
+
+    return {
+        token: tokenResult.token,
+        finalValue: result.finalValue,
+        success: result.success,
+    };
+}
+
 export function resolveSkillTest(params: {
     baseValue: number;
     modifier: number;
