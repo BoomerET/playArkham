@@ -216,6 +216,10 @@ import {
   buildUpkeepLogTexts
 } from "../lib/upkeepLogRules.ts";
 
+import {
+  engageEnemiesAtLocationRule,
+} from "../lib/enemyEngagementRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -3757,26 +3761,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    let didEngage = false;
-
-    const updatedEnemies = enemies.map((enemy) => {
-      if (
-        enemy.locationId === currentLocation.id &&
-        enemy.engagedInvestigatorId === null &&
-        !enemy.exhausted &&
-        !enemyHasAloof(enemy)
-      ) {
-        didEngage = true;
-        return {
-          ...enemy,
-          engagedInvestigatorId: investigator.id,
-        };
-      }
-
-      return enemy;
+    const engagement = engageEnemiesAtLocationRule({
+      enemies,
+      investigatorId: investigator.id,
+      locationId: currentLocation.id,
     });
 
-    if (!didEngage) {
+    const updatedEnemies = engagement.enemies;
+
+    if (engagement.engagedEnemyIds.length === 0) {
       return;
     }
 
@@ -3792,7 +3785,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     ];
 
     const forcedResolution = resolveEnemyEngagedTriggers({
-      enemyCode: updatedEnemies[0].id,
+      enemyCode: engagement.engagedEnemyIds[0],
       locationId: currentLocation.id,
       investigator: updatedInvestigator,
       locations: updatedLocations,
