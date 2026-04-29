@@ -17,9 +17,9 @@ import {
   getChaosTokenModifier,
 } from "../lib/chaosToken";
 
-import {
-  readyEnemies,
-} from "../lib/enemyReadyRules";
+//import {
+//  readyEnemies,
+//} from "../lib/enemyReadyRules";
 
 import {
   takeSetAsideEncounterCardByCode,
@@ -199,6 +199,10 @@ import {
 import {
   getNextPhase
 } from "../lib/phaseRules";
+
+import {
+  runUpkeep
+} from "../lib/upkeepRules";
 
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
@@ -3840,7 +3844,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies,
       selectedEnemyTargetId,
       locations,
-      log,
+      //log,
+      discard,
     } = get();
 
     if (activeSkillTest) {
@@ -3896,65 +3901,74 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "upkeep") {
-      const nextRound = turn.round + 1;
-      const drawResult = drawCards({
+      const result = runUpkeep({
+        investigator,
         deck,
-        count: 1,
+        hand,
+        discard,
+        enemies,
+        round: turn.round,
       });
 
-      const drawnCard = drawResult.drawn[0] ?? null;
-      const updatedDeck = drawResult.deck;
-      const updatedHand = [...hand, ...drawResult.drawn];
-      const updatedEnemies = readyEnemies(enemies);
-      const readyCount = enemies.filter((enemy) => enemy.exhausted).length;
-
       const currentLocation = findCurrentLocation(locations, investigator.id);
+
       const preferredTargetId = currentLocation
         ? getPreferredEnemyTargetId(
-          updatedEnemies,
+          result.enemies,
           currentLocation.id,
           investigator.id,
           selectedEnemyTargetId,
         )
         : null;
 
-      const upkeepLog: GameLogItem[] = [
-        ...log,
-        createLogEntry(
+      // logging (keep in store)
+      get().pushLog(
+        "player",
+        `${investigator.name} gains 1 resource during upkeep.`,
+      );
+
+      if (result.drawnCard) {
+        get().pushLog(
           "player",
-          `${investigator.name} gains 1 resource during upkeep.`,
-        ),
-        drawnCard
-          ? createLogEntry("player", `Drew card during upkeep: ${drawnCard.name}`)
-          : createLogEntry("system", "Could not draw during upkeep because the deck is empty."),
-        ...(readyCount > 0
-          ? [
-            createLogEntry(
-              "system",
-              readyCount === 1
-                ? "1 exhausted enemy readied during upkeep."
-                : `${readyCount} exhausted enemies readied during upkeep.`,
-            ),
-          ]
-          : []),
-        createLogEntry("system", `Round ${nextRound} begins.`),
-      ];
+          `Drew card during upkeep: ${result.drawnCard.name}`,
+        );
+      } else {
+        get().pushLog(
+          "system",
+          "Could not draw during upkeep because the deck is empty.",
+        );
+      }
+
+      if (result.readyCount > 0) {
+        get().pushLog(
+          "system",
+          result.readyCount === 1
+            ? "1 exhausted enemy readied during upkeep."
+            : `${result.readyCount} exhausted enemies readied during upkeep.`,
+        );
+      }
+
+      if (result.reshuffledDiscard) {
+        get().pushLog(
+          "player",
+          "Shuffled discard pile into a new player deck.",
+        );
+      }
+
+      get().pushLog("system", `Round ${result.nextRound} begins.`);
 
       set({
-        investigator: {
-          ...investigator,
-          resources: investigator.resources + 1,
-        },
-        deck: updatedDeck,
-        hand: updatedHand,
-        enemies: updatedEnemies,
+        investigator: result.investigator,
+        deck: result.deck,
+        hand: result.hand,
+        discard: result.discard,
+        enemies: result.enemies,
         selectedEnemyTargetId: preferredTargetId,
         turn: {
           ...turn,
-          round: nextRound,
+          round: result.nextRound,
           actionsRemaining: 3,
         },
-        log: upkeepLog,
       });
 
       get().engageEnemiesAtLocation();
