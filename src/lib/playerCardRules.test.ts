@@ -20,3 +20,23 @@ it("returns draw count for drawCards effect", () => {
     expect(result.drawCount).toBe(2);
     expect(result.logText).toBe("Draw 2 cards.");
 });
+
+it("resolves take damage effect", () => {
+    const result = resolvePlayerCardEffect({
+        investigator: { damage: 1 } as any,
+        effect: { kind: "takeDamage", amount: 2 },
+    });
+
+    expect(result.investigator.damage).toBe(3);
+    expect(result.logText).toBe("Took 2 damage.");
+});
+
+it("resolves take horror effect", () => {
+    const result = resolvePlayerCardEffect({
+        investigator: { horror: 1 } as any,
+        effect: { kind: "takeHorror", amount: 2 },
+    });
+
+    expect(result.investigator.horror).toBe(3);
+    expect(result.logText).toBe("Took 2 horror.");
+});

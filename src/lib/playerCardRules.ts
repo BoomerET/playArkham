@@ -29,6 +29,26 @@ export function resolvePlayerCardEffect(params: {
         };
     }
 
+    if (effect.kind === "takeDamage") {
+        return {
+            investigator: {
+                ...params.investigator,
+                damage: params.investigator.damage + effect.amount,
+            },
+            logText: `Took ${effect.amount} damage.`,
+        };
+    }
+
+    if (effect.kind === "takeHorror") {
+        return {
+            investigator: {
+                ...params.investigator,
+                horror: params.investigator.horror + effect.amount,
+            },
+            logText: `Took ${effect.amount} horror.`,
+        };
+    }
+
     return {
         investigator: params.investigator,
         logText: null,

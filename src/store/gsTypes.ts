@@ -254,4 +254,6 @@ export type ResolvedDeckSelection = {
 export type PlayerCardEffect =
     | { kind: "none" }
     | { kind: "gainResources"; amount: number }
-    | { kind: "drawCards"; amount: number };
+    | { kind: "drawCards"; amount: number }
+    | { kind: "takeDamage"; amount: number }
+    | { kind: "takeHorror"; amount: number };
