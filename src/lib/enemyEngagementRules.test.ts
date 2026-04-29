@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { engageEnemiesAtLocation, engageEnemiesAtLocationRule } from "./enemyEngagementRules";
+import { engageEnemiesAtLocation } from "./enemyEngagementRules";
 import type { Enemy } from "../types/game";
 
 function enemy(overrides: Partial<Enemy> = {}): Enemy {
