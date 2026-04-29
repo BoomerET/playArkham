@@ -192,6 +192,10 @@ import {
   resolveEnemyAttack,
 } from "../lib/enemyRules";
 
+import {
+  runEnemyPhase as runEnemyPhaseRule
+} from "../lib/enemyPhaseRules";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5399,5 +5403,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     get().pushLog("enemy", result.logText);
+  },
+  runEnemyPhase: () => {
+    const { investigator, enemies } = get();
+
+    const result = runEnemyPhaseRule({
+      investigator,
+      enemies,
+    });
+
+    set({
+      investigator: result.investigator,
+      enemies: result.enemies,
+    });
+
+    for (const text of result.logTexts) {
+      get().pushLog("enemy", text);
+    }
   },
 }));
