@@ -3973,10 +3973,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (turn.phase === "mythos") {
-      get().pushLog("system", "Mythos phase begins.");
+      const result = runMythosPhase();
+
+      for (const text of result.logTexts) {
+        get().pushLog("system", text);
+      }
+
       get().resolveMythosPhase();
+
       get().setPhase(getNextPhase(turn.phase));
-      get().pushLog("system", `${investigator.name} has 3 actions this turn.`);
+
+      get().pushLog(
+        "system",
+        `${investigator.name} has 3 actions this turn.`,
+      );
+
       return;
     }
   },
