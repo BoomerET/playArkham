@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveEnemyAttacks } from "./gsFunctions";
+import { resolveEnemyAttacks } from "../lib/enemyAttackRules";
 import type { Enemy, Investigator } from "../types/game";
 
 function investigator(): Investigator {
@@ -48,7 +48,7 @@ describe("resolveEnemyAttacks", () => {
 
         expect(result.investigator.damage).toBe(1);
         expect(result.investigator.horror).toBe(1);
-        expect(result.logEntries).toHaveLength(1);
+        expect(result.logTexts).toHaveLength(1);
     });
 
     it("does not attack with exhausted enemies", () => {
@@ -59,7 +59,7 @@ describe("resolveEnemyAttacks", () => {
 
         expect(result.investigator.damage).toBe(0);
         expect(result.investigator.horror).toBe(0);
-        expect(result.logEntries).toHaveLength(0);
+        expect(result.logTexts).toHaveLength(0);
     });
 
     it("does not attack with unengaged enemies", () => {
@@ -70,6 +70,6 @@ describe("resolveEnemyAttacks", () => {
 
         expect(result.investigator.damage).toBe(0);
         expect(result.investigator.horror).toBe(0);
-        expect(result.logEntries).toHaveLength(0);
+        expect(result.logTexts).toHaveLength(0);
     });
 });

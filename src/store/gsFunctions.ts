@@ -1,6 +1,9 @@
 // Exported functions for gameStore.ts
 
-import { resolveEnemyAttack } from "../lib/enemyRules";
+import {
+resolveEnemyAttacks as resolveEnemyAttacksRule
+
+} from "../lib/enemyAttackRules";
 
 import type {
     Enemy,
@@ -468,34 +471,12 @@ export function resolveEnemyAttacks(args: {
     enemies: Enemy[];
     logEntries: ReturnType<typeof createLogEntry>[];
 } {
-    const { investigator, enemies } = args;
-
-    let updatedInvestigator = investigator;
-    const logEntries: ReturnType<typeof createLogEntry>[] = [];
-
-    const updatedEnemies = enemies.map((enemy) => {
-        const isEngaged = enemy.engagedInvestigatorId === investigator.id;
-
-        if (!isEngaged) return enemy;
-        if (enemy.exhausted) return enemy;
-
-        const attackResult = resolveEnemyAttack({
-            investigator: updatedInvestigator,
-            enemyName: enemy.name,
-            damage: enemy.damage,
-            horror: enemy.horror,
-        });
-
-        updatedInvestigator = attackResult.investigator;
-        logEntries.push(createLogEntry("enemy", attackResult.logText));
-
-        return enemy;
-    });
+    const result = resolveEnemyAttacksRule(args);
 
     return {
-        investigator: updatedInvestigator,
-        enemies: updatedEnemies,
-        logEntries,
+        investigator: result.investigator,
+        enemies: result.enemies,
+        logEntries: result.logTexts.map((text) => createLogEntry("enemy", text)),
     };
 }
 
