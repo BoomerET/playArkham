@@ -243,6 +243,7 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  enemyDiscard: [],
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
     set({
@@ -2749,6 +2750,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
+      enemyDiscard: [],
       setAsideEncounterCards: debugSetAsideEncounterCards,
       act: debugAct,
       agenda: debugAgenda,
@@ -5507,12 +5509,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   attackEnemy: (enemyId: string) => {
-    const { enemies } = get();
+    const { enemies, enemyDiscard } = get();
 
     const result = attackEnemyRule({
       enemies,
       enemyId,
-      damage: 1, // base attack for now
+      damage: 1,
     });
 
     if (result.status === "notFound") {
@@ -5522,10 +5524,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       enemies: result.enemies,
+      enemyDiscard: [...enemyDiscard, ...result.defeatedEnemies],
     });
 
     for (const text of result.logTexts) {
       get().pushLog("player", text);
+    }
+
+    for (const enemy of result.defeatedEnemies) {
+      get().pushLog("enemy", `${enemy.name} was placed in the enemy discard pile.`);
     }
   },
 }));
