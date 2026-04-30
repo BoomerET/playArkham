@@ -1,9 +1,13 @@
 import type { ChaosToken } from "../types/game";
 import { drawChaosToken } from "./chaosBagRules";
 
-function getChaosTokenValue(token: ChaosToken | null): number {
+export function getChaosTokenValue(token: ChaosToken | null): number {
     if (typeof token === "number") {
         return token;
+    }
+
+    if (token === "autoFail") {
+        return Number.NEGATIVE_INFINITY;
     }
 
     return 0;
@@ -54,6 +58,9 @@ export function resolveSkillTest(params: {
 
     return {
         finalValue,
-        success: finalValue >= params.difficulty,
+        success:
+            params.chaosToken === Number.NEGATIVE_INFINITY
+                ? false
+                : finalValue >= params.difficulty,
     };
 }

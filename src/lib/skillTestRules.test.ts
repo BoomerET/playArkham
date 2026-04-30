@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveSkillTest, drawAndResolveSkillTest } from "./skillTestRules";
+import { resolveSkillTest, drawAndResolveSkillTest, getChaosTokenValue } from "./skillTestRules";
 
 describe("resolveSkillTest", () => {
     it("succeeds when value meets difficulty", () => {
@@ -48,5 +48,20 @@ describe("resolveSkillTest", () => {
         expect(result.token).toBe(null);
         expect(result.finalValue).toBe(3);
         expect(result.success).toBe(true);
+    });
+    it("autoFail token always fails", () => {
+        const result = drawAndResolveSkillTest({
+            baseValue: 99,
+            modifier: 0,
+            difficulty: 1,
+            chaosBag: ["autoFail"],
+            rng: () => 0,
+        });
+
+        expect(result.success).toBe(false);
+    });
+    it("treats special non-autofail tokens as 0 for now", () => {
+        expect(getChaosTokenValue("skull")).toBe(0);
+        expect(getChaosTokenValue("elderSign")).toBe(0);
     });
 });
