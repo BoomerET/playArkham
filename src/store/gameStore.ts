@@ -228,6 +228,10 @@ import {
   attackEnemy as attackEnemyRule,
 } from "../lib/playerAttackRules.ts";
 
+import {
+  drawAndResolveSkillTest,
+} from "../lib/skillTestRules.ts";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -243,6 +247,7 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  chaosBag: [0, -1, -2, "autoFail"],
   enemyDiscard: [],
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
@@ -2747,6 +2752,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     set({
+      chaosBag: [0, -1, -2, "autoFail"],
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
@@ -5488,17 +5494,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   evadeEnemy: (enemyId: string) => {
-    const { enemies } = get();
+    const { enemies, investigator, chaosBag } = get();
+
+    const enemy = enemies.find((e) => e.id === enemyId);
+
+    if (!enemy) {
+      get().pushLog("system", "Enemy not found.");
+      return;
+    }
+
+    const test = drawAndResolveSkillTest({
+      baseValue: investigator.agility,
+      modifier: 0,
+      difficulty: enemy.evade,
+      chaosBag,
+    });
+
+    get().pushLog(
+      "system",
+      `Evade test: ${test.finalValue} vs ${enemy.evade}`,
+    );
+
+    if (!test.success) {
+      get().pushLog("player", "Evade failed.");
+      return;
+    }
 
     const result = evadeEnemyRule({
       enemies,
       enemyId,
     });
-
-    if (result.status === "notFound") {
-      get().pushLog("system", "Enemy not found.");
-      return;
-    }
 
     set({
       enemies: result.enemies,
@@ -5509,7 +5534,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   attackEnemy: (enemyId: string) => {
-    const { enemies, enemyDiscard } = get();
+    const { enemies, investigator, chaosBag } = get();
+
+    const enemy = enemies.find((e) => e.id === enemyId);
+
+    if (!enemy) {
+      get().pushLog("system", "Enemy not found.");
+      return;
+    }
+
+    const test = drawAndResolveSkillTest({
+      baseValue: investigator.combat,
+      modifier: 0,
+      difficulty: enemy.fight,
+      chaosBag,
+    });
+
+    get().pushLog(
+      "system",
+      `Combat test: ${test.finalValue} vs ${enemy.fight}`,
+    );
+
+    if (!test.success) {
+      get().pushLog("player", "Attack failed.");
+      return;
+    }
 
     const result = attackEnemyRule({
       enemies,
@@ -5517,22 +5566,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       damage: 1,
     });
 
-    if (result.status === "notFound") {
-      get().pushLog("system", "Enemy not found.");
-      return;
-    }
-
     set({
       enemies: result.enemies,
-      enemyDiscard: [...enemyDiscard, ...result.defeatedEnemies],
+      enemyDiscard: [...get().enemyDiscard, ...result.defeatedEnemies],
     });
 
     for (const text of result.logTexts) {
       get().pushLog("player", text);
-    }
-
-    for (const enemy of result.defeatedEnemies) {
-      get().pushLog("enemy", `${enemy.name} was placed in the enemy discard pile.`);
     }
   },
 }));
