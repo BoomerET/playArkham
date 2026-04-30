@@ -247,7 +247,7 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  chaosBag: [0, -1, -2, "autoFail"],
+  //chaosBag: [0, -1, -2, "autoFail"],
   enemyDiscard: [],
   importedArkhamBuildDeckJson: null,
   setImportedArkhamBuildDeckJson: (deck) => {
@@ -2752,7 +2752,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     set({
-      chaosBag: [0, -1, -2, "autoFail"],
+      //chaosBag: [0, -1, -2, "autoFail"],
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
