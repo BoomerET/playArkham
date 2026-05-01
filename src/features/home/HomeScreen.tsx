@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
-import type { Investigator } from "../../types/game";
+import type { Investigator, LoadedDeck } from "../../types/game";
+import {
+  getDeckSourceFromInput,
+  loadArkhamBuildDeckFromShareCode,
+  loadArkhamDeck,
+} from "../../lib/loadArkhamDeck";
 import "./homeScreen.css";
 
 
@@ -98,6 +103,18 @@ function useModifierKey(key: "Alt" | "Shift") {
   return active;
 }
 
+type DeckSummary = {
+  sourceLabel: string;
+  deckName: string | null;
+  investigatorName: string | null;
+  investigatorCode: string | null;
+  cardCount: number;
+  unsupportedCodes: string[];
+  randomWeaknesses: string[];
+  validationWarnings: string[];
+  validationErrors: string[];
+};
+
 type ArkhamDeckSummary = {
   investigator_code?: string;
   investigator_name?: string;
@@ -123,22 +140,7 @@ export default function HomeScreen() {
     (state) => state.setSelectedInvestigator,
   );
 
-  const importedArkhamBuildResolvedDeck = useGameStore(
-    (state) => state.importedArkhamBuildResolvedDeck,
-  );
-
-  const importedDeckSummary = importedArkhamBuildResolvedDeck
-    ? {
-      deckName: importedArkhamBuildResolvedDeck.deckName,
-      investigatorName: importedArkhamBuildResolvedDeck.investigatorName,
-      investigatorCode: importedArkhamBuildResolvedDeck.investigatorCode,
-      cardCount: importedArkhamBuildResolvedDeck.cards.length,
-      unsupportedCodes: importedArkhamBuildResolvedDeck.unsupportedCodes,
-      randomWeaknesses: importedArkhamBuildResolvedDeck.randomWeaknesses,
-      validationWarnings: importedArkhamBuildResolvedDeck.validationWarnings,
-      validationErrors: importedArkhamBuildResolvedDeck.validationErrors,
-    }
-    : null;
+  const [deckSummary, setDeckSummary] = useState<DeckSummary | null>(null);
 
   const availableScenarios = useGameStore((state) => state.availableScenarios);
   const selectedScenarioId = useGameStore((state) => state.selectedScenarioId);
@@ -197,42 +199,49 @@ export default function HomeScreen() {
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
 
-  const setImportedArkhamBuildDeckJson = useGameStore(
-    (state) => state.setImportedArkhamBuildDeckJson,
-  );
-
   useEffect(() => {
     if (!trimmedDeckCode) {
       setDeckLookupState("idle");
-      setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
+      setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
       setDetectedDeckName(null);
+      setDeckSummary(null);
       return;
     }
 
     let cancelled = false;
 
     const loadDeckSummary = async () => {
+      const deckSource = getDeckSourceFromInput(trimmedDeckCode);
+
+      if (!deckSource) {
+        setDeckLookupState("idle");
+        setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
+        setDetectedDeckName(null);
+        setDeckSummary(null);
+        return;
+      }
+
       setDeckLookupState("loading");
-      setDeckLookupMessage("Looking up ArkhamDB deck...");
+      setDeckLookupMessage(
+        deckSource === "arkhamDb"
+          ? "Looking up ArkhamDB deck..."
+          : "Looking up Arkham.build deck...",
+      );
       setDetectedDeckName(null);
+      setDeckSummary(null);
 
       try {
-        const response = await fetch(
-          `https://arkhamdb.com/api/public/deck/${trimmedDeckCode}.json`,
-        );
-
-        if (!response.ok) {
-          throw new Error(`Could not load ArkhamDB deck ${trimmedDeckCode}.`);
-        }
-
-        const data = (await response.json()) as ArkhamDeckSummary;
+        const loadedDeck: LoadedDeck =
+          deckSource === "arkhamDb"
+            ? await loadArkhamDeck(trimmedDeckCode)
+            : await loadArkhamBuildDeckFromShareCode(trimmedDeckCode);
 
         if (cancelled) {
           return;
         }
 
-        const investigatorCode = data.investigator_code?.trim() ?? "";
-        const deckName = data.name?.trim() ?? null;
+        const investigatorCode = loadedDeck.investigatorCode ?? "";
+        const deckName = loadedDeck.deckName;
 
         setDetectedDeckName(deckName);
 
@@ -255,15 +264,29 @@ export default function HomeScreen() {
               ? `Deck investigator code "${investigatorCode}" is not supported by this app yet.`
               : "This deck's investigator could not be identified.",
           );
+          setDeckSummary(null);
           return;
         }
 
         setSelectedInvestigator(matchingInvestigator.id);
+
+        setDeckSummary({
+          sourceLabel: deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build",
+          deckName,
+          investigatorName: loadedDeck.investigatorName,
+          investigatorCode: loadedDeck.investigatorCode,
+          cardCount: loadedDeck.cards.length,
+          unsupportedCodes: loadedDeck.unsupportedCodes,
+          randomWeaknesses: loadedDeck.randomWeaknesses,
+          validationWarnings: loadedDeck.validationWarnings,
+          validationErrors: loadedDeck.validationErrors,
+        });
+
         setDeckLookupState("ready");
         setDeckLookupMessage(
           deckName
-            ? `Using deck "${deckName}" with investigator ${matchingInvestigator.name}.`
-            : `Using ArkhamDB deck with investigator ${matchingInvestigator.name}.`,
+            ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
+            : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
         );
       } catch (error) {
         console.error(error);
@@ -272,8 +295,15 @@ export default function HomeScreen() {
           return;
         }
 
+        const deckSource = getDeckSourceFromInput(trimmedDeckCode);
+
         setDeckLookupState("error");
-        setDeckLookupMessage(`Could not load ArkhamDB deck ${trimmedDeckCode}.`);
+        setDeckLookupMessage(
+          deckSource === "arkhamBuild"
+            ? `Could not load Arkham.build deck ${trimmedDeckCode}.`
+            : `Could not load ArkhamDB deck ${trimmedDeckCode}.`,
+        );
+        setDeckSummary(null);
       }
     };
 
@@ -346,10 +376,8 @@ export default function HomeScreen() {
 
   const canStartGame =
     Boolean(selectedInvestigator) &&
-    (
-      (trimmedDeckCode.length > 0 && deckLookupState === "ready") ||
-      importedArkhamBuildResolvedDeck != null
-    );
+    trimmedDeckCode.length > 0 &&
+    deckLookupState === "ready";
 
   const selectedInvestigatorImageUrl = selectedInvestigator
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
@@ -405,34 +433,35 @@ export default function HomeScreen() {
               placeholder="ArkhamDB ID, e.g. 5971619, or Arkham.build code, e.g. Sts69Sv8V8mIkZv"
               autoComplete="off"
             />
-            {importedDeckSummary ? (
+            {deckSummary ? (
               <div className="home-screen__deck-meta">
                 <div>
-                  Imported Arkham.build deck:{" "}
-                  <strong>{importedDeckSummary.deckName ?? "Unnamed Deck"}</strong>
+                  {deckSummary.sourceLabel} deck: {" "}
+                  <strong>{deckSummary.deckName ?? "Unnamed Deck"}</strong>
                 </div>
                 <div>
                   Investigator:{" "}
                   <strong>
-                    {importedDeckSummary.investigatorName ??
-                      importedDeckSummary.investigatorCode ??
+                    {deckSummary.investigatorName ??
+                      deckSummary.investigatorCode ??
                       "Unknown"}
                   </strong>
                 </div>
-                <div>Cards listed: {importedDeckSummary.cardCount}</div>
+                <div>Cards listed: {deckSummary.cardCount}</div>
 
                 <button
                   type="button"
                   className="secondary-button"
                   onClick={() => {
-                    setImportedArkhamBuildDeckJson(null);
+                    setSelectedDeckCode("");
+                    setDeckSummary(null);
                     setDetectedDeckName(null);
                     setDeckLookupState("idle");
-                    setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
+                    setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
                     setSelectedInvestigator("");
                   }}
                 >
-                  Clear Imported Deck
+                  Clear Deck
                 </button>
               </div>
             ) : null}
@@ -447,15 +476,15 @@ export default function HomeScreen() {
                 </div>
               )}
 
-              {importedDeckSummary && (
-                importedDeckSummary.unsupportedCodes.length > 0 ? (
+              {deckSummary && (
+                deckSummary.unsupportedCodes.length > 0 ? (
                   <div className="home-screen__deck-warning">
                     Unsupported card code(s):{" "}
-                    <strong>{importedDeckSummary.unsupportedCodes.join(", ")}</strong>
-                    {importedDeckSummary.randomWeaknesses.length > 0 ? (
+                    <strong>{deckSummary.unsupportedCodes.join(", ")}</strong>
+                    {deckSummary.randomWeaknesses.length > 0 ? (
                       <div className="home-screen__deck-meta">
                         Random weakness assigned:{" "}
-                        <strong>{importedDeckSummary.randomWeaknesses.join(", ")}</strong>
+                        <strong>{deckSummary.randomWeaknesses.join(", ")}</strong>
                       </div>
                     ) : null}
 
@@ -464,7 +493,7 @@ export default function HomeScreen() {
                       className="secondary-button"
                       onClick={() =>
                         void copyTextToClipboard(
-                          importedDeckSummary.unsupportedCodes.join(", "),
+                          deckSummary.unsupportedCodes.join(", "),
                         )
                       }
                     >
