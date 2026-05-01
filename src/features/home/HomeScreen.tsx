@@ -4,6 +4,7 @@ import ScenarioDebugPanel from "./ScenarioDebugPanel";
 import type { Investigator } from "../../types/game";
 import "./homeScreen.css";
 
+
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
   {
@@ -152,6 +153,14 @@ export default function HomeScreen() {
   const selectedDeckId = useGameStore((state) => state.selectedDeckId);
   const setSelectedDeckId = useGameStore((state) => state.setSelectedDeckId);
   const startGame = useGameStore((state) => state.startGame);
+
+  const selectedArkhamBuildShareCode = useGameStore(
+    (state) => state.selectedArkhamBuildShareCode,
+  );
+
+  const setSelectedArkhamBuildShareCode = useGameStore(
+    (state) => state.setSelectedArkhamBuildShareCode,
+  );
 
   const [deckLookupState, setDeckLookupState] = useState<
     "idle" | "loading" | "ready" | "error"
@@ -407,6 +416,21 @@ export default function HomeScreen() {
               placeholder="Required, e.g. 5841936"
               autoComplete="off"
               inputMode="numeric"
+            />
+
+            <label htmlFor="arkham-build-share-code">
+              Arkham.build Share Code
+            </label>
+
+            <input
+              id="arkham-build-share-code"
+              type="text"
+              value={selectedArkhamBuildShareCode}
+              onChange={(event) => {
+                setSelectedArkhamBuildShareCode(event.target.value);
+                setSelectedInvestigator("");
+              }}
+              placeholder="e.g. Sts69Sv8V8mIkZv"
             />
 
             <p className="home-screen__help">

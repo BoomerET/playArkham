@@ -148,6 +148,30 @@ export function validateDeckSlots(
   };
 }
 
+export async function loadArkhamBuildDeckFromShareCode(
+  shareCode: string,
+): Promise<LoadedDeck> {
+  const trimmedShareCode = shareCode.trim();
+
+  if (!trimmedShareCode) {
+    throw new Error("Arkham.build share code is empty.");
+  }
+
+  const response = await fetch(
+    `https://api.arkham.build/v1/public/share_history/${encodeURIComponent(
+      trimmedShareCode,
+    )}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to load Arkham.build deck ${trimmedShareCode}.`);
+  }
+
+  const data = (await response.json()) as ArkhamBuildDeckJson;
+
+  return loadArkhamBuildDeckFromJson(data);
+}
+
 export function chooseRandomWeakness(
   weaknessPool: PlayerCard[],
   usedWeaknessCodes: Set<string>,

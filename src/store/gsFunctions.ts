@@ -5,6 +5,10 @@ import {
 
 } from "../lib/enemyAttackRules";
 
+import {
+    loadArkhamBuildDeckFromShareCode,
+} from "../lib/loadArkhamDeck";
+
 import type {
     Enemy,
     EncounterCard,
@@ -2037,6 +2041,7 @@ export function findInvestigatorForDeck(
 export async function resolveSelectedDeck(
     state: GameStore,
 ): Promise<ResolvedDeckSelection> {
+    // 1. Already imported Arkham.build JSON
     if (state.importedArkhamBuildResolvedDeck) {
         return {
             loadedDeck: state.importedArkhamBuildResolvedDeck,
@@ -2044,6 +2049,17 @@ export async function resolveSelectedDeck(
         };
     }
 
+    // 2. Arkham.build share code (NEW)
+    const shareCode = state.selectedArkhamBuildShareCode?.trim();
+
+    if (shareCode) {
+        return {
+            loadedDeck: await loadArkhamBuildDeckFromShareCode(shareCode),
+            source: "arkhamBuild",
+        };
+    }
+
+    // 3. ArkhamDB deck ID
     const selectedDeckId = state.selectedDeckId.trim();
 
     if (!selectedDeckId) {

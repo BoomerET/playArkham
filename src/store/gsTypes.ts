@@ -59,6 +59,8 @@ export type GameStore = GameState & CampaignStoreActions & {
     discard: PlayerCard[];
     enemyDiscard: Enemy[];
     chaosBag: ChaosToken[];
+    selectedArkhamBuildShareCode: string;
+    setSelectedArkhamBuildShareCode: (code: string) => void;
     evadeEnemy: (enemyId: string) => void;
     attackEnemy: (enemyId: string) => void;
     runEnemyPhase: () => void;
