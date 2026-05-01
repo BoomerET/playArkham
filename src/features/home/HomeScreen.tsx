@@ -115,12 +115,6 @@ type DeckSummary = {
   validationErrors: string[];
 };
 
-//type ArkhamDeckSummary = {
-//  investigator_code?: string;
-//  investigator_name?: string;
-//  name?: string;
-//};
-
 type PreviewInvestigator = {
   id: string;
   name: string;
@@ -283,11 +277,11 @@ export default function HomeScreen() {
         });
 
         setDeckLookupState("ready");
-        setDeckLookupMessage(
-          deckName
-            ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
-            : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
-        );
+        //setDeckLookupMessage(
+        //  deckName
+        //    ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
+        //    : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
+        //);
       } catch (error) {
         console.error(error);
 
