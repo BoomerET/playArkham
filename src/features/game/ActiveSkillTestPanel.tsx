@@ -6,6 +6,7 @@ import {
 } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
+import { countMatchingIcons } from "../../lib/skillTestHelpers";
 
 const skillMeta: Record<
   SkillIconType,
@@ -64,17 +65,14 @@ export default function ActiveSkillTestPanel() {
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
 
   const committableCards = useMemo(() => {
-    if (!activeSkill) {
-      return hand;
+    if (!activeSkillTest) {
+      return [];
     }
 
-    return hand.filter((card) => {
-      const cardIcons = formatSkillList(card.icons);
-      return (
-        cardIcons.includes(activeSkill) || cardIcons.includes("wild")
-      );
-    });
-  }, [hand, activeSkill]);
+    return hand.filter(
+      (card) => countMatchingIcons(card, activeSkillTest.skill) > 0,
+    );
+  }, [hand, activeSkillTest]);
 
   const committedBonus = useMemo(() => {
     if (!activeSkillTest) {
@@ -301,12 +299,7 @@ export default function ActiveSkillTestPanel() {
                         <span>Matches {skillLabel}</span>
                         <strong>
                           +
-                          {
-                            cardIcons.filter(
-                              (icon) =>
-                                icon === activeSkill || icon === "wild",
-                            ).length
-                          }
+                          {countMatchingIcons(card, activeSkillTest.skill)}
                         </strong>
                       </div>
                     )}
