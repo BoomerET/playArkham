@@ -216,11 +216,11 @@ export default function HomeScreen() {
       }
 
       setDeckLookupState("loading");
-      //setDeckLookupMessage(
-      //  deckSource === "arkhamDb"
-      //    ? "Looking up ArkhamDB deck..."
-      //    : "Looking up Arkham.build deck...",
-      //);
+      setDeckLookupMessage(
+        deckSource === "arkhamDb"
+          ? "Looking up ArkhamDB deck..."
+          : "Looking up Arkham.build deck...",
+      );
       setDetectedDeckName(null);
       setDeckSummary(null);
 
@@ -277,11 +277,11 @@ export default function HomeScreen() {
         });
 
         setDeckLookupState("ready");
-        //setDeckLookupMessage(
-        //  deckName
-        //    ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
-        //    : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
-        //);
+        setDeckLookupMessage(
+          deckName
+            ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
+            : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
+        );
       } catch (error) {
         console.error(error);
 
