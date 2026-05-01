@@ -1,5 +1,4 @@
-import type
-{
+import type {
   PlayerCard,
   LoadedDeck,
   DeckMetadata,
@@ -8,7 +7,6 @@ import type
 } from "../types/game";
 
 import { playerDeck } from "../data/playerDeck";
-
 import seedrandom from "seedrandom";
 
 type ArkhamDeckResponse = {
@@ -17,17 +15,33 @@ type ArkhamDeckResponse = {
   slots?: Record<string, number>;
 };
 
-export type BuildDeckCardsResult = {
-  cards: PlayerCard[];
-  metadata: DeckBuildMetadata;
-};
-
 export type ArkhamBuildDeckJson = {
   investigator_code?: string;
   investigator_name?: string;
   name?: string;
   slots?: Record<string, number>;
   validationWarnings?: string[];
+};
+
+type ArkhamBuildShareResponse = {
+  share_id: string;
+  data: ArkhamBuildDeckJson;
+  history?: unknown[];
+};
+
+export type BuildDeckCardsResult = {
+  cards: PlayerCard[];
+  metadata: DeckBuildMetadata;
+};
+
+export function getDeckSourceFromInput(
+  value: string,
+): "arkhamDb" | "arkhamBuild" | null {
+  const trimmed = value.trim();
+
+  if (!trimmed) return null;
+
+  return /^\d+$/.test(trimmed) ? "arkhamDb" : "arkhamBuild";
 }
 
 function getBasicWeaknessPool(): PlayerCard[] {
@@ -40,18 +54,6 @@ function generateId(): string {
   }
 
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-
-export function getDeckSourceFromInput(value: string): "arkhamDb" | "arkhamBuild" | null {
-  const trimmed = value.trim();
-
-  if (!trimmed) return null;
-
-  if (/^\d+$/.test(trimmed)) {
-    return "arkhamDb";
-  }
-
-  return "arkhamBuild";
 }
 
 function cloneCard(card: PlayerCard): PlayerCard {
@@ -69,13 +71,18 @@ function getDeckLimit(card: PlayerCard): number {
   return card.deckLimit ?? 2;
 }
 
+function isCardWeakness(card: PlayerCard): boolean {
+  return card.isWeakness === true;
+}
+
 export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
-  const rng = seedrandom(deckId);
   const trimmedDeckId = deckId.trim();
 
   if (!trimmedDeckId) {
     throw new Error("Deck ID is empty.");
   }
+
+  const rng = seedrandom(trimmedDeckId);
 
   const response = await fetch(
     `https://arkhamdb.com/api/public/deck/${trimmedDeckId}.json`,
@@ -106,14 +113,45 @@ export async function loadArkhamDeck(deckId: string): Promise<LoadedDeck> {
   };
 }
 
+export async function loadArkhamBuildDeckFromShareCode(
+  shareCode: string,
+): Promise<LoadedDeck> {
+  const trimmedShareCode = shareCode.trim();
+
+  if (!trimmedShareCode) {
+    throw new Error("Arkham.build share code is empty.");
+  }
+
+  const rng = seedrandom(trimmedShareCode);
+
+  const response = await fetch(
+    `https://api.arkham.build/v1/public/share_history/${encodeURIComponent(
+      trimmedShareCode,
+    )}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to load Arkham.build deck ${trimmedShareCode}.`);
+  }
+
+  const payload = (await response.json()) as ArkhamBuildShareResponse;
+
+  if (!payload.data?.slots) {
+    throw new Error("Arkham.build share response did not include deck slots.");
+  }
+
+  return loadArkhamBuildDeckFromJson(payload.data, rng);
+}
+
 export function loadArkhamBuildDeckFromJson(
   deckJson: ArkhamBuildDeckJson,
+  rng: () => number = Math.random,
 ): LoadedDeck {
   if (!deckJson.slots) {
     throw new Error("Arkham.build deck JSON did not include slots.");
   }
 
-  const buildResult = buildDeckCardsFromSlots(deckJson.slots);
+  const buildResult = buildDeckCardsFromSlots(deckJson.slots, rng);
 
   const metadata: DeckMetadata = {
     investigatorCode: deckJson.investigator_code?.trim() ?? null,
@@ -158,34 +196,6 @@ export function validateDeckSlots(
     validationWarnings,
     validationErrors,
   };
-}
-
-export async function loadArkhamBuildDeckFromShareCode(
-  shareCode: string,
-): Promise<LoadedDeck> {
-  const trimmedShareCode = shareCode.trim();
-
-  if (!trimmedShareCode) {
-    throw new Error("Arkham.build share code is empty.");
-  }
-
-  const response = await fetch(
-    `https://api.arkham.build/v1/public/share_history/${encodeURIComponent(
-      trimmedShareCode,
-    )}`,
-  );
-
-  if (!response.ok) {
-    throw new Error(`Failed to load Arkham.build deck ${trimmedShareCode}.`);
-  }
-
-  const payload = (await response.json()) as {
-    data: ArkhamBuildDeckJson;
-    valid: boolean;
-    share_code: string;
-  };
-
-  return loadArkhamBuildDeckFromJson(payload.data);
 }
 
 export function chooseRandomWeakness(
@@ -299,10 +309,6 @@ export function resolveDeckSlotCard(params: {
   });
 }
 
-function isCardWeakness(card: PlayerCard): boolean {
-  return card.isWeakness === true;
-}
-
 export function buildDeckCardsFromSlots(
   slots: Record<string, number>,
   rng: () => number = Math.random,
@@ -313,9 +319,6 @@ export function buildDeckCardsFromSlots(
   const validationMetadata = validateDeckSlots(slots);
 
   const weaknessPool = getBasicWeaknessPool();
-  if (weaknessPool.some((card) => !isCardWeakness(card))) {
-    console.warn("Weakness pool contains non-weakness cards.");
-  }
   const usedWeaknessCodes = new Set<string>();
 
   for (const [code, count] of Object.entries(slots)) {
