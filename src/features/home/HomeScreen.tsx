@@ -115,11 +115,11 @@ type DeckSummary = {
   validationErrors: string[];
 };
 
-type ArkhamDeckSummary = {
-  investigator_code?: string;
-  investigator_name?: string;
-  name?: string;
-};
+//type ArkhamDeckSummary = {
+//  investigator_code?: string;
+//  investigator_name?: string;
+//  name?: string;
+//};
 
 type PreviewInvestigator = {
   id: string;
