@@ -397,100 +397,22 @@ export default function HomeScreen() {
           <h2 className="section-title">Deck</h2>
 
           <div className="home-screen__field">
-            <label htmlFor="arkhamdb-deck-id" className="home-screen__label">
-              ArkhamDB Deck ID
+            <label htmlFor="deck-code" className="home-screen__label">
+              Deck Code
             </label>
 
             <input
-              id="arkhamdb-deck-id"
+              id="deck-code"
               type="text"
               className="home-screen__input"
-              value={selectedDeckId}
-
+              value={selectedDeckCode}
               onChange={(event) => {
-                setImportedArkhamBuildDeckJson(null);
-                setSelectedDeckId(event.target.value);
+                setSelectedDeckCode(event.target.value);
                 setSelectedInvestigator("");
               }}
-
-              placeholder="Required, e.g. 5841936"
+              placeholder="ArkhamDB ID, e.g. 5971619, or Arkham.build code, e.g. Sts69Sv8V8mIkZv"
               autoComplete="off"
-              inputMode="numeric"
             />
-
-            <label htmlFor="arkham-build-share-code">
-              Arkham.build Share Code
-            </label>
-
-            <input
-              id="arkham-build-share-code"
-              type="text"
-              value={selectedArkhamBuildShareCode}
-              onChange={(event) => {
-                setSelectedArkhamBuildShareCode(event.target.value);
-                setSelectedInvestigator("");
-              }}
-              placeholder="e.g. Sts69Sv8V8mIkZv"
-            />
-
-            <p className="home-screen__help">
-              This app requires an ArkhamDB deck. Investigator selection is
-              automatically derived from the selected deck.
-            </p>
-            <label>
-              Import Arkham.build JSON
-              <input
-                type="file"
-                accept="application/json,.json"
-                onChange={async (event) => {
-                  const file = event.target.files?.[0];
-
-                  if (!file) {
-                    return;
-                  }
-
-                  const text = await file.text();
-                  const parsed = JSON.parse(text);
-
-                  setImportedArkhamBuildDeckJson(parsed);
-
-                  const resolvedDeck = useGameStore.getState().importedArkhamBuildResolvedDeck;
-
-                  if (!resolvedDeck) {
-                    throw new Error("Imported deck did not resolve.");
-                  }
-
-                  setSelectedInvestigator("");
-
-                  const investigatorCode = parsed.investigator_code?.trim() ?? "";
-                  const matchingInvestigator = availableInvestigators.find((item) => {
-                    const itemWithOptionalCode = item as typeof item & { code?: string };
-
-                    return itemWithOptionalCode.code === investigatorCode;
-                  });
-
-                  if (matchingInvestigator) {
-                    setSelectedInvestigator(matchingInvestigator.id);
-                    setDetectedDeckName(parsed.name?.trim() ?? null);
-                    setDeckLookupState("ready");
-                    setDeckLookupMessage(
-                      parsed.name
-                        ? `Using Arkham.build deck "${parsed.name}" with investigator ${matchingInvestigator.name}.`
-                        : `Using Arkham.build import with investigator ${matchingInvestigator.name}.`,
-                    );
-                  } else {
-                    setDeckLookupState("error");
-                    setSelectedInvestigator("");
-                    setDeckLookupMessage(
-                      investigatorCode
-                        ? `Arkham.build investigator code "${investigatorCode}" is not supported by this app yet.`
-                        : "The imported Arkham.build deck did not include an investigator code.",
-                    );
-                  }
-
-                }}
-              />
-            </label>
             {importedDeckSummary ? (
               <div className="home-screen__deck-meta">
                 <div>

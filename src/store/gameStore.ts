@@ -248,6 +248,17 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
   //chaosBag: [0, -1, -2, "autoFail"],
+  selectedDeckCode: initialSelectedDeckId,
+
+  setSelectedDeckCode: (code) => {
+    set({
+      selectedDeckCode: code,
+      selectedDeckId: /^\d+$/.test(code.trim()) ? code : "",
+      selectedArkhamBuildShareCode: /^\d+$/.test(code.trim()) ? "" : code,
+      importedArkhamBuildDeckJson: null,
+      importedArkhamBuildResolvedDeck: null,
+    });
+  },
   selectedArkhamBuildShareCode: "",
   setSelectedArkhamBuildShareCode: (code) => {
     set({

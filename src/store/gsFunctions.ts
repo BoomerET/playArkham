@@ -2036,39 +2036,25 @@ export function findInvestigatorForDeck(
     );
 }
 
-
-
 export async function resolveSelectedDeck(
     state: GameStore,
 ): Promise<ResolvedDeckSelection> {
-    // 1. Already imported Arkham.build JSON
-    if (state.importedArkhamBuildResolvedDeck) {
-        return {
-            loadedDeck: state.importedArkhamBuildResolvedDeck,
-            source: "arkhamBuild",
-        };
-    }
+    const deckCode = state.selectedDeckCode.trim();
 
-    // 2. Arkham.build share code (NEW)
-    const shareCode = state.selectedArkhamBuildShareCode?.trim();
-
-    if (shareCode) {
-        return {
-            loadedDeck: await loadArkhamBuildDeckFromShareCode(shareCode),
-            source: "arkhamBuild",
-        };
-    }
-
-    // 3. ArkhamDB deck ID
-    const selectedDeckId = state.selectedDeckId.trim();
-
-    if (!selectedDeckId) {
+    if (!deckCode) {
         throw new Error("Deck source is required.");
     }
 
+    if (/^\d+$/.test(deckCode)) {
+        return {
+            loadedDeck: await loadArkhamDeck(deckCode),
+            source: "arkhamDb",
+        };
+    }
+
     return {
-        loadedDeck: await loadArkhamDeck(selectedDeckId),
-        source: "arkhamDb",
+        loadedDeck: await loadArkhamBuildDeckFromShareCode(deckCode),
+        source: "arkhamBuild",
     };
 }
 

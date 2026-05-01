@@ -42,6 +42,18 @@ function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+function getDeckSourceFromInput(value: string): "arkhamDb" | "arkhamBuild" | null {
+  const trimmed = value.trim();
+
+  if (!trimmed) return null;
+
+  if (/^\d+$/.test(trimmed)) {
+    return "arkhamDb";
+  }
+
+  return "arkhamBuild";
+}
+
 function cloneCard(card: PlayerCard): PlayerCard {
   return {
     ...card,
