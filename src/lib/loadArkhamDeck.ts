@@ -42,7 +42,7 @@ function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
-function getDeckSourceFromInput(value: string): "arkhamDb" | "arkhamBuild" | null {
+export function getDeckSourceFromInput(value: string): "arkhamDb" | "arkhamBuild" | null {
   const trimmed = value.trim();
 
   if (!trimmed) return null;
