@@ -151,16 +151,16 @@ export default function HomeScreen() {
   );
 
   const selectedDeckId = useGameStore((state) => state.selectedDeckId);
-  const setSelectedDeckId = useGameStore((state) => state.setSelectedDeckId);
+  //const setSelectedDeckId = useGameStore((state) => state.setSelectedDeckId);
   const startGame = useGameStore((state) => state.startGame);
 
-  const selectedArkhamBuildShareCode = useGameStore(
-    (state) => state.selectedArkhamBuildShareCode,
-  );
+  //const selectedArkhamBuildShareCode = useGameStore(
+  //  (state) => state.selectedArkhamBuildShareCode,
+  //);
 
-  const setSelectedArkhamBuildShareCode = useGameStore(
-    (state) => state.setSelectedArkhamBuildShareCode,
-  );
+  //const setSelectedArkhamBuildShareCode = useGameStore(
+  //  (state) => state.setSelectedArkhamBuildShareCode,
+  //);
 
   const [deckLookupState, setDeckLookupState] = useState<
     "idle" | "loading" | "ready" | "error"
