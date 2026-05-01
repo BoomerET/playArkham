@@ -150,17 +150,9 @@ export default function HomeScreen() {
     (scenario) => scenario.id === selectedScenarioId,
   );
 
-  const selectedDeckId = useGameStore((state) => state.selectedDeckId);
-  //const setSelectedDeckId = useGameStore((state) => state.setSelectedDeckId);
+  const selectedDeckCode = useGameStore((state) => state.selectedDeckCode);
+  const setSelectedDeckCode = useGameStore((state) => state.setSelectedDeckCode);
   const startGame = useGameStore((state) => state.startGame);
-
-  //const selectedArkhamBuildShareCode = useGameStore(
-  //  (state) => state.selectedArkhamBuildShareCode,
-  //);
-
-  //const setSelectedArkhamBuildShareCode = useGameStore(
-  //  (state) => state.setSelectedArkhamBuildShareCode,
-  //);
 
   const [deckLookupState, setDeckLookupState] = useState<
     "idle" | "loading" | "ready" | "error"
@@ -174,7 +166,7 @@ export default function HomeScreen() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
 
-  const trimmedDeckId = selectedDeckId.trim();
+  const trimmedDeckCode = selectedDeckCode.trim();
 
   const campaignState = useGameStore((state) => state.campaignState);
   const setPreviousScenarioOutcome = useGameStore(
@@ -210,7 +202,7 @@ export default function HomeScreen() {
   );
 
   useEffect(() => {
-    if (!trimmedDeckId) {
+    if (!trimmedDeckCode) {
       setDeckLookupState("idle");
       setDeckLookupMessage("Enter an ArkhamDB deck ID to begin.");
       setDetectedDeckName(null);
@@ -226,11 +218,11 @@ export default function HomeScreen() {
 
       try {
         const response = await fetch(
-          `https://arkhamdb.com/api/public/deck/${trimmedDeckId}.json`,
+          `https://arkhamdb.com/api/public/deck/${trimmedDeckCode}.json`,
         );
 
         if (!response.ok) {
-          throw new Error(`Could not load ArkhamDB deck ${trimmedDeckId}.`);
+          throw new Error(`Could not load ArkhamDB deck ${trimmedDeckCode}.`);
         }
 
         const data = (await response.json()) as ArkhamDeckSummary;
@@ -281,7 +273,7 @@ export default function HomeScreen() {
         }
 
         setDeckLookupState("error");
-        setDeckLookupMessage(`Could not load ArkhamDB deck ${trimmedDeckId}.`);
+        setDeckLookupMessage(`Could not load ArkhamDB deck ${trimmedDeckCode}.`);
       }
     };
 
@@ -290,7 +282,7 @@ export default function HomeScreen() {
     return () => {
       cancelled = true;
     };
-  }, [availableInvestigators, setSelectedInvestigator, trimmedDeckId]);
+  }, [availableInvestigators, setSelectedInvestigator, trimmedDeckCode]);
 
   const selectedInvestigator = availableInvestigators.find(
     (item) => item.id === selectedInvestigatorId,
@@ -355,7 +347,7 @@ export default function HomeScreen() {
   const canStartGame =
     Boolean(selectedInvestigator) &&
     (
-      (trimmedDeckId.length > 0 && deckLookupState === "ready") ||
+      (trimmedDeckCode.length > 0 && deckLookupState === "ready") ||
       importedArkhamBuildResolvedDeck != null
     );
 
