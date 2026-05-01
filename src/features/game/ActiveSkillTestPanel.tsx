@@ -8,6 +8,7 @@ import { useGameStore } from "../../store/gameStore";
 import { getCardTypeClassName } from "../../lib/ui";
 import { countMatchingIcons } from "../../lib/skillTestHelpers";
 
+
 const skillMeta: Record<
   SkillIconType,
   {
@@ -48,6 +49,7 @@ function formatSkillList(icons: string[] | undefined) {
 }
 
 export default function ActiveSkillTestPanel() {
+
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
   const hand = useGameStore((state) => state.hand);
   const commitSkillCard = useGameStore((state) => state.commitSkillCard);
@@ -63,7 +65,11 @@ export default function ActiveSkillTestPanel() {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
-
+  console.log("Active skill:", activeSkillTest?.skill);
+  console.log(
+    "Hand icons:",
+    hand.map((c) => ({ name: c.name, icons: c.icons }))
+  );
   const committableCards = useMemo(() => {
     if (!activeSkillTest) {
       return [];
