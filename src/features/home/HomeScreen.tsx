@@ -216,11 +216,11 @@ export default function HomeScreen() {
       }
 
       setDeckLookupState("loading");
-      setDeckLookupMessage(
-        deckSource === "arkhamDb"
-          ? "Looking up ArkhamDB deck..."
-          : "Looking up Arkham.build deck...",
-      );
+      //setDeckLookupMessage(
+      //  deckSource === "arkhamDb"
+      //    ? "Looking up ArkhamDB deck..."
+      //    : "Looking up Arkham.build deck...",
+      //);
       setDetectedDeckName(null);
       setDeckSummary(null);
 
