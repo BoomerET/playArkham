@@ -179,9 +179,13 @@ export async function loadArkhamBuildDeckFromShareCode(
     throw new Error(`Failed to load Arkham.build deck ${trimmedShareCode}.`);
   }
 
-  const data = (await response.json()) as ArkhamBuildDeckJson;
+  const payload = (await response.json()) as {
+    data: ArkhamBuildDeckJson;
+    valid: boolean;
+    share_code: string;
+  };
 
-  return loadArkhamBuildDeckFromJson(data);
+  return loadArkhamBuildDeckFromJson(payload.data);
 }
 
 export function chooseRandomWeakness(
