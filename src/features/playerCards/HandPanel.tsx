@@ -272,7 +272,7 @@ export default function HandPanel() {
             const draggable = activeSkillTest
               ? matchingIcons > 0
               : card.type !== "skill";
-
+            const canCommit = matchingIcons > 0;
             return (
               <div
                 key={card.instanceId}
