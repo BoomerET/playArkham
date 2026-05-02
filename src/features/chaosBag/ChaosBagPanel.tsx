@@ -165,7 +165,7 @@ export default function ChaosBagPanel() {
       <div className="chaos-bag-header">
         <div>
           <p className="chaos-bag-kicker">Chaos Bag</p>
-          <h2 className="chaos-bag-title">Draw Token</h2>
+          <h2 className="chaos-bag-title">Draw Test Token</h2>
           <p className="panel-subtitle">
             Pull from the bag and tempt the unknown.
           </p>
@@ -186,15 +186,11 @@ export default function ChaosBagPanel() {
         </div>
 
         <div
-          className={`chaos-token-display ${tokenClassName} ${
-            revealState === "drawing" ? "chaos-token-drawing" : ""
-          } ${
-            revealState === "revealed" ? "chaos-token-revealed" : ""
-          } ${
-            resultPulse === "success" ? "chaos-token-success-pulse" : ""
-          } ${
-            resultPulse === "failure" ? "chaos-token-failure-pulse" : ""
-          }`}
+          className={`chaos-token-display ${tokenClassName} ${revealState === "drawing" ? "chaos-token-drawing" : ""
+            } ${revealState === "revealed" ? "chaos-token-revealed" : ""
+            } ${resultPulse === "success" ? "chaos-token-success-pulse" : ""
+            } ${resultPulse === "failure" ? "chaos-token-failure-pulse" : ""
+            }`}
           aria-live="polite"
         >
           <div className="chaos-token-face">
@@ -232,11 +228,10 @@ export default function ChaosBagPanel() {
 
       {lastSkillTest && revealState === "revealed" && (
         <div
-          className={`chaos-test-result ${
-            lastSkillTest.success
-              ? "chaos-test-result-success"
-              : "chaos-test-result-failure"
-          }`}
+          className={`chaos-test-result ${lastSkillTest.success
+            ? "chaos-test-result-success"
+            : "chaos-test-result-failure"
+            }`}
         >
           <strong>{lastSkillTest.success ? "Success" : "Failure"}</strong>
           <span>
@@ -255,7 +250,7 @@ export default function ChaosBagPanel() {
       )}
 
       <div className="button-row chaos-bag-actions">
-        <button onClick={handleDraw}>Draw Token</button>
+        <button onClick={handleDraw}>Manual Draw</button>
       </div>
     </section>
   );
