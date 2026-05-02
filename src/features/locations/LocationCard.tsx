@@ -272,6 +272,11 @@ export default function LocationCard({ location }: Props) {
                 {isCurrentLocation && (
                   <span className="token-chip success">Current</span>
                 )}
+                {location.revealed && (
+                  <span className={location.clues > 0 ? "token-chip gold" : "token-chip"}>
+                    Clues {location.clues}
+                  </span>
+                )}
                 {isLegalMove && <span className="token-chip">Move</span>}
                 {isIllegalMove && (
                   <span className="token-chip danger">Blocked</span>
