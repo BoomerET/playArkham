@@ -383,16 +383,17 @@ export default function LocationCard({ location }: Props) {
               {action.label ?? `Action ${index + 1}`}
             </button>
           ))}
+          <button
+            type="button"
+            className="secondary-button"
+            disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
+            onClick={investigateAction}
+          >
+            Investigate
+          </button>
         </div>
+
       )}
-      <button
-        type="button"
-        className="secondary-button"
-        disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
-        onClick={investigateAction}
-      >
-        Investigate
-      </button>
 
       {previewLocation &&
         createPortal(
