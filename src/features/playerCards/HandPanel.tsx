@@ -5,6 +5,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
+import { countMatchingIcons } from "../../lib/skillTestHelpers";
 
 const playerCardImages = import.meta.glob(
   [
@@ -147,6 +148,7 @@ export default function HandPanel() {
   const playCard = useGameStore((state) => state.playCard);
   const shuffleDeck = useGameStore((state) => state.shuffleDeck);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
+  const commitSkillCard = useGameStore((state) => state.commitSkillCard);
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
   const deckCount = useGameStore((state) => state.deck.length);
@@ -256,6 +258,12 @@ export default function HandPanel() {
             const imageUrl = getPlayerCardImageUrl(card);
             const isDragging = draggedCardId === card.instanceId;
 
+            const matchingIcons = activeSkillTest
+              ? countMatchingIcons(card, activeSkillTest.skill)
+              : 0;
+
+            const canCommitToActiveTest = matchingIcons > 0;
+
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
               .filter(
@@ -266,11 +274,11 @@ export default function HandPanel() {
               ? normalizeSkillIcon(activeSkillTest.skill)
               : null;
 
-            const matchingIcons = activeSkill
-              ? cardIcons.filter(
-                (icon) => icon === activeSkill || icon === "wild",
-              ).length
-              : 0;
+            //const matchingIcons = activeSkill
+            //  ? cardIcons.filter(
+            //    (icon) => icon === activeSkill || icon === "wild",
+            //  ).length
+            //  : 0;
 
             const draggable = activeSkillTest
               ? matchingIcons > 0
@@ -405,16 +413,25 @@ export default function HandPanel() {
                         </button>
                       </div>
                     ) : (
-                      <div className="hand-card-image-commit-status">
-                        {card.type === "skill" ? (
-                          <span className="token-chip gold">
-                            Draggable to commit
-                          </span>
-                        ) : (
-                          <span className="token-chip danger">
-                            Not committable
-                          </span>
-                        )}
+                      <div className="hand-card-image-actions button-row">
+                        {(() => {
+                          const matchingIcons = activeSkillTest
+                            ? countMatchingIcons(card, activeSkillTest.skill)
+                            : 0;
+
+                          const canCommit = matchingIcons > 0;
+
+                          return (
+                            <button
+                              type="button"
+                              className="secondary-button"
+                              disabled={!canCommit}
+                              onClick={() => commitSkillCard(card.instanceId)}
+                            >
+                              {canCommit ? `Commit +${matchingIcons}` : "No Match"}
+                            </button>
+                          );
+                        })()}
                       </div>
                     )}
                   </div>
