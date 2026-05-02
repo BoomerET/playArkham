@@ -376,7 +376,9 @@ export default function LocationCard({ location }: Props) {
             disabled={!canInvestigate}
             onClick={investigateAction}
           >
-            {hasClues ? `Investigate (${location.shroud})` : "No clues"}
+            {location.clues > 0
+              ? `Investigate (${location.shroud})`
+              : "No clues remaining"}
           </button>
           {location.abilities?.map((ability, index) => (
             <button
