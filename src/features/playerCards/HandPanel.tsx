@@ -6,6 +6,7 @@ import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import { getPlayerCardImageUrl } from "../../lib/playerCardImages";
 import { countMatchingIcons } from "../../lib/skillTestHelpers";
+import "./handPanel.css";
 
 const playerCardImages = import.meta.glob(
   [
@@ -262,35 +263,22 @@ export default function HandPanel() {
               ? countMatchingIcons(card, activeSkillTest.skill)
               : 0;
 
-            //const canCommitToActiveTest = matchingIcons > 0;
-
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
               .filter(
                 (icon): icon is NonNullable<typeof icon> => icon !== null,
               );
 
-            //const activeSkill = activeSkillTest
-            //  ? normalizeSkillIcon(activeSkillTest.skill)
-            //  : null;
-
-            //const matchingIcons = activeSkill
-            //  ? cardIcons.filter(
-            //    (icon) => icon === activeSkill || icon === "wild",
-            //  ).length
-            //  : 0;
-
             const draggable = activeSkillTest
               ? matchingIcons > 0
               : card.type !== "skill";
-
-
 
             return (
               <div
                 key={card.instanceId}
                 className={`hand-card-image-shell ${isDragging ? "dragging-card" : ""
-                  } ${draggable ? "hand-card-draggable" : "hand-card-static"}`}
+                  } ${draggable ? "hand-card-draggable" : "hand-card-static"} ${activeSkillTest && canCommit ? "hand-card-committable" : ""
+                  }`}
                 draggable={draggable}
                 onClick={(event) => {
                   if (activeSkillTest) {
@@ -309,10 +297,9 @@ export default function HandPanel() {
                   }
 
                   if (event.shiftKey) {
-                    event.preventDefault(); // only block browser menu when discarding
+                    event.preventDefault();
                     discardCard(card.instanceId);
                   }
-                  // otherwise: do nothing → browser context menu works
                 }}
                 onDragStart={(event) => {
                   if (!draggable) {
