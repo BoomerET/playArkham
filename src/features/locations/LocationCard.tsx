@@ -23,6 +23,9 @@ const locationImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+const investigateAction = useGameStore((state) => state.investigateAction);
+const turn = useGameStore((state) => state.turn);
+
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
 
@@ -382,6 +385,14 @@ export default function LocationCard({ location }: Props) {
           ))}
         </div>
       )}
+      <button
+        type="button"
+        className="secondary-button"
+        disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
+        onClick={investigateAction}
+      >
+        Investigate
+      </button>
 
       {previewLocation &&
         createPortal(
