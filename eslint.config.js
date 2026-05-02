@@ -14,7 +14,6 @@ export default defineConfig([
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
-      plugin.vitest/recommended,
     ],
     languageOptions: {
       ecmaVersion: 2020,
