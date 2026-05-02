@@ -3820,7 +3820,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ),
     ];
 
-    let extraLog: ReturnType<typeof createLogEntry>[] = [];
+    const extraLog: ReturnType<typeof createLogEntry>[] = [];
 
     for (const enemyId of engagement.engagedEnemyIds) {
       const forcedResolution = resolveEnemyEngagedTriggers({
@@ -3839,13 +3839,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       extraLog.push(...forcedResolution.logEntries);
     }
-
-    //updatedInvestigator = forcedResolution.investigator;
-    //updatedLocations = forcedResolution.locations;
-    //finalEnemies = forcedResolution.enemies;
-    //updatedCampaignState = forcedResolution.campaignState;
-    //const extraLog: ReturnType<typeof createLogEntry>[] = [];
-    //extraLog.push(...forcedResolution.logEntries);
 
     set((state) => ({
       investigator: updatedInvestigator,
