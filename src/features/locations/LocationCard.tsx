@@ -362,14 +362,7 @@ export default function LocationCard({ location }: Props) {
 
       {isHere && (
         <div className="location-card-actions">
-          <button
-            type="button"
-            className="location-card-action-button"
-            disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
-            onClick={investigateAction}
-          >
-            Investigate ({location.shroud})
-          </button>
+
           {location.abilities?.map((ability, index) => (
             <button
               key={`${location.id}-ability-${index}`}
