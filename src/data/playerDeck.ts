@@ -1597,7 +1597,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60152"
@@ -1645,7 +1649,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60155"
@@ -1660,7 +1666,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Creature. Police."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60156"
@@ -1676,7 +1684,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Police."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60157"
@@ -1692,7 +1702,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm. Police."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60158"
@@ -1707,7 +1719,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Armor."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60159"
@@ -1722,7 +1736,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "combat"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60160"
@@ -1738,7 +1755,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune."
     ],
-    "icons": [],
+    "icons": [
+      "combat"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60161"
@@ -1755,7 +1774,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Upgrade."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60162"
@@ -1772,7 +1793,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Upgrade."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60163"
@@ -1787,7 +1810,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60164"
@@ -1804,7 +1830,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60165"
@@ -1819,7 +1848,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "intellect"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60166"
@@ -1835,7 +1867,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60167"
@@ -1850,7 +1886,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60168"
@@ -1865,7 +1905,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "combat"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60169"
@@ -1880,7 +1922,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Creature. Police."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60170"
@@ -1896,7 +1940,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60171"
@@ -1913,7 +1960,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Upgrade."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60172"
@@ -1929,7 +1978,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Police."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60173"
@@ -1944,7 +1997,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60174"
@@ -1959,7 +2015,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Supply."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60175"
@@ -1974,7 +2032,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced. Expert."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "combat"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60176"
@@ -1991,7 +2052,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Detective. Police."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "combat",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60177"
@@ -2008,7 +2073,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60178"
@@ -2023,7 +2091,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60179"
@@ -2038,7 +2109,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate. Developed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60180"
@@ -2054,7 +2129,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Armor. Police."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60181"
@@ -2071,7 +2150,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "combat"
+    ],
     "faction": "guardian",
     "isWeakness": false,
     "code": "60182"
@@ -2088,7 +2170,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tome. Science."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60252"
@@ -2136,7 +2222,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tome."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60255"
@@ -2152,7 +2240,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tome. Occult."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60256"
@@ -2168,7 +2258,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Profession."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60257"
@@ -2183,7 +2275,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Miskatonic."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60258"
@@ -2199,7 +2293,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic. Tome."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60259"
@@ -2215,7 +2311,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Miskatonic."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60260"
@@ -2230,7 +2328,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Science."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "combat"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60261"
@@ -2245,7 +2346,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60262"
@@ -2261,7 +2365,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60263"
@@ -2276,7 +2383,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight. Science."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60264"
@@ -2291,7 +2401,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60265"
@@ -2307,7 +2420,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60266"
@@ -2322,7 +2438,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60267"
@@ -2337,7 +2455,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60268"
@@ -2352,7 +2472,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60269"
@@ -2369,7 +2492,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60270"
@@ -2384,7 +2509,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60271"
@@ -2400,7 +2529,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60272"
@@ -2415,7 +2547,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Science."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "combat",
+      "combat"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60273"
@@ -2430,7 +2566,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Science."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60274"
@@ -2445,7 +2585,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced. Expert."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "intellect"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60275"
@@ -2460,7 +2603,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tome. Science."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60276"
@@ -2477,7 +2624,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60277"
@@ -2492,7 +2643,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight. Science."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60278"
@@ -2508,7 +2663,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic. Tome."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "wild",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60279"
@@ -2524,7 +2683,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic. Tome."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "wild",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60280"
@@ -2540,7 +2703,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic. Tome."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "wild",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60281"
@@ -2556,7 +2723,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "intellect",
+      "wild"
+    ],
     "faction": "seeker",
     "isWeakness": false,
     "code": "60282"
@@ -2572,7 +2743,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60352"
@@ -2588,7 +2761,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60353"
@@ -2604,7 +2779,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60354"
@@ -2668,7 +2845,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Condition."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60358"
@@ -2684,7 +2863,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Connection."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60359"
@@ -2700,7 +2881,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Charm."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60360"
@@ -2715,7 +2898,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool. Illicit."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60361"
@@ -2731,7 +2916,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Patron."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60362"
@@ -2746,7 +2934,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Melee."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60363"
@@ -2761,7 +2951,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60364"
@@ -2776,7 +2969,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Favor."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60365"
@@ -2791,7 +2987,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60366"
@@ -2806,7 +3005,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60367"
@@ -2822,7 +3024,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trick. Illicit."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60368"
@@ -2838,7 +3043,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Favor."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60369"
@@ -2853,7 +3060,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Gambit."
     ],
-    "icons": [],
+    "icons": [
+      "agility",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60370"
@@ -2869,7 +3079,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Gambit."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60371"
@@ -2885,7 +3099,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool. Illicit."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60372"
@@ -2900,7 +3116,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Gambit."
     ],
-    "icons": [],
+    "icons": [
+      "agility",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60373"
@@ -2916,7 +3135,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Connection."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60374"
@@ -2932,7 +3154,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Patron."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60375"
@@ -2947,7 +3172,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "intellect",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60376"
@@ -2962,7 +3191,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60377"
@@ -2977,7 +3210,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "combat",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60378"
@@ -2996,7 +3233,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60379"
@@ -3013,7 +3254,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60380"
@@ -3030,7 +3275,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Condition."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60381"
@@ -3046,7 +3294,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trick. Illicit."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60382"
@@ -3061,7 +3313,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced. Expert."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60383"
@@ -3080,7 +3335,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Relic."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild"
+    ],
     "faction": "rogue",
     "isWeakness": false,
     "code": "60384"
@@ -3096,7 +3354,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Charm. Occult. Blessed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60452"
@@ -3146,7 +3408,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Sorcerer."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60455"
@@ -3162,7 +3426,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Occult."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60456"
@@ -3177,7 +3443,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Charm. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60457"
@@ -3193,7 +3461,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Charm. Occult."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60458"
@@ -3209,7 +3480,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "combat"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60459"
@@ -3225,7 +3498,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60460"
@@ -3241,7 +3516,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60461"
@@ -3256,7 +3533,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60462"
@@ -3287,7 +3567,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60464"
@@ -3303,7 +3585,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60465"
@@ -3318,7 +3603,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60466"
@@ -3334,7 +3622,12 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild",
+      "wild",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60467"
@@ -3349,7 +3642,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Augury."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60468"
@@ -3365,7 +3660,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Practiced."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60469"
@@ -3380,7 +3677,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Clothing."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60470"
@@ -3396,7 +3695,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60471"
@@ -3412,7 +3714,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60472"
@@ -3428,7 +3733,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60473"
@@ -3444,7 +3751,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60474"
@@ -3460,7 +3770,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Melee. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60475"
@@ -3477,7 +3791,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60476"
@@ -3493,7 +3811,13 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild",
+      "wild",
+      "wild",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60477"
@@ -3525,7 +3849,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Performer."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60479"
@@ -3541,7 +3868,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60480"
@@ -3557,7 +3886,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60481"
@@ -3573,7 +3906,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility",
+      "wild"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60482"
@@ -3588,7 +3925,12 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spell. Cursed."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "willpower",
+      "combat",
+      "combat"
+    ],
     "faction": "mystic",
     "isWeakness": false,
     "code": "60483"
@@ -3604,7 +3946,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60552"
@@ -3652,7 +3997,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Hunter."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60555"
@@ -3667,7 +4014,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Ally. Creature."
     ],
-    "icons": [],
+    "icons": [
+      "combat"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60556"
@@ -3683,7 +4032,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Condition."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60557"
@@ -3698,7 +4049,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60558"
@@ -3713,7 +4066,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Tool. Weapon. Melee."
     ],
-    "icons": [],
+    "icons": [
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60559"
@@ -3728,7 +4083,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Charm."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60560"
@@ -3744,7 +4101,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Condition."
     ],
-    "icons": [],
+    "icons": [
+      "intellect"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60561"
@@ -3760,7 +4119,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trap. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60562"
@@ -3776,7 +4139,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Insight. Trap."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60563"
@@ -3791,7 +4158,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60564"
@@ -3824,7 +4194,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic. Trap."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "combat",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60566"
@@ -3839,7 +4213,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60567"
@@ -3854,7 +4231,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "intellect",
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60568"
@@ -3870,7 +4251,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Gambit. Desperate."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60569"
@@ -3886,7 +4269,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Supply."
     ],
-    "icons": [],
+    "icons": [
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60570"
@@ -3902,7 +4287,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60571"
@@ -3917,7 +4304,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Innate."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60572"
@@ -3933,7 +4323,9 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item."
     ],
-    "icons": [],
+    "icons": [
+      "willpower"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60573"
@@ -3949,7 +4341,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60574"
@@ -3966,7 +4362,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Firearm."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60575"
@@ -3981,7 +4380,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Tactic."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60576"
@@ -3997,7 +4400,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Spirit."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60577"
@@ -4013,7 +4419,10 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trap. Trick."
     ],
-    "icons": [],
+    "icons": [
+      "intellect",
+      "combat"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60578"
@@ -4030,7 +4439,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Talent."
     ],
-    "icons": [],
+    "icons": [
+      "willpower",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60579"
@@ -4047,7 +4460,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Item. Weapon. Ranged."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60580"
@@ -4063,7 +4480,11 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Trap."
     ],
-    "icons": [],
+    "icons": [
+      "combat",
+      "agility",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60581"
@@ -4079,9 +4500,13 @@ export const playerDeck: PlayerCard[] = [
     "traits": [
       "Fortune."
     ],
-    "icons": [],
+    "icons": [
+      "wild",
+      "wild",
+      "wild"
+    ],
     "faction": "survivor",
     "isWeakness": false,
     "code": "60582"
   },
-];
+]
