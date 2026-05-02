@@ -65,11 +65,7 @@ export default function ActiveSkillTestPanel() {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const activeSkill = normalizeSkillIcon(activeSkillTest?.skill ?? "");
-  console.log("Active skill:", activeSkillTest?.skill);
-  console.log(
-    "Hand icons:",
-    hand.map((c) => ({ name: c.name, icons: c.icons }))
-  );
+
   const committableCards = useMemo(() => {
     if (!activeSkillTest) {
       return [];
