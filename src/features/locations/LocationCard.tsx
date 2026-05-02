@@ -23,9 +23,6 @@ const locationImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
-const investigateAction = useGameStore((state) => state.investigateAction);
-const turn = useGameStore((state) => state.turn);
-
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
 
@@ -137,6 +134,8 @@ export default function LocationCard({ location }: Props) {
   );
 
   //const investigator = useGameStore((state) => state.investigator);
+  const investigateAction = useGameStore((state) => state.investigateAction);
+  const turn = useGameStore((state) => state.turn);
   const locationAbility = useGameStore((state) => state.locationAbility);
   const locationAction = useGameStore((state) => state.locationAction);
 
@@ -362,7 +361,14 @@ export default function LocationCard({ location }: Props) {
 
       {isHere && (
         <div className="location-card-actions">
-
+          <button
+            type="button"
+            className="location-card-action-button"
+            disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
+            onClick={investigateAction}
+          >
+            Investigate ({location.shroud})
+          </button>
           {location.abilities?.map((ability, index) => (
             <button
               key={`${location.id}-ability-${index}`}
