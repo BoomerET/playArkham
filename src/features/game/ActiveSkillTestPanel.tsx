@@ -48,8 +48,13 @@ function formatSkillList(icons: string[] | undefined) {
     .filter((icon): icon is SkillIconType => icon !== null);
 }
 
-export default function ActiveSkillTestPanel() {
+function getInvestigationBonusClues(committedCards: { card: { name: string } }[]): number {
+  return committedCards.some((entry) => entry.card.name === "Deduction")
+    ? 1
+    : 0;
+}
 
+export default function ActiveSkillTestPanel() {
   const activeSkillTest = useGameStore((state) => state.activeSkillTest);
   const hand = useGameStore((state) => state.hand);
   const commitSkillCard = useGameStore((state) => state.commitSkillCard);
@@ -85,6 +90,14 @@ export default function ActiveSkillTestPanel() {
       (total, entry) => total + entry.matchingIcons,
       0,
     );
+  }, [activeSkillTest]);
+
+  const bonusClues = useMemo(() => {
+    if (!activeSkillTest || !activeSkillTest.source.startsWith("Investigate")) {
+      return 0;
+    }
+
+    return getInvestigationBonusClues(activeSkillTest.committedCards);
   }, [activeSkillTest]);
 
   if (!activeSkillTest) {
@@ -168,6 +181,15 @@ export default function ActiveSkillTestPanel() {
             <strong>Committed Cards</strong>
             <span>{activeSkillTest.committedCards.length} committed</span>
           </div>
+
+          {bonusClues > 0 && (
+            <div className="skill-value-card">
+              <span className="skill-value-label">Success Bonus</span>
+              <strong className="skill-value-number">
+                +{bonusClues} clue{bonusClues === 1 ? "" : "s"}
+              </strong>
+            </div>
+          )}
 
           {activeSkillTest.committedCards.length === 0 ? (
             <div className="empty-drop-message active-skill-empty-state">
