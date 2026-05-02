@@ -195,6 +195,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!trimmedDeckCode) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDeckLookupState("idle");
       setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
       setDetectedDeckName(null);
