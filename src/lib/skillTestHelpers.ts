@@ -5,19 +5,31 @@ import type {
 } from "../types/game";
 import { normalizeSkillIcon } from "../components/skillIconUtils";
 
-export function countMatchingIcons(card: PlayerCard, skill: SkillType): number {
-  return (card.icons ?? []).reduce((total, icon) => {
+export function countMatchingIcons(
+  card: PlayerCard,
+  skill: SkillType,
+): number {
+  if (!card.icons || !skill) {
+    return 0;
+  }
+
+  const normalizedSkill = normalizeSkillIcon(skill);
+
+  if (!normalizedSkill) {
+    return 0;
+  }
+
+  return card.icons.reduce<number>((count, icon) => {
     const normalizedIcon = normalizeSkillIcon(icon);
 
-    if (normalizedIcon === null) {
-      return total;
+    if (
+      normalizedIcon === normalizedSkill ||
+      normalizedIcon === "wild"
+    ) {
+      return count + 1;
     }
 
-    if (normalizedIcon === skill || normalizedIcon === "wild") {
-      return total + 1;
-    }
-
-    return total;
+    return count;
   }, 0);
 }
 
