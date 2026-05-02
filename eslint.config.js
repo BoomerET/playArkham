@@ -23,12 +23,19 @@ export default defineConfig([
   },
 
   {
-    files: ['**/*.test.{ts,tsx}'],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
+  files: ['**/*.test.{ts,tsx}'],
+  languageOptions: {
+    globals: {
+      ...globals.browser,
+      ...globals.node,
+      describe: 'readonly',
+      it: 'readonly',
+      expect: 'readonly',
+      vi: 'readonly',
     },
   },
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+  },
+},
 ])
