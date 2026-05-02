@@ -4574,10 +4574,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
           horror: investigator.horror + horrorFromThreatArea,
         };
 
+        const bonusClueText =
+          bonusCluesOnSuccess > 0
+            ? ` (${1} base + ${bonusCluesOnSuccess} bonus)`
+            : "";
+
         resolutionLog.push(
           createLogEntry(
             "skill-test",
-            `Investigation succeeded at ${location.name}. Discovered ${totalCluesDiscovered} clue${totalCluesDiscovered === 1 ? "" : "s"} and spent 1 action.`,
+            `Investigation succeeded at ${location.name}. Discovered ${totalCluesDiscovered} clue${totalCluesDiscovered === 1 ? "" : "s"
+            }${bonusClueText} and spent 1 action.`,
           ),
         );
 
