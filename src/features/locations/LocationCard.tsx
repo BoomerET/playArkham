@@ -232,7 +232,11 @@ export default function LocationCard({ location }: Props) {
   const hasEnemies = enemiesHere.length > 0;
 
   const isHere = location.investigatorsHere.includes(investigator.id);
-
+  const hasClues = location.clues > 0;
+  const canInvestigate =
+    turn.phase === "investigation" &&
+    turn.actionsRemaining > 0 &&
+    hasClues;
   return (
     <>
       <div
@@ -364,10 +368,10 @@ export default function LocationCard({ location }: Props) {
           <button
             type="button"
             className="location-card-action-button"
-            disabled={turn.phase !== "investigation" || turn.actionsRemaining <= 0}
+            disabled={!canInvestigate}
             onClick={investigateAction}
           >
-            Investigate ({location.shroud})
+            {hasClues ? `Investigate (${location.shroud})` : "No clues"}
           </button>
           {location.abilities?.map((ability, index) => (
             <button
