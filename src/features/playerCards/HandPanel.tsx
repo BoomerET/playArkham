@@ -262,7 +262,7 @@ export default function HandPanel() {
               ? countMatchingIcons(card, activeSkillTest.skill)
               : 0;
 
-            const canCommitToActiveTest = matchingIcons > 0;
+            //const canCommitToActiveTest = matchingIcons > 0;
 
             const cardIcons = (card.icons ?? [])
               .map((icon) => normalizeSkillIcon(icon))
@@ -270,9 +270,9 @@ export default function HandPanel() {
                 (icon): icon is NonNullable<typeof icon> => icon !== null,
               );
 
-            const activeSkill = activeSkillTest
-              ? normalizeSkillIcon(activeSkillTest.skill)
-              : null;
+            //const activeSkill = activeSkillTest
+            //  ? normalizeSkillIcon(activeSkillTest.skill)
+            //  : null;
 
             //const matchingIcons = activeSkill
             //  ? cardIcons.filter(
