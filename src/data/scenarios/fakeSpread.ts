@@ -62,7 +62,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       name: "Miskatonic Quad",
 
       shroud: 1,
-      clues: 1,
+      clues: 0,
       traits: [
         "Miskatonic",
         "Central",
