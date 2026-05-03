@@ -1,11 +1,11 @@
 import type {
-  ChaosToken,
   EnemySpawn,
   GameLocation,
   ScenarioCardKind,
   EncounterCard,
   ScenarioStatus,
   CardAbilityDefinition,
+  ChaosToken,
 } from "../../types/game";
 
 export interface ScenarioAdvanceEffects {
@@ -85,7 +85,7 @@ export interface ScenarioDefinition {
   startingLocationId: string;
   locations: GameLocation[];
   enemySpawns?: EnemySpawn[];
-  chaosBag?: ChaosToken[];
+  chaosBag?: ScenarioChaosBags;
   agendas?: ScenarioCardDefinition[];
   acts?: ScenarioCardDefinition[];
   setupNotes?: ScenarioSetupNotes;
@@ -103,6 +103,7 @@ export interface ScenarioDefinition {
   }[];
   setAsideEncounterCards?: EncounterCard[];
   setAsideEncounterCardCodes?: string[];
+  chaosBags?: ScenarioChaosBags;
 }
 
 export interface ScenarioRandomizedLocationOption {
@@ -137,3 +138,7 @@ export interface ScenarioRandomizedSelection {
   chosenOptionId: string;
   optionIds: string[];
 }
+
+export type ChaosBagDifficulty = "easy" | "standard" | "hard" | "expert";
+
+export type ScenarioChaosBags = Record<ChaosBagDifficulty, ChaosToken[]>;

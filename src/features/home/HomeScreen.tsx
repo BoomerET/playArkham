@@ -9,6 +9,7 @@ import {
 } from "../../lib/loadArkhamDeck";
 import "./homeScreen.css";
 
+import { type ChaosBagDifficulty } from "../../data/scenarios/scenarioTypes";
 
 const investigatorImages = import.meta.glob(
   "../../assets/images/investigators/*.{jpg,jpeg,png,webp}",
@@ -175,6 +176,14 @@ export default function HomeScreen() {
   const selectedChaosBag = useGameStore((state) => state.selectedChaosBag);
   const setSelectedChaosBag = useGameStore((state) => state.setSelectedChaosBag);
   const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
+
+  const selectedChaosBagDifficulty = useGameStore(
+    (state) => state.selectedChaosBagDifficulty,
+  );
+
+  const setSelectedChaosBagDifficulty = useGameStore(
+    (state) => state.setSelectedChaosBagDifficulty,
+  );
 
   const chaosTokenOptions: ChaosToken[] = [
     2,
@@ -627,6 +636,30 @@ export default function HomeScreen() {
             })}
           </div>
         </div>
+
+        {selectedScenario?.chaosBags && (
+          <div className="home-screen__field">
+            <label className="home-screen__label" htmlFor="chaos-bag-difficulty">
+              Chaos Bag Difficulty
+            </label>
+
+            <select
+              id="chaos-bag-difficulty"
+              className="home-screen__input"
+              value={selectedChaosBagDifficulty}
+              onChange={(event) =>
+                setSelectedChaosBagDifficulty(
+                  event.target.value as ChaosBagDifficulty,
+                )
+              }
+            >
+              <option value="easy">Easy</option>
+              <option value="standard">Standard</option>
+              <option value="hard">Hard</option>
+              <option value="expert">Expert</option>
+            </select>
+          </div>
+        )}
 
         <div className="home-actions">
           <button
