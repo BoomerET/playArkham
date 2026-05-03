@@ -305,6 +305,24 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
     },
   ],
   enemySpawns: [],
+  chaosBags: {
+    easy: [
+      1, 1, 0, 0, 0, -1, -1, -1, -2, -2,
+      "skull", "skull", "tablet", "autoFail", "elderSign", "elderThing", "cultist", "cultist",
+    ],
+    standard: [
+      1, 0, 0, -1, -1, -1, -2, -1, -3, -4,
+      "skull", "skull", "tablet", "autoFail", "elderSign", "elderThing", "cultist", "cultist",
+    ],
+    hard: [
+      0, 0, 0, -1, -1, -2, -2, -3, -3 - 4, -5,
+      "skull", "skull", "tablet", "autoFail", "elderSign", "elderThing", "cultist", "cultist",
+    ],
+    expert: [
+      0, -1, -1, -2, -2, -3, -3, -4, -4, -5, -6, -8,
+      "skull", "skull", "tablet", "elderThing", "autoFail", "elderSign", "cultist", "cultist",
+    ],
+  },
   campaignKey: "smoke-and-mirrors",
   campaignOutcome: "quiet",
   acts: [

@@ -1,0 +1,60 @@
+.scenario-intro-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(120, 42, 42, 0.25), transparent 45%),
+    rgba(5, 6, 10, 0.82);
+  backdrop-filter: blur(4px);
+}
+
+.scenario-intro-dialog {
+  width: min(720px, 100%);
+  max-height: min(760px, 90vh);
+  overflow: auto;
+  padding: 32px;
+  border: 1px solid rgba(218, 190, 120, 0.35);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(35, 30, 25, 0.96), rgba(12, 14, 18, 0.98));
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.65),
+    inset 0 0 40px rgba(218, 190, 120, 0.06);
+  color: #f4ead2;
+}
+
+.scenario-intro-kicker {
+  margin: 0 0 8px;
+  color: #d9b76f;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.scenario-intro-title {
+  margin: 0 0 20px;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1;
+}
+
+.scenario-intro-text {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+  font-family: Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #eadfc8;
+}
+
+.scenario-intro-text p {
+  margin: 0;
+}
+
+.scenario-intro-button {
+  width: 100%;
+}

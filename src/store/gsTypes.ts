@@ -34,6 +34,8 @@ import { type ChaosBagDifficulty } from "../data/scenarios/scenarioTypes";
 type Screen = "home" | "game";
 
 export type GameStore = GameState & CampaignStoreActions & {
+    showScenarioIntro: boolean;
+    dismissScenarioIntro: () => void;
     selectedChaosBagDifficulty: ChaosBagDifficulty;
     setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
     screen: Screen;

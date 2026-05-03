@@ -242,6 +242,8 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  showScenarioIntro: false,
+  dismissScenarioIntro: () => set({ showScenarioIntro: false }),
   selectedChaosBag: startingChaosBag,
   selectedChaosBagDifficulty: "standard",
 
@@ -2782,6 +2784,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenario.chaosBags?.[difficulty] ?? startingChaosBag
 
     set({
+      showScenarioIntro: Boolean(selectedScenario.introText?.length),
       chaosBag: [...selectedChaosBag],
       investigator: debugInvestigator,
       threatArea: debugThreatArea,

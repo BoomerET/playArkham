@@ -104,6 +104,7 @@ export interface ScenarioDefinition {
   setAsideEncounterCards?: EncounterCard[];
   setAsideEncounterCardCodes?: string[];
   chaosBags?: ScenarioChaosBags;
+  introText?: string[];
 }
 
 export interface ScenarioRandomizedLocationOption {

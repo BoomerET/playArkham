@@ -18,6 +18,7 @@ import "./gameTable.css";
 import EncounterPanel from "../encounter/EncounterPanel";
 import EncounterInspector from "../encounter/EncounterInspector";
 import ScenarioCardPanel from "../scenario/ScenarioCardPanel";
+import ScenarioIntroDialog from "../scenario/ScenarioIntroDialog";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
@@ -85,6 +86,7 @@ export default function GameTable() {
 
   return (
     <main className="game-table-shell">
+      <ScenarioIntroDialog />
       <header className="game-table-header">
         <div className="game-table-title-wrap">
           <p className="game-table-eyebrow">Arkham Horror: The Card Game</p>
