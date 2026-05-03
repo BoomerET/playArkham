@@ -743,54 +743,7 @@ export default function HomeScreen() {
             })}
           </div>
         ) : null}
-        <section className="home-screen__field">
-          <h2 className="section-title">Chaos Bag</h2>
 
-          <div className="button-row">
-            {chaosTokenOptions.map((token) => (
-              <button
-                key={String(token)}
-                type="button"
-                className="secondary-button"
-                onClick={() => setSelectedChaosBag([...selectedChaosBag, token])}
-              >
-                Add {formatChaosToken(token)}
-              </button>
-            ))}
-          </div>
-
-          <div className="home-screen__deck-meta">
-            Current bag:{" "}
-            <strong>
-              {selectedChaosBag.map(formatChaosToken).join(", ")}
-            </strong>
-          </div>
-
-          <div className="button-row">
-            {selectedChaosBag.map((token, index) => (
-              <button
-                key={`${String(token)}-${index}`}
-                type="button"
-                className="secondary-button"
-                onClick={() =>
-                  setSelectedChaosBag(
-                    selectedChaosBag.filter((_, tokenIndex) => tokenIndex !== index),
-                  )
-                }
-              >
-                Remove {formatChaosToken(token)}
-              </button>
-            ))}
-
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={resetSelectedChaosBag}
-            >
-              Reset Bag
-            </button>
-          </div>
-        </section>
         {selectedScenario ? (
           <ScenarioDebugPanel scenario={selectedScenario} />
         ) : null}
