@@ -514,3 +514,9 @@
 .location-card-action-button:active {
   transform: translateY(0);
 }
+
+.location-card-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: saturate(0.7);
+}
