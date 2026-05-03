@@ -13,9 +13,9 @@ import {
   scenarios,
 } from "../data/scenarios";
 
-import type {
-  ChaosBagDifficulty,
-} from "../data/scenarios/scenarioTypes";
+//import type {
+//  ChaosBagDifficulty,
+//} from "../data/scenarios/scenarioTypes";
 
 import {
   getChaosTokenModifier,
