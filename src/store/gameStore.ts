@@ -89,7 +89,6 @@ import {
   shuffle,
   drawOpeningHandWithoutWeaknesses,
   performMulligan,
-  //drawCards,
   discardCards,
   drawCardsWithDiscardReshuffle,
 } from "../lib/openingHand";
@@ -116,7 +115,6 @@ import type {
   LocationAttachment,
   PlayerCard,
   SkillTestResult,
-  //GameLogItem,
   LoadedDeck,
 } from "../types/game";
 
@@ -247,7 +245,6 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
-  //chaosBag: [0, -1, -2, "autoFail"],
   selectedDeckCode: initialSelectedDeckId,
 
   setSelectedDeckCode: (code) => {
@@ -2772,7 +2769,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     set({
-      //chaosBag: [0, -1, -2, "autoFail"],
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
@@ -3889,7 +3885,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       enemies,
       selectedEnemyTargetId,
       locations,
-      //log,
       discard,
     } = get();
 
@@ -3957,42 +3952,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           selectedEnemyTargetId,
         )
         : null;
-
-      // logging (keep in store)
-      //get().pushLog(
-      //  "player",
-      //  `${investigator.name} gains 1 resource during upkeep.`,
-      //);
-
-      //if (result.drawnCard) {
-      //  get().pushLog(
-      //    "player",
-      //    `Drew card during upkeep: ${result.drawnCard.name}`,
-      //  );
-      //} else {
-      //  get().pushLog(
-      //    "system",
-      //    "Could not draw during upkeep because the deck is empty.",
-      //  );
-      //}
-
-      //if (result.readyCount > 0) {
-      //  get().pushLog(
-      //    "system",
-      //    result.readyCount === 1
-      //      ? "1 exhausted enemy readied during upkeep."
-      //      : `${result.readyCount} exhausted enemies readied during upkeep.`,
-      //  );
-      //}
-
-      //if (result.reshuffledDiscard) {
-      //  get().pushLog(
-      //    "player",
-      //    "Shuffled discard pile into a new player deck.",
-      //  );
-      //}
-
-      //get().pushLog("system", `Round ${result.nextRound} begins.`);
 
       const upkeepLogTexts = buildUpkeepLogTexts({
         investigator,

@@ -158,6 +158,9 @@ export type GameStore = GameState & CampaignStoreActions & {
     parleyAction: (enemyCode?: string) => void;
     resignAction: () => void;
     locationAction: (actionIndex: number) => void;
+    selectedChaosBag: ChaosToken[];
+    setSelectedChaosBag: (chaosBag: ChaosToken[]) => void;
+    resetSelectedChaosBag: () => void;
 };
 
 export type PendingEncounterResolution = {

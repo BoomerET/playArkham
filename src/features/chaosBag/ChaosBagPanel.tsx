@@ -235,18 +235,6 @@ export default function ChaosBagPanel() {
         >
           <strong>{lastSkillTest.success ? "Success" : "Failure"}</strong>
           <span>
-            {/*
-            {lastSkillTest.baseValue}
-            {lastSkillTest.assetModifier !== 0 &&
-              ` + ${lastSkillTest.assetModifier}`}
-            {lastSkillTest.committedModifier !== 0 &&
-              ` + ${lastSkillTest.committedModifier}`}{" "}
-            {lastSkillTest.tokenModifier >= 0
-              ? `+ ${lastSkillTest.tokenModifier}`
-              : `- ${Math.abs(lastSkillTest.tokenModifier)}`}{" "}
-            = {lastSkillTest.finalValue} vs Difficulty{" "}
-            {lastSkillTest.difficulty}
-            */}
             <div className="chaos-test-breakdown">
               <div>Base: {lastSkillTest.baseValue}</div>
 
