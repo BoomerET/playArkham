@@ -10,15 +10,17 @@
     box-shadow 140ms ease,
     opacity 140ms ease,
     background 140ms ease;
+  max-width: 140px;
+  position: relative;
+  min-height: 0;
+  padding: 0;
+  transform: scale(0.95);
 }
 
 .location-card.current-location {
-  border-color: rgba(215, 180, 106, 0.55);
-  box-shadow:
-    0 0 0 1px rgba(215, 180, 106, 0.18),
-    0 0 26px rgba(110, 208, 214, 0.14),
-    0 0 18px rgba(215, 180, 106, 0.12);
-  background: linear-gradient(180deg, rgba(28, 42, 56, 0.98), rgba(13, 21, 31, 0.98));
+  outline: 2px solid rgba(215, 180, 106, 0.75);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(215, 180, 106, 0.2);
 }
 
 .location-card.legal-location {
@@ -371,10 +373,6 @@
   height: auto;
 }
 
-.location-card {
-  position: relative;
-}
-
 .location-card-media {
   position: relative;
   margin-bottom: 8px;
@@ -429,14 +427,6 @@
   display: none;
 }
 
-.location-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* was space-between */
-  min-height: 0;               /* was 240px */
-  padding: 0;                  /* in case entity-card adds nothing useful */
-}
-
 .location-card-compact {
   padding: 0;                  /* was 12px */
   gap: 0;                      /* was 10px */
@@ -479,28 +469,16 @@
 }
 
 .location-card-actions {
+  margin-top: 6px;
+  max-width: 150px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.55rem;
+  gap: 4px;
 }
 
 .location-card-action-button {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.03)
-  );
-  color: inherit;
-  border-radius: 10px;
-  padding: 0.45rem 0.7rem;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  line-height: 1.1;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.72rem;
 }
 
 .location-card-action-button:hover {
@@ -516,4 +494,3 @@
 .location-card-action-button:active {
   transform: translateY(0);
 }
-
