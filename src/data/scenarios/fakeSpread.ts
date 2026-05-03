@@ -26,8 +26,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
     ],
   },
   introText: [
-    "Strange things are afoot in the city of Arkham.",
-    "A recent spate of fires and grisly \
+    "Strange things are afoot in the city of Arkham. A recent spate of fires and grisly \
 “accidents” have the entire city on edge. While the Arkham Advertiser has offered \
 a few flimsy explanations, you and your associates are not so sure. Robed figures \
 have been sighted near these odd happenings, and your mutual friend is convinced \
