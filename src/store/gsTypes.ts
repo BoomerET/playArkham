@@ -29,9 +29,13 @@ import {
     type ScenarioEffectState,
 } from "../lib/scenarioEffects";
 
+import { type ChaosBagDifficulty } from "../data/scenarios/scenarioTypes";
+
 type Screen = "home" | "game";
 
 export type GameStore = GameState & CampaignStoreActions & {
+    selectedChaosBagDifficulty: ChaosBagDifficulty;
+    setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
     screen: Screen;
     availableInvestigators: Investigator[];
     availableScenarios: ScenarioDefinition[];

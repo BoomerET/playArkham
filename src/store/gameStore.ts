@@ -13,6 +13,10 @@ import {
   scenarios,
 } from "../data/scenarios";
 
+import type {
+  ChaosBagDifficulty,
+} from "../data/scenarios/scenarioTypes";
+
 import {
   getChaosTokenModifier,
 } from "../lib/chaosToken";
@@ -240,17 +244,16 @@ const initialSelectedScenarioId =
 
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
+
 export const useGameStore = create<GameStore>((set, get) => ({
   selectedChaosBag: startingChaosBag,
-  //selectedChaosBag: [],
-  //setSelectedChaosBag: (chaosBag) => {
-  //  set({ selectedChaosBag: chaosBag });
-  //},
-  //resetSelectedChaosBag: () => {
-  //  set({ selectedChaosBag: startingChaosBag });
-  //},
+  selectedChaosBagDifficulty: "standard",
 
   selectedDeckCode: initialSelectedDeckId,
+
+  setSelectedChaosBagDifficulty: (difficulty) => {
+    set({ selectedChaosBagDifficulty: difficulty });
+  },
 
   setSelectedDeckCode: (code) => {
     set({
@@ -2369,9 +2372,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea: [],
       encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterCardCodes),
       encounterDiscard: [],
-      chaosBag: selectedScenario.chaosBag
-        ? [...selectedScenario.chaosBag]
-        : [...startingChaosBag],
+      //chaosBag: selectedScenario.chaosBag
+      //  ? [...selectedScenario.chaosBag]
+      //  : [...startingChaosBag],
       locations: applyConditionalLocationVisibility({
         locations: cloneScenarioLocations(selectedScenario.locations),
         campaignState: get().campaignState,
@@ -2780,7 +2783,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isArkhamBuildImport,
     });
 
+    const difficulty = get().selectedChaosBagDifficulty;
+
+    const selectedChaosBag =
+      selectedScenario.chaosBags?.[difficulty] ?? startingChaosBag
+
     set({
+      chaosBag: [...selectedChaosBag],
       investigator: debugInvestigator,
       threatArea: debugThreatArea,
       locations: debugLocations,
@@ -2795,10 +2804,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       encounterDeck: initialEncounterDeck,
       encounterDiscard: [],
       enemies: setupEnemies,
-      //chaosBag: selectedScenario.chaosBag
-      //  ? [...selectedScenario.chaosBag]
-      //  : [...startingChaosBag],
-      chaosBag: [...get().selectedChaosBag],
+      //chaosBag: [...get().selectedChaosBag],
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
