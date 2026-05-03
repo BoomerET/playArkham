@@ -174,8 +174,8 @@ export default function HomeScreen() {
   );
 
   //const selectedChaosBag = useGameStore((state) => state.selectedChaosBag);
-  const setSelectedChaosBag = useGameStore((state) => state.setSelectedChaosBag);
-  const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
+  //const setSelectedChaosBag = useGameStore((state) => state.setSelectedChaosBag);
+  //const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
 
   const selectedChaosBagDifficulty = useGameStore(
     (state) => state.selectedChaosBagDifficulty,
