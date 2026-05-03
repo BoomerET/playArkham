@@ -504,13 +504,13 @@ export default function HomeScreen() {
               className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
             >
               <div>{deckLookupMessage}</div>
-
+              {/*
               {detectedDeckName && (
                 <div className="home-screen__deck-meta">
                   Deck: <strong>{detectedDeckName}</strong>
                 </div>
               )}
-              {/*
+              
               {deckSummary && (
                 deckSummary.unsupportedCodes.length > 0 ? (
                   <div className="home-screen__deck-warning">
@@ -541,7 +541,7 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
-*/}
+
 
 
               {selectedInvestigator && (
@@ -549,6 +549,7 @@ export default function HomeScreen() {
                   Investigator: <strong>{selectedInvestigator.name}</strong>
                 </div>
               )}
+*/}
             </div>
           </div>
         </div>
