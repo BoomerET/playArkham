@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
-import type { Investigator, LoadedDeck } from "../../types/game";
+import type { Investigator, LoadedDeck, ChaosToken } from "../../types/game";
 import {
   getDeckSourceFromInput,
   loadArkhamBuildDeckFromShareCode,
@@ -172,6 +172,27 @@ export default function HomeScreen() {
     (state) => state.setCampaignRandomizedSelection,
   );
 
+  const selectedChaosBag = useGameStore((state) => state.selectedChaosBag);
+  const setSelectedChaosBag = useGameStore((state) => state.setSelectedChaosBag);
+  const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
+
+  const chaosTokenOptions: ChaosToken[] = [
+    1,
+    0,
+    -1,
+    -2,
+    -3,
+    -4,
+    -5,
+    -6,
+    "skull",
+    "cultist",
+    "tablet",
+    "elderThing",
+    "autoFail",
+    "elderSign",
+  ];
+
   const visibleScenarios = useMemo(() => {
     const seenCampaignKeys = new Set<string>();
 
@@ -192,6 +213,13 @@ export default function HomeScreen() {
   const randomizeCampaignSelectionsForScenario = useGameStore(
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
+
+  function formatChaosToken(token: ChaosToken): string {
+    if (token === "autoFail") return "Auto-Fail";
+    if (token === "elderSign") return "Elder Sign";
+    if (typeof token === "number") return token >= 0 ? `+${token}` : `${token}`;
+    return token;
+  }
 
   useEffect(() => {
     if (!trimmedDeckCode) {
@@ -679,6 +707,54 @@ export default function HomeScreen() {
             })}
           </div>
         ) : null}
+        <section className="home-screen__field">
+          <h2 className="section-title">Chaos Bag</h2>
+
+          <div className="button-row">
+            {chaosTokenOptions.map((token) => (
+              <button
+                key={String(token)}
+                type="button"
+                className="secondary-button"
+                onClick={() => setSelectedChaosBag([...selectedChaosBag, token])}
+              >
+                Add {formatChaosToken(token)}
+              </button>
+            ))}
+          </div>
+
+          <div className="home-screen__deck-meta">
+            Current bag:{" "}
+            <strong>
+              {selectedChaosBag.map(formatChaosToken).join(", ")}
+            </strong>
+          </div>
+
+          <div className="button-row">
+            {selectedChaosBag.map((token, index) => (
+              <button
+                key={`${String(token)}-${index}`}
+                type="button"
+                className="secondary-button"
+                onClick={() =>
+                  setSelectedChaosBag(
+                    selectedChaosBag.filter((_, tokenIndex) => tokenIndex !== index),
+                  )
+                }
+              >
+                Remove {formatChaosToken(token)}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={resetSelectedChaosBag}
+            >
+              Reset Bag
+            </button>
+          </div>
+        </section>
         {selectedScenario ? (
           <ScenarioDebugPanel scenario={selectedScenario} />
         ) : null}

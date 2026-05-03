@@ -65,7 +65,7 @@ import {
 } from "./gsFunctions";
 
 import {
-  persistedCampaignSetup
+  persistedCampaignSetup, startingChaosBag
 } from "./gsConst";
 
 import {
@@ -167,10 +167,6 @@ import {
 } from "../lib/buildEncounterDeck";
 
 import {
-  startingChaosBag
-} from "./gsConst.ts";
-
-import {
   applyDeckExhaustionPenalty,
 } from "../lib/gameRules.ts";
 
@@ -245,6 +241,15 @@ const initialSelectedScenarioId =
 const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  selectedChaosBag: startingChaosBag,
+  //selectedChaosBag: [],
+  //setSelectedChaosBag: (chaosBag) => {
+  //  set({ selectedChaosBag: chaosBag });
+  //},
+  //resetSelectedChaosBag: () => {
+  //  set({ selectedChaosBag: startingChaosBag });
+  //},
+
   selectedDeckCode: initialSelectedDeckId,
 
   setSelectedDeckCode: (code) => {
@@ -349,6 +354,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
       ],
     }));
+  },
+  setSelectedChaosBag: (chaosBag) => {
+    set({ selectedChaosBag: chaosBag });
+  },
+
+  resetSelectedChaosBag: () => {
+    set({ selectedChaosBag: startingChaosBag });
   },
   setAsideEncounterCards: [],
   victoryDisplay: [],
@@ -2783,9 +2795,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       encounterDeck: initialEncounterDeck,
       encounterDiscard: [],
       enemies: setupEnemies,
-      chaosBag: selectedScenario.chaosBag
-        ? [...selectedScenario.chaosBag]
-        : [...startingChaosBag],
+      //chaosBag: selectedScenario.chaosBag
+      //  ? [...selectedScenario.chaosBag]
+      //  : [...startingChaosBag],
+      chaosBag: [...get().selectedChaosBag],
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
