@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/gameStore";
 import ScenarioDebugPanel from "./ScenarioDebugPanel";
-import type { Investigator, LoadedDeck, ChaosToken } from "../../types/game";
+import type { Investigator, LoadedDeck } from "../../types/game";
 import {
   getDeckSourceFromInput,
   loadArkhamBuildDeckFromShareCode,
