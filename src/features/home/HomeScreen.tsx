@@ -185,25 +185,25 @@ export default function HomeScreen() {
     (state) => state.setSelectedChaosBagDifficulty,
   );
 
-  const chaosTokenOptions: ChaosToken[] = [
-    2,
-    1,
-    0,
-    -1,
-    -2,
-    -3,
-    -4,
-    -5,
-    -6,
-    -7,
-    -8,
-    "skull",
-    "cultist",
-    "tablet",
-    "elderThing",
-    "autoFail",
-    "elderSign",
-  ];
+  //const chaosTokenOptions: ChaosToken[] = [
+  //  2,
+  //  1,
+  //  0,
+  //  -1,
+  //  -2,
+  //  -3,
+  //  -4,
+  //  -5,
+  //  -6,
+  //  -7,
+  //  -8,
+  //  "skull",
+  //  "cultist",
+  //  "tablet",
+  //  "elderThing",
+  //  "autoFail",
+  //  "elderSign",
+  //];
 
   const visibleScenarios = useMemo(() => {
     const seenCampaignKeys = new Set<string>();
@@ -418,24 +418,24 @@ export default function HomeScreen() {
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
 
-  async function copyTextToClipboard(text: string) {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return;
-    }
+  //async function copyTextToClipboard(text: string) {
+  //  if (navigator.clipboard?.writeText) {
+  //    await navigator.clipboard.writeText(text);
+  //    return;
+  //  }
 
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed";
-    textArea.style.left = "-9999px";
+  //  const textArea = document.createElement("textarea");
+  //  textArea.value = text;
+  //  textArea.style.position = "fixed";
+  //  textArea.style.left = "-9999px";
 
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+  //  document.body.appendChild(textArea);
+  //  textArea.focus();
+  //  textArea.select();
 
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-  }
+  //  document.execCommand("copy");
+  //  document.body.removeChild(textArea);
+  //}
 
   return (
     <main className="app-shell">
