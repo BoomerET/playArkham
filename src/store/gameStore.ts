@@ -13,10 +13,6 @@ import {
   scenarios,
 } from "../data/scenarios";
 
-//import type {
-//  ChaosBagDifficulty,
-//} from "../data/scenarios/scenarioTypes";
-
 import {
   getChaosTokenModifier,
 } from "../lib/chaosToken";
@@ -2372,9 +2368,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playArea: [],
       encounterDeck: buildInitialEncounterDeck(selectedScenario.encounterCardCodes),
       encounterDiscard: [],
-      //chaosBag: selectedScenario.chaosBag
-      //  ? [...selectedScenario.chaosBag]
-      //  : [...startingChaosBag],
       locations: applyConditionalLocationVisibility({
         locations: cloneScenarioLocations(selectedScenario.locations),
         campaignState: get().campaignState,
@@ -2804,7 +2797,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       encounterDeck: initialEncounterDeck,
       encounterDiscard: [],
       enemies: setupEnemies,
-      //chaosBag: [...get().selectedChaosBag],
       scenarioStatus: "inProgress",
       scenarioResolutionText: null,
       scenarioResolutionTitle: null,
