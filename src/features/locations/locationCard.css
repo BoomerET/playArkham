@@ -481,8 +481,8 @@
   font-size: 0.72rem;
   background: linear-gradient(
     180deg,
-    rgba(200, 200, 200, 0.12),
-    rgba(200, 200, 200, 0.05)
+    rgba(255, 60, 60, 0.12),
+    rgba(255, 60, 60, 0.05)
   );
 }
 
