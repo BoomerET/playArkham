@@ -154,10 +154,6 @@ export default function HomeScreen() {
   const [deckLookupState, setDeckLookupState] = useState<
     "idle" | "loading" | "ready" | "error"
   >("idle");
-  //const [deckLookupMessage, setDeckLookupMessage] = useState(
-  //  "Enter an ArkhamDB deck ID to begin.",
-  //);
-  //const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -173,10 +169,6 @@ export default function HomeScreen() {
     (state) => state.setCampaignRandomizedSelection,
   );
 
-  //const selectedChaosBag = useGameStore((state) => state.selectedChaosBag);
-  //const setSelectedChaosBag = useGameStore((state) => state.setSelectedChaosBag);
-  //const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
-
   const selectedChaosBagDifficulty = useGameStore(
     (state) => state.selectedChaosBagDifficulty,
   );
@@ -184,26 +176,6 @@ export default function HomeScreen() {
   const setSelectedChaosBagDifficulty = useGameStore(
     (state) => state.setSelectedChaosBagDifficulty,
   );
-
-  //const chaosTokenOptions: ChaosToken[] = [
-  //  2,
-  //  1,
-  //  0,
-  //  -1,
-  //  -2,
-  //  -3,
-  //  -4,
-  //  -5,
-  //  -6,
-  //  -7,
-  //  -8,
-  //  "skull",
-  //  "cultist",
-  //  "tablet",
-  //  "elderThing",
-  //  "autoFail",
-  //  "elderSign",
-  //];
 
   const visibleScenarios = useMemo(() => {
     const seenCampaignKeys = new Set<string>();
@@ -226,19 +198,10 @@ export default function HomeScreen() {
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
 
-  //function formatChaosToken(token: ChaosToken): string {
-  //  if (token === "autoFail") return "Auto-Fail";
-  //  if (token === "elderSign") return "Elder Sign";
-  //  if (typeof token === "number") return token >= 0 ? `+${token}` : `${token}`;
-  //  return token;
-  //}
-
   useEffect(() => {
     if (!trimmedDeckCode) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDeckLookupState("idle");
-      //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
-      //setDetectedDeckName(null);
       setDeckSummary(null);
       return;
     }
@@ -250,19 +213,11 @@ export default function HomeScreen() {
 
       if (!deckSource) {
         setDeckLookupState("idle");
-        //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
-        //setDetectedDeckName(null);
         setDeckSummary(null);
         return;
       }
 
       setDeckLookupState("loading");
-      //setDeckLookupMessage(
-      //  deckSource === "arkhamDb"
-      //    ? "Looking up ArkhamDB deck..."
-      //    : "Looking up Arkham.build deck...",
-      //);
-      //setDetectedDeckName(null);
       setDeckSummary(null);
 
       try {
@@ -278,8 +233,6 @@ export default function HomeScreen() {
         const investigatorCode = loadedDeck.investigatorCode ?? "";
         const deckName = loadedDeck.deckName;
 
-        //setDetectedDeckName(deckName);
-
         const matchingInvestigator = availableInvestigators.find((item) => {
           const itemWithOptionalCode = item as typeof item & {
             code?: string;
@@ -294,11 +247,6 @@ export default function HomeScreen() {
 
         if (!matchingInvestigator) {
           setDeckLookupState("error");
-          //setDeckLookupMessage(
-          //  investigatorCode
-          //    ? `Deck investigator code "${investigatorCode}" is not supported by this app yet.`
-          //    : "This deck's investigator could not be identified.",
-          //);
           setDeckSummary(null);
           return;
         }
@@ -318,11 +266,6 @@ export default function HomeScreen() {
         });
 
         setDeckLookupState("ready");
-        //setDeckLookupMessage(
-        //  deckName
-        //    ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
-        //    : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
-        //);
       } catch (error) {
         console.error(error);
 
@@ -330,14 +273,7 @@ export default function HomeScreen() {
           return;
         }
 
-        //const deckSource = getDeckSourceFromInput(trimmedDeckCode);
-
         setDeckLookupState("error");
-        //setDeckLookupMessage(
-        //  deckSource === "arkhamBuild"
-        //    ? `Could not load Arkham.build deck ${trimmedDeckCode}.`
-        //    : `Could not load ArkhamDB deck ${trimmedDeckCode}.`,
-        //);
         setDeckSummary(null);
       }
     };
@@ -418,25 +354,6 @@ export default function HomeScreen() {
     ? getInvestigatorFrontImageUrl(selectedInvestigator)
     : null;
 
-  //async function copyTextToClipboard(text: string) {
-  //  if (navigator.clipboard?.writeText) {
-  //    await navigator.clipboard.writeText(text);
-  //    return;
-  //  }
-
-  //  const textArea = document.createElement("textarea");
-  //  textArea.value = text;
-  //  textArea.style.position = "fixed";
-  //  textArea.style.left = "-9999px";
-
-  //  document.body.appendChild(textArea);
-  //  textArea.focus();
-  //  textArea.select();
-  //
-  //  document.execCommand("copy");
-  //  document.body.removeChild(textArea);
-  //}
-
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -490,9 +407,7 @@ export default function HomeScreen() {
                   onClick={() => {
                     setSelectedDeckCode("");
                     setDeckSummary(null);
-                    //setDetectedDeckName(null);
                     setDeckLookupState("idle");
-                    //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
                     setSelectedInvestigator("");
                   }}
                 >
@@ -503,54 +418,7 @@ export default function HomeScreen() {
             <div
               className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
             >
-              {/*
-              <div>{deckLookupMessage}</div>
 
-              {detectedDeckName && (
-                <div className="home-screen__deck-meta">
-                  Deck: <strong>{detectedDeckName}</strong>
-                </div>
-              )}
-              
-              {deckSummary && (
-                deckSummary.unsupportedCodes.length > 0 ? (
-                  <div className="home-screen__deck-warning">
-                    Unsupported card code(s):{" "}
-                    <strong>{deckSummary.unsupportedCodes.join(", ")}</strong>
-                    {deckSummary.randomWeaknesses.length > 0 ? (
-                      <div className="home-screen__deck-meta">
-                        Random weakness assigned:{" "}
-                        <strong>{deckSummary.randomWeaknesses.join(", ")}</strong>
-                      </div>
-                    ) : null}
-
-                    <button
-                      type="button"
-                      className="secondary-button"
-                      onClick={() =>
-                        void copyTextToClipboard(
-                          deckSummary.unsupportedCodes.join(", "),
-                        )
-                      }
-                    >
-                      Copy Codes
-                    </button>
-                  </div>
-                ) : (
-                  <div className="home-screen__deck-meta">
-                    All imported card codes are supported.
-                  </div>
-                )
-              )}
-
-
-
-              {selectedInvestigator && (
-                <div className="home-screen__deck-meta">
-                  Investigator: <strong>{selectedInvestigator.name}</strong>
-                </div>
-              )}
-*/}
             </div>
           </div>
         </div>
