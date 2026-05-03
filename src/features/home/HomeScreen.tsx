@@ -154,9 +154,9 @@ export default function HomeScreen() {
   const [deckLookupState, setDeckLookupState] = useState<
     "idle" | "loading" | "ready" | "error"
   >("idle");
-  const [deckLookupMessage, setDeckLookupMessage] = useState(
-    "Enter an ArkhamDB deck ID to begin.",
-  );
+  //const [deckLookupMessage, setDeckLookupMessage] = useState(
+  //  "Enter an ArkhamDB deck ID to begin.",
+  //);
   //const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
@@ -237,7 +237,7 @@ export default function HomeScreen() {
     if (!trimmedDeckCode) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDeckLookupState("idle");
-      setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
+      //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
       //setDetectedDeckName(null);
       setDeckSummary(null);
       return;
@@ -250,18 +250,18 @@ export default function HomeScreen() {
 
       if (!deckSource) {
         setDeckLookupState("idle");
-        setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
+        //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
         //setDetectedDeckName(null);
         setDeckSummary(null);
         return;
       }
 
       setDeckLookupState("loading");
-      setDeckLookupMessage(
-        deckSource === "arkhamDb"
-          ? "Looking up ArkhamDB deck..."
-          : "Looking up Arkham.build deck...",
-      );
+      //setDeckLookupMessage(
+      //  deckSource === "arkhamDb"
+      //    ? "Looking up ArkhamDB deck..."
+      //    : "Looking up Arkham.build deck...",
+      //);
       //setDetectedDeckName(null);
       setDeckSummary(null);
 
@@ -294,11 +294,11 @@ export default function HomeScreen() {
 
         if (!matchingInvestigator) {
           setDeckLookupState("error");
-          setDeckLookupMessage(
-            investigatorCode
-              ? `Deck investigator code "${investigatorCode}" is not supported by this app yet.`
-              : "This deck's investigator could not be identified.",
-          );
+          //setDeckLookupMessage(
+          //  investigatorCode
+          //    ? `Deck investigator code "${investigatorCode}" is not supported by this app yet.`
+          //    : "This deck's investigator could not be identified.",
+          //);
           setDeckSummary(null);
           return;
         }
@@ -318,11 +318,11 @@ export default function HomeScreen() {
         });
 
         setDeckLookupState("ready");
-        setDeckLookupMessage(
-          deckName
-            ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
-            : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
-        );
+        //setDeckLookupMessage(
+        //  deckName
+        //    ? `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck "${deckName}" with investigator ${matchingInvestigator.name}.`
+        //    : `Using ${deckSource === "arkhamDb" ? "ArkhamDB" : "Arkham.build"} deck with investigator ${matchingInvestigator.name}.`,
+        //);
       } catch (error) {
         console.error(error);
 
@@ -330,14 +330,14 @@ export default function HomeScreen() {
           return;
         }
 
-        const deckSource = getDeckSourceFromInput(trimmedDeckCode);
+        //const deckSource = getDeckSourceFromInput(trimmedDeckCode);
 
         setDeckLookupState("error");
-        setDeckLookupMessage(
-          deckSource === "arkhamBuild"
-            ? `Could not load Arkham.build deck ${trimmedDeckCode}.`
-            : `Could not load ArkhamDB deck ${trimmedDeckCode}.`,
-        );
+        //setDeckLookupMessage(
+        //  deckSource === "arkhamBuild"
+        //    ? `Could not load Arkham.build deck ${trimmedDeckCode}.`
+        //    : `Could not load ArkhamDB deck ${trimmedDeckCode}.`,
+        //);
         setDeckSummary(null);
       }
     };
@@ -492,7 +492,7 @@ export default function HomeScreen() {
                     setDeckSummary(null);
                     //setDetectedDeckName(null);
                     setDeckLookupState("idle");
-                    setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
+                    //setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
                     setSelectedInvestigator("");
                   }}
                 >
