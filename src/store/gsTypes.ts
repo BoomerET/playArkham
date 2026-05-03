@@ -275,3 +275,8 @@ export type PlayerCardEffect =
     | { kind: "drawCards"; amount: number }
     | { kind: "takeDamage"; amount: number }
     | { kind: "takeHorror"; amount: number };
+
+export type SkillTestEffect =
+    | { kind: "bonusCluesOnSuccess"; amount: number }
+    | { kind: "bonusDamageOnSuccess"; amount: number }
+    | { kind: "drawCardsOnSuccess"; amount: number };

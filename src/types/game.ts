@@ -1,5 +1,5 @@
 import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
-import type { PlayerCardEffect } from "../store/gsTypes";
+import type { PlayerCardEffect, SkillTestEffect } from "../store/gsTypes";
 
 // ============================================================
 // Core primitives
@@ -176,6 +176,10 @@ export interface PlayerCard {
   passiveSkillModifiers?: PassiveSkillModifiers;
   deckLimit?: number;
   onPlay?: PlayerCardEffect;
+  onSkillTestSuccess?: SkillTestEffect[];
+  //onCommit?: (context: SkillTestContext) => void;
+  //onSuccess?: (context: SkillTestContext) => void;
+  //onPlay?: (context: GameContext) => void;
 }
 
 

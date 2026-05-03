@@ -95,7 +95,6 @@ import {
 
 import {
   countMatchingIcons,
-  hasCommittedCardByName,
 } from "../lib/skillTestHelpers";
 
 import {
@@ -4461,38 +4460,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let bonusCluesOnSuccess = 0;
     let bonusDamageOnSuccess = 0;
 
+    const damageSources: string[] = [];
+
     if (success) {
-      if (
-        hasCommittedCardByName(activeSkillTest.committedCards, "Perception")
-      ) {
-        cardsToDrawOnSuccess += 1;
-      }
+      for (const entry of activeSkillTest.committedCards) {
+        for (const effect of entry.card.onSkillTestSuccess ?? []) {
+          if (effect.kind === "drawCardsOnSuccess") {
+            cardsToDrawOnSuccess += effect.amount;
+          }
 
-      if (hasCommittedCardByName(activeSkillTest.committedCards, "Guts")) {
-        cardsToDrawOnSuccess += 1;
-      }
+          if (
+            pendingTestResolution?.kind === "investigate" &&
+            effect.kind === "bonusCluesOnSuccess"
+          ) {
+            bonusCluesOnSuccess += effect.amount;
+          }
 
-      if (
-        hasCommittedCardByName(
-          activeSkillTest.committedCards,
-          "Manual Dexterity",
-        )
-      ) {
-        cardsToDrawOnSuccess += 1;
-      }
-
-      if (
-        pendingTestResolution?.kind === "investigate" &&
-        hasCommittedCardByName(activeSkillTest.committedCards, "Deduction")
-      ) {
-        bonusCluesOnSuccess += 1;
-      }
-
-      if (
-        pendingTestResolution?.kind === "fight" &&
-        hasCommittedCardByName(activeSkillTest.committedCards, "Vicious Blow")
-      ) {
-        bonusDamageOnSuccess += 1;
+          if (
+            pendingTestResolution?.kind === "fight" &&
+            effect.kind === "bonusDamageOnSuccess"
+          ) {
+            bonusDamageOnSuccess += effect.amount;
+            damageSources.push(entry.card.name);
+          }
+        }
       }
 
       if (pendingTestResolution?.kind === "fight") {
@@ -4728,7 +4719,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           resolutionLog.push(
             createLogEntry(
               "combat",
-              `Vicious Blow added +${bonusDamageOnSuccess} damage on success.`,
+              `${damageSources.join(", ")} added +${bonusDamageOnSuccess} damage.`,
             ),
           );
         }

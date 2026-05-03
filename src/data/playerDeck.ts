@@ -320,7 +320,13 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "guardian",
-    "code": "12025"
+    "code": "12025",
+    "onSkillTestSuccess": [
+      {
+        "kind": "bonusDamageOnSuccess",
+        "amount": 1
+      }
+    ],
   },
   {
     "instanceId": "counterattack-6",
@@ -563,7 +569,13 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "seeker",
-    "code": "12039"
+    "code": "12039",
+    "onSkillTestSuccess": [
+      {
+        "kind": "bonusCluesOnSuccess",
+        "amount": 1
+      }
+    ],
   },
   {
     "instanceId": "mysterious-grimoire-0",
@@ -1399,7 +1411,10 @@ export const playerDeck: PlayerCard[] = [
       "Innate"
     ],
     "faction": "neutral",
-    "code": "12090"
+    "code": "12090",
+    onSkillTestSuccess: [
+      { kind: "drawCardsOnSuccess", amount: 1 },
+    ]
   },
   {
     "instanceId": "manual-dexterity-1",
@@ -1414,7 +1429,10 @@ export const playerDeck: PlayerCard[] = [
       "Innate"
     ],
     "faction": "neutral",
-    "code": "12091"
+    "code": "12091",
+    onSkillTestSuccess: [
+      { kind: "drawCardsOnSuccess", amount: 1 },
+    ]
   },
   {
     "instanceId": "overpower-2",
@@ -1444,7 +1462,10 @@ export const playerDeck: PlayerCard[] = [
       "Practiced"
     ],
     "faction": "neutral",
-    "code": "12093"
+    "code": "12093",
+    onSkillTestSuccess: [
+      { kind: "drawCardsOnSuccess", amount: 1 },
+    ]
   },
   {
     "instanceId": "unexpected-courage-4",
@@ -2443,7 +2464,10 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "seeker",
     "isWeakness": false,
-    "code": "60267"
+    "code": "60267",
+    onSkillTestSuccess: [
+      { kind: "bonusCluesOnSuccess", amount: 1 },
+    ]
   },
   {
     "instanceId": "establish-motive-1",
@@ -2591,7 +2615,10 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "seeker",
     "isWeakness": false,
-    "code": "60275"
+    "code": "60275",
+    onSkillTestSuccess: [
+      { kind: "bonusCluesOnSuccess", amount: 1 },
+    ]
   },
   {
     "instanceId": "autopsy-report-1",
