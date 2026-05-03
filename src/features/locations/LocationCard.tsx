@@ -182,13 +182,12 @@ export default function LocationCard({ location }: Props) {
     if (!zoomHeld || !isHovering || !imageUrl) {
       return null;
     }
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     return {
       id: location.id,
       name: location.name,
       imageUrl,
     };
-    // eslint-disable-next-line react-hooks/set-state-in-effect
   }, [location.revealed, zoomHeld, isHovering, imageUrl, location.id, location.name]);
 
   const isCurrentLocation = location.investigatorsHere.includes(
