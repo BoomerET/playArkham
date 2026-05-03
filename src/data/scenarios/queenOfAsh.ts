@@ -76,7 +76,7 @@ of Ash, has been eradicated in the inferno.",
     {
       id: "sewer-tunnels-2",
       code: "12183",
-      name: "Sewer Tunnels - Infested Pipes",
+      name: "Sewer Tunnels",
       subname: "Infested Pipes",
 
       shroud: 1,
@@ -97,7 +97,7 @@ of Ash, has been eradicated in the inferno.",
     {
       id: "sewer-tunnels-3",
       code: "12184",
-      name: "Sewer Tunnels - Overgrown Tunnels",
+      name: "Sewer Tunnels",
       subname: "Overgrown Tunnels",
 
       shroud: 2,
@@ -118,7 +118,7 @@ of Ash, has been eradicated in the inferno.",
     {
       id: "sewer-tunnels-4",
       code: "12186",
-      name: "Sewer Tunnels - Smuggler's Cache",
+      name: "Sewer Tunnels",
       subname: "Smuggler's Cache",
 
       shroud: 3,
@@ -139,7 +139,7 @@ of Ash, has been eradicated in the inferno.",
     {
       id: "sewer-tunnels-5",
       code: "12187",
-      name: "Sewer Tunnels - Toxic Waste Pit",
+      name: "Sewer Tunnels",
       subname: "Toxic Waste Pit",
 
       shroud: 3,
