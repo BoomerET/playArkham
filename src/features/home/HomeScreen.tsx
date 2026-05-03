@@ -157,7 +157,7 @@ export default function HomeScreen() {
   const [deckLookupMessage, setDeckLookupMessage] = useState(
     "Enter an ArkhamDB deck ID to begin.",
   );
-  const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
+  //const [detectedDeckName, setDetectedDeckName] = useState<string | null>(null);
 
   const zoomHeld = useModifierKey("Shift");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -238,7 +238,7 @@ export default function HomeScreen() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDeckLookupState("idle");
       setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
-      setDetectedDeckName(null);
+      //setDetectedDeckName(null);
       setDeckSummary(null);
       return;
     }
@@ -251,7 +251,7 @@ export default function HomeScreen() {
       if (!deckSource) {
         setDeckLookupState("idle");
         setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
-        setDetectedDeckName(null);
+        //setDetectedDeckName(null);
         setDeckSummary(null);
         return;
       }
@@ -262,7 +262,7 @@ export default function HomeScreen() {
           ? "Looking up ArkhamDB deck..."
           : "Looking up Arkham.build deck...",
       );
-      setDetectedDeckName(null);
+      //setDetectedDeckName(null);
       setDeckSummary(null);
 
       try {
@@ -278,7 +278,7 @@ export default function HomeScreen() {
         const investigatorCode = loadedDeck.investigatorCode ?? "";
         const deckName = loadedDeck.deckName;
 
-        setDetectedDeckName(deckName);
+        //setDetectedDeckName(deckName);
 
         const matchingInvestigator = availableInvestigators.find((item) => {
           const itemWithOptionalCode = item as typeof item & {
@@ -490,7 +490,7 @@ export default function HomeScreen() {
                   onClick={() => {
                     setSelectedDeckCode("");
                     setDeckSummary(null);
-                    setDetectedDeckName(null);
+                    //setDetectedDeckName(null);
                     setDeckLookupState("idle");
                     setDeckLookupMessage("Enter an ArkhamDB deck ID or Arkham.build share code to begin.");
                     setSelectedInvestigator("");
