@@ -43,7 +43,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       ],
 
       connections: ["fake-dormitories"],
-      mapPosition: { x: 8, y: 16 },
+      mapPosition: { x: 8, y: 18 },
 
       revealed: true,
       isVisible: true,
@@ -68,7 +68,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: ["You're in the dorms",],
 
       connections: ["fake-friends-room", "fake-miskatonic-quad"],
-      mapPosition: { x: 30, y: 16 },
+      mapPosition: { x: 28, y: 18 },
 
       revealed: false,
       isVisible: false,
@@ -92,7 +92,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
         "fake-dormitories",
         "fake-science-hall",
       ],
-      mapPosition: { x: 51, y: 16 },
+      mapPosition: { x: 49, y: 18 },
 
       revealed: false,
       isVisible: false,
@@ -113,7 +113,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: ["Forced - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",],
 
       connections: ["fake-miskatonic-quad", "fake-orne-library"],
-      mapPosition: { x: 72, y: 16 },
+      mapPosition: { x: 70, y: 18 },
 
       investigatorsHere: [],
 
@@ -135,7 +135,7 @@ export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
       text: ["Action x2: Draw 3 cards (Limit once per game.)",],
 
       connections: ["fake-science-hall"],
-      mapPosition: { x: 93, y: 16 },
+      mapPosition: { x: 91, y: 18 },
 
       revealed: false,
       isVisible: false,
