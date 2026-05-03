@@ -32,7 +32,7 @@ a few flimsy explanations, you and your associates are not so sure. Robed figure
 have been sighted near these odd happenings, and your mutual friend is convinced \
 they are to blame. You agree to meet at your friend’s dormitory at Miskatonic \
 University to try and get to the bottom of things. However, when you arrive, your \
-friend’s room is empty and the dormitories are strangely quiet"],
+friend’s room is empty and the dormitories are strangely quiet..."],
   locations: [
     {
       id: "fake-friends-room",
