@@ -78,22 +78,24 @@ function getLocationImageUrl(
   side: "front" | "back" = "front",
 ): string | null {
   const locationCode = (location as GameLocation & { code?: string }).code;
-  const sideCode =
-    side === "back" && locationCode ? `${locationCode}b` : locationCode;
 
-  const candidates = [
-    sideCode ?? "",
-    locationCode ?? "",
-    location.id,
-    slugifyName(location.name),
-  ]
+  const candidates =
+    side === "back" && locationCode
+      ? [`${locationCode}b`]
+      : [
+        locationCode ?? "",
+        location.id,
+        slugifyName(location.name),
+      ];
+
+  const normalizedCandidates = candidates
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
 
   const match = Object.entries(locationImages).find(([path]) => {
     const fileName = path.split("/").pop()?.toLowerCase() ?? "";
     const baseName = fileName.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-    return candidates.includes(baseName);
+    return normalizedCandidates.includes(baseName);
   });
 
   return match?.[1] ?? null;
