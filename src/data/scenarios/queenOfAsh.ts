@@ -54,7 +54,7 @@ of Ash, has been eradicated in the inferno.",
     {
       id: "sewer-tunnels-1",
       code: "12185",
-      name: "Sewer Tunnels - Flooded Crypt",
+      name: "Sewer Tunnels",
       subname: "Flooded Crypt",
 
       shroud: 4,
