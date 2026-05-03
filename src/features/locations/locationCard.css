@@ -479,6 +479,11 @@
 .location-card-action-button {
   padding: 0.35rem 0.55rem;
   font-size: 0.72rem;
+  background: linear-gradient(
+    180deg,
+    rgba(200, 200, 200, 0.12),
+    rgba(200, 200, 200, 0.05)
+  );
 }
 
 .location-card-action-button:hover {
