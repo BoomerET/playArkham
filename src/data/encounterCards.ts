@@ -1050,15 +1050,6 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Hunter",
         ],
-        //abilities: [
-        //    {
-        //        label: "Death Rattle",
-        //        trigger: "forced",
-        //        event: "enemyDefeated",
-        //        text: "Forced — When this enemy is defeated, take 7 horror.",
-        //        effect: { kind: "takeHorror", amount: 7 },
-        //    },
-        //],
 
         victoryPoints: 2,
 
@@ -1080,22 +1071,6 @@ export const encounterCards: EncounterCard[] = [
         ability: [
             "Peril",
         ],
-        //abilities: [
-        //    {
-        //        label: "Lingering Pain",
-        //        trigger: "forced",
-        //        event: "turnEnds",
-        //        text: "Forced — When your turn ends, take 1 damage.",
-        //        effect: { kind: "takeDamage", amount: 10 },
-        //    },
-        //    {
-        //        label: "Draining Burden",
-        //        trigger: "forced",
-        //        event: "turnBegins",
-        //        text: "Forced — When your turn begins, gain 1 resource.",
-        //        effect: { kind: "gainResources", amount: 10 },
-        //    },
-        //],
         text: [
             "Revelation - Flavor text.",
         ],
@@ -1119,7 +1094,6 @@ export const encounterCards: EncounterCard[] = [
 
         ability: [
             "Hunter",
-            //"Parley",
         ],
 
         text: [
