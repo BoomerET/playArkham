@@ -179,7 +179,7 @@ export default function LocationCard({ location }: Props) {
   const backImageUrl = getLocationImageUrl(location, "back");
   const imageUrl = location.revealed ? frontImageUrl : backImageUrl;
   const previewLocation = useMemo<PreviewLocation | null>(() => {
-    if (!location.revealed || !zoomHeld || !isHovering || !imageUrl) {
+    if (!zoomHeld || !isHovering || !imageUrl) {
       return null;
     }
 
