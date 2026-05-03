@@ -479,11 +479,23 @@
 .location-card-action-button {
   padding: 0.35rem 0.55rem;
   font-size: 0.72rem;
+
+  color: #f4ead2; /* light readable text */
   background: linear-gradient(
     180deg,
-    rgba(255, 60, 60, 0.12),
-    rgba(255, 60, 60, 0.05)
+    rgba(40, 45, 55, 0.9),
+    rgba(20, 24, 30, 0.95)
   );
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
 }
 
 .location-card-action-button:hover {
