@@ -177,22 +177,22 @@ export default function HomeScreen() {
   const resetSelectedChaosBag = useGameStore((state) => state.resetSelectedChaosBag);
 
   const chaosTokenOptions: ChaosToken[] = [
+    2,
     1,
-    1,
     0,
-    0,
-    0,
-    0,
-    -1,
-    -1,
     -1,
     -2,
-    -2,
+    -3,
+    -4,
+    -5,
+    -6,
+    -7,
+    -8,
     "skull",
-    "skull",
+    "cultist",
     "tablet",
-    "autoFail",
     "elderThing",
+    "autoFail",
     "elderSign",
   ];
 
