@@ -503,8 +503,9 @@ export default function HomeScreen() {
             <div
               className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
             >
-              <div>{deckLookupMessage}</div>
               {/*
+              <div>{deckLookupMessage}</div>
+
               {detectedDeckName && (
                 <div className="home-screen__deck-meta">
                   Deck: <strong>{detectedDeckName}</strong>
