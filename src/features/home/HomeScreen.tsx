@@ -178,18 +178,21 @@ export default function HomeScreen() {
 
   const chaosTokenOptions: ChaosToken[] = [
     1,
+    1,
+    0,
+    0,
+    0,
     0,
     -1,
+    -1,
+    -1,
     -2,
-    -3,
-    -4,
-    -5,
-    -6,
+    -2,
     "skull",
-    "cultist",
+    "skull",
     "tablet",
-    "elderThing",
     "autoFail",
+    "elderThing",
     "elderSign",
   ];
 
