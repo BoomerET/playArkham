@@ -187,6 +187,25 @@ of Ash, has been eradicated in the inferno.",
     },
   ],
   enemySpawns: [],
+  introText: [
+    "Dr. Armitage thanks the waitress at Velma’s Diner as she sets two \
+pieces of warm apple pie between you. The head librarian pushes one toward \
+you with a strained smile. “Arkham is changing. The world is changing—for the \
+worse, I fear—but at least we have pie.”",
+    "Together, you and Dr. Armitage piece together a disturbing picture of the \
+situation at hand. “The Brethren of Ash are not conspirators,” Armitage says. \
+“They are thralls, all of them. Thralls of an ancient goddess, one they call \
+‘Elokoss’.” Dr. Armitage shows you a grotesque woodcut of a gnarled tree with \
+burning branches before continuing.",
+    "“After attending one of the cult’s secret gatherings, some prospective followers \
+develop a strange bruise that marks them as one of Elokoss’s own. These \
+followers are from all walks of life: rich and poor, weak and strong. Most \
+importantly, these thralls have no idea that they are under her sway. Your \
+mysterious pursuer is one such thrall. According to prophecy, the ‘Servant of \
+Flame’ who attacked us at the university is the harbinger of the queen’s return. \
+The servant gathers sacrifices to make way for their queen’s glorious rebirth. A \
+rebirth they predict will happen this very evening.”",
+  ],
   chaosBags: {
     easy: [
       1, 1, 0, 0, 0, -1, -1, -1, -2, -2,

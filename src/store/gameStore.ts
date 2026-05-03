@@ -4724,7 +4724,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
           );
         }
       }
-
     }
 
     if (pendingTestResolution?.kind === "evade") {
