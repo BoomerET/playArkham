@@ -510,7 +510,7 @@ export default function HomeScreen() {
                   Deck: <strong>{detectedDeckName}</strong>
                 </div>
               )}
-
+              {/*
               {deckSummary && (
                 deckSummary.unsupportedCodes.length > 0 ? (
                   <div className="home-screen__deck-warning">
@@ -541,6 +541,7 @@ export default function HomeScreen() {
                   </div>
                 )
               )}
+*/}
 
 
               {selectedInvestigator && (
