@@ -226,12 +226,12 @@ export default function HomeScreen() {
     (state) => state.randomizeCampaignSelectionsForScenario,
   );
 
-  //function formatChaosToken(token: ChaosToken): string {
-  //  if (token === "autoFail") return "Auto-Fail";
-  //  if (token === "elderSign") return "Elder Sign";
-  //  if (typeof token === "number") return token >= 0 ? `+${token}` : `${token}`;
-  //  return token;
-  //}
+  function formatChaosToken(token: ChaosToken): string {
+    if (token === "autoFail") return "Auto-Fail";
+    if (token === "elderSign") return "Elder Sign";
+    if (typeof token === "number") return token >= 0 ? `+${token}` : `${token}`;
+    return token;
+  }
 
   useEffect(() => {
     if (!trimmedDeckCode) {
@@ -432,7 +432,7 @@ export default function HomeScreen() {
   //  document.body.appendChild(textArea);
   //  textArea.focus();
   //  textArea.select();
-
+  //
   //  document.execCommand("copy");
   //  document.body.removeChild(textArea);
   //}
