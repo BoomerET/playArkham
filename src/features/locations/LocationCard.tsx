@@ -73,9 +73,17 @@ function slugifyName(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function getLocationImageUrl(location: GameLocation): string | null {
+function getLocationImageUrl(
+  location: GameLocation,
+  side: "front" | "back" = "front",
+): string | null {
+  const locationCode = (location as GameLocation & { code?: string }).code;
+  const sideCode =
+    side === "back" && locationCode ? `${locationCode}b` : locationCode;
+
   const candidates = [
-    (location as GameLocation & { code?: string }).code ?? "",
+    sideCode ?? "",
+    locationCode ?? "",
     location.id,
     slugifyName(location.name),
   ]
@@ -165,7 +173,9 @@ export default function LocationCard({ location }: Props) {
     wasRevealedRef.current = location.revealed;
   }, [location.revealed]);
 
-  const imageUrl = getLocationImageUrl(location);
+  const frontImageUrl = getLocationImageUrl(location, "front");
+  const backImageUrl = getLocationImageUrl(location, "back");
+  const imageUrl = location.revealed ? frontImageUrl : backImageUrl;
   const previewLocation = useMemo<PreviewLocation | null>(() => {
     if (!location.revealed || !zoomHeld || !isHovering || !imageUrl) {
       return null;
@@ -357,13 +367,27 @@ export default function LocationCard({ location }: Props) {
               )}
             </div>
 
-            <p className="location-card-hidden-label">Unrevealed</p>
+            {imageUrl ? (
+              <div className="location-card-image-shell">
+                <img
+                  src={imageUrl}
+                  alt={`${location.name} unrevealed`}
+                  className="location-card-image"
+                  draggable={false}
+                />
+              </div>
+            ) : (
+              <>
+                <p className="location-card-hidden-label">Unrevealed</p>
 
-            <div className="location-card-hidden-art" aria-hidden="true">
-              <span className="location-card-hidden-glyph">?</span>
-            </div>
+                <div className="location-card-hidden-art" aria-hidden="true">
+                  <span className="location-card-hidden-glyph">?</span>
+                </div>
 
-            <p className="location-card-hidden-name">{location.name}</p>
+                <p className="location-card-hidden-name">{location.name}</p>
+              </>
+            )}
+
           </div>
         )}
       </div>
