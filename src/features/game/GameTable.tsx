@@ -18,7 +18,7 @@ import "./gameTable.css";
 import EncounterPanel from "../encounter/EncounterPanel";
 import EncounterInspector from "../encounter/EncounterInspector";
 import ScenarioCardPanel from "../scenario/ScenarioCardPanel";
-import ScenarioIntroDialog from "../scenario/ScenarioIntroDialog";
+import ScenarioIntroDialog from "../../data/scenarios/ScenarioIntroDialog";
 
 export default function GameTable() {
   const returnToHome = useGameStore((state) => state.returnToHome);
