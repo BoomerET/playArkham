@@ -471,7 +471,8 @@ export default function LocationCard({ location }: Props) {
               <img
                 src={previewLocation.imageUrl}
                 alt={previewLocation.name}
-                className="card-preview-image"
+                className={`card-preview-image ${flipHeld ? "location-preview-flipped" : ""
+                  }`}
                 draggable={false}
               />
             </div>
