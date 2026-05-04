@@ -31,6 +31,7 @@ export function resolveEnemyAttacks(args: {
 
         updatedInvestigator = attackResult.investigator;
         logTexts.push(attackResult.logText);
+        attackedEnemyIds.push(enemy.id);
 
         return {
             ...enemy,
