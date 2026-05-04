@@ -196,23 +196,7 @@ export default function PlayAreaPanel() {
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
-                >{card.abilities?.length ? (
-                  <div className="play-area-image-actions button-row">
-                    {card.abilities.map((ability) => (
-                      <button
-                        key={ability.id}
-                        type="button"
-                        className="secondary-button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          activatePlayerCardAbility(card.instanceId, ability.id);
-                        }}
-                      >
-                        {ability.label}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
+                >
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -261,6 +245,23 @@ export default function PlayAreaPanel() {
                             viewBox="0 0 24 24"
                           />
                         </span>
+                      ))}
+                    </div>
+                  ) : null}
+                  {card.abilities?.length ? (
+                    <div className="play-area-image-actions button-row">
+                      {card.abilities.map((ability) => (
+                        <button
+                          key={ability.id}
+                          type="button"
+                          className="secondary-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            activatePlayerCardAbility(card.instanceId, ability.id);
+                          }}
+                        >
+                          {ability.label}
+                        </button>
                       ))}
                     </div>
                   ) : null}
