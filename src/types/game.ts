@@ -180,9 +180,34 @@ export interface PlayerCard {
   onSkillTestSuccess?: SkillTestEffect[];
   //onCommit?: (context: SkillTestContext) => void;
   //onSuccess?: (context: SkillTestContext) => void;
-  //onPlay?: (context: GameContext) => void;
   abilities?: PlayerCardAbility[];
 }
+
+export type PlayerCardAbilityCost = {
+  action?: number;
+  exhaust?: boolean;
+};
+
+export type PlayerCardAbility =
+  | {
+    id: string;
+    label: string;
+    cost?: PlayerCardAbilityCost;
+    effect: {
+      kind: "enemyEngagesAndAttacks";
+    };
+  }
+  | {
+    id: string;
+    label: string;
+    cost?: PlayerCardAbilityCost;
+    skillTest: {
+      kind: "fight";
+      skill: "combat";
+      combatModifier: number;
+      damageBonusIfEnemyAttackedThisRound?: number;
+    };
+  };
 
 
 // ============================================================
