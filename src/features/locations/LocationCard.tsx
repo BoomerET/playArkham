@@ -23,6 +23,34 @@ const locationImages = import.meta.glob(
   },
 ) as Record<string, string>;
 
+function useKeyPress(key: string) {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === key.toLowerCase()) {
+        setActive(true);
+      }
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === key.toLowerCase()) {
+        setActive(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, [key]);
+
+  return active;
+}
+
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
 
@@ -143,7 +171,7 @@ export default function LocationCard({ location }: Props) {
     (state) => state.availableInvestigators,
   );
 
-  //const investigator = useGameStore((state) => state.investigator);
+  const flipHeld = useKeyPress("f");
   const investigateAction = useGameStore((state) => state.investigateAction);
   const turn = useGameStore((state) => state.turn);
   const locationAbility = useGameStore((state) => state.locationAbility);
@@ -178,14 +206,19 @@ export default function LocationCard({ location }: Props) {
   const frontImageUrl = getLocationImageUrl(location, "front");
   const backImageUrl = getLocationImageUrl(location, "back");
   const imageUrl = location.revealed ? frontImageUrl : backImageUrl;
+  const previewImageUrl = flipHeld
+    ? location.revealed
+      ? backImageUrl
+      : frontImageUrl
+    : imageUrl;
   const previewLocation = useMemo<PreviewLocation | null>(() => {
-    if (!zoomHeld || !isHovering || !imageUrl) {
+    if (!zoomHeld || !isHovering || !previewImageUrl) {
       return null;
     }
     return {
       id: location.id,
       name: location.name,
-      imageUrl,
+      imageUrl: previewImageUrl,
     };
   }, [zoomHeld, isHovering, imageUrl, location.id, location.name]);
 
