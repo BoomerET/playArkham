@@ -241,6 +241,35 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  activatePlayerCardAbility: (cardInstanceId, abilityId) => {
+    const { playArea } = get();
+
+    const card = playArea.find((entry) => entry.instanceId === cardInstanceId);
+    const ability = card?.abilities?.find((entry) => entry.id === abilityId);
+
+    if (!card || !ability) {
+      get().pushLog("system", "That card ability could not be found.");
+      return;
+    }
+
+    get().pushLog("player", `Activated ${card.name}: ${ability.label}.`);
+
+    // Daniela's Wrench Fight ability
+    if (ability.skillTest?.kind === "fight") {
+      const bonusDamage =
+        ability.skillTest.damageBonusIfEnemyAttackedThisRound ? 1 : 0;
+
+      set({
+        pendingFightCombatModifier: ability.skillTest.combatModifier,
+        pendingFightDamageBonus: bonusDamage,
+      });
+
+      get().fightAction();
+      return;
+    }
+
+    get().pushLog("system", `${card.name}'s ability is not implemented yet.`);
+  },
   enemyIdsThatAttackedThisRound: [],
   showScenarioIntro: false,
   dismissScenarioIntro: () => set({ showScenarioIntro: false }),

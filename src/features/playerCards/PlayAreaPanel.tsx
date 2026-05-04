@@ -48,6 +48,9 @@ type PreviewCard = {
 };
 
 export default function PlayAreaPanel() {
+  const activatePlayerCardAbility = useGameStore(
+    (state) => state.activatePlayerCardAbility,
+  );
   const playArea = useGameStore((state) => state.playArea);
   const playCard = useGameStore((state) => state.playCard);
   const togglePlayAreaCardExhausted = useGameStore(
@@ -259,7 +262,21 @@ export default function PlayAreaPanel() {
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
                     ) : null}
-
+                    {card.abilities?.length ? (
+                      <div className="card-actions">
+                        {card.abilities.map((ability) => (
+                          <button
+                            key={ability.id}
+                            type="button"
+                            onClick={() =>
+                              activatePlayerCardAbility(card.instanceId, ability.id)
+                            }
+                          >
+                            {ability.label}
+                          </button>
+                        ))}
+                      </div>
+                    ) : null}
                     {card.type === "asset" &&
                       canActivatePlayAreaCardAbility(card) ? (
                       <div className="play-area-image-actions button-row">
