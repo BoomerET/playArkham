@@ -265,18 +265,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     get().pushLog("player", `Activated ${card.name}: ${ability.label}.`);
 
-    // Daniela's Wrench Fight ability
     if ("skillTest" in ability && ability.skillTest.kind === "fight") {
       set({
+        playArea: updatedPlayArea,
         pendingFightCombatModifier: ability.skillTest.combatModifier,
-        pendingFightDamageBonus: ability.skillTest.damageBonusIfEnemyAttackedThisRound
-          ? 1
-          : 0,
+        pendingFightDamageBonus:
+          ability.skillTest.damageBonusIfEnemyAttackedThisRound ? 1 : 0,
       });
 
       get().fightAction();
       return;
     }
+
+    set({
+      playArea: updatedPlayArea,
+    });
 
     get().pushLog("system", `${card.name}'s ability is not implemented yet.`);
   },
