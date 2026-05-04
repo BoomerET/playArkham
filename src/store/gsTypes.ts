@@ -35,9 +35,7 @@ type Screen = "home" | "game";
 
 export type GameStore = GameState & CampaignStoreActions & {
     showScenarioIntro: boolean;
-    dismissScenarioIntro: () => void;
     selectedChaosBagDifficulty: ChaosBagDifficulty;
-    setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
     screen: Screen;
     availableInvestigators: Investigator[];
     availableScenarios: ScenarioDefinition[];
@@ -65,9 +63,13 @@ export type GameStore = GameState & CampaignStoreActions & {
     discard: PlayerCard[];
     enemyDiscard: Enemy[];
     chaosBag: ChaosToken[];
-    selectedArkhamBuildShareCode: string;
-    setSelectedArkhamBuildShareCode: (code: string) => void;
     selectedDeckCode: string;
+    selectedArkhamBuildShareCode: string;
+    selectedChaosBag: ChaosToken[];
+    enemyIdsThatAttackedThisRound: string[];
+    setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
+    dismissScenarioIntro: () => void;
+    setSelectedArkhamBuildShareCode: (code: string) => void;
     setSelectedDeckCode: (code: string) => void;
     evadeEnemy: (enemyId: string) => void;
     attackEnemy: (enemyId: string) => void;
@@ -164,7 +166,6 @@ export type GameStore = GameState & CampaignStoreActions & {
     parleyAction: (enemyCode?: string) => void;
     resignAction: () => void;
     locationAction: (actionIndex: number) => void;
-    selectedChaosBag: ChaosToken[];
     setSelectedChaosBag: (chaosBag: ChaosToken[]) => void;
     resetSelectedChaosBag: () => void;
 };
