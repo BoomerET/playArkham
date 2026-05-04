@@ -5478,6 +5478,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ],
     });
 
+    console.log(
+      "Enemies that attacked this round:",
+      get().enemyIdsThatAttackedThisRound
+    );
+
     for (const text of result.logTexts) {
       get().pushLog("enemy", text);
     }

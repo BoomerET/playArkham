@@ -37,7 +37,7 @@ export function resolveEnemyAttacks(args: {
             exhausted: true,
         };
     });
-
+    console.log("attackedEnemyIds (pure):", attackedEnemyIds);
     return {
         investigator: updatedInvestigator,
         enemies: updatedEnemies,
