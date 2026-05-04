@@ -121,6 +121,7 @@ export default function PlayAreaPanel() {
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
       : (previewCard?.frontImageUrl ?? null);
+
   return (
     <section
       className={`game-panel drop-zone ${isDragOver ? "drop-zone-active" : ""}`}
@@ -176,7 +177,7 @@ export default function PlayAreaPanel() {
               .filter(
                 (icon): icon is NonNullable<typeof icon> => icon !== null,
               );
-            console.log(card.name, card.abilities);
+
             return (
               <div
                 key={card.instanceId}
@@ -211,25 +212,7 @@ export default function PlayAreaPanel() {
                     </div>
                   )}
 
-
                   <div className="play-area-image-topbar">
-                    {card.abilities?.length ? (
-                      <div className="play-area-image-actions button-row">
-                        {card.abilities.map((ability) => (
-                          <button
-                            key={ability.id}
-                            type="button"
-                            className="secondary-button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              activatePlayerCardAbility(card.instanceId, ability.id);
-                            }}
-                          >
-                            {ability.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
                     <span
                       className={`play-area-cost-chip ${card.cost === undefined
                         ? "play-area-cost-chip-empty"
@@ -266,7 +249,6 @@ export default function PlayAreaPanel() {
                     </div>
                   ) : null}
 
-
                   <div className="play-area-card-state-row">
                     {card.exhausted ? (
                       <span className="play-area-state-badge">Exhausted</span>
@@ -280,9 +262,42 @@ export default function PlayAreaPanel() {
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
                     ) : null}
-                  </div>
-                </div>
 
+                    {card.type === "asset" &&
+                      canActivatePlayAreaCardAbility(card) ? (
+                      <div className="play-area-image-actions button-row">
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            triggerPlayAreaCardAbility(card.instanceId);
+                          }}
+                        >
+                          Use Ability
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                  {card.abilities?.length ? (
+                    <div className="play-area-image-actions button-row">
+                      {card.abilities.map((ability) => (
+                        <button
+                          key={ability.id}
+                          type="button"
+                          className="secondary-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            activatePlayerCardAbility(card.instanceId, ability.id);
+                          }}
+                        >
+                          {ability.label}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                {/* TRY HERE 002 */}
               </div>
             );
           })}
