@@ -3,8 +3,6 @@ import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import "./deckInspector.css";
 
-const shufflePlayerDeck = useGameStore((state) => state.shufflePlayerDeck);
-
 type GroupedCard = {
   name: string;
   count: number;
@@ -59,6 +57,7 @@ export default function DeckInspector() {
   const deck = useGameStore((state) => state.deck);
   const hand = useGameStore((state) => state.hand);
   const discard = useGameStore((state) => state.discard);
+  const shufflePlayerDeck = useGameStore((state) => state.shufflePlayerDeck);
 
   if (!showDeckInspector) {
     return null;
