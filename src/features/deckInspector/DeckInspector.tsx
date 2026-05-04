@@ -3,6 +3,8 @@ import { useGameStore } from "../../store/gameStore";
 import type { PlayerCard } from "../../types/game";
 import "./deckInspector.css";
 
+const shufflePlayerDeck = useGameStore((state) => state.shufflePlayerDeck);
+
 type GroupedCard = {
   name: string;
   count: number;
@@ -66,6 +68,13 @@ export default function DeckInspector() {
     <aside className="deck-inspector" aria-label="Deck Inspector">
       <div className="deck-inspector__header">
         <h2 className="deck-inspector__title">Deck Inspector</h2>
+        <button
+          type="button"
+          className="deck-inspector__close"
+          onClick={shufflePlayerDeck}
+        >
+          Shuffle Deck
+        </button>
         <button
           type="button"
           className="deck-inspector__close"

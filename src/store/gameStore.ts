@@ -91,6 +91,7 @@ import {
   performMulligan,
   discardCards,
   drawCardsWithDiscardReshuffle,
+  shuffleDeck
 } from "../lib/openingHand";
 
 import {
@@ -241,6 +242,15 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  shufflePlayerDeck: () => {
+    const { deck } = get();
+
+    set({
+      deck: shuffleDeck(deck),
+    });
+
+    get().pushLog("player", "Shuffled the player deck.");
+  },
   enemyIdsThatAttackedThisRound: [],
   showScenarioIntro: false,
   dismissScenarioIntro: () => set({ showScenarioIntro: false }),
