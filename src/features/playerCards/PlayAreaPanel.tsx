@@ -196,7 +196,22 @@ export default function PlayAreaPanel() {
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
-                >
+                >{card.abilities?.length ? (
+                  <div className="card-actions">
+                    {card.abilities.map((ability) => (
+                      <button
+                        key={ability.id}
+                        type="button"
+                        onClick={() =>
+                          activatePlayerCardAbility(card.instanceId, ability.id)
+                        }
+                      >
+                        {ability.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -261,21 +276,7 @@ export default function PlayAreaPanel() {
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
                     ) : null}
-                    {card.abilities?.length ? (
-                      <div className="card-actions">
-                        {card.abilities.map((ability) => (
-                          <button
-                            key={ability.id}
-                            type="button"
-                            onClick={() =>
-                              activatePlayerCardAbility(card.instanceId, ability.id)
-                            }
-                          >
-                            {ability.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
+
                     {card.type === "asset" &&
                       canActivatePlayAreaCardAbility(card) ? (
                       <div className="play-area-image-actions button-row">
