@@ -1,5 +1,6 @@
 import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
 import type { PlayerCardEffect, SkillTestEffect } from "../store/gsTypes";
+import type { PlayerCardAbility } from "../data/scenarios/playerAbilities";
 
 // ============================================================
 // Core primitives
@@ -180,6 +181,7 @@ export interface PlayerCard {
   //onCommit?: (context: SkillTestContext) => void;
   //onSuccess?: (context: SkillTestContext) => void;
   //onPlay?: (context: GameContext) => void;
+  abilities?: PlayerCardAbility[];
 }
 
 
