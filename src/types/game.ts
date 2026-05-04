@@ -1,6 +1,5 @@
 import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
 import type { PlayerCardEffect, SkillTestEffect } from "../store/gsTypes";
-import type { PlayerCardAbility } from "../data/scenarios/playerAbilities";
 
 // ============================================================
 // Core primitives
