@@ -247,6 +247,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (ability.cost?.exhaust && card.exhausted) {
+      get().pushLog(
+        "system",
+        `${card.name} is already exhausted and cannot use ${ability.label}.`,
+      );
+      return;
+    }
+
+    const updatedPlayArea = ability.cost?.exhaust
+      ? playArea.map((entry) =>
+        entry.instanceId === card.instanceId
+          ? { ...entry, exhausted: true }
+          : entry,
+      )
+      : playArea;
+
     get().pushLog("player", `Activated ${card.name}: ${ability.label}.`);
 
     // Daniela's Wrench Fight ability
@@ -2742,7 +2758,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const selectedChaosBag =
       selectedScenario.chaosBags?.[difficulty] ?? startingChaosBag;
-
+    /* FIND ME set for setupGame */
     set({
       enemyIdsThatAttackedThisRound: [],
       showScenarioIntro: Boolean(selectedScenario.introText?.length),
