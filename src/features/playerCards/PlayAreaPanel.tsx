@@ -5,6 +5,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
 import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
+import "./playAreaPanel.css";
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -199,12 +200,12 @@ export default function PlayAreaPanel() {
                   title="Double-click to exhaust or ready"
                 >
                   {card.abilities?.length ? (
-                    <div className="play-area-image-actions button-row">
+                    <div className="play-area-ability-overlay">
                       {card.abilities.map((ability) => (
                         <button
                           key={ability.id}
                           type="button"
-                          className="secondary-button"
+                          className="play-area-ability-button"
                           onClick={(event) => {
                             event.stopPropagation();
                             activatePlayerCardAbility(card.instanceId, ability.id);
