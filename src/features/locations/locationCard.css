@@ -531,6 +531,6 @@
 }
 
 .card-preview-image.location-preview-flipped {
-  transform: rotateY(180deg);
+  transform: rotateY(360deg);
   opacity: 0.92;
 }
