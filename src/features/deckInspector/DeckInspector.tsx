@@ -80,6 +80,9 @@ function CardSection({ title, cards }: CardSectionProps) {
 }
 
 export default function DeckInspector() {
+  const enemyIdsThatAttackedThisRound = useGameStore(
+    (state) => state.enemyIdsThatAttackedThisRound,
+  );
   const showDeckInspector = useGameStore((state) => state.showDeckInspector);
   const closeDeckInspector = useGameStore((state) => state.closeDeckInspector);
   const deck = useGameStore((state) => state.deck);
@@ -104,7 +107,26 @@ export default function DeckInspector() {
       </div>
 
       <p className="deck-inspector__hint">Hidden shortcut: Shift + D</p>
+      <section className="deck-inspector__section">
+        <div className="deck-inspector__section-header">
+          <h3 className="deck-inspector__section-title">Attacked This Round</h3>
+          <span className="deck-inspector__count">
+            {enemyIdsThatAttackedThisRound.length}
+          </span>
+        </div>
 
+        {enemyIdsThatAttackedThisRound.length === 0 ? (
+          <div className="deck-inspector__empty">None</div>
+        ) : (
+          <ul className="deck-inspector__list">
+            {enemyIdsThatAttackedThisRound.map((id) => (
+              <li key={id} className="deck-inspector__list-item">
+                <span>{id}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
       <OrderedCardSection title="Deck Order" cards={deck} />
       <CardSection title="Hand" cards={hand} />
       <CardSection title="Discard" cards={discard} />
