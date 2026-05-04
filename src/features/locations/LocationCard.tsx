@@ -211,6 +211,7 @@ export default function LocationCard({ location }: Props) {
       ? backImageUrl
       : frontImageUrl
     : imageUrl;
+
   const previewLocation = useMemo<PreviewLocation | null>(() => {
     if (!zoomHeld || !isHovering || !previewImageUrl) {
       return null;
@@ -220,7 +221,7 @@ export default function LocationCard({ location }: Props) {
       name: location.name,
       imageUrl: previewImageUrl,
     };
-  }, [zoomHeld, isHovering, imageUrl, location.id, location.name]);
+  }, [zoomHeld, isHovering, previewImageUrl, location.id, location.name]);
 
   const isCurrentLocation = location.investigatorsHere.includes(
     investigator.id,
