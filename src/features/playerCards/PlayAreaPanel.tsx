@@ -278,6 +278,23 @@ export default function PlayAreaPanel() {
                     </button>
                   </div>
                 ) : null}
+                {card.abilities?.length ? (
+                  <div className="play-area-image-actions button-row">
+                    {card.abilities.map((ability) => (
+                      <button
+                        key={ability.id}
+                        type="button"
+                        className="secondary-button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          activatePlayerCardAbility(card.instanceId, ability.id);
+                        }}
+                      >
+                        {ability.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             );
           })}
