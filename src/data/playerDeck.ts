@@ -20,6 +20,25 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "guardian",
     "code": "12002",
+    abilities: [
+      {
+        id: "danielas-wrench-bait-attack",
+        label: "Exhaust: Enemy engages and attacks",
+        cost: { exhaust: true },
+        effect: { kind: "enemyEngagesAndAttacks" },
+      },
+      {
+        id: "danielas-wrench-fight",
+        label: "Fight +2",
+        cost: { action: 1 },
+        skillTest: {
+          kind: "fight",
+          skill: "combat",
+          combatModifier: 2,
+          damageBonusIfEnemyAttackedThisRound: 1,
+        },
+      },
+    ]
   },
   {
     "instanceId": "in-harms-way-3",
