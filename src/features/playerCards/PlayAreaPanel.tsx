@@ -213,6 +213,23 @@ export default function PlayAreaPanel() {
 
 
                   <div className="play-area-image-topbar">
+                    {card.abilities?.length ? (
+                      <div className="play-area-image-actions button-row">
+                        {card.abilities.map((ability) => (
+                          <button
+                            key={ability.id}
+                            type="button"
+                            className="secondary-button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              activatePlayerCardAbility(card.instanceId, ability.id);
+                            }}
+                          >
+                            {ability.label}
+                          </button>
+                        ))}
+                      </div>
+                    ) : null}
                     <span
                       className={`play-area-cost-chip ${card.cost === undefined
                         ? "play-area-cost-chip-empty"
@@ -248,23 +265,7 @@ export default function PlayAreaPanel() {
                       ))}
                     </div>
                   ) : null}
-                  {card.abilities?.length ? (
-                    <div className="play-area-image-actions button-row">
-                      {card.abilities.map((ability) => (
-                        <button
-                          key={ability.id}
-                          type="button"
-                          className="secondary-button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            activatePlayerCardAbility(card.instanceId, ability.id);
-                          }}
-                        >
-                          {ability.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
+
 
                   <div className="play-area-card-state-row">
                     {card.exhausted ? (
