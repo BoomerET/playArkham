@@ -67,7 +67,6 @@ export type GameStore = GameState & CampaignStoreActions & {
     selectedArkhamBuildShareCode: string;
     selectedChaosBag: ChaosToken[];
     enemyIdsThatAttackedThisRound: string[];
-    shufflePlayerDeck: () => void;
     setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
     dismissScenarioIntro: () => void;
     setSelectedArkhamBuildShareCode: (code: string) => void;

@@ -57,7 +57,6 @@ export default function DeckInspector() {
   const deck = useGameStore((state) => state.deck);
   const hand = useGameStore((state) => state.hand);
   const discard = useGameStore((state) => state.discard);
-  const shufflePlayerDeck = useGameStore((state) => state.shufflePlayerDeck);
 
   if (!showDeckInspector) {
     return null;
@@ -67,13 +66,6 @@ export default function DeckInspector() {
     <aside className="deck-inspector" aria-label="Deck Inspector">
       <div className="deck-inspector__header">
         <h2 className="deck-inspector__title">Deck Inspector</h2>
-        <button
-          type="button"
-          className="deck-inspector__close"
-          onClick={shufflePlayerDeck}
-        >
-          Shuffle Deck
-        </button>
         <button
           type="button"
           className="deck-inspector__close"
