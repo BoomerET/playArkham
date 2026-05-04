@@ -149,11 +149,6 @@ import {
 } from "../lib/playerCardEffects";
 
 import {
-  canActivatePlayAreaCardAbility,
-  getActivatedCardAbilityEffect,
-} from "../lib/playerCardAbilities";
-
-import {
   resolveEncounterCardImmediate,
 } from "../lib/encounterEffects";
 
@@ -1755,69 +1750,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       pendingFightCombatModifier: 0,
       pendingFightDamageBonus: 0,
     });
-  },
-
-  triggerPlayAreaCardAbility: (cardCode) => {
-    const {
-      playArea,
-      activeSkillTest,
-      scenarioStatus,
-      pendingInvestigateDifficultyModifier,
-      pendingFightCombatModifier,
-      pendingFightDamageBonus,
-    } = get();
-    if (isScenarioResolved(scenarioStatus)) {
-      get().pushLog("system", getScenarioResolvedMessage(scenarioStatus));
-      return;
-    }
-    if (activeSkillTest) {
-      get().pushLog(
-        "system",
-        "Cannot activate a play-area ability while a skill test is active.",
-      );
-      return;
-    }
-    const card = playArea.find((entry) => entry.instanceId === cardCode);
-    if (!card) return;
-    if (!canActivatePlayAreaCardAbility(card)) {
-      get().pushLog(
-        "system",
-        `Cannot activate ${card.name}. No usable counters remain.`,
-      );
-      return;
-    }
-    const effect = getActivatedCardAbilityEffect(card);
-    if (!effect) return;
-    const currentCounterValue = card.counters?.[effect.counterType] ?? 0;
-    const nextCounterValue = Math.max(
-      0,
-      currentCounterValue - effect.counterCost,
-    );
-    set({
-      playArea: playArea.map((entry) =>
-        entry.instanceId !== cardCode
-          ? entry
-          : {
-            ...entry,
-            counters: (() => {
-              const nc = {
-                ...(entry.counters ?? {}),
-                [effect.counterType]: nextCounterValue,
-              };
-              if (nextCounterValue === 0) delete nc[effect.counterType];
-              return nc;
-            })(),
-          },
-      ),
-      pendingInvestigateDifficultyModifier:
-        pendingInvestigateDifficultyModifier +
-        (effect.investigateDifficultyModifier ?? 0),
-      pendingFightCombatModifier:
-        pendingFightCombatModifier + (effect.fightCombatModifier ?? 0),
-      pendingFightDamageBonus:
-        pendingFightDamageBonus + (effect.fightDamageBonus ?? 0),
-    });
-    get().pushLog("player", effect.logText);
   },
 
   togglePendingAssetReplacementChoice: (cardCode) => {

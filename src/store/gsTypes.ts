@@ -156,7 +156,6 @@ export type GameStore = GameState & CampaignStoreActions & {
     confirmMulligan: () => void;
     skipMulligan: () => void;
     discardCardFromHand: (cardCode: string) => void;
-    triggerPlayAreaCardAbility: (cardCode: string) => void;
     clearPendingCardAbilityBonuses: () => void;
     shuffleEncounterDeck: () => void;
     discardThreatAreaCard: (cardCode: string) => void;
