@@ -8,6 +8,34 @@ type GroupedCard = {
   count: number;
 };
 
+function OrderedCardSection({ title, cards }: CardSectionProps) {
+  return (
+    <section className="deck-inspector__section">
+      <div className="deck-inspector__section-header">
+        <h3 className="deck-inspector__section-title">{title}</h3>
+        <span className="deck-inspector__count">{cards.length}</span>
+      </div>
+
+      {cards.length === 0 ? (
+        <div className="deck-inspector__empty">Empty</div>
+      ) : (
+        <ol className="deck-inspector__list">
+          {cards.map((card, index) => (
+            <li
+              key={`${card.instanceId}-${index}`}
+              className="deck-inspector__list-item"
+            >
+              <span>
+                {index + 1}. {card.name}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  );
+}
+
 function groupCardsByName(cards: PlayerCard[]): GroupedCard[] {
   const counts = new Map<string, number>();
 
@@ -77,7 +105,7 @@ export default function DeckInspector() {
 
       <p className="deck-inspector__hint">Hidden shortcut: Shift + D</p>
 
-      <CardSection title="Deck" cards={deck} />
+      <OrderedCardSection title="Deck Order" cards={deck} />
       <CardSection title="Hand" cards={hand} />
       <CardSection title="Discard" cards={discard} />
     </aside>
