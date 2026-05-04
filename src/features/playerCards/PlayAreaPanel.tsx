@@ -121,7 +121,6 @@ export default function PlayAreaPanel() {
     previewSide === "back" && previewCard?.backImageUrl
       ? previewCard.backImageUrl
       : (previewCard?.frontImageUrl ?? null);
-
   return (
     <section
       className={`game-panel drop-zone ${isDragOver ? "drop-zone-active" : ""}`}
@@ -177,7 +176,7 @@ export default function PlayAreaPanel() {
               .filter(
                 (icon): icon is NonNullable<typeof icon> => icon !== null,
               );
-
+            console.log(card.name, card.abilities);
             return (
               <div
                 key={card.instanceId}
