@@ -8,8 +8,10 @@ export function resolveEnemyAttacks(args: {
     investigator: Investigator;
     enemies: Enemy[];
     logTexts: string[];
+    attackedEnemyIds: string[];
 } {
     const { investigator, enemies } = args;
+    const attackedEnemyIds: string[] = [];
 
     let updatedInvestigator = investigator;
     const logTexts: string[] = [];
@@ -40,5 +42,6 @@ export function resolveEnemyAttacks(args: {
         investigator: updatedInvestigator,
         enemies: updatedEnemies,
         logTexts,
+        attackedEnemyIds,
     };
 }

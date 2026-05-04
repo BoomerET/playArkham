@@ -5472,6 +5472,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       investigator: result.investigator,
       enemies: result.enemies,
+      enemyIdsThatAttackedThisRound: [
+        ...get().enemyIdsThatAttackedThisRound,
+        ...result.attackedEnemyIds,
+      ],
     });
 
     for (const text of result.logTexts) {

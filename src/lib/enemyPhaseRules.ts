@@ -8,6 +8,7 @@ export function runEnemyPhase(params: {
     investigator: Investigator;
     enemies: Enemy[];
     logTexts: string[];
+    attackedEnemyIds: string[];
 } {
     const attackResult = resolveEnemyAttacks({
         investigator: params.investigator,
@@ -18,5 +19,6 @@ export function runEnemyPhase(params: {
         investigator: attackResult.investigator,
         enemies: attackResult.enemies,
         logTexts: attackResult.logTexts,
+        attackedEnemyIds: attackResult.attackedEnemyIds,
     };
 }
