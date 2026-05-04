@@ -277,6 +277,90 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
+    if (
+      "effect" in ability &&
+      ability.effect.kind === "enemyEngagesAndAttacks"
+    ) {
+      const {
+        investigator,
+        enemies,
+        locations,
+        selectedEnemyTargetId,
+        enemyIdsThatAttackedThisRound,
+      } = get();
+
+      const currentLocation = findCurrentLocation(locations, investigator.id);
+
+      if (!currentLocation) {
+        get().pushLog(
+          "system",
+          "Cannot use this ability because the investigator is not at a location.",
+        );
+        return;
+      }
+
+      const enemy =
+        enemies.find(
+          (entry) =>
+            entry.locationId === currentLocation.id &&
+            entry.engagedInvestigatorId === investigator.id,
+        ) ??
+        enemies.find(
+          (entry) =>
+            entry.locationId === currentLocation.id &&
+            entry.engagedInvestigatorId === null,
+        );
+
+      if (!enemy) {
+        get().pushLog(
+          "system",
+          "No enemy at your location for this ability.",
+        );
+        return;
+      }
+
+      const attackResult = resolveEnemyAttack({
+        investigator,
+        enemyName: enemy.name,
+        damage: enemy.damage,
+        horror: enemy.horror,
+      });
+
+      const updatedEnemies = enemies.map((entry) =>
+        entry.id === enemy.id
+          ? {
+            ...entry,
+            engagedInvestigatorId: investigator.id,
+            exhausted: true,
+          }
+          : entry,
+      );
+
+      set({
+        playArea: updatedPlayArea,
+        investigator: attackResult.investigator,
+        enemies: updatedEnemies,
+        selectedEnemyTargetId: getPreferredEnemyTargetId(
+          updatedEnemies,
+          currentLocation.id,
+          investigator.id,
+          selectedEnemyTargetId,
+        ),
+        enemyIdsThatAttackedThisRound: [
+          ...enemyIdsThatAttackedThisRound,
+          enemy.id,
+        ],
+      });
+
+      get().pushLog(
+        "enemy",
+        `${enemy.name} engages you and makes an immediate attack.`,
+      );
+      get().pushLog("enemy", attackResult.logText);
+
+      return;
+    }
+
     set({
       playArea: updatedPlayArea,
     });
