@@ -261,24 +261,23 @@ export default function PlayAreaPanel() {
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
                     ) : null}
-
-                    {card.type === "asset" &&
-                      canActivatePlayAreaCardAbility(card) ? (
-                      <div className="play-area-image-actions button-row">
-                        <button
-                          type="button"
-                          className="secondary-button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            triggerPlayAreaCardAbility(card.instanceId);
-                          }}
-                        >
-                          Use Ability
-                        </button>
-                      </div>
-                    ) : null}
                   </div>
                 </div>
+                {card.type === "asset" &&
+                  canActivatePlayAreaCardAbility(card) ? (
+                  <div className="play-area-image-actions button-row">
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        triggerPlayAreaCardAbility(card.instanceId);
+                      }}
+                    >
+                      Use Ability
+                    </button>
+                  </div>
+                ) : null}
               </div>
             );
           })}
