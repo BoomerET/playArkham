@@ -20,7 +20,7 @@ export const playerDeck: PlayerCard[] = [
     ],
     "faction": "guardian",
     "code": "12002",
-    abilities: [
+    "abilities": [
       {
         id: "danielas-wrench-bait-attack",
         label: "Exhaust: Enemy engages and attacks",
