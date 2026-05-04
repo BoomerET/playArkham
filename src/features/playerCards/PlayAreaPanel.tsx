@@ -196,19 +196,21 @@ export default function PlayAreaPanel() {
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
-                >{card.type === "asset" &&
-                  canActivatePlayAreaCardAbility(card) ? (
+                >{card.abilities?.length ? (
                   <div className="play-area-image-actions button-row">
-                    <button
-                      type="button"
-                      className="secondary-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        triggerPlayAreaCardAbility(card.instanceId);
-                      }}
-                    >
-                      Use Ability
-                    </button>
+                    {card.abilities.map((ability) => (
+                      <button
+                        key={ability.id}
+                        type="button"
+                        className="secondary-button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          activatePlayerCardAbility(card.instanceId, ability.id);
+                        }}
+                      >
+                        {ability.label}
+                      </button>
+                    ))}
                   </div>
                 ) : null}
                   {imageUrl ? (
@@ -224,23 +226,7 @@ export default function PlayAreaPanel() {
                       <span>{card.type}</span>
                     </div>
                   )}
-                  {card.abilities?.length ? (
-                    <div className="play-area-image-actions button-row">
-                      {card.abilities.map((ability) => (
-                        <button
-                          key={ability.id}
-                          type="button"
-                          className="secondary-button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            activatePlayerCardAbility(card.instanceId, ability.id);
-                          }}
-                        >
-                          {ability.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
+
 
                   <div className="play-area-image-topbar">
                     <span
