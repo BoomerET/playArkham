@@ -2784,6 +2784,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       selectedScenario.chaosBags?.[difficulty] ?? startingChaosBag;
 
     set({
+      enemyIdsThatAttackedThisRound: [],
       showScenarioIntro: Boolean(selectedScenario.introText?.length),
       chaosBag: [...selectedChaosBag],
       investigator: debugInvestigator,
@@ -3991,6 +3992,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           round: result.nextRound,
           actionsRemaining: 3,
         },
+        enemyIdsThatAttackedThisRound: [],
       });
 
       get().engageEnemiesAtLocation();
