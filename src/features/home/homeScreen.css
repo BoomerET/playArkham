@@ -58,3 +58,14 @@
   max-width: 260px;
   width: 100%;
 }
+
+.scenario-name {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.scenario-description {
+  margin: 0;
+  line-height: 1.4;
+}
