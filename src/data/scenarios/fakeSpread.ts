@@ -3,7 +3,7 @@ import { ENCOUNTER_CARD_CODES } from "../../types/game";
 
 export const fakeSpreadingFlamesScenario: ScenarioDefinition = {
   id: "fake-spreading-flames",
-  name: "Fake Spreading Flames",
+  name: "01 - Fake Spreading Flames",
   description:
     "A recent spate of fires and grisly “accidents” have the entire city on edge.",
   startingLocationId: "fake-friends-room",
