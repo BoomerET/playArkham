@@ -4,5 +4,5 @@ import { smokeAndMirrorsFlamesScenario } from "./smokeAndMirrorsFlames";
 import { fakeSpreadingFlamesScenario } from "./fakeSpread";
 import { queenOfAshScenario } from "./queenOfAsh";
 
-export const scenarios = [spreadingFlamesScenario, smokeAndMirrorsQuietScenario, smokeAndMirrorsFlamesScenario, fakeSpreadingFlamesScenario, queenOfAshScenario];
-export const defaultScenarioId = spreadingFlamesScenario.id;
+export const scenarios = [fakeSpreadingFlamesScenario, spreadingFlamesScenario, smokeAndMirrorsQuietScenario, smokeAndMirrorsFlamesScenario, queenOfAshScenario];
+export const defaultScenarioId = fakeSpreadingFlamesScenario.id;
