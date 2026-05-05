@@ -5,15 +5,12 @@ export const queenOfAshScenario: ScenarioDefinition = {
   id: "queen-of-ash",
   name: "Queen of Ash",
   description:
-    "Dr. Armitage thanks the waitress at Velma’s Diner as she sets two \
-pieces of warm apple pie between you. The head librarian pushes one toward \
-you with a strained smile. “Arkham is changing. The world is changing—for the \
-worse, I fear—but at least we have pie.”",
+    "A cult’s final ritual nears completion as a fiery sovereign rises from the ruins, and you must stop her before the world is reduced to cinders.",
   startingLocationId: "sewer-culvert",
   resign: {
     title: "Resigned",
     subtitle: "You flee before things get worse.",
-    text: "YDr. Armitage barely escapes the sewers alive, \
+    text: "Dr. Armitage barely escapes the sewers alive, \
 wracked with guilt at leaving his companions behind. By dawn, \
 an unquenchable fire has spread through all of Easttown, claiming \
 countless lives. Although the Arkham Fire Department tries its best, \

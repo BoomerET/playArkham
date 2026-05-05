@@ -5,7 +5,7 @@ export const smokeAndMirrorsQuietScenario: ScenarioDefinition = {
   id: "smoke-and-mirrors-quiet",
   name: "Smoke and Mirrors",
   description:
-    "You follow Dr. Armitage back to his apartment. A veil of black smoke obscures the moon and stars as a warm breeze carries ash and embers through the familiar city streets.",
+    "Illusions and deception shroud the cult’s movements, forcing you to uncover what’s real before their hidden plans take shape.",
   setupNotes: {
     previousScenarioOutcome: "quiet-campus",
     notes: [
