@@ -1,5 +1,5 @@
 import type { ArkhamBuildDeckJson } from "../lib/loadArkhamDeck";
-import type { PlayerCardEffect, SkillTestEffect } from "../store/gsTypes";
+import type { PlayerCardEffect, SkillTestEffect, StatModifiers } from "../store/gsTypes";
 
 // ============================================================
 // Core primitives
@@ -180,6 +180,7 @@ export interface PlayerCard {
   //onCommit?: (context: SkillTestContext) => void;
   //onSuccess?: (context: SkillTestContext) => void;
   abilities?: PlayerCardAbility[];
+  statModifiers?: StatModifiers;
 }
 
 export type PlayerCardAbilityCost = {

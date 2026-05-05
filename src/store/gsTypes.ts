@@ -281,3 +281,10 @@ export type SkillTestEffect =
     | { kind: "bonusCluesOnSuccess"; amount: number }
     | { kind: "bonusDamageOnSuccess"; amount: number }
     | { kind: "drawCardsOnSuccess"; amount: number };
+
+export type StatModifiers = {
+    willpower?: number;
+    intellect?: number;
+    combat?: number;
+    agility?: number;
+};
