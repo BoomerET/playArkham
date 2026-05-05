@@ -60,6 +60,8 @@ function cloneCard(card: PlayerCard): PlayerCard {
   return {
     ...card,
     instanceId: `${card.code}-${generateId()}`,
+    damageOnCard: 0,
+    horrorOnCard: 0,
   };
 }
 

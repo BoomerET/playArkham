@@ -184,6 +184,8 @@ export interface PlayerCard {
   subtype?: string;
   health?: number;
   sanity?: number;
+  damageOnCard?: number;
+  horrorOnCard?: number;
 }
 
 export type PlayerCardAbilityCost = {
