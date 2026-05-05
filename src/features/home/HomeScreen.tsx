@@ -365,120 +365,124 @@ export default function HomeScreen() {
       </section>
 
       <section className="panel">
-        <div className="scenario-section">
-          <h2 className="section-title">Deck</h2>
 
-          <div className="home-screen__field">
-            <label htmlFor="deck-code" className="home-screen__label">
-              Deck Code
-            </label>
+        <div className="home-screen__setup-grid">
 
-            <input
-              id="deck-code"
-              type="text"
-              className="home-screen__input"
-              value={selectedDeckCode}
-              onChange={(event) => {
-                setSelectedDeckCode(event.target.value);
-                setSelectedInvestigator("");
-              }}
-              placeholder="ArkhamDB ID, e.g. 5971619, or Arkham.build code, e.g. Sts69Sv8V8mIkZv"
-              autoComplete="off"
-            />
-            {deckSummary ? (
-              <div className="home-screen__deck-meta">
-                <div>
-                  {deckSummary.sourceLabel} deck: {" "}
-                  <strong>{deckSummary.deckName ?? "Unnamed Deck"}</strong>
+          <div className="scenario-section">
+            <h2 className="section-title">Deck</h2>
+
+            <div className="home-screen__field">
+              <label htmlFor="deck-code" className="home-screen__label">
+                Deck Code
+              </label>
+
+              <input
+                id="deck-code"
+                type="text"
+                className="home-screen__input"
+                value={selectedDeckCode}
+                onChange={(event) => {
+                  setSelectedDeckCode(event.target.value);
+                  setSelectedInvestigator("");
+                }}
+                placeholder="ArkhamDB ID, e.g. 5971619, or Arkham.build code, e.g. Sts69Sv8V8mIkZv"
+                autoComplete="off"
+              />
+              {deckSummary ? (
+                <div className="home-screen__deck-meta">
+                  <div>
+                    {deckSummary.sourceLabel} deck: {" "}
+                    <strong>{deckSummary.deckName ?? "Unnamed Deck"}</strong>
+                  </div>
+                  <div>
+                    Investigator:{" "}
+                    <strong>
+                      {deckSummary.investigatorName ??
+                        deckSummary.investigatorCode ??
+                        "Unknown"}
+                    </strong>
+                  </div>
+                  <div>Cards listed: {deckSummary.cardCount}</div>
+
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => {
+                      setSelectedDeckCode("");
+                      setDeckSummary(null);
+                      setDeckLookupState("idle");
+                      setSelectedInvestigator("");
+                    }}
+                  >
+                    Clear Deck
+                  </button>
                 </div>
-                <div>
-                  Investigator:{" "}
-                  <strong>
-                    {deckSummary.investigatorName ??
-                      deckSummary.investigatorCode ??
-                      "Unknown"}
-                  </strong>
-                </div>
-                <div>Cards listed: {deckSummary.cardCount}</div>
+              ) : null}
+              <div
+                className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
+              >
 
+              </div>
+            </div>
+          </div>
+
+          <div className="home-screen__deck-investigator-lock">
+            <h2 className="section-title">Investigator</h2>
+
+            <div
+              className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${zoomHeld ? "active" : ""
+                }`}
+            >
+              Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
+            </div>
+
+            {selectedInvestigator ? (
+              <div className="investigator-grid">
                 <button
                   type="button"
-                  className="secondary-button"
-                  onClick={() => {
-                    setSelectedDeckCode("");
-                    setDeckSummary(null);
-                    setDeckLookupState("idle");
-                    setSelectedInvestigator("");
+                  className="investigator-card selected"
+                  aria-label={`Detected investigator ${selectedInvestigator.name}`}
+                  onMouseEnter={() => {
+                    setHoveredId(selectedInvestigator.id);
+                    setPreviewSide("front");
                   }}
+                  onMouseLeave={() =>
+                    setHoveredId((current) =>
+                      current === selectedInvestigator.id ? null : current,
+                    )
+                  }
                 >
-                  Clear Deck
+                  {selectedInvestigatorImageUrl ? (
+                    <>
+                      <img
+                        src={selectedInvestigatorImageUrl}
+                        alt={selectedInvestigator.name}
+                        className="investigator-card-image"
+                        draggable={false}
+                      />
+                      <div className="investigator-card-overlay">
+                        <div className="investigator-name">
+                          {selectedInvestigator.name}
+                        </div>
+                        <div className="investigator-stats">
+                          <span>Will {selectedInvestigator.willpower}</span>
+                          <span>Int {selectedInvestigator.intellect}</span>
+                          <span>Com {selectedInvestigator.combat}</span>
+                          <span>Agi {selectedInvestigator.agility}</span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="investigator-fallback">
+                      {selectedInvestigator.name}
+                    </div>
+                  )}
                 </button>
               </div>
-            ) : null}
-            <div
-              className={`home-screen__deck-status home-screen__deck-status--${deckLookupState}`}
-            >
-
-            </div>
+            ) : (
+              <p>Investigator will be determined from the ArkhamDB deck.</p>
+            )}
           </div>
-        </div>
-
-        <div className="home-screen__deck-investigator-lock">
-          <h2 className="section-title">Investigator</h2>
-
-          <div
-            className={`investigator-zoom-hint ${hoveredId ? "visible" : ""} ${zoomHeld ? "active" : ""
-              }`}
-          >
-            Hold <kbd>Shift</kbd> to zoom • Press <kbd>F</kbd> to flip
-          </div>
-
-          {selectedInvestigator ? (
-            <div className="investigator-grid">
-              <button
-                type="button"
-                className="investigator-card selected"
-                aria-label={`Detected investigator ${selectedInvestigator.name}`}
-                onMouseEnter={() => {
-                  setHoveredId(selectedInvestigator.id);
-                  setPreviewSide("front");
-                }}
-                onMouseLeave={() =>
-                  setHoveredId((current) =>
-                    current === selectedInvestigator.id ? null : current,
-                  )
-                }
-              >
-                {selectedInvestigatorImageUrl ? (
-                  <>
-                    <img
-                      src={selectedInvestigatorImageUrl}
-                      alt={selectedInvestigator.name}
-                      className="investigator-card-image"
-                      draggable={false}
-                    />
-                    <div className="investigator-card-overlay">
-                      <div className="investigator-name">
-                        {selectedInvestigator.name}
-                      </div>
-                      <div className="investigator-stats">
-                        <span>Will {selectedInvestigator.willpower}</span>
-                        <span>Int {selectedInvestigator.intellect}</span>
-                        <span>Com {selectedInvestigator.combat}</span>
-                        <span>Agi {selectedInvestigator.agility}</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="investigator-fallback">
-                    {selectedInvestigator.name}
-                  </div>
-                )}
-              </button>
-            </div>
-          ) : (
-            <p>Investigator will be determined from the ArkhamDB deck.</p>
-          )}
         </div>
 
         <div className="scenario-section">

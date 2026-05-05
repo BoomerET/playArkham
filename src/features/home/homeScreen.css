@@ -38,3 +38,23 @@
   color: #f5b971;
   font-size: 0.9rem;
 }
+
+.home-screen__setup-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  gap: 1rem;
+  align-items: start;
+}
+
+.home-screen__deck-investigator-lock {
+  margin-top: 0;
+}
+
+.home-screen__deck-investigator-lock .investigator-grid {
+  grid-template-columns: 1fr;
+}
+
+.home-screen__deck-investigator-lock .investigator-card {
+  max-width: 260px;
+  width: 100%;
+}
