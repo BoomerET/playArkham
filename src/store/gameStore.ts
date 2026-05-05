@@ -266,11 +266,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
     get().pushLog("player", `Activated ${card.name}: ${ability.label}.`);
 
     if ("skillTest" in ability && ability.skillTest.kind === "fight") {
+      const {
+        enemies,
+        selectedEnemyTargetId,
+        enemyIdsThatAttackedThisRound,
+      } = get();
+
+      const targetEnemy =
+        enemies.find((enemy) => enemy.id === selectedEnemyTargetId) ?? null;
+
+      const damageBonus =
+        ability.skillTest.damageBonusIfEnemyAttackedThisRound &&
+          targetEnemy &&
+          enemyIdsThatAttackedThisRound.includes(targetEnemy.id)
+          ? 1
+          : 0;
+
       set({
         playArea: updatedPlayArea,
         pendingFightCombatModifier: ability.skillTest.combatModifier,
-        pendingFightDamageBonus:
-          ability.skillTest.damageBonusIfEnemyAttackedThisRound ? 1 : 0,
+        pendingFightDamageBonus: damageBonus,
       });
 
       get().fightAction();
