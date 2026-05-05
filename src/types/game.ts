@@ -181,6 +181,9 @@ export interface PlayerCard {
   //onSuccess?: (context: SkillTestContext) => void;
   abilities?: PlayerCardAbility[];
   statModifiers?: StatModifiers;
+  subtype?: string;
+  health?: number;
+  sanity?: number;
 }
 
 export type PlayerCardAbilityCost = {
