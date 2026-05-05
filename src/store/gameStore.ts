@@ -220,6 +220,10 @@ import {
   drawAndResolveSkillTest,
 } from "../lib/skillTestRules.ts";
 
+import {
+  getStatModifierFromPlayArea
+} from "../lib/playerStatModifiers";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -4451,10 +4455,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       skill: activeSkillTest.skill,
       testKind: pendingTestResolution?.kind ?? "none",
     });
-    const assetModifier = modifierDetails.reduce(
+
+    const abilityAssetModifier = modifierDetails.reduce(
       (sum, modifier) => sum + modifier.amount,
       0,
     );
+
+    const passiveStatModifier = getStatModifierFromPlayArea({
+      playArea,
+      skill: activeSkillTest.skill,
+    });
+
+    const assetModifier = abilityAssetModifier + passiveStatModifier;
     const activatedAbilityModifier =
       pendingTestResolution?.kind === "fight" ? pendingFightCombatModifier : 0;
     const committedModifier = activeSkillTest.committedCards.reduce(
