@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 import SkillIcon from "../../components/SkillIcon";
 import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
+import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
 import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
-import "./playAreaPanel.css";
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
@@ -48,8 +48,6 @@ type PreviewCard = {
 };
 
 export default function PlayAreaPanel() {
-  //const assignDamageToAsset = useGameStore((state) => state.assignDamageToAsset);
-  //const assignHorrorToAsset = useGameStore((state) => state.assignHorrorToAsset);
   const activatePlayerCardAbility = useGameStore(
     (state) => state.activatePlayerCardAbility,
   );
@@ -60,6 +58,9 @@ export default function PlayAreaPanel() {
   );
   const draggedCardId = useGameStore((state) => state.draggedCardId);
   const setDraggedCardId = useGameStore((state) => state.setDraggedCardId);
+  const triggerPlayAreaCardAbility = useGameStore(
+    (state) => state.triggerPlayAreaCardAbility,
+  );
 
   const [isDragOver, setIsDragOver] = useState(false);
   const zoomHeld = useModifierKey("Shift");
@@ -198,12 +199,12 @@ export default function PlayAreaPanel() {
                   title="Double-click to exhaust or ready"
                 >
                   {card.abilities?.length ? (
-                    <div className="play-area-ability-overlay">
+                    <div className="play-area-image-actions button-row">
                       {card.abilities.map((ability) => (
                         <button
                           key={ability.id}
                           type="button"
-                          className="play-area-ability-button"
+                          className="secondary-button"
                           onClick={(event) => {
                             event.stopPropagation();
                             activatePlayerCardAbility(card.instanceId, ability.id);
@@ -277,6 +278,22 @@ export default function PlayAreaPanel() {
                     <p className="play-area-image-title">{card.name}</p>
                     {card.text ? (
                       <p className="play-area-image-text">{card.text}</p>
+                    ) : null}
+
+                    {card.type === "asset" &&
+                      canActivatePlayAreaCardAbility(card) ? (
+                      <div className="play-area-image-actions button-row">
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            triggerPlayAreaCardAbility(card.instanceId);
+                          }}
+                        >
+                          Use Ability
+                        </button>
+                      </div>
                     ) : null}
                   </div>
                 </div>
