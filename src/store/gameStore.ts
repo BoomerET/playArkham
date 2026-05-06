@@ -3532,26 +3532,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   takeDamage: (amount = 1) => {
-    const { investigator } = get();
+    //const { investigator } = get();
 
     set({
-      investigator: {
-        ...investigator,
-        damage: investigator.damage + amount,
-      },
+      pendingDamage: amount,
+      pendingHorror: 0,
+      isAssigningDamage: true,
     });
 
     get().pushLog("combat", `Took ${amount} damage.`);
   },
 
   takeHorror: (amount = 1) => {
-    const { investigator } = get();
+    //const { investigator } = get();
 
     set({
-      investigator: {
-        ...investigator,
-        horror: investigator.horror + amount,
-      },
+      pendingDamage: 0,
+      pendingHorror: amount,
+      isAssigningDamage: true,
     });
 
     get().pushLog("combat", `Took ${amount} horror.`);
@@ -5724,5 +5722,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
         `${discardedCard.name} was discarded after taking too much horror.`,
       );
     }
+  },
+  assignRemainingDamageToInvestigator: () => {
+    const { investigator, pendingDamage, pendingHorror } = get();
+
+    set({
+      investigator: {
+        ...investigator,
+        damage: investigator.damage + pendingDamage,
+        horror: investigator.horror + pendingHorror,
+      },
+      pendingDamage: 0,
+      pendingHorror: 0,
+      isAssigningDamage: false,
+    });
   },
 }));
