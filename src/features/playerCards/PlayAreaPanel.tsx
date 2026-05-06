@@ -5,6 +5,7 @@ import { normalizeSkillIcon } from "../../components/skillIconUtils";
 import { useGameStore } from "../../store/gameStore";
 import { canActivatePlayAreaCardAbility } from "../../lib/playerCardAbilities";
 import { getPlayerCardImageUrl, getPlayerCardBackImageUrl } from "../../lib/playerCardImages";
+import "./playAreaPanel.css";
 
 function useModifierKey(key: "Alt" | "Shift") {
   const [active, setActive] = useState(false);
