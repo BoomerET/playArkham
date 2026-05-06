@@ -5668,6 +5668,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       amount: 1,
     });
 
+    const card = playArea.find((entry) => entry.instanceId === cardInstanceId);
+
     if (result.status !== "assigned") {
       get().pushLog("system", "That asset cannot soak damage.");
       return;
@@ -5678,9 +5680,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
       discard: [...discard, ...result.discardedCards],
     });
 
-    get().pushLog("player", "Assigned 1 damage to asset.");
-  },
+    get().pushLog(
+      "player",
+      `Assigned 1 damage to ${card?.name ?? "asset"}.`,
+    );
 
+    for (const discardedCard of result.discardedCards) {
+      get().pushLog(
+        "player",
+        `${discardedCard.name} was discarded after taking too much damage.`,
+      );
+    }
+  },
   assignHorrorToAsset: (cardInstanceId) => {
     const { playArea, discard } = get();
 
@@ -5689,6 +5700,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       cardInstanceId,
       amount: 1,
     });
+
+    const card = playArea.find((entry) => entry.instanceId === cardInstanceId);
 
     if (result.status !== "assigned") {
       get().pushLog("system", "That asset cannot soak horror.");
@@ -5700,6 +5713,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       discard: [...discard, ...result.discardedCards],
     });
 
-    get().pushLog("player", "Assigned 1 horror to asset.");
+    get().pushLog(
+      "player",
+      `Assigned 1 horror to ${card?.name ?? "asset"}.`,
+    );
+
+    for (const discardedCard of result.discardedCards) {
+      get().pushLog(
+        "player",
+        `${discardedCard.name} was discarded after taking too much horror.`,
+      );
+    }
   },
 }));
