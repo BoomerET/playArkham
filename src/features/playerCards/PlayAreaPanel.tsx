@@ -197,23 +197,7 @@ export default function PlayAreaPanel() {
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
                 >
-                  {card.abilities?.length ? (
-                    <div className="play-area-ability-overlay">
-                      {card.abilities.map((ability) => (
-                        <button
-                          key={ability.id}
-                          type="button"
-                          className="play-area-ability-button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            activatePlayerCardAbility(card.instanceId, ability.id);
-                          }}
-                        >
-                          {ability.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
+
 
                   {imageUrl ? (
                     <img
@@ -283,6 +267,23 @@ export default function PlayAreaPanel() {
                       >
                         Damage {card.damageOnCard ?? 0}/{card.health}
                       </button>
+                    ) : null}
+                    {card.abilities?.length ? (
+                      <div className="play-area-ability-overlay">
+                        {card.abilities.map((ability) => (
+                          <button
+                            key={ability.id}
+                            type="button"
+                            className="play-area-ability-button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              activatePlayerCardAbility(card.instanceId, ability.id);
+                            }}
+                          >
+                            {ability.label}
+                          </button>
+                        ))}
+                      </div>
                     ) : null}
 
                     {card.sanity ? (
