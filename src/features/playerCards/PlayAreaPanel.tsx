@@ -214,31 +214,7 @@ export default function PlayAreaPanel() {
                       ))}
                     </div>
                   ) : null}
-                  {card.health ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignDamageToAsset(card.instanceId);
-                      }}
-                    >
-                      Damage {card.damageOnCard ?? 0}/{card.health}
-                    </button>
-                  ) : null}
 
-                  {card.sanity ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignHorrorToAsset(card.instanceId);
-                      }}
-                    >
-                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
-                    </button>
-                  ) : null}
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -297,7 +273,31 @@ export default function PlayAreaPanel() {
                       <span className="play-area-state-badge ready">Ready</span>
                     )}
                   </div>
+                  {card.health ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignDamageToAsset(card.instanceId);
+                      }}
+                    >
+                      Damage {card.damageOnCard ?? 0}/{card.health}
+                    </button>
+                  ) : null}
 
+                  {card.sanity ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignHorrorToAsset(card.instanceId);
+                      }}
+                    >
+                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
+                    </button>
+                  ) : null}
                   <div className="play-area-image-footer">
                     <p className="play-area-image-title">{card.name}</p>
                     {card.text ? (
