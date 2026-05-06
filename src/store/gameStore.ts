@@ -5661,7 +5661,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   assignDamageToAsset: (cardInstanceId) => {
-    const { playArea, discard } = get();
+    const { playArea, discard, pendingDamage = 0 } = get();
+
+    if (pendingDamage <= 0) {
+      get().pushLog("system", "No damage to assign.");
+      return;
+    }
 
     const result = assignDamageToAssetRule({
       playArea,
@@ -5679,6 +5684,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       playArea: result.playArea,
       discard: [...discard, ...result.discardedCards],
+      pendingDamage: pendingDamage - 1,
     });
 
     get().pushLog(
@@ -5694,7 +5700,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   assignHorrorToAsset: (cardInstanceId) => {
-    const { playArea, discard } = get();
+    const { playArea, discard, pendingHorror = 0 } = get();
+
+    if (pendingHorror <= 0) {
+      get().pushLog("system", "No horror to assign.");
+      return;
+    }
 
     const result = assignHorrorToAssetRule({
       playArea,
@@ -5712,6 +5723,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       playArea: result.playArea,
       discard: [...discard, ...result.discardedCards],
+      pendingHorror: pendingHorror - 1,
     });
 
     get().pushLog(

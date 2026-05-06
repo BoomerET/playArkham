@@ -48,6 +48,8 @@ type PreviewCard = {
 };
 
 export default function PlayAreaPanel() {
+  const pendingDamage = useGameStore((state) => state.pendingDamage);
+  const pendingHorror = useGameStore((state) => state.pendingHorror);
   const assignDamageToAsset = useGameStore((state) => state.assignDamageToAsset);
   const assignHorrorToAsset = useGameStore((state) => state.assignHorrorToAsset);
   const activatePlayerCardAbility = useGameStore(
@@ -266,7 +268,7 @@ export default function PlayAreaPanel() {
                           assignDamageToAsset(card.instanceId);
                         }}
                       >
-                        Damage {card.damageOnCard ?? 0}/{card.health}
+                        Damage {card.damageOnCard ?? 0}/{card.health} ({pendingDamage})
                       </button>
                     ) : null}
 
@@ -280,7 +282,7 @@ export default function PlayAreaPanel() {
                           assignHorrorToAsset(card.instanceId);
                         }}
                       >
-                        Horror {card.horrorOnCard ?? 0}/{card.sanity}
+                        Horror {card.horrorOnCard ?? 0}/{card.sanity} ({pendingHorror})
                       </button>
                     ) : null}
                     {card.abilities?.length ? (
