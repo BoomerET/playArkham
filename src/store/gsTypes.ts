@@ -67,9 +67,9 @@ export type GameStore = GameState & CampaignStoreActions & {
     selectedArkhamBuildShareCode: string;
     selectedChaosBag: ChaosToken[];
     enemyIdsThatAttackedThisRound: string[];
-    pendingDamage?: number;
-    pendingHorror?: number;
-    isAssigningDamage?: boolean;
+    pendingDamage: number;
+    pendingHorror: number;
+    isAssigningDamage: boolean;
     activatePlayerCardAbility: (cardInstanceId: string, abilityId: string) => void;
     setSelectedChaosBagDifficulty: (difficulty: ChaosBagDifficulty) => void;
     dismissScenarioIntro: () => void;

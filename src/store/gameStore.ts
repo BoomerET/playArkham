@@ -245,6 +245,9 @@ const initialSelectedDeckId = persistedCampaignSetup?.selectedDeckId ?? "";
 
 
 export const useGameStore = create<GameStore>((set, get) => ({
+  pendingDamage: 0,
+  pendingHorror: 0,
+  isAssigningDamage: false,
   activatePlayerCardAbility: (cardInstanceId, abilityId) => {
     const { playArea } = get();
 
@@ -5724,7 +5727,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
   assignRemainingDamageToInvestigator: () => {
-    const { investigator, pendingDamage, pendingHorror } = get();
+    const { investigator } = get();
+    const pendingDamage = get().pendingDamage;
+    const pendingHorror = get().pendingHorror;
 
     set({
       investigator: {
