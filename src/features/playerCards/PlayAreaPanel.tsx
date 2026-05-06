@@ -270,6 +270,15 @@ export default function PlayAreaPanel() {
                       ))}
                     </div>
                   ) : null}
+
+
+                  <div className="play-area-card-state-row">
+                    {card.exhausted ? (
+                      <span className="play-area-state-badge">Exhausted</span>
+                    ) : (
+                      <span className="play-area-state-badge ready">Ready</span>
+                    )}
+                  </div>
                   {/* FIX ME */}
                   {card.health ? (
                     <button
@@ -297,14 +306,6 @@ export default function PlayAreaPanel() {
                     </button>
                   ) : null}
                   {/* END FIX ME */}
-
-                  <div className="play-area-card-state-row">
-                    {card.exhausted ? (
-                      <span className="play-area-state-badge">Exhausted</span>
-                    ) : (
-                      <span className="play-area-state-badge ready">Ready</span>
-                    )}
-                  </div>
 
                   <div className="play-area-image-footer">
                     <p className="play-area-image-title">{card.name}</p>
