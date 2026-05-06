@@ -284,7 +284,7 @@ export default function PlayAreaPanel() {
                       </button>
                     ) : null}
                     {card.abilities?.length ? (
-                      <div className="play-area-ability-overlay">
+                      <div className="play-area-ability-overlay2">
                         {card.abilities.map((ability) => (
                           <button
                             key={ability.id}
