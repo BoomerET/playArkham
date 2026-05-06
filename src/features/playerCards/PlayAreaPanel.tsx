@@ -232,33 +232,7 @@ export default function PlayAreaPanel() {
                     </div>
                   )}
 
-                  {/* FIX ME */}
-                  {card.health ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignDamageToAsset(card.instanceId);
-                      }}
-                    >
-                      Damage {card.damageOnCard ?? 0}/{card.health}
-                    </button>
-                  ) : null}
 
-                  {card.sanity ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignHorrorToAsset(card.instanceId);
-                      }}
-                    >
-                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
-                    </button>
-                  ) : null}
-                  {/* END FIX ME */}
 
                   <div className="play-area-image-topbar">
                     <span
@@ -296,6 +270,33 @@ export default function PlayAreaPanel() {
                       ))}
                     </div>
                   ) : null}
+                  {/* FIX ME */}
+                  {card.health ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignDamageToAsset(card.instanceId);
+                      }}
+                    >
+                      Damage {card.damageOnCard ?? 0}/{card.health}
+                    </button>
+                  ) : null}
+
+                  {card.sanity ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignHorrorToAsset(card.instanceId);
+                      }}
+                    >
+                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
+                    </button>
+                  ) : null}
+                  {/* END FIX ME */}
 
                   <div className="play-area-card-state-row">
                     {card.exhausted ? (
