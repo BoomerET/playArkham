@@ -279,7 +279,7 @@ export default function PlayAreaPanel() {
                       <span className="play-area-state-badge ready">Ready</span>
                     )}
                   </div>
-                  {/* FIX ME */}
+                  {/* FIX ME
                   {card.health ? (
                     <button
                       type="button"
@@ -305,7 +305,7 @@ export default function PlayAreaPanel() {
                       Horror {card.horrorOnCard ?? 0}/{card.sanity}
                     </button>
                   ) : null}
-                  {/* END FIX ME */}
+                  END FIX ME */}
 
                   <div className="play-area-image-footer">
                     <p className="play-area-image-title">{card.name}</p>
