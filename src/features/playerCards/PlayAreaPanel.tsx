@@ -193,39 +193,40 @@ export default function PlayAreaPanel() {
                 }
               >
 
-                {/* FIX ME */}
-                {card.health ? (
-                  <button
-                    type="button"
-                    className="play-area-ability-button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      assignDamageToAsset(card.instanceId);
-                    }}
-                  >
-                    Damage {card.damageOnCard ?? 0}/{card.health}
-                  </button>
-                ) : null}
 
-                {card.sanity ? (
-                  <button
-                    type="button"
-                    className="play-area-ability-button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      assignHorrorToAsset(card.instanceId);
-                    }}
-                  >
-                    Horror {card.horrorOnCard ?? 0}/{card.sanity}
-                  </button>
-                ) : null}
-                {/* END FIX ME */}
 
                 <div
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
                 >
+                  {/* FIX ME */}
+                  {card.health ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignDamageToAsset(card.instanceId);
+                      }}
+                    >
+                      Damage {card.damageOnCard ?? 0}/{card.health}
+                    </button>
+                  ) : null}
+
+                  {card.sanity ? (
+                    <button
+                      type="button"
+                      className="play-area-ability-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        assignHorrorToAsset(card.instanceId);
+                      }}
+                    >
+                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
+                    </button>
+                  ) : null}
+                  {/* END FIX ME */}
                   {card.abilities?.length ? (
                     <div className="play-area-ability-overlay">
                       {card.abilities.map((ability) => (
