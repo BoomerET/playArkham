@@ -48,6 +48,8 @@ type PreviewCard = {
 };
 
 export default function PlayAreaPanel() {
+  const assignDamageToAsset = useGameStore((state) => state.assignDamageToAsset);
+  const assignHorrorToAsset = useGameStore((state) => state.assignHorrorToAsset);
   const activatePlayerCardAbility = useGameStore(
     (state) => state.activatePlayerCardAbility,
   );
@@ -190,6 +192,35 @@ export default function PlayAreaPanel() {
                   )
                 }
               >
+
+                {/* FIX ME */}
+                {card.health ? (
+                  <button
+                    type="button"
+                    className="play-area-ability-button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      assignDamageToAsset(card.instanceId);
+                    }}
+                  >
+                    Damage {card.damageOnCard ?? 0}/{card.health}
+                  </button>
+                ) : null}
+
+                {card.sanity ? (
+                  <button
+                    type="button"
+                    className="play-area-ability-button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      assignHorrorToAsset(card.instanceId);
+                    }}
+                  >
+                    Horror {card.horrorOnCard ?? 0}/{card.sanity}
+                  </button>
+                ) : null}
+                {/* END FIX ME */}
+
                 <div
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}

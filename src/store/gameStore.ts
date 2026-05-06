@@ -224,6 +224,11 @@ import {
   getStatModifierFromPlayArea
 } from "../lib/playerStatModifiers";
 
+import {
+  assignDamageToAsset as assignDamageToAssetRule,
+  assignHorrorToAsset as assignHorrorToAssetRule,
+} from "../lib/assetSoakRules";
+
 const defaultCampaignState: CampaignState = {
   previousScenarioOutcome: null,
   randomizedSelectionsByCampaignKey: {},
@@ -5653,5 +5658,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
     for (const text of result.logTexts) {
       get().pushLog("player", text);
     }
+  },
+  assignDamageToAsset: (cardInstanceId) => {
+    const { playArea, discard } = get();
+
+    const result = assignDamageToAssetRule({
+      playArea,
+      cardInstanceId,
+      amount: 1,
+    });
+
+    if (result.status !== "assigned") {
+      get().pushLog("system", "That asset cannot soak damage.");
+      return;
+    }
+
+    set({
+      playArea: result.playArea,
+      discard: [...discard, ...result.discardedCards],
+    });
+
+    get().pushLog("player", "Assigned 1 damage to asset.");
+  },
+
+  assignHorrorToAsset: (cardInstanceId) => {
+    const { playArea, discard } = get();
+
+    const result = assignHorrorToAssetRule({
+      playArea,
+      cardInstanceId,
+      amount: 1,
+    });
+
+    if (result.status !== "assigned") {
+      get().pushLog("system", "That asset cannot soak horror.");
+      return;
+    }
+
+    set({
+      playArea: result.playArea,
+      discard: [...discard, ...result.discardedCards],
+    });
+
+    get().pushLog("player", "Assigned 1 horror to asset.");
   },
 }));

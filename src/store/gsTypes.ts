@@ -168,6 +168,8 @@ export type GameStore = GameState & CampaignStoreActions & {
     locationAction: (actionIndex: number) => void;
     setSelectedChaosBag: (chaosBag: ChaosToken[]) => void;
     resetSelectedChaosBag: () => void;
+    assignDamageToAsset: (cardInstanceId: string) => void;
+    assignHorrorToAsset: (cardInstanceId: string) => void;
 };
 
 export type PendingEncounterResolution = {
