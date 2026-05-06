@@ -48,8 +48,8 @@ type PreviewCard = {
 };
 
 export default function PlayAreaPanel() {
-  const assignDamageToAsset = useGameStore((state) => state.assignDamageToAsset);
-  const assignHorrorToAsset = useGameStore((state) => state.assignHorrorToAsset);
+  //const assignDamageToAsset = useGameStore((state) => state.assignDamageToAsset);
+  //const assignHorrorToAsset = useGameStore((state) => state.assignHorrorToAsset);
   const activatePlayerCardAbility = useGameStore(
     (state) => state.activatePlayerCardAbility,
   );
@@ -192,15 +192,11 @@ export default function PlayAreaPanel() {
                   )
                 }
               >
-
-
-
                 <div
                   className="play-area-card-interactive"
                   onDoubleClick={() => togglePlayAreaCardExhausted(card.instanceId)}
                   title="Double-click to exhaust or ready"
                 >
-
                   {card.abilities?.length ? (
                     <div className="play-area-ability-overlay">
                       {card.abilities.map((ability) => (
@@ -231,8 +227,6 @@ export default function PlayAreaPanel() {
                       <span>{card.type}</span>
                     </div>
                   )}
-
-
 
                   <div className="play-area-image-topbar">
                     <span
@@ -271,7 +265,6 @@ export default function PlayAreaPanel() {
                     </div>
                   ) : null}
 
-
                   <div className="play-area-card-state-row">
                     {card.exhausted ? (
                       <span className="play-area-state-badge">Exhausted</span>
@@ -279,33 +272,6 @@ export default function PlayAreaPanel() {
                       <span className="play-area-state-badge ready">Ready</span>
                     )}
                   </div>
-                  {/* FIX ME
-                  {card.health ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignDamageToAsset(card.instanceId);
-                      }}
-                    >
-                      Damage {card.damageOnCard ?? 0}/{card.health}
-                    </button>
-                  ) : null}
-
-                  {card.sanity ? (
-                    <button
-                      type="button"
-                      className="play-area-ability-button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        assignHorrorToAsset(card.instanceId);
-                      }}
-                    >
-                      Horror {card.horrorOnCard ?? 0}/{card.sanity}
-                    </button>
-                  ) : null}
-                  END FIX ME */}
 
                   <div className="play-area-image-footer">
                     <p className="play-area-image-title">{card.name}</p>
