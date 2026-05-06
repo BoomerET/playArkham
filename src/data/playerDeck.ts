@@ -3519,12 +3519,6 @@ export const playerDeck: PlayerCard[] =
       ],
       "abilities": [
         {
-          id: "danielas-wrench-bait-attack",
-          label: "Exhaust: Enemy engages and attacks",
-          cost: { exhaust: true },
-          effect: { kind: "enemyEngagesAndAttacks" },
-        },
-        {
           id: "danielas-wrench-fight",
           label: "Fight +2",
           cost: { action: 1 },
@@ -3535,6 +3529,12 @@ export const playerDeck: PlayerCard[] =
             damageBonusIfEnemyAttackedThisRound: 1,
           },
         },
+        {
+          id: "danielas-wrench-bait-attack",
+          label: "Exhaust: Enemy engages and attacks",
+          cost: { exhaust: true },
+          effect: { kind: "enemyEngagesAndAttacks" },
+        }
       ],
 
       "slot": "Hand",
