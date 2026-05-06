@@ -256,23 +256,7 @@ export default function PlayAreaPanel() {
                     ) : (
                       <span className="play-area-state-badge ready">Ready</span>
                     )}
-                    {card.abilities?.length ? (
-                      <div className="play-area-ability-overlay">
-                        {card.abilities.map((ability) => (
-                          <button
-                            key={ability.id}
-                            type="button"
-                            className="play-area-ability-button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              activatePlayerCardAbility(card.instanceId, ability.id);
-                            }}
-                          >
-                            {ability.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
+
                     {card.health ? (
                       <button
                         type="button"
@@ -298,6 +282,23 @@ export default function PlayAreaPanel() {
                       >
                         Horror {card.horrorOnCard ?? 0}/{card.sanity}
                       </button>
+                    ) : null}
+                    {card.abilities?.length ? (
+                      <div className="play-area-ability-overlay">
+                        {card.abilities.map((ability) => (
+                          <button
+                            key={ability.id}
+                            type="button"
+                            className="play-area-ability-button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              activatePlayerCardAbility(card.instanceId, ability.id);
+                            }}
+                          >
+                            {ability.label}
+                          </button>
+                        ))}
+                      </div>
                     ) : null}
                   </div>
 
